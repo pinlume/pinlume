@@ -53,7 +53,7 @@ All third-party network features are opt-in. Their handling of data is governed 
 
 ## Updates
 
-Public releases of Pinlume can check for and download updates. When update checking is enabled, the app contacts the configured update provider (currently GitHub) to retrieve release metadata and, if you choose to update, the installer. This request may include ordinary technical information needed for update delivery, such as the app version and platform. It does not intentionally include screenshots, recordings, OCR results, clipboard contents, or translation text.
+Current beta builds do not check for or download updates automatically. New versions, if any, must be downloaded manually from the GitHub Releases page. If automatic updates are introduced in a future release, this policy will be updated before that feature is enabled.
 
 ## Permissions
 
@@ -78,6 +78,6 @@ For questions about this policy, open an issue at [github.com/pinlume/pinlume](h
 
 ## 中文摘要
 
-Pinlume 不提供遥测、分析、广告或由维护者运营的用户内容存储服务。截图、录屏、OCR 结果、剪贴板内容、翻译文本、历史记录和设置默认留在你的 Mac 上；只有你主动选择上传、使用联网翻译或安装更新时，相关数据才会与所选第三方服务通信。
+Pinlume 不提供遥测、分析、广告或由维护者运营的用户内容存储服务。截图、录屏、OCR 结果、剪贴板内容、翻译文本、历史记录和设置默认留在你的 Mac 上；只有你主动选择上传或使用联网翻译时，相关数据才会与所选第三方服务通信。当前 Beta 版不提供自动更新。
 
-Google Drive、imgbb、S3 兼容存储和 Google 翻译均为可选功能。更新检查启用后会连接 GitHub 获取版本信息，但不会主动上传截图、录屏、OCR、剪贴板或翻译正文。诊断日志默认关闭，开启后只记录尺寸、耗时、状态和错误码等运行元数据。
+Google Drive、imgbb、S3 兼容存储和 Google 翻译均为可选功能。诊断日志默认关闭，开启后只记录尺寸、耗时、状态和错误码等运行元数据。

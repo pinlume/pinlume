@@ -34,13 +34,13 @@ Pinlume 是一款为高频桌面操作而生的原生 macOS 工具：小、快�
 
 ## 发布状态
 
-Pinlume 正在完成首次公开发布准备。首个正式版本将提供 macOS 安装包与自动更新；在此之前，你仍可以从源码本地构建体验。
+Pinlume 提供可供体验的 macOS Beta 版本。维护者目前未加入 Apple Developer Program，Beta 包使用本地签名、**未经过 Apple 公证**，且暂不提供自动更新；首次启动需按 macOS 的安全提示手动确认。请只从本仓库的 [Releases](https://github.com/pinlume/pinlume/releases) 下载，并参阅 [Beta 安装与权限说明](BETA_INSTALL.md)。
 
 > 本仓库保留 GPLv3 许可证及历史来源记录。Pinlume 是基于 MacShot 代码独立维护的项目；详细边界见 [NOTICE.md](NOTICE.md)。
 
 ## 快速开始
 
-正式版发布后，下载并将 `Pinlume.app` 移到“应用程序”文件夹，首次启动后按系统提示授予所需权限。
+下载 Beta DMG 后，将 `Pinlume.app` 移到“应用程序”文件夹；若 macOS 阻止首次打开，请前往“系统设置 → 隐私与安全性”点击“仍要打开”。完整步骤见 [Beta 安装与权限说明](BETA_INSTALL.md)。
 
 1. 启动 Pinlume。
 2. 按 `Command + F1` 开始截图。

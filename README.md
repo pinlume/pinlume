@@ -31,13 +31,13 @@ Pinlume is a small, fast, native macOS tool for high-frequency desktop work. It 
 
 ## Release status
 
-Pinlume is preparing for its first public release. The first stable release will include a macOS installer and automatic updates. Until then, you can build it locally from source.
+Pinlume provides macOS beta builds. The maintainer is not currently enrolled in the Apple Developer Program, so beta builds use a local signature, are **not notarized by Apple**, and do not include automatic updates. macOS requires a one-time manual confirmation on first launch. Download only from this repository's [Releases](https://github.com/pinlume/pinlume/releases) and read the [Beta Installation and Permissions Guide](BETA_INSTALL.md).
 
 > This repository retains GPLv3 and the project's provenance. Pinlume is independently maintained from the MacShot codebase; see [NOTICE.md](NOTICE.md) for details.
 
 ## Quick start
 
-When the stable release is available, download `Pinlume.app`, move it to Applications, and grant the permissions macOS requests on first use.
+Download the beta DMG and move `Pinlume.app` to Applications. If macOS blocks the first launch, go to **System Settings → Privacy & Security** and choose **Open Anyway**. See the [Beta Installation and Permissions Guide](BETA_INSTALL.md) for the complete steps.
 
 1. Launch Pinlume.
 2. Press `Command + F1` to start a capture.
