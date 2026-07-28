@@ -60,7 +60,7 @@ scripts/run-pinlume.sh
 scripts/install-pinlume.sh
 ```
 
-Local builds use the `Pinlume` name, Bundle ID `com.pinlume.app`, and URL scheme `pinlume://`. Their signature is for stable local permissions and testing, not a notarized release package.
+Local builds use the `Pinlume` name, Bundle ID `com.pinlume.app`, and URL scheme `pinlume://`. The default build uses Xcode's local signature and may require macOS permissions on first use; it is not a notarized release package. Maintainers testing multiple local checkouts on one Mac can opt into the shared local identity with `PINLUME_USE_STABLE_LOCAL_SIGNING=1 scripts/build-pinlume.sh`.
 
 <details>
 <summary><b>Full feature set</b></summary>

@@ -63,7 +63,7 @@ scripts/run-pinlume.sh
 scripts/install-pinlume.sh
 ```
 
-本地构建使用 `Pinlume`、Bundle ID `com.pinlume.app` 和 URL Scheme `pinlume://`。本地构建签名仅用于稳定权限与本机体验，不等同于正式发布包。
+本地构建使用 `Pinlume`、Bundle ID `com.pinlume.app` 和 URL Scheme `pinlume://`。默认构建使用 Xcode 的本地签名，首次使用时可能需要按 macOS 提示授予权限，不等同于正式发布包。在同一台 Mac 上调试多个本地工作副本的维护者，可显式运行 `PINLUME_USE_STABLE_LOCAL_SIGNING=1 scripts/build-pinlume.sh` 复用本地签名身份。
 
 <details>
 <summary><b>完整功能</b></summary>

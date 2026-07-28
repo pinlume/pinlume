@@ -6,7 +6,8 @@ REPOSITORY_ROOT="${ROOT_DIR}"
 if COMMON_GIT_DIR="$(git -C "${ROOT_DIR}" rev-parse --path-format=absolute --git-common-dir 2>/dev/null)"; then
   REPOSITORY_ROOT="$(dirname "${COMMON_GIT_DIR}")"
 fi
-SIGNING_DIR="${PINLUME_SIGNING_DIR:-${REPOSITORY_ROOT}/build/signing}"
+LEGACY_SIGNING_DIR="${REPOSITORY_ROOT}/build/signing"
+SIGNING_DIR="${PINLUME_SIGNING_DIR:-${HOME}/Library/Application Support/Pinlume/signing}"
 KEYCHAIN="${SIGNING_DIR}/pinlume-signing.keychain-db"
 KEYCHAIN_PASSWORD="pinlume-local"
 IDENTITY_NAME="Pinlume Local Code Signing"
@@ -15,6 +16,22 @@ CERT_FILE="${SIGNING_DIR}/pinlume.crt"
 P12_FILE="${SIGNING_DIR}/pinlume.p12"
 OPENSSL_CONFIG="${SIGNING_DIR}/openssl-codesign.cnf"
 
+migrate_legacy_identity_if_needed() {
+  [ "${SIGNING_DIR}" = "${LEGACY_SIGNING_DIR}" ] && return
+  [ -f "${P12_FILE}" ] && return
+  [ -f "${LEGACY_SIGNING_DIR}/pinlume.p12" ] || return
+  [ -f "${LEGACY_SIGNING_DIR}/pinlume.crt" ] || return
+  [ -f "${LEGACY_SIGNING_DIR}/pinlume.key" ] || return
+
+  mkdir -p "${SIGNING_DIR}"
+  cp "${LEGACY_SIGNING_DIR}/pinlume.key" "${KEY_FILE}"
+  cp "${LEGACY_SIGNING_DIR}/pinlume.crt" "${CERT_FILE}"
+  cp "${LEGACY_SIGNING_DIR}/pinlume.p12" "${P12_FILE}"
+  chmod 600 "${KEY_FILE}" "${P12_FILE}"
+  chmod 644 "${CERT_FILE}"
+}
+
+migrate_legacy_identity_if_needed
 mkdir -p "${SIGNING_DIR}"
 
 remove_keychain_from_search_list() {
