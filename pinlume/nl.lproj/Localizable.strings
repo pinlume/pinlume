@@ -1,0 +1,846 @@
+/* Nederlands — Pinlume localization
+ *
+ * To add a new language:
+ * 1. Create a new folder: pinlume/<lang-code>.lproj/
+ * 2. Copy this file into that folder
+ * 3. Translate all values (right side of = sign)
+ * 4. Add the language to LanguageManager.availableLanguages in Services/LanguageManager.swift
+ * 5. Add the language code to knownRegions in pinlume.xcodeproj/project.pbxproj
+ * 6. Submit a pull request!
+ *
+ * Keys use the English text. Values should be the translation.
+ * Format strings use %@ for strings, %d for integers.
+ * Keep keyboard shortcuts (like ⌘C) untranslated.
+ * Keep brand names (Pinlume, Google Drive, imgbb, S3) untranslated.
+ */
+
+/* Menu Bar */
+"Capture Area" = "Gebied vastleggen";
+"Capture Screen" = "Scherm vastleggen";
+"Capture OCR" = "OCR vastleggen";
+"Quick Capture" = "Snelle opname";
+"Scroll Capture" = "Scrollopname";
+"Capture Last Area" = "Laatste gebied vastleggen";
+"Capture Delay" = "Opnamevertraging";
+"None" = "Geen";
+"%d seconds" = "%d seconden";
+"Record Area" = "Gebied opnemen";
+"Record Screen" = "Scherm opnemen";
+"Recent Captures" = "Recente opnames";
+"Show History Panel" = "Geschiedenispaneel tonen";
+"Open Image..." = "Afbeelding openen...";
+"Open from Clipboard" = "Openen vanuit klembord";
+"Pin from Clipboard" = "Vastpinnen vanuit klembord";
+"Preferences..." = "Instellingen...";
+"Check for Updates..." = "Controleer op updates...";
+"Quit Pinlume" = "Stop Pinlume";
+"No recent captures" = "Geen recente opnames";
+"Clear History" = "Geschiedenis wissen";
+
+/* History Panel */
+"Copy" = "Kopieer";
+"Save As..." = "Bewaar als...";
+"Open in Editor" = "Open in editor";
+"Pin to Screen" = "Vastpinnen op scherm";
+"Quick Look" = "Snelle weergave";
+"Delete" = "Verwijder";
+"All" = "Alles";
+"Screenshots" = "Schermafbeeldingen";
+"GIFs" = "GIFs";
+"Click to copy · Drag to app" = "Klik om te kopieren · Sleep naar app";
+"No captures yet" = "Nog geen opnames";
+
+/* Floating Thumbnail */
+"Close All" = "Sluit alles";
+"Save All to Folder…" = "Bewaar alles in map…";
+"Save" = "Bewaar";
+
+/* Editor Top Bar */
+"Zoom In" = "Inzoomen";
+"Zoom Out" = "Uitzoomen";
+"Fit Canvas" = "Pas canvas in";
+"Crop" = "Bijsnijden";
+"Flip Horizontal" = "Horizontaal spiegelen";
+"Flip Vertical" = "Verticaal spiegelen";
+"Rotate Left" = "Linksom draaien";
+"Rotate Right" = "Rechtsom draaien";
+"Add Capture" = "Opname toevoegen";
+
+/* Toolbar - Tools */
+"Arrow" = "Pijl";
+"Line" = "Lijn";
+"Rectangle" = "Rechthoek";
+"Ellipse" = "Ellips";
+"Pencil" = "Potlood";
+"Pencil (Draw)" = "Potlood (Tekenen)";
+"Marker" = "Markeerstift";
+"Text" = "Tekst";
+"Number" = "Nummer";
+"Number / Counter" = "Nummer / Teller";
+"Stamp / Emoji" = "Stempel / Emoji";
+"Censor" = "Censureren";
+"Censor (Pixelate / Blur / Solid)" = "Censureren (Pixelen / Vervagen / Effen)";
+"Measure" = "Meten";
+"Measure (px)" = "Meten (px)";
+"Magnify (Loupe)" = "Vergroten (Loep)";
+"Highlight" = "Uitlichten";
+"Highlight (Spotlight)" = "Uitlichten (Spotlight)";
+"Dim" = "Dimmen";
+"Color Sampler" = "Kleurpipet";
+"Color Picker" = "Kleurkiezer";
+"Select & Edit" = "Selecteren en bewerken";
+"Color" = "Kleur";
+
+/* Toolbar - Actions */
+"Copy to Clipboard" = "Kopieer naar klembord";
+"Save to File" = "Bewaar als bestand";
+"Save to" = "Bewaar in";
+"Open in Editor Window" = "Open in editorvenster";
+"Pin on Screen" = "Vastpinnen op scherm";
+"Pin" = "Vastpinnen";
+"Pin (floating window)" = "Vastpinnen (zwevend venster)";
+"OCR" = "OCR";
+"OCR Text" = "OCR-tekst";
+"OCR (extract text)" = "OCR (tekst extraheren)";
+"OCR & QR" = "OCR & QR";
+"Capture OCR & QR" = "OCR & QR vastleggen";
+"Capture area and read text/QR codes" = "Gebied vastleggen en tekst/QR-codes lezen";
+"Run OCR & QR" = "OCR & QR uitvoeren";
+"Text & QR Recognition" = "Tekst- & QR-herkenning";
+"QR Code" = "QR-code";
+"QR Codes" = "QR-codes";
+"Open Link" = "Link openen";
+"Open With" = "Openen met";
+"No Apps Available" = "Geen apps beschikbaar";
+"No Share Services" = "Geen deeldiensten";
+"Upload" = "Uploaden";
+"Share" = "Deel";
+"Undo" = "Ongedaan maken";
+"Redo" = "Opnieuw";
+"Close" = "Sluit";
+"Remove Background" = "Achtergrond verwijderen";
+"Beautify" = "Verfraai";
+"Adjust" = "Aanpassen";
+"Adjust (Image Effects)" = "Aanpassen (Afbeeldingseffecten)";
+"Invert Colors" = "Kleuren omkeren";
+"Record" = "Opnemen";
+"Record screen" = "Scherm opnemen";
+"Translate" = "Vertalen";
+"Auto-Redact sensitive data" = "Gevoelige gegevens automatisch censureren";
+"Move Selection" = "Selectie verplaatsen";
+
+/* Toolbar - Recording */
+"Start Recording" = "Opname starten";
+"Cancel Recording" = "Opname annuleren";
+"Highlight Mouse Clicks" = "Muisklikken markeren";
+"Record System Audio" = "Systeemaudio opnemen";
+"Record Microphone" = "Microfoon opnemen";
+"Recording Settings" = "Opname-instellingen";
+
+/* Tool Options */
+"Size" = "Grootte";
+"Stroke" = "Lijn";
+"Radius" = "Radius";
+"Start:" = "Start:";
+"Draw:" = "Teken:";
+"Auto:" = "Auto:";
+"Fill" = "Vulling";
+"Outline" = "Omtrek";
+"More Emojis" = "Meer emoji's";
+"Load Image" = "Afbeelding laden";
+"Gradient Style" = "Verloopstijl";
+"On" = "Aan";
+"Text Only" = "Alleen tekst";
+"All Text" = "Alle tekst";
+"PII" = "PII";
+"Faces" = "Gezichten";
+"People" = "Personen";
+"Confirm before upload" = "Bevestig voor uploaden";
+"Flip" = "Spiegelen";
+"Smooth" = "Vloeiend";
+"Refined" = "Verfijnd";
+"Smart" = "Slim";
+"Padding" = "Opvulling";
+"Shadow" = "Schaduw";
+"Right-click to add points" = "Rechtsklik om punten toe te voegen";
+"Hold 1 auto-vertical  ·  Hold 2 auto-horizontal" = "Houd 1 ingedrukt auto-verticaal  ·  Houd 2 ingedrukt auto-horizontaal";
+
+/* Overlay / Canvas */
+"Click a window  ·  Drag for custom area  ·  F for full screen" = "Klik op een venster  ·  Sleep voor aangepast gebied  ·  F voor volledig scherm";
+"Drag to select  ·  Click for full screen" = "Sleep om te selecteren  ·  Klik voor volledig scherm";
+"Release to annotate and edit" = "Laat los om te annoteren en bewerken";
+"Release to finish" = "Laat los om te voltooien";
+"Hold Space to move. Release to annotate and edit" = "Houd Spatie ingedrukt om te verplaatsen. Laat los om te annoteren en bewerken";
+"Hold Space to move. Release to finish" = "Houd Spatie ingedrukt om te verplaatsen. Laat los om te voltooien";
+"Window snap: " = "Venster-snap: ";
+"ON" = "AAN";
+"OFF" = "UIT";
+"  (Tab to toggle)" = "  (Tab om te wisselen)";
+"Right-click to copy" = "Rechtsklik om te kopieren";
+"Copied %@" = "%@ gekopieerd";
+"Set color %@" = "Kleur %@ ingesteld";
+"Draw something first to use the move tool." = "Teken eerst iets om het verplaatsgereedschap te gebruiken.";
+"Drag to reposition" = "Sleep om te herpositioneren";
+
+/* Overlay - Popovers */
+"Format:" = "Formaat:";
+"FPS:" = "FPS:";
+"When done:" = "Na afloop:";
+"Open editor" = "Open editor";
+"Show in Finder" = "Toon in Finder";
+"Copy to clipboard" = "Kopieer naar klembord";
+
+/* Preferences - General */
+"Pinlume Preferences" = "Pinlume-instellingen";
+"General" = "Algemeen";
+"Tools" = "Gereedschap";
+"Recording" = "Opname";
+"About" = "Over";
+"Shortcuts" = "Sneltoetsen";
+"Uploads" = "Uploads";
+"Language" = "Taal";
+"Language:" = "Taal:";
+"Restart the app to fully apply the new language." = "Herstart de app om de nieuwe taal volledig toe te passen.";
+"Capture" = "Opname";
+"Play sound on capture" = "Geluid afspelen bij opname";
+"Play sound on copy" = "Geluid afspelen bij kopieren";
+"Remember last selected tool" = "Laatst geselecteerd gereedschap onthouden";
+"Show floating thumbnail after capture" = "Zwevende miniatuur tonen na opname";
+"Launch at login" = "Open bij inloggen";
+"Show snap alignment guides" = "Uitlijnhulplijnen tonen";
+"Snap selection edges to image boundaries" = "Selectieranden uitlijnen op afbeeldingsgrenzen";
+"Capture mouse cursor in screenshot" = "Muiscursor vastleggen in schermafbeelding";
+"Double-click selection to copy" = "Dubbelklik op selectie om te kopiëren";
+"Hide capture instructions" = "Opname-instructies verbergen";
+"Disable shadow outside selection" = "Schaduw buiten selectie uitschakelen";
+"Show shortcuts in tooltips" = "Sneltoetsen in knopinfo tonen";
+"Use window title in saved filename" = "Venstertitel gebruiken in bestandsnaam";
+"Hide menu bar icon" = "Menubalkpictogram verbergen";
+"Hotkeys still work. To show the icon again, re-launch Pinlume." = "Sneltoetsen werken nog steeds. Start Pinlume opnieuw op om het pictogram weer te tonen.";
+"Check for updates automatically" = "Automatisch op updates controleren";
+"Check for beta updates" = "Controleren op bèta-updates";
+"Thumbnail" = "Miniatuur";
+"  Dismiss after:" = "  Verberg na:";
+"seconds before auto-dismiss (0 = never)" = "seconden voor automatisch verbergen (0 = nooit)";
+"  Multiple previews:" = "  Meerdere voorbeelden:";
+"Stack (keep all)" = "Stapelen (alles bewaren)";
+"Replace (show only latest)" = "Vervangen (alleen laatste tonen)";
+"  Position:" = "  Positie:";
+"Menu Bar Order" = "Volgorde menubalk";
+"Choose the order of capture actions in the Pinlume menu bar menu." = "Kies de volgorde van opname-acties in het menubalkmenu van Pinlume.";
+"Move up" = "Omhoog verplaatsen";
+"Move down" = "Omlaag verplaatsen";
+"Output" = "Uitvoer";
+"Image format:" = "Afbeeldingsformaat:";
+"Quality:" = "Kwaliteit:";
+"%d%%" = "%d%%";
+"Save at standard resolution (1x)" = "Opslaan op standaardresolutie (1x)";
+"Halves dimensions on Retina displays, ~4x smaller files" = "Halveert afmetingen op Retina-schermen, ~4x kleinere bestanden";
+"Embed sRGB color profile" = "sRGB-kleurprofiel insluiten";
+"Ensures consistent colors across different displays" = "Zorgt voor consistente kleuren op verschillende schermen";
+"Screenshot History" = "Schermafbeeldingsgeschiedenis";
+"Order history by last edit" = "Geschiedenis sorteren op laatste bewerking";
+"Edited screenshots move to the top. Off keeps them in capture order." = "Bewerkte schermafbeeldingen komen bovenaan. Uit houdt ze in opnamevolgorde.";
+"History size:" = "Geschiedenisgrootte:";
+"screenshots kept on disk (0 = off)" = "schermafbeeldingen bewaard op schijf (0 = uit)";
+"Save Directory" = "Opslagmap";
+"Save action:" = "Opslagactie:";
+"Save to default folder" = "Opslaan in standaardmap";
+"Ask where to save" = "Vragen waar op te slaan";
+"Save folder:" = "Opslagmap:";
+"Browse…" = "Bladeren…";
+"Appearance" = "Weergave";
+"Accent color:" = "Accentkleur:";
+"Icon color:" = "Pictogramkleur:";
+"Background color:" = "Achtergrondkleur:";
+"Reset" = "Herstel";
+"Menu bar icon:" = "Menubalkpictogram:";
+"Default" = "Standaard";
+"Custom symbol" = "Aangepast symbool";
+"Enter any SF Symbol name (e.g. camera.fill) or pick a preset. Browse names in Apple's SF Symbols app. Invalid names fall back to the default icon." = "Voer een willekeurige SF Symbol-naam in (bijv. camera.fill) of kies een voorinstelling. Blader door namen in Apple's SF Symbols-app. Ongeldige namen vallen terug op het standaardpictogram.";
+"OCR Capture:" = "OCR-opname:";
+"OCR & QR Capture:" = "OCR & QR-opname:";
+"Show window + copy to clipboard" = "Venster tonen + kopieren naar klembord";
+"Show window only" = "Alleen venster tonen";
+"Copy to clipboard only" = "Alleen kopieren naar klembord";
+"Enter / Quick Capture:" = "Enter / Snelle opname:";
+"Save to file" = "Bewaar als bestand";
+"Save + copy to clipboard" = "Bewaar + kopieer naar klembord";
+"OCR Action" = "OCR-actie";
+
+/* Preferences - Shortcuts */
+"Keyboard Shortcuts" = "Sneltoetsen";
+"Hotkeys" = "Sneltoetsen";
+"Clear shortcut" = "Sneltoets wissen";
+"Press keys..." = "Druk op toetsen...";
+"Waiting..." = "Wachten...";
+
+/* Preferences - Tools */
+"Annotation Tools" = "Annotatiegereedschap";
+"Hidden tools are removed from the bottom toolbar." = "Verborgen gereedschappen worden verwijderd uit de onderste werkbalk.";
+"Capture Actions" = "Opnameacties";
+"Bottom Toolbar Actions" = "Acties in onderste werkbalk";
+"Hidden actions are removed from the bottom toolbar." = "Verborgen acties worden verwijderd uit de onderste werkbalk.";
+"Editor Actions" = "Editoracties";
+"Right Toolbar Actions" = "Acties in rechter werkbalk";
+"Hidden actions are removed from the right toolbar." = "Verborgen acties worden verwijderd uit de rechter werkbalk.";
+
+/* Preferences - Recording */
+"Frame rate:" = "Framesnelheid:";
+"After recording:" = "Na opname:";
+"Save recording to:" = "Opname opslaan in:";
+"Clear" = "Wis";
+"Max height:" = "Max hoogte:";
+"px (0 = unlimited)" = "px (0 = onbeperkt)";
+"Behavior" = "Gedrag";
+"Auto-scroll (sends synthetic scroll events)" = "Automatisch scrollen (stuurt synthetische scroll-events)";
+"Detect fixed/sticky headers" = "Vaste/plakkende headers detecteren";
+"Scroll speed:" = "Scrollsnelheid:";
+"Slow" = "Langzaam";
+"Medium" = "Gemiddeld";
+"Fast" = "Snel";
+"Very fast" = "Zeer snel";
+"5 fps" = "5 fps";
+"10 fps" = "10 fps";
+"15 fps" = "15 fps";
+"24 fps" = "24 fps";
+"30 fps" = "30 fps";
+"60 fps" = "60 fps";
+"120 fps" = "120 fps";
+"MP4 (H.264)" = "MP4 (H.264)";
+"GIF" = "GIF";
+
+/* Preferences - Upload */
+"Upload Service" = "Uploaddienst";
+"Upload Provider" = "Uploadprovider";
+"Provider:" = "Provider:";
+"Google Drive" = "Google Drive";
+"Google Drive (images + videos)" = "Google Drive (afbeeldingen + video's)";
+"imgbb (images only)" = "imgbb (alleen afbeeldingen)";
+"S3-Compatible (images + videos)" = "S3-compatibel (afbeeldingen + video's)";
+"S3-Compatible Storage" = "S3-compatibele opslag";
+"Sign In with Google" = "Inloggen met Google";
+"Sign Out" = "Uitloggen";
+"Signed in" = "Ingelogd";
+"Not signed in" = "Niet ingelogd";
+"Account:" = "Account:";
+"Test Connection" = "Verbinding testen";
+"Fill in endpoint, bucket, and credentials first" = "Vul eerst endpoint, bucket en inloggegevens in";
+"Testing..." = "Testen...";
+"Connection successful!" = "Verbinding geslaagd!";
+"Leave empty to use default" = "Laat leeg voor standaardwaarde";
+"Endpoint:" = "Endpoint:";
+"Region:" = "Regio:";
+"Bucket:" = "Bucket:";
+"Access Key:" = "Toegangssleutel:";
+"Secret Key:" = "Geheime sleutel:";
+"Public URL:" = "Publieke URL:";
+"Path Prefix:" = "Padprefix:";
+"API key:" = "API-sleutel:";
+"Upload History" = "Uploadgeschiedenis";
+"No uploads yet." = "Nog geen uploads.";
+"Base URL for public access. If empty, the S3 endpoint URL is used (may not be publicly accessible)." = "Basis-URL voor publieke toegang. Indien leeg wordt de S3-endpoint-URL gebruikt (mogelijk niet publiek toegankelijk).";
+"A shared key is included — get your own free key at imgbb.com/api if you hit rate limits. Images only (no video support)." = "Een gedeelde sleutel is inbegrepen — haal je eigen gratis sleutel op imgbb.com/api als je limieten bereikt. Alleen afbeeldingen (geen video-ondersteuning).";
+"Works with AWS S3, Cloudflare R2, MinIO, DigitalOcean Spaces, Backblaze B2, and other S3-compatible services. Supports images and videos." = "Werkt met AWS S3, Cloudflare R2, MinIO, DigitalOcean Spaces, Backblaze B2 en andere S3-compatibele diensten. Ondersteunt afbeeldingen en video's.";
+"Configure S3 in Preferences" = "Configureer S3 in Instellingen";
+"Sign in to Google Drive in Preferences" = "Log in bij Google Drive in Instellingen";
+"Video upload requires Google Drive or S3" = "Video-upload vereist Google Drive of S3";
+
+/* Preferences - About */
+"Pinlume" = "Pinlume";
+"Version %@ (%@)" = "Versie %@ (%@)";
+"Made by" = "Gemaakt door";
+"Licensed under the GPLv3" = "Gelicenseerd onder de GPLv3";
+"A free, open-source screenshot & screen recording tool for macOS.\nFully native — built with Swift and AppKit." = "Een gratis, open-source schermafbeelding- en schermopnametool voor macOS.\nVolledig natief — gebouwd met Swift en AppKit.";
+
+/* Alerts */
+"No Image on Clipboard" = "Geen afbeelding op klembord";
+"No Image or Text on Clipboard" = "Geen afbeelding of tekst op klembord";
+"Copy an image to the clipboard first, then try again." = "Kopieer eerst een afbeelding naar het klembord en probeer het opnieuw.";
+"Copy an image or text to the clipboard first, then try again." = "Kopieer eerst een afbeelding of tekst naar het klembord en probeer het opnieuw.";
+"OK" = "OK";
+"Accessibility Access Required" = "Toegankelijkheidstoegang vereist";
+"Pinlume needs Accessibility permission to auto-scroll other apps. Please grant access in System Settings, then try again." = "Pinlume heeft toegankelijkheidstoegang nodig om automatisch in andere apps te scrollen. Verleen toegang in Systeeminstellingen en probeer het opnieuw.";
+"Pinlume needs Accessibility permission for scroll capture. Please grant access in System Settings, then try again." = "Pinlume heeft toegankelijkheids­toestemming nodig voor scrollopname. Verleen toegang in Systeeminstellingen en probeer het opnieuw.";
+"Open Settings" = "Open Instellingen";
+"Cancel" = "Annuleer";
+"Microphone Access Required" = "Microfoontoegang vereist";
+"Pinlume needs microphone permission to record voice audio. Open System Settings to grant access." = "Pinlume heeft microfoontoestemming nodig om spraak op te nemen. Open Systeeminstellingen om toegang te verlenen.";
+"Upload to Google Drive?" = "Uploaden naar Google Drive?";
+"Upload to S3?" = "Uploaden naar S3?";
+"Upload to imgbb.com?" = "Uploaden naar imgbb.com?";
+"Your screenshot will be uploaded." = "Je schermafbeelding wordt geupload.";
+
+/* Permission Onboarding */
+"Welcome to Pinlume" = "Welkom bij Pinlume";
+"Pinlume needs one permission" = "Pinlume heeft een toestemming nodig";
+"Screen Recording not yet granted" = "Schermopname nog niet toegestaan";
+"Screen Recording granted!" = "Schermopname toegestaan!";
+"Enable Pinlume, then try taking a screenshot" = "Schakel Pinlume in en probeer een schermafbeelding te maken";
+"Open Screen Recording Settings" = "Open schermopname-instellingen";
+"Continue" = "Ga door";
+
+/* OCR Window */
+"Text Recognition" = "Tekstherkenning";
+"Translate to:" = "Vertalen naar:";
+"%d chars · %d words" = "%d tekens · %d woorden";
+"Copy  ⌘↩" = "Kopieer  ⌘↩";
+"AI Search" = "AI-zoeken";
+"Show Original" = "Toon origineel";
+"Translation Failed" = "Vertaling mislukt";
+"Translation" = "Vertaling";
+"(No text detected in the selected area)" = "(Geen tekst gedetecteerd in het geselecteerde gebied)";
+
+/* Upload Toast */
+"URL copied to the clipboard" = "URL gekopieerd naar het klembord";
+"Uploading... %d%%" = "Uploaden... %d%%";
+"Upload failed: %@" = "Upload mislukt: %@";
+"Uploaded! Link copied." = "Geupload! Link gekopieerd.";
+"Uploading to %@... %d%%" = "Uploaden naar %@... %d%%";
+"Open" = "Open";
+
+/* Recording Toast */
+"Recording saved" = "Opname opgeslagen";
+"%@ • Recording saved" = "%@ • Opname opgeslagen";
+"Copy Path" = "Kopieer pad";
+"Path copied!" = "Pad gekopieerd!";
+
+/* Video Editor */
+"Pinlume Video Editor" = "Pinlume Video-editor";
+"%@ selected" = "%@ geselecteerd";
+"Exporting..." = "Exporteren...";
+"Export failed" = "Export mislukt";
+"Saved to %@" = "Opgeslagen in %@";
+"Save failed" = "Opslaan mislukt";
+
+/* Barcode Detector */
+/* "Open" and "Copy" are shared with other sections */
+
+/* Save Panel */
+"Save As..." = "Bewaar als...";
+"Save Recording" = "Bewaar opname";
+"Choose a folder" = "Kies een map";
+"Save All to Folder…" = "Bewaar alles in map…";
+
+/* Scroll Capture HUD */
+"Auto Scroll" = "Automatisch scrollen";
+"Stop" = "Stop";
+"Scrolling..." = "Scrollen...";
+
+/* Effects Picker (Adjust popover) */
+"Presets" = "Voorinstellingen";
+"Adjustments" = "Aanpassingen";
+"Brightness" = "Helderheid";
+"Contrast" = "Contrast";
+"Saturation" = "Verzadiging";
+"Sharpness" = "Scherpte";
+
+/* Time Ago */
+"just now" = "zojuist";
+"%ds ago" = "%ds geleden";
+"%dm ago" = "%dm geleden";
+"%dh ago" = "%du geleden";
+
+/* Hotkey Labels */
+"History" = "Geschiedenis";
+
+/* Preferences - Shortcuts note */
+"Click \"Record\" and press a key combination with at least one modifier (⌘, ⌥, ⌃, ⇧) to set a shortcut." = "Klik op \"Opnemen\" en druk op een toetsencombinatie met ten minste een modifier (⌘, ⌥, ⌃, ⇧) om een sneltoets in te stellen.";
+
+/* Recording — GIF Processing */
+"Processing GIF…" = "GIF verwerken…";
+
+/* Recording — Input Monitoring Permission */
+"Input Monitoring Required" = "Invoerbewaking vereist";
+"Pinlume needs Input Monitoring permission to show keystrokes during recording. Please grant access in System Settings, then try again." = "Pinlume heeft de toestemming Invoerbewaking nodig om toetsaanslagen te tonen tijdens de opname. Verleen toegang in System Settings en probeer het opnieuw.";
+"Pinlume needs Accessibility permission to show keystrokes during recording. Please grant access in System Settings, then try again." = "Pinlume heeft de toegankelijkheidstoestemming nodig om toetsaanslagen te tonen tijdens de opname. Verleen toegang in System Settings en probeer het opnieuw.";
+
+/* Recording — Keystroke Overlay */
+"Show Keystrokes" = "Toetsaanslagen tonen";
+"Shortcuts Only" = "Alleen sneltoetsen";
+"All Keystrokes" = "Alle toetsaanslagen";
+
+/* Recording — Settings Popover */
+"Delay:" = "Vertraging:";
+
+/* Video Editor */
+"Copied to clipboard!" = "Gekopieerd naar klembord!";
+
+/* Webcam Overlay */
+"Webcam Overlay" = "Webcamoverlay";
+"Camera Access Required" = "Cameratoegang vereist";
+"Pinlume needs camera permission for the webcam overlay. Open System Settings to grant access." = "Pinlume heeft cameratoegang nodig voor de webcamoverlay. Open Systeeminstellingen om toegang te verlenen.";
+"Webcam" = "Webcam";
+"Bottom Right" = "Rechtsonder";
+"Bottom Left" = "Linksonder";
+"Top Right" = "Rechtsboven";
+"Top Left" = "Linksboven";
+"Small" = "Klein";
+"Large" = "Groot";
+"Webcam Size Small" = "Klein";
+"Webcam Size Medium" = "Gemiddeld";
+"Webcam Size Large" = "Groot";
+"Webcam Size Extra Large" = "Extra groot";
+"Circle" = "Cirkel";
+"Rounded Rectangle" = "Afgeronde rechthoek";
+"Cam pos:" = "Cam pos.:";
+"Cam size:" = "Cam grootte:";
+"Cam shape:" = "Cam vorm:";
+
+/* New strings */
+"Settings..." = "Instellingen...";
+"Settings" = "Instellingen";
+"Pinlume Settings" = "Pinlume-instellingen";
+"Also open in Editor" = "Ook openen in editor";
+"Hide controls" = "Bedieningselementen verbergen";
+"Hide recording controls" = "Opnamebediening verbergen";
+"Stop recording from the menu bar icon instead." = "Stop de opname via het menubalkpictogram.";
+"Pixelate" = "Pixelen";
+"Blur" = "Vervagen";
+"Solid" = "Effen";
+"Erase" = "Wissen";
+"Done" = "Gereed";
+"Do nothing" = "Niets doen";
+"Overlay / Editor Shortcuts" = "Overlay- / editorsneltoetsen";
+"Set" = "Instellen";
+"Press..." = "Druk...";
+"Reset to default" = "Standaardwaarden herstellen";
+"Press a single key to assign it as the shortcut for that tool. These work when the overlay or editor is active." = "Druk op een toets om deze als sneltoets voor dat gereedschap toe te wijzen. Deze werken wanneer de overlay of editor actief is.";
+"Keep Separate" = "Gescheiden houden";
+"Merge Audio" = "Audio samenvoegen";
+"Audio Tracks" = "Audiotracks";
+"Adjust volume for each audio track:" = "Pas het volume aan voor elke audiotrack:";
+"Microphone:" = "Microfoon:";
+"System audio:" = "Systeemaudio:";
+"Loupe" = "Loep";
+"Stamp" = "Stempel";
+"Unlimited" = "Onbeperkt";
+"Save changes?" = "Wijzigingen opslaan?";
+"Your annotations will be lost if you close without saving." = "Je annotaties gaan verloren als je sluit zonder op te slaan.";
+"Save & Close" = "Opslaan en sluiten";
+"Discard" = "Verwerpen";
+"Stop Recording" = "Opname stoppen";
+"Pause" = "Pauzeren";
+"Resume" = "Hervatten";
+"Engine:" = "Engine:";
+"Google Translate" = "Google Translate";
+"Apple (on-device)" = "Apple (op het apparaat)";
+"Apple translation is faster and works offline. Google Translate supports more languages." = "Apple-vertaling is sneller en werkt offline. Google Translate ondersteunt meer talen.";
+"Download language packs in System Settings…" = "Download taalpakketten in Systeeminstellingen…";
+"Configure S3 in Settings" = "Configureer S3 in Instellingen";
+"Sign in to Google Drive in Settings" = "Log in bij Google Drive in Instellingen";
+"Offline build: upload and cloud storage integrations are removed. Update checks may still connect to Pinlume's update server. Screenshots and recordings stay local unless you share or save them yourself." = "Offline build: integraties voor uploaden en cloudopslag zijn verwijderd. Controles op updates kunnen nog steeds verbinding maken met de updateserver van Pinlume. Schermafbeeldingen en opnames blijven lokaal tenzij je ze zelf deelt of opslaat.";
+"Position:" = "Positie:";
+"Size:" = "Grootte:";
+"Shape:" = "Vorm:";
+
+"Same as screenshots" = "Hetzelfde als schermafbeeldingen";
+"  Preview size:" = "  Voorbeeldgrootte:";
+"(0 = off)" = "(0 = uit)";
+"Clear All" = "Alles wissen";
+"Clear History?" = "Geschiedenis wissen?";
+"This will permanently delete all screenshots from history." = "Hiermee worden alle schermafbeeldingen definitief uit de geschiedenis verwijderd.";
+"Click \"Set\" and press a key combination with at least one modifier (⌘, ⌥, ⌃, ⇧) to set a shortcut." = "Klik op \"Instellen\" en druk op een toetscombinatie met ten minste één modifier (⌘, ⌥, ⌃, ⇧) om een sneltoets in te stellen.";
+"Files are uploaded to a \"Pinlume\" folder in your Google Drive. Everything stays private — nothing is shared publicly." = "Bestanden worden geüpload naar een \"Pinlume\"-map in uw Google Drive. Alles blijft privé — er wordt niets openbaar gedeeld.";
+
+"Pressure" = "Druk";
+
+/* Added for v4.1.0-beta.3 — video editor, effects, open-video, shortcuts help */
+"Open Video..." = "Video openen...";
+"Choose a video to open in Pinlume editor" = "Kies een video om in de Pinlume-editor te openen";
+"Click to add effects" = "Klik om effecten toe te voegen";
+"Add Zoom" = "Zoom toevoegen";
+"Add Censor" = "Censuur toevoegen";
+"Add Cut" = "Knip toevoegen";
+"Add Speed" = "Snelheid toevoegen";
+"Add Freeze" = "Stilstaand beeld toevoegen";
+"Add Text" = "Tekst toevoegen";
+"Delete Zoom" = "Zoom verwijderen";
+"Delete Censor" = "Censuur verwijderen";
+"Delete Cut" = "Knip verwijderen";
+"Delete Speed" = "Snelheid verwijderen";
+"Delete Freeze" = "Stilstaand beeld verwijderen";
+"Delete Text" = "Tekst verwijderen";
+"Edit Text…" = "Tekst bewerken…";
+"Huge" = "Enorm";
+"Bold" = "Vet";
+"Italic" = "Cursief";
+"Alignment" = "Uitlijning";
+"Left" = "Links";
+"Center" = "Midden";
+"Right" = "Rechts";
+"Text Color" = "Tekstkleur";
+"Background Color" = "Achtergrondkleur";
+"Rounded" = "Afgerond";
+"Custom…" = "Aangepast…";
+"Transparent" = "Transparant";
+"Black" = "Zwart";
+"White" = "Wit";
+"Yellow" = "Geel";
+"Red" = "Rood";
+"Green" = "Groen";
+"Blue" = "Blauw";
+"Untitled" = "Naamloos";
+"Add effect" = "Effect toevoegen";
+"Fade" = "Vervagen";
+"High" = "Hoog";
+"Low" = "Laag";
+"Not enough room here" = "Niet genoeg ruimte hier";
+"Copied!" = "Gekopieerd!";
+"Converting to GIF…" = "Omzetten naar GIF…";
+"GIF conversion failed" = "GIF-conversie mislukt";
+"No video track found" = "Geen videotrack gevonden";
+"Preview:" = "Voorbeeld:";
+"Copy Screen Info" = "Scherminfo kopiëren";
+"Copies display and capture diagnostics to clipboard" = "Kopieert scherm- en opnamediagnostiek naar het klembord";
+"Accent" = "Accent";
+"Icon" = "Pictogram";
+"Background" = "Achtergrond";
+"Custom" = "Aangepast";
+"Theme:" = "Thema:";
+"Application" = "Applicatie";
+"Capture area and extract text" = "Gebied vastleggen en tekst extraheren";
+"Capture the full screen" = "Volledig scherm vastleggen";
+"Counter for multi-screen captures" = "Teller voor opnames op meerdere schermen";
+"8-character random string (e.g. k3j7x9q2)" = "Willekeurige reeks van 8 tekens (bijv. k3j7x9q2)";
+"Filename Template Tokens" = "Tokens voor bestandsnaamsjabloon";
+"Filename tokens" = "Bestandsnaam-tokens";
+"Filename:" = "Bestandsnaam:";
+"Open an image file in the editor" = "Open een afbeeldingsbestand in de editor";
+"Open the recent captures overlay" = "Open de overlay met recente opnames";
+"Open this settings window" = "Open dit instellingenvenster";
+"Quick capture (uses your Enter action)" = "Snelle opname (gebruikt je Enter-actie)";
+"Re-capture the last selected area" = "Laatst geselecteerde gebied opnieuw vastleggen";
+"Screenshots only — captured window title (blank otherwise)" = "Alleen schermafbeeldingen — titel van het vastgelegde venster (anders leeg)";
+"Show available filename tokens" = "Beschikbare bestandsnaam-tokens tonen";
+"Show supported URL scheme commands" = "Ondersteunde URL-schemacommando's tonen";
+"Enable pinlume:// URL scheme" = "pinlume:// URL-schema inschakelen";
+"Start area capture" = "Gebiedsopname starten";
+"Start area recording" = "Gebiedsopname (video) starten";
+"Start full-screen recording" = "Volledige schermopname starten";
+"Start scroll capture" = "Scrollopname starten";
+"Stop the current recording" = "Huidige opname stoppen";
+"Supported URL Scheme Commands" = "Ondersteunde URL-schemacommando's";
+"The file extension is appended automatically. Slashes and colons in {window} become dashes." = "De bestandsextensie wordt automatisch toegevoegd. Schuine strepen en dubbele punten in {window} worden streepjes.";
+"Trigger Pinlume from Raycast, Alfred, Shortcuts, or any tool that opens URLs." = "Activeer Pinlume vanuit Raycast, Alfred, Shortcuts of elke tool die URL's opent.";
+"URL scheme info" = "URL-schema-info";
+"sec (0 = never)" = "sec (0 = nooit)";
+
+/* Resolution / aspect ratio presets */
+"Aspect ratio & resolution presets" = "Voorinstellingen voor beeldverhouding en resolutie";
+"Aspect ratio" = "Beeldverhouding";
+"Resolution" = "Resolutie";
+"Freeform" = "Vrije vorm";
+"Custom · %@" = "Aangepast · %@";
+"Units" = "Eenheden";
+"Keep ratio for next captures" = "Verhouding behouden voor volgende opnames";
+"Zoom" = "Zoom";
+
+/* Keyboard key names */
+"Space" = "Spatie";
+
+/* Localized current UI keys. Existing translations above are preserved. */
+"Plus build: personal build with update checks disabled. Preferences, history, and permissions are separate from the original Pinlume app." = "Plus build: persoonlijke build met updatecontroles uitgeschakeld. Voorkeuren, geschiedenis en machtigingen staan ​​los van de originele Pinlume-app.";
+"Light" = "Licht";
+"Press Option to hide magnifier" = "Druk op Optie om het vergrootglas te verbergen";
+"Changes to the selected profile are saved automatically." = "Wijzigingen aan het geselecteerde profiel worden automatisch opgeslagen.";
+"Show Pin Shadow" = "Pinschaduw weergeven";
+"Arrow Keys" = "Pijltjestoetsen";
+"Source Language" = "Brontaal";
+"Translation Pin" = "Vertaalpin";
+"Color Scheme:" = "Kleurenschema:";
+"Text Recognition / QR" = "Tekstherkenning / QR";
+"Basic" = "Basis";
+"Full" = "Vol";
+"Menu Bar Menu" = "Menubalkmenu";
+"Screenshot history and editable annotations" = "Screenshotgeschiedenis en bewerkbare annotaties";
+"Press Shift to switch RGB/HEX" = "Druk op Shift om tussen RGB/HEX te schakelen";
+"Clipboard image backups" = "Back-ups van klembordafbeeldingen";
+"Double-click to Toggle Thumbnail" = "Dubbelklik om miniatuur in of uit te schakelen";
+"Compare" = "Vergelijk";
+"Apple translation does not support %@ → %@." = "De Apple-vertaling ondersteunt %@ → %@ niet.";
+"Profile:" = "Profiel:";
+"Move to Applications" = "Ga naar Applicaties";
+"Filled Rectangle" = "Gevulde rechthoek";
+"Google translation is unavailable because sending text is disabled." = "Google-vertaling is niet beschikbaar omdat het verzenden van tekst is uitgeschakeld.";
+"Adjust Area and Edit" = "Gebied aanpassen en bewerken";
+"Clear Local Data…" = "Lokale gegevens wissen…";
+"Swap Languages" = "Wissel talen";
+"Ignore window occlusion" = "Negeer vensterocclusie";
+"Graphite Blue" = "Grafietblauw";
+"Copy Original" = "Kopieer origineel";
+"Pin Shadow" = "Speldschaduw";
+"Translation Window" = "Vertaalvenster";
+"Show Translation" = "Vertaling tonen";
+"Enable %@:// URL scheme" = "Schakel %@:// URL-schema in";
+"Disabled by default. Keeps up to 7 days or 2 MB; never writes screenshots, OCR text, clipboard contents, or keys." = "Standaard uitgeschakeld. Houdt maximaal 7 dagen of 2 MB; schrijft nooit schermafbeeldingen, OCR-tekst, klembordinhoud of sleutels.";
+"Strength" = "Sterkte";
+"Auto-Redact Sensitive Information" = "Gevoelige informatie automatisch redigeren";
+"More Tools" = "Meer hulpmiddelen";
+"Move Magnifier Sample Point 1 Pixel" = "Verplaats het vergrootglasmonsterpunt 1 pixel";
+"Translating…" = "Vertalen…";
+"Pin Scroll Zoom" = "Pin-scroll-zoom";
+"Copy Text (shown for text pins only)" = "Tekst kopiëren (alleen weergegeven voor tekstpinnen)";
+"Copy Pinned Text" = "Kopieer vastgezette tekst";
+"Forest" = "Bos";
+"Show floating window after Quick Capture" = "Zwevend venster weergeven na Quick Capture";
+"Brush" = "Borstel";
+"Allow Scroll Zoom on Pins" = "Sta Scroll Zoom op pinnen toe";
+"Could not copy configuration." = "Kan configuratie niet kopiëren.";
+"Allow sending text to Google Translate" = "Toestaan dat tekst naar Google Translate wordt verzonden";
+"Export…" = "Exporteren…";
+"Choose local data to clear" = "Kies lokale gegevens om te wissen";
+"Delete Configuration?" = "Configuratie verwijderen?";
+"Non-Drawing Actions" = "Niet-tekenende acties";
+"Restored pins (closes current pins immediately)" = "Herstelde pinnen (sluit huidige pinnen onmiddellijk)";
+"Professional" = "Professioneel";
+"Move to More Tools" = "Ga naar Meer hulpmiddelen";
+"Translation failed; original text shown." = "Vertaling mislukt; originele tekst weergegeven.";
+"Target Language" = "Doeltaal";
+"About Pinlume" = "Over Pinlume";
+"No text found" = "Geen tekst gevonden";
+"Automatic" = "Automatisch";
+"Select Text" = "Selecteer Tekst";
+"Move Down" = "Ga naar beneden";
+"Don't ask again" = "Vraag het niet opnieuw";
+"Space to move. Release to annotate and edit" = "Ruimte om te bewegen. Laat los om aantekeningen te maken en te bewerken";
+"Transparent Annotation" = "Transparante annotatie";
+"Speak Source" = "Spreek Bron";
+"Press %@ to move selection 1 pixel" = "Druk op %@ om de selectie 1 pixel te verplaatsen";
+"Pin Scroll Opacity" = "Dekking van pin-scroll";
+"OCR Pin" = "OCR-pin";
+"Double-click" = "Dubbelklik";
+"Rename Configuration" = "Configuratie hernoemen";
+"When shortcuts conflict, the settings list is matched from top to bottom and the first entry takes priority." = "Wanneer snelkoppelingen conflicteren, wordt de lijst met instellingen van boven naar beneden met elkaar vergeleken en krijgt de eerste invoer voorrang.";
+"Original / Translation" = "Origineel / vertaling";
+"Move Toolbar" = "Werkbalk verplaatsen";
+"Beautify Screenshot" = "Verfraai screenshot";
+"Opacity %d%%" = "Dekking %d%%";
+"Configuration" = "Configuratie";
+"Press %@ to show/hide magnifier" = "Druk op %@ om het vergrootglas te tonen/verbergen";
+"Anchor to Mouse Position" = "Verankeren aan muispositie";
+"Press C to copy color" = "Druk op C om kleur te kopiëren";
+"Import…" = "Importeren…";
+"Apple translation language availability is unknown." = "De beschikbaarheid van de Apple-vertaaltalen is onbekend.";
+"Unable to capture selection" = "Kan selectie niet vastleggen";
+"Translated Text" = "Vertaalde tekst";
+"Show partial image in compact Pin" = "Toon gedeeltelijke afbeelding in compacte pin";
+"Translation complete" = "Vertaling voltooid";
+"Show Original / Translation" = "Toon origineel / vertaling";
+"Languages swapped; edited translation was preserved" = "Talen verwisseld; de bewerkte vertaling is bewaard gebleven";
+"Image Adjustments" = "Beeldaanpassingen";
+"Hide All Pins" = "Verberg alle pinnen";
+"Make Common" = "Maak gemeenschappelijk";
+"Storage & Diagnostics" = "Opslag en diagnostiek";
+"Size %d%%" = "Maat %d%%";
+"Enter a new name for this custom configuration." = "Voer een nieuwe naam in voor deze aangepaste configuratie.";
+"Preparing full window…" = "Volledig venster voorbereiden…";
+"This affects both the capture selection toolbar and pin toolbar. Common tools appear in the first row; additional tools move into the More menu." = "Dit heeft invloed op zowel de vastlegselectiewerkbalk als de vastzetwerkbalk. Algemene tools verschijnen in de eerste rij; aanvullende hulpmiddelen worden naar het menu Meer verplaatst.";
+"Pinlume needs Accessibility permission to translate selected text. Open System Settings to grant access. If Pinlume is not listed, click the + button and choose the running Pinlume app." = "Pinlume heeft toegankelijkheidstoestemming nodig om de geselecteerde tekst te vertalen. Open Systeeminstellingen om toegang te verlenen. Als Pinlume niet in de lijst staat, klikt u op de knop + en kiest u de actieve Pinlume-app.";
+"These shortcuts work only in a capture selection or selected pin; on-screen hints follow the current settings." = "Deze sneltoetsen werken alleen in een vastlegselectie of geselecteerde pin; hints op het scherm volgen de huidige instellingen.";
+"Copy Configuration" = "Kopieer";
+"Deep Teal" = "Diep blauwgroen";
+"Could not apply configuration profile." = "Kan configuratieprofiel niet toepassen.";
+"Switch Magnifier RGB/HEX" = "Schakel Vergrootglas RGB/HEX";
+"Anchor to Top Left" = "Anker linksboven";
+"Amber" = "Amber";
+"Configuration:" = "Configuratie:";
+"Selectable Text Capture" = "Selecteerbare tekstopname";
+"Hide/Show All Pins" = "Alle pinnen verbergen/tonen";
+"Unable to capture full window" = "Kan het volledige venster niet vastleggen";
+"Toolbar Layout" = "Indeling van de werkbalk";
+"Move Up" = "Ga omhoog";
+"Enable Hotkeys" = "Schakel sneltoetsen in";
+"Choose an image to pin to screen" = "Kies een afbeelding om vast te zetten op het scherm";
+"OCR Selection" = "OCR-selectie";
+"%@ is running from a disk image. Move it to your Applications folder for stable permissions and the best experience." = "%@ wordt uitgevoerd vanaf een schijfkopie. Verplaats het naar uw map Programma's voor stabiele machtigingen en de beste ervaring.";
+"System Default" = "Systeemstandaard";
+"Midnight Indigo" = "Middernacht Indigo";
+"Shortcut unavailable (error %d)" = "Snelkoppeling niet beschikbaar (fout %d)";
+"Auto Detect" = "Automatische detectie";
+"Copy of %@" = "Kopie van %@";
+"Choose which actions appear in the status bar menu and arrange the order of common and additional tools. Settings, version, and quit remain fixed." = "Kies welke acties in het statusbalkmenu verschijnen en rangschik de volgorde van algemene en aanvullende tools. Instellingen, versie en afsluiten blijven vast.";
+"Sentence Comparison" = "Zinvergelijking";
+"Could not rename configuration." = "Kan de naam van de configuratie niet wijzigen.";
+"No items" = "Geen artikelen";
+"Diagnostic logs" = "Diagnostische logboeken";
+"Not Now" = "Niet nu";
+"Text copied" = "Tekst gekopieerd";
+"Scroll capture copied to clipboard" = "Scrollopname gekopieerd naar klembord";
+"Rename…" = "Naam wijzigen…";
+"Calculating…" = "Berekenen…";
+"Disable Hotkeys" = "Schakel sneltoetsen uit";
+"Enable diagnostic logging (status, timing, coordinates, and errors only)" = "Diagnostische registratie inschakelen (alleen status, timing, coördinaten en fouten)";
+"Hold %@ to show magnifier" = "Houd %@ vast om het vergrootglas weer te geven";
+"Choose which dedicated OCR and translation tools are visible. Keyboard shortcuts are in Shortcuts." = "Kies welke speciale OCR- en vertaaltools zichtbaar zijn. Sneltoetsen vindt u in Snelkoppelingen.";
+"Hold to Show Magnifier" = "Houd ingedrukt om vergrootglas weer te geven";
+"Show All Pins" = "Toon alle pinnen";
+"The configuration “%@” will be deleted and Basic will be applied." = "De configuratie “%@” wordt verwijderd en Basic wordt toegepast.";
+"These are actions rather than drawing tools. They appear in More Tools; disabling one hides it from both selections and pins." = "Dit zijn acties in plaats van tekenhulpmiddelen. Ze verschijnen in Meer tools; Als u er een uitschakelt, wordt deze verborgen voor zowel selecties als pinnen.";
+"Images saved to a folder you choose will not be deleted." = "Afbeeldingen die zijn opgeslagen in een map die u kiest, worden niet verwijderd.";
+"Press %@ to switch RGB/HEX" = "Druk op %@ om tussen RGB/HEX te schakelen";
+"Space to move. Release to finish" = "Ruimte om te bewegen. Laat los om te voltooien";
+"Show/Hide Magnifier" = "Vergrootglas tonen/verbergen";
+"Speak" = "Spreek";
+"Eraser" = "Gum";
+"Current Configuration" = "Huidige configuratie";
+"Screen Translation Capture" = "Schermvertaling vastleggen";
+"Copy Translation" = "Kopieer vertaling";
+"Move to Applications folder?" = "Verplaatsen naar de map Programma's?";
+"Double-click to Close Pin" = "Dubbelklik om de pin te sluiten";
+"Slim" = "Slank";
+"Could not move to Applications" = "Kan niet naar Applicaties verplaatsen";
+"Please drag Pinlume to your Applications folder manually.\n\n%@" = "Sleep Pinlume handmatig naar uw map Programma's.\n\n%@";
+"Could not import configuration." = "Kan configuratie niet importeren.";
+"These are actions rather than drawing tools. Disabling one hides it from ordinary selections and pins." = "Dit zijn acties in plaats van tekenhulpmiddelen. Als u er een uitschakelt, wordt deze verborgen voor gewone selecties en pinnen.";
+"Turn this off to keep translation text on this Mac. Google translation will be unavailable." = "Schakel dit uit om de vertalingstekst op deze Mac te behouden. Google-vertaling zal niet beschikbaar zijn.";
+"Could not delete configuration." = "Kan configuratie niet verwijderen.";
+"Screen translation must stay on one display" = "Schermvertaling moet op één scherm blijven staan";
+"Hide Pin Shadow" = "Pinschaduw verbergen";
+"Translation Status" = "Vertaalstatus";
+"Monochrome" = "Monochroom";
+"Translate before swapping languages" = "Vertaal voordat u van taal wisselt";
+"Export" = "Exporteren";
+"Dark" = "Donker";
+"Apple translation needs the %@ → %@ language pack. Download it in System Settings." = "Voor Apple-vertalingen is het taalpakket %@ → %@ nodig. Download het in Systeeminstellingen.";
+"Press %@ to move the sample point 1 pixel" = "Druk op %@ om het monsterpunt 1 pixel te verplaatsen";
+"Move Selection 1 Pixel" = "Verplaats selectie 1 pixel";
+"Screen Translation" = "Schermvertaling";
+"Smooth Pin Zoom" = "Vloeiende pinzoom";
+"The current settings were kept unchanged." = "De huidige instellingen zijn ongewijzigd gebleven.";
+"Presentation Drawing" = "Presentatie tekening";
+"Interface Theme:" = "Interface-thema:";
+"Quick capture copied to clipboard" = "Snelle opname gekopieerd naar klembord";
+"Translate selected text" = "Vertaal geselecteerde tekst";
+"Import" = "Importeren";
+"  Pin Zoom Anchor:" = "Pin-zoomanker:";
+"Source Text" = "Brontekst";
+"Open Translation Window" = "Open het vertaalvenster";
+"Configuration Profiles" = "Configuratieprofielen";
+"Text recognition failed" = "Tekstherkenning mislukt";
+"Continue with Clipboard" = "Ga verder met Klembord";
+"Allow Trackpad Pinch Zoom on Pins" = "Sta trackpad-knijpzoom op pinnen toe";
+"Actions in More Tools" = "Acties in Meer tools";
+"Clear Selected Data" = "Wis geselecteerde gegevens";
+"Could not export configuration." = "Kan configuratie niet exporteren.";
+"Copy Source" = "Bron kopiëren";
+"Common Tools" = "Gemeenschappelijke hulpmiddelen";
+"Swap" = "Wissel";
+"Recognize Text" = "Herken tekst";
+"Speak Translation" = "Spreek vertaling";
+"These are actions rather than drawing tools. Disabling one hides it wherever that action is available." = "Dit zijn acties in plaats van tekenhulpmiddelen. Als u er een uitschakelt, wordt deze overal verborgen waar die actie beschikbaar is.";
+"Common tools appear in the first row; additional tools move into the More menu. Actions unavailable for the current context do not appear." = "Algemene tools verschijnen in de eerste rij; aanvullende hulpmiddelen worden naar het menu Meer verplaatst. Acties die niet beschikbaar zijn voor de huidige context, verschijnen niet.";
+"Not enough space for comparison" = "Niet genoeg ruimte voor vergelijking";
+"Set the Select Text pin action, translation engine, and privacy policy here. Keyboard shortcuts are in Shortcuts." = "Stel hier de Select Text-pinactie, de vertaalengine en het privacybeleid in. Sneltoetsen vindt u in Snelkoppelingen.";
+"Recognizing Text…" = "Tekst herkennen...";
+"Release %@ to hide magnifier" = "Laat %@ los om het vergrootglas te verbergen";
+"Rename" = "Hernoemen";
+"Translate Now" = "Vertaal nu";
+"Mouse Wheel" = "Muiswiel";
+"Google translation is disabled in Settings." = "Google-vertaling is uitgeschakeld in Instellingen.";
+"Could not determine the source language." = "Kan de brontaal niet bepalen.";
+"Copy Text" = "Kopieer tekst";
+"Selection & Pin Interactions" = "Selectie- en pininteracties";
+"Pin zoom anchors to mouse position" = "Zet zoomankers vast aan de muispositie";
+"OCR & Translation" = "OCR en vertaling";
+"Rotate Clockwise" = "Met de klok mee draaien";

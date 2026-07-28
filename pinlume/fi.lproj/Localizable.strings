@@ -1,0 +1,844 @@
+/* Suomi — Pinlume localization
+ *
+ * To add a new language:
+ * 1. Create a new folder: pinlume/<lang-code>.lproj/
+ * 2. Copy this file into that folder
+ * 3. Translate all values (right side of = sign)
+ * 4. Add the language to LanguageManager.availableLanguages in Services/LanguageManager.swift
+ * 5. Add the language code to knownRegions in pinlume.xcodeproj/project.pbxproj
+ * 6. Submit a pull request!
+ *
+ * Keys use the English text. Values should be the translation.
+ * Format strings use %@ for strings, %d for integers.
+ * Keep keyboard shortcuts (like ⌘C) untranslated.
+ * Keep brand names (Pinlume, Google Drive, imgbb, S3) untranslated.
+ */
+
+/* Menu Bar */
+"Capture Area" = "Kaappaa alue";
+"Capture Screen" = "Kaappaa ruutu";
+"Capture OCR" = "Kaappaa OCR";
+"Capture OCR & QR" = "Kaappaa OCR & QR";
+"Capture area and read text/QR codes" = "Kaappaa alue ja lue teksti/QR-koodit";
+"Quick Capture" = "Pikakaappaus";
+"Scroll Capture" = "Vierityskaappaus";
+"Capture Last Area" = "Kaappaa viimeinen alue";
+"Capture Delay" = "Kaappausviive";
+"None" = "Ei mitaan";
+"%d seconds" = "%d sekuntia";
+"Record Area" = "Nauhoita alue";
+"Record Screen" = "Nauhoita ruutu";
+"Recent Captures" = "Viimeaikaiset kaappaukset";
+"Show History Panel" = "Nayta historiapaneeli";
+"Open Image..." = "Avaa kuva...";
+"Open from Clipboard" = "Avaa leikepoydalsta";
+"Pin from Clipboard" = "Kiinnita leikepoydalsta";
+"Preferences..." = "Asetukset...";
+"Check for Updates..." = "Tarkista paivitykset...";
+"Quit Pinlume" = "Lopeta Pinlume";
+"No recent captures" = "Ei viimeaikaisia kaappauksia";
+"Clear History" = "Tyhjenna historia";
+
+/* History Panel */
+"Copy" = "Kopioi";
+"Save As..." = "Tallenna nimella...";
+"Open in Editor" = "Avaa editorissa";
+"Pin to Screen" = "Kiinnita ruudulle";
+"Quick Look" = "Pika-esikatselu";
+"Delete" = "Poista";
+"All" = "Kaikki";
+"Screenshots" = "Kuvakaappaukset";
+"GIFs" = "GIFs";
+"Click to copy · Drag to app" = "Napsauta kopioidaksesi · Vedä sovellukseen";
+"No captures yet" = "Ei kaappauksia viela";
+
+/* Floating Thumbnail */
+"Close All" = "Sulje kaikki";
+"Save All to Folder…" = "Tallenna kaikki kansioon…";
+"Save" = "Tallenna";
+
+/* Editor Top Bar */
+"Zoom" = "Zoomaus";
+"Zoom In" = "Lahenna";
+"Zoom Out" = "Loitonna";
+"Fit Canvas" = "Sovita kankaalle";
+"Crop" = "Rajaa";
+"Rotate Left" = "Kierra vasemmalle";
+"Rotate Right" = "Kierra oikealle";
+"Flip Horizontal" = "Kaanna vaakasuunnassa";
+"Flip Vertical" = "Kaanna pystysuunnassa";
+"Add Capture" = "Lisaa kaappaus";
+
+/* Toolbar - Tools */
+"Arrow" = "Nuoli";
+"Line" = "Viiva";
+"Rectangle" = "Suorakulmio";
+"Ellipse" = "Ellipsi";
+"Pencil" = "Kyna";
+"Pencil (Draw)" = "Kyna (Piirra)";
+"Marker" = "Korostuskyna";
+"Text" = "Teksti";
+"Number" = "Numero";
+"Number / Counter" = "Numero / Laskuri";
+"Stamp / Emoji" = "Leima / Emoji";
+"Censor" = "Sensuroi";
+"Censor (Pixelate / Blur / Solid)" = "Sensuroi (Pikseloi / Sumenna / Yhtenäinen)";
+"Measure" = "Mittaa";
+"Measure (px)" = "Mittaa (px)";
+"Magnify (Loupe)" = "Suurenna (Luuppi)";
+"Highlight" = "Korosta";
+"Highlight (Spotlight)" = "Korosta (Kohdevalo)";
+"Dim" = "Himmennä";
+"Color Sampler" = "Varipoimija";
+"Color Picker" = "Varivalitsin";
+"Select & Edit" = "Valitse ja muokkaa";
+"Color" = "Vari";
+
+/* Toolbar - Actions */
+"Copy to Clipboard" = "Kopioi leikepoydale";
+"Save to File" = "Tallenna tiedostoon";
+"Save to" = "Tallenna kohteeseen";
+"Open in Editor Window" = "Avaa editori-ikkunassa";
+"Pin on Screen" = "Kiinnita ruudulle";
+"Pin" = "Kiinnita";
+"Pin (floating window)" = "Kiinnita (kelluva ikkuna)";
+"OCR" = "OCR";
+"OCR Text" = "OCR-teksti";
+"OCR (extract text)" = "OCR (poimi teksti)";
+"OCR & QR" = "OCR & QR";
+"Run OCR & QR" = "Suorita OCR & QR";
+"Text & QR Recognition" = "Tekstin & QR:n tunnistus";
+"QR Code" = "QR-koodi";
+"QR Codes" = "QR-koodit";
+"Open Link" = "Avaa linkki";
+"Upload" = "Lataa";
+"Share" = "Jaa";
+"Undo" = "Kumoa";
+"Redo" = "Tee uudelleen";
+"Close" = "Sulje";
+"Remove Background" = "Poista tausta";
+"Beautify" = "Kaunista";
+"Adjust" = "Saada";
+"Adjust (Image Effects)" = "Saada (Kuvatehosteet)";
+"Invert Colors" = "Kaanna varit";
+"Record" = "Nauhoita";
+"Record screen" = "Nauhoita ruutu";
+"Translate" = "Kaanna";
+"Auto-Redact sensitive data" = "Piilota arkaluontoiset tiedot automaattisesti";
+"Move Selection" = "Siirra valintaa";
+"Aspect ratio & resolution presets" = "Kuvasuhteen ja tarkkuuden esiasetukset";
+"Aspect ratio" = "Kuvasuhde";
+"Custom \U00B7 %@" = "Mukautettu \U00B7 %@";
+"Resolution" = "Tarkkuus";
+"Freeform" = "Vapaamuotoinen";
+"Units" = "Yksikot";
+"Keep ratio for next captures" = "Sailyta suhde seuraavissa kaappauksissa";
+
+/* Toolbar - Recording */
+"Start Recording" = "Aloita nauhoitus";
+"Cancel Recording" = "Peruuta nauhoitus";
+"Highlight Mouse Clicks" = "Korosta hiiren napsautukset";
+"Record System Audio" = "Nauhoita jarjestelman aani";
+"Record Microphone" = "Nauhoita mikrofoni";
+"Recording Settings" = "Nauhoitusasetukset";
+
+/* Tool Options */
+"Size" = "Koko";
+"Stroke" = "Viiva";
+"Radius" = "Sade";
+"Start:" = "Aloitus:";
+"Draw:" = "Piirra:";
+"Auto:" = "Auto:";
+"Fill" = "Tayta";
+"Outline" = "Reunaviiva";
+"More Emojis" = "Lisaa emojeja";
+"Load Image" = "Lataa kuva";
+"Gradient Style" = "Liukuvarityyli";
+"On" = "Paalla";
+"Text Only" = "Vain teksti";
+"All Text" = "Kaikki teksti";
+"PII" = "PII";
+"Faces" = "Kasvot";
+"People" = "Ihmiset";
+"Confirm before upload" = "Vahvista ennen latausta";
+"Flip" = "Kaanna";
+"Smooth" = "Tasoita";
+"Refined" = "Hienosäädetty";
+"Smart" = "Alykäs";
+"Padding" = "Reunus";
+"Shadow" = "Varjo";
+"Right-click to add points" = "Lisaa pisteet hiiren oikealla painikkeella";
+"Hold 1 auto-vertical  ·  Hold 2 auto-horizontal" = "Pida 1 automaattinen pystysuunta  ·  Pida 2 automaattinen vaakasuunta";
+
+/* Overlay / Canvas */
+"Click a window  ·  Drag for custom area  ·  F for full screen" = "Napsauta ikkunaa  ·  Vedä valitaksesi alue  ·  F koko ruudulle";
+"Drag to select  ·  Click for full screen" = "Vedä valitaksesi  ·  Napsauta koko ruudulle";
+"Release to annotate and edit" = "Vapauta merkintoja ja muokkausta varten";
+"Release to finish" = "Vapauta lopettaaksesi";
+"Hold Space to move. Release to annotate and edit" = "Pida valilyontia siirtaaksesi. Vapauta merkintoja ja muokkausta varten";
+"Hold Space to move. Release to finish" = "Pida valilyontia siirtaaksesi. Vapauta lopettaaksesi";
+"Space" = "V\U00E4lily\U00F6nti";
+"Window snap: " = "Ikkunan tarttuminen: ";
+"ON" = "PAALLA";
+"OFF" = "POIS";
+"  (Tab to toggle)" = "  (Tab vaihtaaksesi)";
+"Right-click to copy" = "Kopioi oikealla napsautuksella";
+"Copied %@" = "Kopioitu %@";
+"Set color %@" = "Aseta vari %@";
+"Draw something first to use the move tool." = "Piirra ensin jotain kayttaaksesi siirtotyokalua.";
+"Drag to reposition" = "Vedä siirtaaksesi";
+
+/* Overlay - Popovers */
+"Format:" = "Muoto:";
+"FPS:" = "FPS:";
+"When done:" = "Kun valmis:";
+"Open editor" = "Avaa editori";
+"Open With" = "Avaa sovelluksella";
+"No Apps Available" = "Ei sovelluksia saatavilla";
+"No Share Services" = "Ei jakopalveluita";
+"Show in Finder" = "Nayta Finder-sovelluksessa";
+"Copy to clipboard" = "Kopioi leikepoydale";
+
+/* Preferences - General */
+"Pinlume Preferences" = "Pinlume-asetukset";
+"General" = "Yleiset";
+"Tools" = "Tyokalut";
+"Recording" = "Nauhoitus";
+"About" = "Tietoja";
+"Shortcuts" = "Pikanappaimet";
+"Uploads" = "Lataukset";
+"Language" = "Kieli";
+"Language:" = "Kieli:";
+"Restart the app to fully apply the new language." = "Kaynnista sovellus uudelleen ottaaksesi uuden kielen kayttoon.";
+"Capture" = "Kaappaus";
+"Play sound on capture" = "Toista ääni kaappauksessa";
+"Play sound on copy" = "Toista aani kopioitaessa";
+"Remember last selected tool" = "Muista viimeksi valittu tyokalu";
+"Show floating thumbnail after capture" = "Nayta kelluva pienoiskuva kaappauksen jalkeen";
+"Launch at login" = "Kaynnista kirjautumisen yhteydessa";
+"Show snap alignment guides" = "Nayta kohdistusoppaat";
+"Snap selection edges to image boundaries" = "Kohdista valinnan reunat kuvan rajoihin";
+"Capture mouse cursor in screenshot" = "Kaappaa hiiren osoitin kuvakaappaukseen";
+"Double-click selection to copy" = "Kopioi kaksoisnapsauttamalla valintaa";
+"Hide capture instructions" = "Piilota kuvakaappausohjeet";
+"Use window title in saved filename" = "Kayta ikkunan otsikkoa tiedostonimessa";
+"Hide menu bar icon" = "Piilota valikkopalkin kuvake";
+"Hotkeys still work. To show the icon again, re-launch Pinlume." = "Pikanappaimet toimivat edelleen. Nayta kuvake uudelleen kaynnistamalla Pinlume.";
+"Check for updates automatically" = "Tarkista paivitykset automaattisesti";
+"Check for beta updates" = "Tarkista beetapäivitykset";
+"Thumbnail" = "Pienoiskuva";
+"  Dismiss after:" = "  Hylkaa jalkeen:";
+"seconds before auto-dismiss (0 = never)" = "sekuntia ennen automaattista hylkaämista (0 = ei koskaan)";
+"  Multiple previews:" = "  Useita esikatseluja:";
+"Stack (keep all)" = "Pinoa (sailyta kaikki)";
+"Replace (show only latest)" = "Korvaa (nayta vain viimeisin)";
+"Output" = "Tuloste";
+"Image format:" = "Kuvamuoto:";
+"Quality:" = "Laatu:";
+"%d%%" = "%d%%";
+"Save at standard resolution (1x)" = "Tallenna vakiotarkkuudella (1x)";
+"Halves dimensions on Retina displays, ~4x smaller files" = "Puolittaa mitat Retina-naytolla, ~4x pienemmat tiedostot";
+"Embed sRGB color profile" = "Upota sRGB-variprofiili";
+"Ensures consistent colors across different displays" = "Varmistaa yhtenaiset varit eri naytoilla";
+"Screenshot History" = "Kuvakaappaushistoria";
+"History size:" = "Historian koko:";
+"screenshots kept on disk (0 = off)" = "kuvakaappausta sailytetaan levylla (0 = pois)";
+"Order history by last edit" = "J\U00E4rjest\U00E4 historia viimeisimm\U00E4n muokkauksen mukaan";
+"Edited screenshots move to the top. Off keeps them in capture order." = "Muokatut kuvakaappaukset siirtyv\U00E4t yl\U00F6s. Pois pit\U00E4\U00E4 ne kaappausj\U00E4rjestyksess\U00E4.";
+"Save Directory" = "Tallennuskansio";
+"Save folder:" = "Tallennuskansio:";
+"Browse…" = "Selaa…";
+"Appearance" = "Ulkoasu";
+"Accent color:" = "Korostusväri:";
+"Icon color:" = "Kuvakkeen väri:";
+"Background color:" = "Taustaväri:";
+"Reset" = "Nollaa";
+"OCR Capture:" = "OCR-kaappaus:";
+"OCR & QR Capture:" = "OCR- & QR-kaappaus:";
+"Show window + copy to clipboard" = "Nayta ikkuna + kopioi leikepoydale";
+"Show window only" = "Nayta vain ikkuna";
+"Copy to clipboard only" = "Kopioi vain leikepoydale";
+"Enter / Quick Capture:" = "Enter / Pikakaappaus:";
+"Save to file" = "Tallenna tiedostoon";
+"Save + copy to clipboard" = "Tallenna + kopioi leikepoydale";
+"OCR Action" = "OCR-toiminto";
+"Save action:" = "Tallennustoiminto:";
+"Save to default folder" = "Tallenna oletuskansioon";
+"Ask where to save" = "Kysy tallennuspaikka";
+"Disable shadow outside selection" = "Poista varjo valinnan ulkopuolelta";
+"Show shortcuts in tooltips" = "Nayta pikanappaimet tyokaluvihjeissa";
+"Menu bar icon:" = "Valikkopalkin kuvake:";
+"Default" = "Oletus";
+"Custom symbol" = "Mukautettu symboli";
+"Enter any SF Symbol name (e.g. camera.fill) or pick a preset. Browse names in Apple's SF Symbols app. Invalid names fall back to the default icon." = "Anna mika tahansa SF Symbol -nimi (esim. camera.fill) tai valitse esiasetus. Selaa nimia Applen SF Symbols -sovelluksessa. Virheelliset nimet palautuvat oletuskuvakkeeseen.";
+
+/* Preferences - Shortcuts */
+"Keyboard Shortcuts" = "Pikanappaimet";
+"Hotkeys" = "Pikanappaimet";
+"Clear shortcut" = "Tyhjenna pikanappain";
+"Press keys..." = "Paina nappaimia...";
+"Waiting..." = "Odotetaan...";
+
+/* Preferences - Tools */
+"Annotation Tools" = "Merkintasotyokalut";
+"Hidden tools are removed from the bottom toolbar." = "Piilotetut tyokalut poistetaan alapalkilta.";
+"Capture Actions" = "Kaappaustoiminnot";
+"Menu Bar Order" = "Valikkopalkin j\U00E4rjestys";
+"Choose the order of capture actions in the Pinlume menu bar menu." = "Valitse kaappaustoimintojen j\U00E4rjestys Pinlume-valikkopalkkivalikossa.";
+"Move up" = "Siirr\U00E4 yl\U00F6s";
+"Move down" = "Siirr\U00E4 alas";
+"Bottom Toolbar Actions" = "Alapalkin toiminnot";
+"Hidden actions are removed from the bottom toolbar." = "Piilotetut toiminnot poistetaan alapalkilta.";
+"Editor Actions" = "Editorin toiminnot";
+"Right Toolbar Actions" = "Oikean palkin toiminnot";
+"Hidden actions are removed from the right toolbar." = "Piilotetut toiminnot poistetaan oikeasta palkista.";
+
+/* Preferences - Recording */
+"Frame rate:" = "Kuvataajuus:";
+"After recording:" = "Nauhoituksen jalkeen:";
+"Save recording to:" = "Tallenna nauhoitus kohteeseen:";
+"Save Recording" = "Tallenna nauhoitus";
+"Clear" = "Tyhjenna";
+"Max height:" = "Enimmäiskorkeus:";
+"px (0 = unlimited)" = "px (0 = rajoittamaton)";
+"Behavior" = "Toiminta";
+"Auto-scroll (sends synthetic scroll events)" = "Automaattivieritys (lahettaa synteettisia vieritystapahtumia)";
+"Detect fixed/sticky headers" = "Tunnista kiinteat/tarttuvat ylatunnisteet";
+"Scroll speed:" = "Vieritysnopeus:";
+"Slow" = "Hidas";
+"Medium" = "Keskitaso";
+"Fast" = "Nopea";
+"Very fast" = "Erittain nopea";
+"5 fps" = "5 fps";
+"10 fps" = "10 fps";
+"15 fps" = "15 fps";
+"24 fps" = "24 fps";
+"30 fps" = "30 fps";
+"60 fps" = "60 fps";
+"120 fps" = "120 fps";
+"MP4 (H.264)" = "MP4 (H.264)";
+"GIF" = "GIF";
+
+/* Preferences - Upload */
+"Upload Service" = "Latauspalvelu";
+"Upload Provider" = "Latauspalveluntarjoaja";
+"Provider:" = "Palveluntarjoaja:";
+"Google Drive" = "Google Drive";
+"Google Drive (images + videos)" = "Google Drive (kuvat + videot)";
+"imgbb (images only)" = "imgbb (vain kuvat)";
+"S3-Compatible (images + videos)" = "S3-yhteensopiva (kuvat + videot)";
+"S3-Compatible Storage" = "S3-yhteensopiva tallennustila";
+"Sign In with Google" = "Kirjaudu sisaan Googlella";
+"Sign Out" = "Kirjaudu ulos";
+"Signed in" = "Kirjautunut sisaan";
+"Not signed in" = "Ei kirjautunut";
+"Account:" = "Tili:";
+"Test Connection" = "Testaa yhteys";
+"Fill in endpoint, bucket, and credentials first" = "Täytä ensin paatepiste, sailio ja tunnistetiedot";
+"Testing..." = "Testataan...";
+"Connection successful!" = "Yhteys onnistui!";
+"Leave empty to use default" = "Jata tyhjäksi kayttaaksesi oletusta";
+"Endpoint:" = "Paatepiste:";
+"Region:" = "Alue:";
+"Bucket:" = "Sailio:";
+"Access Key:" = "Kayttoavain:";
+"Secret Key:" = "Salainen avain:";
+"Public URL:" = "Julkinen URL:";
+"Path Prefix:" = "Polun etuliite:";
+"API key:" = "API-avain:";
+"Upload History" = "Lataushistoria";
+"No uploads yet." = "Ei latauksia viela.";
+"Base URL for public access. If empty, the S3 endpoint URL is used (may not be publicly accessible)." = "Julkisen paasyn perus-URL. Jos tyhja, kaytetaan S3-paastepisteen URL-osoitetta (ei valttamatta julkisesti saatavilla).";
+"A shared key is included — get your own free key at imgbb.com/api if you hit rate limits. Images only (no video support)." = "Jaettu avain on mukana — hanki oma ilmainen avain osoitteesta imgbb.com/api, jos kohtaat nopeusrajoituksia. Vain kuvat (ei videotukea).";
+"Works with AWS S3, Cloudflare R2, MinIO, DigitalOcean Spaces, Backblaze B2, and other S3-compatible services. Supports images and videos." = "Toimii AWS S3:n, Cloudflare R2:n, MinIO:n, DigitalOcean Spacesin, Backblaze B2:n ja muiden S3-yhteensopivien palveluiden kanssa. Tukee kuvia ja videoita.";
+"Configure S3 in Preferences" = "Maarittele S3 asetuksissa";
+"Sign in to Google Drive in Preferences" = "Kirjaudu Google Driveen asetuksissa";
+"Video upload requires Google Drive or S3" = "Videon lataus vaatii Google Driven tai S3:n";
+
+/* Preferences - About */
+"Pinlume" = "Pinlume";
+"Version %@ (%@)" = "Versio %@ (%@)";
+"Made by" = "Tekija";
+"Licensed under the GPLv3" = "Lisensoitu GPLv3-lisenssilla";
+"A free, open-source screenshot & screen recording tool for macOS.\nFully native — built with Swift and AppKit." = "Ilmainen, avoimen lahdekoodin kuvakaappaus- ja ruudunnauhoitustyokalu macOS:lle.\nTaysin natiivi — rakennettu Swiftilla ja AppKitilla.";
+
+/* Alerts */
+"No Image on Clipboard" = "Ei kuvaa leikepöydällä";
+"No Image or Text on Clipboard" = "Ei kuvaa tai tekstiä leikepöydällä";
+"Copy an image to the clipboard first, then try again." = "Kopioi ensin kuva leikepoydale ja yrita sitten uudelleen.";
+"Copy an image or text to the clipboard first, then try again." = "Kopioi ensin kuva tai teksti leikepoydale ja yrita sitten uudelleen.";
+"OK" = "OK";
+"Accessibility Access Required" = "Esteettomyysoikeus vaaditaan";
+"Pinlume needs Accessibility permission to auto-scroll other apps. Please grant access in System Settings, then try again." = "Pinlume tarvitsee esteettomyysoikeuden vierittaakseen muita sovelluksia automaattisesti. Myonna oikeus jarjestelman asetuksissa ja yrita uudelleen.";
+"Pinlume needs Accessibility permission for scroll capture. Please grant access in System Settings, then try again." = "Pinlume tarvitsee Esteettömyys-luvan vierityskaappausta varten. Myönnä käyttöoikeus Järjestelmäasetuksista ja yritä uudelleen.";
+"Open Settings" = "Avaa asetukset";
+"Cancel" = "Peruuta";
+"Microphone Access Required" = "Mikrofonin kayttoikeus vaaditaan";
+"Pinlume needs microphone permission to record voice audio. Open System Settings to grant access." = "Pinlume tarvitsee mikrofonin kayttooikeuden äanittaakseen puhetta. Avaa jarjestelman asetukset myontaaksesi kayttooikeuden.";
+"Upload to Google Drive?" = "Ladataanko Google Driveen?";
+"Upload to S3?" = "Ladataanko S3:een?";
+"Upload to imgbb.com?" = "Ladataanko imgbb.com-palveluun?";
+"Your screenshot will be uploaded." = "Kuvakaappauksesi ladataan.";
+
+/* Permission Onboarding */
+"Welcome to Pinlume" = "Tervetuloa Pinlume-sovellukseen";
+"Pinlume needs one permission" = "Pinlume tarvitsee yhden luvan";
+"Screen Recording not yet granted" = "Ruudun nauhoituslupaa ei ole viela myonnetty";
+"Screen Recording granted!" = "Ruudun nauhoituslupa myonnetty!";
+"Enable Pinlume, then try taking a screenshot" = "Ota Pinlume kayttoon ja kokeile kuvakaappausta";
+"Open Screen Recording Settings" = "Avaa ruudun nauhoitusasetukset";
+"Continue" = "Jatka";
+
+/* OCR Window */
+"Text Recognition" = "Tekstintunnistus";
+"Translate to:" = "Kaanna kielelle:";
+"%d chars · %d words" = "%d merkkia · %d sanaa";
+"Copy  ⌘↩" = "Kopioi  ⌘↩";
+"AI Search" = "Tekoalyhaku";
+"Show Original" = "Nayta alkuperainen";
+"Translation Failed" = "Kaannos epaonnistui";
+"Translation" = "Kaannos";
+"(No text detected in the selected area)" = "(Tekstia ei havaittu valitulta alueelta)";
+
+/* Upload Toast */
+"URL copied to the clipboard" = "URL kopioitu leikepoydale";
+"Uploading... %d%%" = "Ladataan... %d%%";
+"Upload failed: %@" = "Lataus epaonnistui: %@";
+"Uploaded! Link copied." = "Ladattu! Linkki kopioitu.";
+"Uploading to %@... %d%%" = "Ladataan palveluun %@... %d%%";
+"Open" = "Avaa";
+
+/* Recording Toast */
+"Recording saved" = "Nauhoitus tallennettu";
+"%@ • Recording saved" = "%@ • Nauhoitus tallennettu";
+"Copy Path" = "Kopioi polku";
+"Path copied!" = "Polku kopioitu!";
+
+/* Video Editor */
+"Pinlume Video Editor" = "Pinlume-videoeditori";
+"%@ selected" = "%@ valittu";
+"Exporting..." = "Viedaan...";
+"Export failed" = "Vienti epaonnistui";
+"Saved to %@" = "Tallennettu kohteeseen %@";
+"Save failed" = "Tallennus epaonnistui";
+
+/* Barcode Detector */
+/* "Open" and "Copy" are shared with other sections */
+
+/* Save Panel */
+"Save As..." = "Tallenna nimella...";
+"Choose a folder" = "Valitse kansio";
+"Save All to Folder…" = "Tallenna kaikki kansioon…";
+
+/* Scroll Capture HUD */
+"Auto Scroll" = "Automaattivieritys";
+"Stop" = "Pysayta";
+"Scrolling..." = "Vieritetaan...";
+
+/* Effects Picker (Adjust popover) */
+"Presets" = "Esiasetukset";
+"Adjustments" = "Saadot";
+"Brightness" = "Kirkkaus";
+"Contrast" = "Kontrasti";
+"Saturation" = "Varikylläisyys";
+"Sharpness" = "Terävyys";
+
+/* Time Ago */
+"just now" = "juuri nyt";
+"%ds ago" = "%ds sitten";
+"%dm ago" = "%dm sitten";
+"%dh ago" = "%dh sitten";
+
+/* Hotkey Labels */
+"History" = "Historia";
+
+/* Preferences - Shortcuts note */
+"Click \"Record\" and press a key combination with at least one modifier (⌘, ⌥, ⌃, ⇧) to set a shortcut." = "Napsauta \"Nauhoita\" ja paina nappaimistoyhdistelmaa, jossa on vahintaan yksi muokkausnappain (⌘, ⌥, ⌃, ⇧), asettaaksesi pikanappaimen.";
+
+/* Recording — GIF Processing */
+"Processing GIF…" = "Käsitellään GIF…";
+
+/* Recording — Input Monitoring Permission */
+"Input Monitoring Required" = "Syötön seuranta vaaditaan";
+"Pinlume needs Input Monitoring permission to show keystrokes during recording. Please grant access in System Settings, then try again." = "Pinlume tarvitsee syötön seurannan luvan näyttääkseen näppäinpainallukset nauhoituksen aikana. Myönnä käyttöoikeus System Settings -asetuksista ja yritä uudelleen.";
+"Pinlume needs Accessibility permission to show keystrokes during recording. Please grant access in System Settings, then try again." = "Pinlume tarvitsee esteettömyysoikeuden näyttääkseen näppäinpainallukset nauhoituksen aikana. Myönnä käyttöoikeus System Settings -asetuksista ja yritä uudelleen.";
+
+/* Recording — Keystroke Overlay */
+"Show Keystrokes" = "Näytä näppäinpainallukset";
+"Shortcuts Only" = "Vain pikanäppäimet";
+"All Keystrokes" = "Kaikki näppäinpainallukset";
+
+/* Recording — Settings Popover */
+"Delay:" = "Viive:";
+
+/* Video Editor */
+"Copied to clipboard!" = "Kopioitu leikepöydälle!";
+
+/* Webcam Overlay */
+"Webcam Overlay" = "Webkameran peittokuva";
+"Camera Access Required" = "Kameran kayttooikeus vaaditaan";
+"Pinlume needs camera permission for the webcam overlay. Open System Settings to grant access." = "Pinlume tarvitsee kameran kayttooikeuden webkameran peittokuvaa varten. Avaa jarjestelman asetukset myontaaksesi kayttooikeuden.";
+"Webcam" = "Webkamera";
+"Bottom Right" = "Oikea alakulma";
+"Bottom Left" = "Vasen alakulma";
+"Top Right" = "Oikea ylakulma";
+"Top Left" = "Vasen ylakulma";
+"Small" = "Pieni";
+"Large" = "Suuri";
+"Webcam Size Small" = "Pieni";
+"Webcam Size Medium" = "Keskitaso";
+"Webcam Size Large" = "Suuri";
+"Webcam Size Extra Large" = "Erittain suuri";
+"Circle" = "Ympyra";
+"Rounded Rectangle" = "Pyoristetty suorakulmio";
+"Cam pos:" = "Kameran sijainti:";
+"Cam size:" = "Kameran koko:";
+"Cam shape:" = "Kameran muoto:";
+"  Position:" = "  Sijainti:";
+
+/* New Strings */
+"Settings..." = "Asetukset...";
+"Pinlume Settings" = "Pinlume-asetukset";
+"Also open in Editor" = "Avaa my\U00F6s editorissa";
+"Hide controls" = "Piilota ohjaimet";
+"Hide recording controls" = "Piilota nauhoitusohjaimet";
+"Stop recording from the menu bar icon instead." = "Pys\U00E4yt\U00E4 nauhoitus valikkopalkin kuvakkeesta.";
+"Pixelate" = "Pikseloi";
+"Blur" = "Sumenna";
+"Solid" = "Yht\U00E4jaksoinen";
+"Erase" = "Pyhi";
+"Done" = "Valmis";
+"Do nothing" = "\U00C4l\U00E4 tee mit\U00E4\U00E4n";
+"Overlay / Editor Shortcuts" = "Peittokuvan / editorin pikan\U00E4pp\U00E4imet";
+"Set" = "Aseta";
+"Press..." = "Paina...";
+"Reset to default" = "Palauta oletukseksi";
+"Press a single key to assign it as the shortcut for that tool. These work when the overlay or editor is active." = "Paina yht\U00E4 n\U00E4pp\U00E4int\U00E4 m\U00E4\U00E4ritt\U00E4\U00E4ksesi sen ty\U00F6kalun pikan\U00E4pp\U00E4imeksi. N\U00E4m\U00E4 toimivat, kun peittokuva tai editori on aktiivinen.";
+"Keep Separate" = "Pid\U00E4 erillaan";
+"Merge Audio" = "Yhdist\U00E4 \U00E4\U00E4ni";
+"Audio Tracks" = "\U00C4\U00E4niraidat";
+"Adjust volume for each audio track:" = "S\U00E4\U00E4d\U00E4 kunkin \U00E4\U00E4niraidan \U00E4\U00E4nenvoimakkuus:";
+"Microphone:" = "Mikrofoni:";
+"System audio:" = "J\U00E4rjestelm\U00E4n \U00E4\U00E4ni:";
+"Loupe" = "Luuppi";
+"Stamp" = "Leima";
+"Unlimited" = "Rajoittamaton";
+
+/* Save Confirmation / Recording / Translation / Upload / Inspector */
+"Save changes?" = "Tallenna muutokset?";
+"Your annotations will be lost if you close without saving." = "Merkint\U00E4si menetet\U00E4\U00E4n, jos suljet tallentamatta.";
+"Save & Close" = "Tallenna ja sulje";
+"Discard" = "Hylk\U00E4\U00E4";
+"Stop Recording" = "Pys\U00E4yt\U00E4 nauhoitus";
+"Pause" = "Tauko";
+"Resume" = "Jatka";
+"Engine:" = "Moottori:";
+"Google Translate" = "Google Translate";
+"Apple (on-device)" = "Apple (laitteessa)";
+"Apple translation is faster and works offline. Google Translate supports more languages." = "Apple-k\U00E4\U00E4nn\U00F6s on nopeampi ja toimii offline-tilassa. Google Translate tukee useampia kieli\U00E4.";
+"Download language packs in System Settings\U2026" = "Lataa kielipaketteja J\U00E4rjestelm\U00E4asetuksista\U2026";
+"Configure S3 in Settings" = "M\U00E4\U00E4rit\U00E4 S3 asetuksissa";
+"Sign in to Google Drive in Settings" = "Kirjaudu Google Driveen asetuksissa";
+"Position:" = "Sijainti:";
+"Size:" = "Koko:";
+"Shape:" = "Muoto:";
+
+"Same as screenshots" = "Sama kuin kuvakaappaukset";
+"  Preview size:" = "  Esikatselukoko:";
+"(0 = off)" = "(0 = pois)";
+"Clear All" = "Tyhjennä kaikki";
+"Clear History?" = "Tyhjennetäänkö historia?";
+"This will permanently delete all screenshots from history." = "Tämä poistaa kaikki kuvakaappaukset historiasta pysyvästi.";
+"Click \"Set\" and press a key combination with at least one modifier (⌘, ⌥, ⌃, ⇧) to set a shortcut." = "Napsauta \"Aseta\" ja paina näppäinyhdistelmää, jossa on vähintään yksi muokkausnäppäin (⌘, ⌥, ⌃, ⇧) asettaaksesi pikakuvakkeen.";
+"Files are uploaded to a \"Pinlume\" folder in your Google Drive. Everything stays private — nothing is shared publicly." = "Tiedostot ladataan \"Pinlume\"-kansioon Google Drivessasi. Kaikki pysyy yksityisenä — mitään ei jaeta julkisesti.";
+
+"Pressure" = "Paine";
+
+/* Added for v4.1.0-beta.3 — video editor, effects, open-video, shortcuts help */
+"Open Video..." = "Avaa video...";
+"Choose a video to open in Pinlume editor" = "Valitse video avattavaksi Pinlume-editorissa";
+"Click to add effects" = "Napsauta lisätäksesi tehosteita";
+"Add Zoom" = "Lisää zoomaus";
+"Add Censor" = "Lisää sensurointi";
+"Add Cut" = "Lisää leikkaus";
+"Add Speed" = "Lisää nopeus";
+"Add Freeze" = "Lisää pysäytyskuva";
+"Add Text" = "Lisää teksti";
+"Delete Zoom" = "Poista zoomaus";
+"Delete Censor" = "Poista sensurointi";
+"Delete Cut" = "Poista leikkaus";
+"Delete Speed" = "Poista nopeus";
+"Delete Freeze" = "Poista pysäytyskuva";
+"Delete Text" = "Poista teksti";
+"Edit Text…" = "Muokkaa tekstiä…";
+"Huge" = "Valtava";
+"Bold" = "Lihavoitu";
+"Italic" = "Kursivoitu";
+"Alignment" = "Tasaus";
+"Left" = "Vasen";
+"Center" = "Keskitetty";
+"Right" = "Oikea";
+"Text Color" = "Tekstin väri";
+"Background Color" = "Taustaväri";
+"Rounded" = "Pyöristetty";
+"Custom…" = "Mukautettu…";
+"Transparent" = "Läpinäkyvä";
+"Black" = "Musta";
+"White" = "Valkoinen";
+"Yellow" = "Keltainen";
+"Red" = "Punainen";
+"Green" = "Vihreä";
+"Blue" = "Sininen";
+"Untitled" = "Nimetön";
+"Add effect" = "Lisää tehoste";
+"Fade" = "Häivytys";
+"High" = "Korkea";
+"Low" = "Matala";
+"Not enough room here" = "Tilaa ei ole tarpeeksi tähän";
+"Copied!" = "Kopioitu!";
+"Converting to GIF…" = "Muunnetaan GIF-muotoon…";
+"GIF conversion failed" = "GIF-muunnos epäonnistui";
+"No video track found" = "Videoraitaa ei löydy";
+"Preview:" = "Esikatselu:";
+"Copy Screen Info" = "Kopioi näytön tiedot";
+"Copies display and capture diagnostics to clipboard" = "Kopioi näytön ja kaappauksen diagnostiikan leikepöydälle";
+"Accent" = "Korostus";
+"Icon" = "Kuvake";
+"Background" = "Tausta";
+"Custom" = "Mukautettu";
+"Theme:" = "Teema:";
+"Application" = "Sovellus";
+"Capture area and extract text" = "Kaappaa alue ja poimi teksti";
+"Capture the full screen" = "Kaappaa koko ruutu";
+"Counter for multi-screen captures" = "Laskuri monen näytön kaappauksille";
+"8-character random string (e.g. k3j7x9q2)" = "8-merkkinen satunnainen merkkijono (esim. k3j7x9q2)";
+"Filename Template Tokens" = "Tiedostonimen mallin tunnukset";
+"Filename tokens" = "Tiedostonimen tunnukset";
+"Filename:" = "Tiedostonimi:";
+"Open an image file in the editor" = "Avaa kuvatiedosto editorissa";
+"Open the recent captures overlay" = "Avaa viimeaikaisten kaappausten peittokuva";
+"Open this settings window" = "Avaa tämä asetusikkuna";
+"Quick capture (uses your Enter action)" = "Pikakaappaus (käyttää Enter-toimintoasi)";
+"Re-capture the last selected area" = "Kaappaa viimeksi valittu alue uudelleen";
+"Screenshots only — captured window title (blank otherwise)" = "Vain kuvakaappaukset — kaapatun ikkunan otsikko (muuten tyhjä)";
+"Show available filename tokens" = "Näytä käytettävissä olevat tiedostonimen tunnukset";
+"Show supported URL scheme commands" = "Näytä tuetut URL-skeeman komennot";
+"Start area capture" = "Aloita aluekaappaus";
+"Start area recording" = "Aloita aluenauhoitus";
+"Start full-screen recording" = "Aloita koko ruudun nauhoitus";
+"Start scroll capture" = "Aloita vierityskaappaus";
+"Stop the current recording" = "Pysäytä nykyinen nauhoitus";
+"Supported URL Scheme Commands" = "Tuetut URL-skeeman komennot";
+"The file extension is appended automatically. Slashes and colons in {window} become dashes." = "Tiedostopääte lisätään automaattisesti. {window}-kentän vinoviivat ja kaksoispisteet muuttuvat viivoiksi.";
+"Trigger Pinlume from Raycast, Alfred, Shortcuts, or any tool that opens URLs." = "Käynnistä Pinlume Raycastista, Alfredista, Shortcuts-sovelluksesta tai mistä tahansa työkalusta, joka avaa URL-osoitteita.";
+"URL scheme info" = "URL-skeeman tiedot";
+"Enable pinlume:// URL scheme" = "Ota pinlume://-URL-skeema k\U00E4ytt\U00F6\U00F6n";
+"sec (0 = never)" = "s (0 = ei koskaan)";
+"Settings" = "Asetukset";
+"Offline build: upload and cloud storage integrations are removed. Update checks may still connect to Pinlume's update server. Screenshots and recordings stay local unless you share or save them yourself." = "Offline-versio: lähetys- ja pilvitallennusintegraatiot on poistettu. Päivitysten tarkistus voi silti muodostaa yhteyden Pinlumein päivityspalvelimeen. Kuvakaappaukset ja tallenteet pysyvät paikallisina, ellet jaa tai tallenna niitä itse.";
+
+/* Localized current UI keys. Existing translations above are preserved. */
+"Plus build: personal build with update checks disabled. Preferences, history, and permissions are separate from the original Pinlume app." = "Plus build: henkilökohtainen koontiversio, jossa päivitystarkistukset on poistettu käytöstä. Asetukset, historia ja käyttöoikeudet ovat erillisiä alkuperäisestä Pinlume-sovelluksesta.";
+"Light" = "Kevyt";
+"Press Option to hide magnifier" = "Paina Optio piilottaaksesi suurennuslasin";
+"Changes to the selected profile are saved automatically." = "Valittuun profiiliin tehdyt muutokset tallennetaan automaattisesti.";
+"Show Pin Shadow" = "Näytä Pin Shadow";
+"Arrow Keys" = "Nuolinäppäimet";
+"Source Language" = "Lähdekieli";
+"Translation Pin" = "Käännösmerkki";
+"Color Scheme:" = "Värimalli:";
+"Text Recognition / QR" = "Tekstin tunnistus / QR";
+"Basic" = "Perus";
+"Full" = "Täysi";
+"Menu Bar Menu" = "Valikkopalkin valikko";
+"Screenshot history and editable annotations" = "Kuvakaappaushistoria ja muokattavat merkinnät";
+"Press Shift to switch RGB/HEX" = "Paina Shift vaihtaaksesi RGB/HEX";
+"Clipboard image backups" = "Leikepöydän kuvien varmuuskopiot";
+"Double-click to Toggle Thumbnail" = "Kaksoisnapsauta vaihtaaksesi pikkukuvaa";
+"Compare" = "Vertaa";
+"Apple translation does not support %@ → %@." = "Applen käännös ei tue numeroita %@ → %@.";
+"Profile:" = "Profiili:";
+"Move to Applications" = "Siirry kohtaan Sovellukset";
+"Filled Rectangle" = "Täytetty suorakulmio";
+"Google translation is unavailable because sending text is disabled." = "Google-käännös ei ole saatavilla, koska tekstin lähettäminen on estetty.";
+"Adjust Area and Edit" = "Säädä aluetta ja muokkaa";
+"Clear Local Data…" = "Tyhjennä paikalliset tiedot…";
+"Swap Languages" = "Vaihda kieliä";
+"Ignore window occlusion" = "Ohita ikkunan tukkeutuminen";
+"Graphite Blue" = "Grafiitinsininen";
+"Copy Original" = "Kopioi alkuperäinen";
+"Pin Shadow" = "Pin Shadow";
+"Translation Window" = "Käännösikkuna";
+"Show Translation" = "Näytä käännös";
+"Enable %@:// URL scheme" = "Ota käyttöön URL-osoitemalli %@://";
+"Disabled by default. Keeps up to 7 days or 2 MB; never writes screenshots, OCR text, clipboard contents, or keys." = "Ei käytössä oletuksena. Säilyy jopa 7 päivää tai 2 Mt; ei koskaan kirjoita kuvakaappauksia, OCR-tekstiä, leikepöydän sisältöä tai avaimia.";
+"Strength" = "Vahvuus";
+"Auto-Redact Sensitive Information" = "Poista arkaluonteiset tiedot automaattisesti";
+"More Tools" = "Lisää työkaluja";
+"Move Magnifier Sample Point 1 Pixel" = "Siirrä suurennuslasin näytepiste 1 pikseliä";
+"Translating…" = "Käännetään…";
+"Pin Scroll Zoom" = "Pin Scroll Zoom";
+"Copy Text (shown for text pins only)" = "Kopioi teksti (näkyy vain tekstipinnoille)";
+"Copy Pinned Text" = "Kopioi kiinnitetty teksti";
+"Forest" = "Metsä";
+"Show floating window after Quick Capture" = "Näytä kelluva ikkuna Pikakaappauksen jälkeen";
+"Brush" = "Harja";
+"Allow Scroll Zoom on Pins" = "Salli vierityszoomaus pinsseissä";
+"Could not copy configuration." = "Määritystä ei voitu kopioida.";
+"Allow sending text to Google Translate" = "Salli tekstin lähettäminen Google-kääntäjälle";
+"Export…" = "Vie…";
+"Choose local data to clear" = "Valitse tyhjennettävät paikalliset tiedot";
+"Delete Configuration?" = "Poistetaanko määritykset?";
+"Non-Drawing Actions" = "Ei-piirtotoiminnot";
+"Restored pins (closes current pins immediately)" = "Palautetut nastat (sulkee nykyiset nastat välittömästi)";
+"Professional" = "Ammattilainen";
+"Move to More Tools" = "Siirry kohtaan Lisää työkaluja";
+"Translation failed; original text shown." = "Käännös epäonnistui; alkuperäinen teksti näkyy.";
+"Target Language" = "Kohdekieli";
+"About Pinlume" = "Tietoja Pinlumesta";
+"No text found" = "Tekstiä ei löytynyt";
+"Automatic" = "Automaattinen";
+"Select Text" = "Valitse Teksti";
+"Move Down" = "Siirrä alas";
+"Don't ask again" = "Älä kysy uudelleen";
+"Space to move. Release to annotate and edit" = "Tilaa liikkua. Vapauta merkintöjen lisäämiseksi ja muokkaamiseksi";
+"Transparent Annotation" = "Läpinäkyvä huomautus";
+"Speak Source" = "Puhu lähde";
+"Press %@ to move selection 1 pixel" = "Paina %@ siirtääksesi valintaa 1 pikselin";
+"Pin Scroll Opacity" = "Pin Scroll Opacity";
+"OCR Pin" = "OCR Pin";
+"Double-click" = "Kaksoisnapsauta";
+"Rename Configuration" = "Nimeä kokoonpano uudelleen";
+"When shortcuts conflict, the settings list is matched from top to bottom and the first entry takes priority." = "Kun pikanäppäimet ovat ristiriidassa, asetusluettelo täsmää ylhäältä alas ja ensimmäinen merkintä on etusijalla.";
+"Original / Translation" = "Alkuperäinen / käännös";
+"Move Toolbar" = "Siirrä työkalupalkki";
+"Beautify Screenshot" = "Kaunista kuvakaappaus";
+"Opacity %d%%" = "Peittävyys %d%%";
+"Configuration" = "Kokoonpano";
+"Press %@ to show/hide magnifier" = "Näytä/piilota suurennus painamalla %@";
+"Anchor to Mouse Position" = "Kiinnitä hiiren asentoon";
+"Press C to copy color" = "Kopioi väri painamalla C";
+"Import…" = "Tuo…";
+"Apple translation language availability is unknown." = "Applen käännöskielen saatavuutta ei tiedetä.";
+"Unable to capture selection" = "Valintaa ei voi kaapata";
+"Translated Text" = "Käännetty teksti";
+"Show partial image in compact Pin" = "Näytä osittainen kuva kompaktissa Pin-muodossa";
+"Translation complete" = "Käännös valmis";
+"Show Original / Translation" = "Näytä alkuperäinen / käännös";
+"Languages swapped; edited translation was preserved" = "Kielet vaihdettu; muokattu käännös säilytettiin";
+"Image Adjustments" = "Kuvan säädöt";
+"Hide All Pins" = "Piilota kaikki nastat";
+"Make Common" = "Tee yhteiseksi";
+"Storage & Diagnostics" = "Varastointi ja diagnostiikka";
+"Size %d%%" = "Koko %d%%";
+"Enter a new name for this custom configuration." = "Anna tälle mukautetulle kokoonpanolle uusi nimi.";
+"Preparing full window…" = "Valmistellaan koko ikkunaa…";
+"This affects both the capture selection toolbar and pin toolbar. Common tools appear in the first row; additional tools move into the More menu." = "Tämä vaikuttaa sekä sieppauksen valintatyökaluriviin että kiinnitystyökaluriviin. Yleiset työkalut näkyvät ensimmäisellä rivillä; lisätyökalut siirtyvät Lisää-valikkoon.";
+"Pinlume needs Accessibility permission to translate selected text. Open System Settings to grant access. If Pinlume is not listed, click the + button and choose the running Pinlume app." = "Pinlume tarvitsee esteettömyysluvan valitun tekstin kääntämiseen. Avaa Järjestelmäasetukset myöntääksesi käyttöoikeudet. Jos Pinlumea ei ole luettelossa, napsauta +-painiketta ja valitse käynnissä oleva Pinlume-sovellus.";
+"These shortcuts work only in a capture selection or selected pin; on-screen hints follow the current settings." = "Nämä pikanäppäimet toimivat vain sieppausvalinnassa tai valitussa nastassa; näytön vihjeet seuraavat nykyisiä asetuksia.";
+"Copy Configuration" = "Kopioi";
+"Deep Teal" = "Syvä sinivihreä";
+"Could not apply configuration profile." = "Määritysprofiilia ei voitu käyttää.";
+"Switch Magnifier RGB/HEX" = "Vaihda suurennuslasi RGB/HEX";
+"Anchor to Top Left" = "Ankkuri vasempaan yläkulmaan";
+"Amber" = "Amber";
+"Configuration:" = "Kokoonpano:";
+"Selectable Text Capture" = "Valittavissa oleva tekstinkaappaus";
+"Hide/Show All Pins" = "Piilota/näytä kaikki nastat";
+"Unable to capture full window" = "Koko ikkunaa ei voi kaapata";
+"Toolbar Layout" = "Työkalupalkin asettelu";
+"Move Up" = "Siirrä ylös";
+"Enable Hotkeys" = "Ota pikanäppäimet käyttöön";
+"Choose an image to pin to screen" = "Valitse näytölle kiinnitettävä kuva";
+"OCR Selection" = "OCR-valinta";
+"%@ is running from a disk image. Move it to your Applications folder for stable permissions and the best experience." = "%@ on käynnissä levyvedosta. Siirrä se Sovellukset-kansioosi saadaksesi vakaat käyttöoikeudet ja parhaan käyttökokemuksen.";
+"System Default" = "Järjestelmän oletus";
+"Midnight Indigo" = "Keskiyön indigo";
+"Shortcut unavailable (error %d)" = "Pikanäppäin ei ole käytettävissä (virhe %d)";
+"Auto Detect" = "Automaattinen tunnistus";
+"Copy of %@" = "Kopio numerosta %@";
+"Choose which actions appear in the status bar menu and arrange the order of common and additional tools. Settings, version, and quit remain fixed." = "Valitse tilapalkin valikossa näkyvät toiminnot ja järjestä yleisten ja lisätyökalujen järjestys. Asetukset, versio ja lopetus pysyvät kiinteinä.";
+"Sentence Comparison" = "Lauseiden vertailu";
+"Could not rename configuration." = "Määritystä ei voitu nimetä uudelleen.";
+"No items" = "Ei kohteita";
+"Diagnostic logs" = "Diagnostiset lokit";
+"Not Now" = "Ei nyt";
+"Text copied" = "Teksti kopioitu";
+"Scroll capture copied to clipboard" = "Vierityskaappaus kopioitu leikepöydälle";
+"Rename…" = "Nimeä uudelleen…";
+"Calculating…" = "Lasketaan…";
+"Disable Hotkeys" = "Poista pikanäppäimet käytöstä";
+"Enable diagnostic logging (status, timing, coordinates, and errors only)" = "Ota diagnostiikkaloki käyttöön (vain tila, ajoitus, koordinaatit ja virheet)";
+"Hold %@ to show magnifier" = "Pidä %@ näyttääksesi suurennuslasin";
+"Choose which dedicated OCR and translation tools are visible. Keyboard shortcuts are in Shortcuts." = "Valitse, mitkä OCR- ja käännöstyökalut ovat näkyvissä. Pikanäppäimet ovat Pikanäppäimet-kohdassa.";
+"Hold to Show Magnifier" = "Pidä painettuna näyttääksesi suurennuslasin";
+"Show All Pins" = "Näytä kaikki Pin-merkit";
+"The configuration “%@” will be deleted and Basic will be applied." = "Määritys \"%@\" poistetaan ja Basic otetaan käyttöön.";
+"These are actions rather than drawing tools. They appear in More Tools; disabling one hides it from both selections and pins." = "Nämä ovat pikemminkin toimintoja kuin piirustustyökaluja. Ne näkyvät kohdassa Lisää työkaluja; poistaminen käytöstä piilottaa sen sekä valinnoista että nastaista.";
+"Images saved to a folder you choose will not be deleted." = "Valitsemaasi kansioon tallennettuja kuvia ei poisteta.";
+"Press %@ to switch RGB/HEX" = "Paina %@ vaihtaaksesi RGB/HEX";
+"Space to move. Release to finish" = "Tilaa liikkua. Päästä vapauttamalla";
+"Show/Hide Magnifier" = "Näytä/piilota suurennuslasi";
+"Speak" = "Puhu";
+"Eraser" = "Pyyhekumi";
+"Current Configuration" = "Nykyinen kokoonpano";
+"Screen Translation Capture" = "Näytön käännöskaappaus";
+"Copy Translation" = "Kopioi käännös";
+"Move to Applications folder?" = "Siirretäänkö Sovellukset-kansioon?";
+"Double-click to Close Pin" = "Sulje kiinnitys kaksoisnapsauttamalla";
+"Slim" = "Ohut";
+"Could not move to Applications" = "Ei voitu siirtää sovelluksiin";
+"Please drag Pinlume to your Applications folder manually.\n\n%@" = "Vedä Pinlume manuaalisesti Sovellukset-kansioon.\n\n%@";
+"Could not import configuration." = "Määritystä ei voitu tuoda.";
+"These are actions rather than drawing tools. Disabling one hides it from ordinary selections and pins." = "Nämä ovat pikemminkin toimintoja kuin piirustustyökaluja. Sen poistaminen käytöstä piilottaa sen tavallisilta valinnoilta ja nastailta.";
+"Turn this off to keep translation text on this Mac. Google translation will be unavailable." = "Poista tämä käytöstä, jos haluat säilyttää käännöstekstin tässä Macissa. Google-käännös ei ole saatavilla.";
+"Could not delete configuration." = "Määritystä ei voitu poistaa.";
+"Screen translation must stay on one display" = "Näytön käännöksen on pysyttävä yhdellä näytöllä";
+"Hide Pin Shadow" = "Piilota Pin Shadow";
+"Translation Status" = "Käännöksen tila";
+"Monochrome" = "Yksivärinen";
+"Translate before swapping languages" = "Käännä ennen kielten vaihtamista";
+"Export" = "Vie";
+"Dark" = "Tumma";
+"Apple translation needs the %@ → %@ language pack. Download it in System Settings." = "Applen käännös vaatii kielipaketin %@ → %@. Lataa se järjestelmäasetuksista.";
+"Press %@ to move the sample point 1 pixel" = "Paina %@ siirtääksesi näytepistettä 1 pikselin";
+"Move Selection 1 Pixel" = "Siirrä valinta 1 pikseli";
+"Screen Translation" = "Näytön käännös";
+"Smooth Pin Zoom" = "Smooth Pin Zoom";
+"The current settings were kept unchanged." = "Nykyiset asetukset pidettiin ennallaan.";
+"Presentation Drawing" = "Esityksen piirustus";
+"Interface Theme:" = "Käyttöliittymän teema:";
+"Quick capture copied to clipboard" = "Pikakaappaus kopioitu leikepöydälle";
+"Translate selected text" = "Käännä valittu teksti";
+"Import" = "Tuo";
+"  Pin Zoom Anchor:" = "Zoomausankkuri:";
+"Source Text" = "Lähdeteksti";
+"Open Translation Window" = "Avaa käännösikkuna";
+"Configuration Profiles" = "Määritysprofiilit";
+"Text recognition failed" = "Tekstin tunnistus epäonnistui";
+"Continue with Clipboard" = "Jatka leikepöydällä";
+"Allow Trackpad Pinch Zoom on Pins" = "Salli ohjauslevyn nipistyszoomaus pinsseissä";
+"Actions in More Tools" = "Toiminnot lisätyökaluissa";
+"Clear Selected Data" = "Tyhjennä valitut tiedot";
+"Could not export configuration." = "Määritystä ei voitu viedä.";
+"Copy Source" = "Kopioi lähde";
+"Common Tools" = "Yleiset työkalut";
+"Swap" = "Vaihda";
+"Recognize Text" = "Tunnista teksti";
+"Speak Translation" = "Puhu käännös";
+"These are actions rather than drawing tools. Disabling one hides it wherever that action is available." = "Nämä ovat pikemminkin toimintoja kuin piirustustyökaluja. Poistaminen käytöstä piilottaa sen kaikkialla, missä se on käytettävissä.";
+"Common tools appear in the first row; additional tools move into the More menu. Actions unavailable for the current context do not appear." = "Yleiset työkalut näkyvät ensimmäisellä rivillä; lisätyökalut siirtyvät Lisää-valikkoon. Toiminnot, jotka eivät ole käytettävissä nykyisessä kontekstissa, eivät näy.";
+"Not enough space for comparison" = "Ei tarpeeksi tilaa vertailulle";
+"Set the Select Text pin action, translation engine, and privacy policy here. Keyboard shortcuts are in Shortcuts." = "Aseta Select Text pin -toiminto, käännösmoottori ja tietosuojakäytäntö tässä. Pikanäppäimet ovat Pikanäppäimet-kohdassa.";
+"Recognizing Text…" = "Tekstiä tunnistetaan…";
+"Release %@ to hide magnifier" = "Vapauta %@ piilottaaksesi suurennuslasin";
+"Rename" = "Nimeä uudelleen";
+"Translate Now" = "Käännä nyt";
+"Mouse Wheel" = "Hiiren pyörä";
+"Google translation is disabled in Settings." = "Google-käännös on poistettu käytöstä asetuksista.";
+"Could not determine the source language." = "Lähdekieltä ei voitu määrittää.";
+"Copy Text" = "Kopioi teksti";
+"Selection & Pin Interactions" = "Valinta ja pin-vuorovaikutukset";
+"Pin zoom anchors to mouse position" = "Kiinnitä zoomausankkurit hiiren asentoon";
+"OCR & Translation" = "Tekstintunnistus ja käännös";
+"Rotate Clockwise" = "Kierrä myötäpäivään";

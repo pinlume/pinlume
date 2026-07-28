@@ -1,0 +1,846 @@
+/* 繁體中文 — Pinlume localization
+ *
+ * To add a new language:
+ * 1. Create a new folder: pinlume/<lang-code>.lproj/
+ * 2. Copy this file into that folder
+ * 3. Translate all values (right side of = sign)
+ * 4. Add the language to LanguageManager.availableLanguages in Services/LanguageManager.swift
+ * 5. Add the language code to knownRegions in pinlume.xcodeproj/project.pbxproj
+ * 6. Submit a pull request!
+ *
+ * Keys use the English text. Values should be the translation.
+ * Format strings use %@ for strings, %d for integers.
+ * Keep keyboard shortcuts (like ⌘C) untranslated.
+ * Keep brand names (Pinlume, Google Drive, imgbb, S3) untranslated.
+ */
+
+/* Menu Bar */
+"Capture Area" = "擷取區域";
+"Capture Screen" = "擷取螢幕";
+"Capture OCR" = "擷取 OCR";
+"Capture OCR & QR" = "擷取 OCR 與 QR";
+"Capture area and read text/QR codes" = "擷取區域並讀取文字／QR 條碼";
+"Quick Capture" = "快速擷取";
+"Scroll Capture" = "捲動擷取";
+"Capture Last Area" = "擷取上次區域";
+"Capture Delay" = "延遲擷取";
+"None" = "無";
+"%d seconds" = "%d 秒";
+"Record Area" = "錄製區域";
+"Record Screen" = "錄製螢幕";
+"Recent Captures" = "最近的擷取";
+"Show History Panel" = "顯示歷史記錄面板";
+"Open Image..." = "開啟影像⋯";
+"Open from Clipboard" = "從剪貼簿開啟";
+"Pin from Clipboard" = "從剪貼簿釘選";
+"Preferences..." = "偏好設定⋯";
+"Check for Updates..." = "檢查更新⋯";
+"Quit Pinlume" = "結束 Pinlume";
+"No recent captures" = "沒有最近的擷取";
+"Clear History" = "清除歷史記錄";
+
+/* History Panel */
+"Copy" = "拷貝";
+"Save As..." = "另存新檔⋯";
+"Open in Editor" = "在編輯器中開啟";
+"Pin to Screen" = "釘選至螢幕";
+"Quick Look" = "快速查看";
+"Delete" = "刪除";
+"All" = "全部";
+"Screenshots" = "螢幕截圖";
+"GIFs" = "GIFs";
+"Click to copy · Drag to app" = "點按以拷貝 · 拖移至 App";
+"No captures yet" = "尚無擷取";
+
+/* Floating Thumbnail */
+"Close All" = "全部關閉";
+"Save All to Folder…" = "全部儲存至檔案夾⋯";
+"Save" = "儲存";
+
+/* Editor Top Bar */
+"Zoom In" = "放大";
+"Zoom Out" = "縮小";
+"Zoom" = "縮放";
+"Fit Canvas" = "配合畫布大小";
+"Crop" = "裁切";
+"Flip Horizontal" = "水平翻轉";
+"Flip Vertical" = "垂直翻轉";
+"Rotate Left" = "向左旋轉";
+"Rotate Right" = "向右旋轉";
+"Add Capture" = "加入擷取";
+
+/* Toolbar - Tools */
+"Arrow" = "箭頭";
+"Line" = "線條";
+"Rectangle" = "矩形";
+"Ellipse" = "橢圓";
+"Pencil" = "鉛筆";
+"Pencil (Draw)" = "鉛筆（繪圖）";
+"Marker" = "螢光筆";
+"Text" = "文字";
+"Number" = "編號";
+"Number / Counter" = "編號 / 計數器";
+"Stamp / Emoji" = "圖章 / 表情符號";
+"Censor" = "遮蔽";
+"Censor (Pixelate / Blur / Solid)" = "遮蔽（馬賽克 / 模糊 / 填色）";
+"Measure" = "測量";
+"Measure (px)" = "測量 (px)";
+"Magnify (Loupe)" = "放大鏡";
+"Highlight" = "聚光";
+"Highlight (Spotlight)" = "聚光（聚光燈）";
+"Dim" = "變暗";
+"Color Sampler" = "顏色取樣器";
+"Color Picker" = "顏色選取器";
+"Select & Edit" = "選取與編輯";
+"Color" = "顏色";
+
+/* Toolbar - Actions */
+"Copy to Clipboard" = "拷貝至剪貼簿";
+"Save to File" = "儲存至檔案";
+"Save to" = "儲存至";
+"Open in Editor Window" = "在編輯器視窗中開啟";
+"Pin on Screen" = "釘選在螢幕上";
+"Pin" = "釘選";
+"Pin (floating window)" = "釘選（浮動視窗）";
+"OCR" = "OCR";
+"OCR Text" = "OCR 文字辨識";
+"OCR (extract text)" = "OCR（擷取文字）";
+"OCR & QR" = "OCR 與 QR";
+"Run OCR & QR" = "執行 OCR 與 QR";
+"Open Link" = "開啟連結";
+"Open With" = "開啟方式";
+"No Apps Available" = "沒有可用的 App";
+"No Share Services" = "沒有可用的分享服務";
+"QR Code" = "QR 條碼";
+"QR Codes" = "QR 條碼";
+"Upload" = "上傳";
+"Share" = "分享";
+"Undo" = "還原";
+"Redo" = "重做";
+"Close" = "關閉";
+"Remove Background" = "移除背景";
+"Beautify" = "美化";
+"Adjust" = "調整";
+"Adjust (Image Effects)" = "調整（影像效果）";
+"Invert Colors" = "反轉顏色";
+"Record" = "錄製";
+"Record screen" = "錄製螢幕";
+"Translate" = "翻譯";
+"Auto-Redact sensitive data" = "自動遮蔽敏感資料";
+"Move Selection" = "移動選取範圍";
+
+/* Toolbar - Recording */
+"Start Recording" = "開始錄製";
+"Cancel Recording" = "取消錄製";
+"Highlight Mouse Clicks" = "標示滑鼠點按";
+"Record System Audio" = "錄製系統音訊";
+"Record Microphone" = "錄製麥克風";
+"Recording Settings" = "錄製設定";
+
+/* Tool Options */
+"Size" = "大小";
+"Stroke" = "筆畫";
+"Radius" = "半徑";
+"Start:" = "起始：";
+"Draw:" = "繪製：";
+"Auto:" = "自動：";
+"Fill" = "填充";
+"Outline" = "外框";
+"More Emojis" = "更多表情符號";
+"Load Image" = "載入影像";
+"Gradient Style" = "漸層樣式";
+"On" = "開啟";
+"Text Only" = "僅文字";
+"All Text" = "全部文字";
+"PII" = "個資";
+"Faces" = "臉孔";
+"People" = "人物";
+"Confirm before upload" = "上傳前確認";
+"Flip" = "翻轉";
+"Smooth" = "平滑";
+"Refined" = "精細";
+"Smart" = "智慧型";
+"Padding" = "間距";
+"Shadow" = "陰影";
+"Right-click to add points" = "右鍵點按以加入控制點";
+"Hold 1 auto-vertical  ·  Hold 2 auto-horizontal" = "按住 1 自動垂直  ·  按住 2 自動水平";
+
+/* Overlay / Canvas */
+"Click a window  ·  Drag for custom area  ·  F for full screen" = "點按視窗  ·  拖移以自訂區域  ·  F 全螢幕";
+"Drag to select  ·  Click for full screen" = "拖移以選取  ·  點按以全螢幕";
+"Release to annotate and edit" = "放開以標註與編輯";
+"Release to finish" = "放開以完成";
+"Hold Space to move. Release to annotate and edit" = "按住空白鍵以移動。放開以標註與編輯";
+"Hold Space to move. Release to finish" = "按住空白鍵以移動。放開以完成";
+"Space" = "空白鍵";
+"Window snap: " = "視窗吸附：";
+"ON" = "開";
+"OFF" = "關";
+"  (Tab to toggle)" = "  （Tab 切換）";
+"Right-click to copy" = "右鍵點按以拷貝";
+"Copied %@" = "已拷貝 %@";
+"Set color %@" = "設定顏色 %@";
+"Draw something first to use the move tool." = "請先繪製內容再使用移動工具。";
+"Drag to reposition" = "拖移以重新定位";
+
+/* Resolution / Aspect Ratio Presets */
+"Aspect ratio & resolution presets" = "長寬比與解析度預設";
+"Aspect ratio" = "長寬比";
+"Resolution" = "解析度";
+"Freeform" = "自由形式";
+"Units" = "單位";
+"Keep ratio for next captures" = "為後續擷取保留比例";
+"Custom · %@" = "自訂 · %@";
+"Order history by last edit" = "依最近編輯排序歷史記錄";
+"Edited screenshots move to the top. Off keeps them in capture order." = "編輯過的截圖會移至頂部。關閉後則保持擷取順序。";
+
+/* Overlay - Popovers */
+"Format:" = "格式：";
+"FPS:" = "FPS：";
+"When done:" = "完成後：";
+"Open editor" = "開啟編輯器";
+"Show in Finder" = "在 Finder 中顯示";
+"Copy to clipboard" = "拷貝至剪貼簿";
+
+/* Preferences - General */
+"Pinlume Preferences" = "Pinlume 偏好設定";
+"General" = "一般";
+"Tools" = "工具";
+"Recording" = "錄製";
+"About" = "關於";
+"Shortcuts" = "快捷鍵";
+"Uploads" = "上傳";
+"Language" = "語言";
+"Language:" = "語言：";
+"Restart the app to fully apply the new language." = "重新啟動 App 以完整套用新語言。";
+"Capture" = "擷取";
+"Play sound on capture" = "擷取時播放提示音";
+"Play sound on copy" = "拷貝時播放音效";
+"Remember last selected tool" = "記住上次選取的工具";
+"Show floating thumbnail after capture" = "擷取後顯示浮動縮圖";
+"Launch at login" = "登入時啟動";
+"Show snap alignment guides" = "顯示對齊輔助線";
+"Snap selection edges to image boundaries" = "將選取範圍邊緣貼齊影像邊界";
+"Capture mouse cursor in screenshot" = "在螢幕截圖中擷取滑鼠游標";
+"Double-click selection to copy" = "雙擊選取範圍以複製";
+"Hide capture instructions" = "隱藏截圖操作提示";
+"Disable shadow outside selection" = "停用選取範圍外的陰影";
+"Show shortcuts in tooltips" = "在工具提示中顯示快捷鍵";
+"Use window title in saved filename" = "在儲存的檔案名稱中使用視窗標題";
+"Hide menu bar icon" = "隱藏選單列圖像";
+"Hotkeys still work. To show the icon again, re-launch Pinlume." = "快捷鍵仍可使用。若要再次顯示圖像，請重新啟動 Pinlume。";
+"Menu bar icon:" = "選單列圖像：";
+"Default" = "預設";
+"Custom symbol" = "自訂符號";
+"Enter any SF Symbol name (e.g. camera.fill) or pick a preset. Browse names in Apple's SF Symbols app. Invalid names fall back to the default icon." = "輸入任何 SF Symbol 名稱（例如 camera.fill）或選擇預設。可在 Apple 的 SF Symbols App 中瀏覽名稱。無效的名稱將回復為預設圖像。";
+"Menu Bar Order" = "選單列順序";
+"Choose the order of capture actions in the Pinlume menu bar menu." = "選擇 Pinlume 選單列選單中擷取動作的順序。";
+"Move up" = "上移";
+"Move down" = "下移";
+"Check for updates automatically" = "自動檢查更新";
+"Check for beta updates" = "檢查測試版更新";
+"Thumbnail" = "縮圖";
+"  Dismiss after:" = "  自動關閉：";
+"seconds before auto-dismiss (0 = never)" = "秒後自動關閉（0 = 永不）";
+"  Multiple previews:" = "  多個預覽：";
+"Stack (keep all)" = "堆疊（保留全部）";
+"Replace (show only latest)" = "取代（僅顯示最新）";
+"Output" = "輸出";
+"Image format:" = "影像格式：";
+"Quality:" = "品質：";
+"%d%%" = "%d%%";
+"Save at standard resolution (1x)" = "以標準解析度 (1x) 儲存";
+"Halves dimensions on Retina displays, ~4x smaller files" = "在 Retina 顯示器上尺寸減半，檔案約縮小 4 倍";
+"Embed sRGB color profile" = "嵌入 sRGB 色彩描述檔";
+"Ensures consistent colors across different displays" = "確保不同顯示器之間色彩一致";
+"Screenshot History" = "螢幕截圖歷史記錄";
+"History size:" = "歷史記錄大小：";
+"screenshots kept on disk (0 = off)" = "張螢幕截圖保留在磁碟上（0 = 關閉）";
+"Save Directory" = "儲存目錄";
+"Save folder:" = "儲存檔案夾：";
+"Browse…" = "瀏覽⋯";
+"Appearance" = "外觀";
+"Accent color:" = "強調色：";
+"Icon color:" = "圖像顏色：";
+"Background color:" = "背景顏色：";
+"Reset" = "重置";
+"OCR Capture:" = "OCR 擷取：";
+"OCR & QR Capture:" = "OCR 與 QR 擷取：";
+"Show window + copy to clipboard" = "顯示視窗 + 拷貝至剪貼簿";
+"Show window only" = "僅顯示視窗";
+"Copy to clipboard only" = "僅拷貝至剪貼簿";
+"Enter / Quick Capture:" = "Enter / 快速擷取：";
+"Save to file" = "儲存至檔案";
+"Save + copy to clipboard" = "儲存 + 拷貝至剪貼簿";
+"Save action:" = "儲存動作：";
+"Save to default folder" = "儲存至預設檔案夾";
+"Ask where to save" = "詢問儲存位置";
+"OCR Action" = "OCR 動作";
+
+/* Preferences - Shortcuts */
+"Keyboard Shortcuts" = "鍵盤快捷鍵";
+"Hotkeys" = "快捷鍵";
+"Clear shortcut" = "清除快捷鍵";
+"Press keys..." = "請按下按鍵⋯";
+"Waiting..." = "等候中⋯";
+
+/* Preferences - Tools */
+"Annotation Tools" = "標註工具";
+"Hidden tools are removed from the bottom toolbar." = "隱藏的工具會從底部工具列中移除。";
+"Capture Actions" = "擷取動作";
+"Bottom Toolbar Actions" = "底部工具列動作";
+"Hidden actions are removed from the bottom toolbar." = "隱藏的動作會從底部工具列中移除。";
+"Editor Actions" = "編輯器動作";
+"Right Toolbar Actions" = "右側工具列動作";
+"Hidden actions are removed from the right toolbar." = "隱藏的動作會從右側工具列中移除。";
+
+/* Preferences - Recording */
+"Frame rate:" = "影格率：";
+"After recording:" = "錄製後：";
+"Save recording to:" = "將錄製儲存至：";
+"Save Recording" = "儲存錄製";
+"Clear" = "清除";
+"Max height:" = "最大高度：";
+"px (0 = unlimited)" = "px（0 = 不限）";
+"Behavior" = "行為";
+"Auto-scroll (sends synthetic scroll events)" = "自動捲動（傳送模擬捲動事件）";
+"Detect fixed/sticky headers" = "偵測固定/黏性標頭";
+"Scroll speed:" = "捲動速度：";
+"Slow" = "慢";
+"Medium" = "中";
+"Fast" = "快";
+"Very fast" = "極快";
+"5 fps" = "5 fps";
+"10 fps" = "10 fps";
+"15 fps" = "15 fps";
+"24 fps" = "24 fps";
+"30 fps" = "30 fps";
+"60 fps" = "60 fps";
+"120 fps" = "120 fps";
+"MP4 (H.264)" = "MP4 (H.264)";
+"GIF" = "GIF";
+
+/* Preferences - Upload */
+"Upload Service" = "上傳服務";
+"Upload Provider" = "上傳供應商";
+"Provider:" = "供應商：";
+"Google Drive" = "Google Drive";
+"Google Drive (images + videos)" = "Google Drive（影像 + 影片）";
+"imgbb (images only)" = "imgbb（僅影像）";
+"S3-Compatible (images + videos)" = "S3 相容（影像 + 影片）";
+"S3-Compatible Storage" = "S3 相容儲存空間";
+"Sign In with Google" = "使用 Google 登入";
+"Sign Out" = "登出";
+"Signed in" = "已登入";
+"Not signed in" = "未登入";
+"Account:" = "帳號：";
+"Test Connection" = "測試連線";
+"Fill in endpoint, bucket, and credentials first" = "請先填寫端點、儲存貯體及憑證";
+"Testing..." = "測試中⋯";
+"Connection successful!" = "連線成功！";
+"Leave empty to use default" = "留空以使用預設值";
+"Endpoint:" = "端點：";
+"Region:" = "區域：";
+"Bucket:" = "儲存貯體：";
+"Access Key:" = "存取金鑰：";
+"Secret Key:" = "秘密金鑰：";
+"Public URL:" = "公開 URL：";
+"Path Prefix:" = "路徑前綴：";
+"API key:" = "API 金鑰：";
+"Upload History" = "上傳歷史記錄";
+"No uploads yet." = "尚無上傳記錄。";
+"Base URL for public access. If empty, the S3 endpoint URL is used (may not be publicly accessible)." = "用於公開存取的基礎 URL。若為空，將使用 S3 端點 URL（可能無法公開存取）。";
+"A shared key is included — get your own free key at imgbb.com/api if you hit rate limits. Images only (no video support)." = "已包含共用金鑰 — 如遇到速率限制，請至 imgbb.com/api 取得您自己的免費金鑰。僅支援影像（不支援影片）。";
+"Works with AWS S3, Cloudflare R2, MinIO, DigitalOcean Spaces, Backblaze B2, and other S3-compatible services. Supports images and videos." = "支援 AWS S3、Cloudflare R2、MinIO、DigitalOcean Spaces、Backblaze B2 及其他 S3 相容服務。支援影像和影片。";
+"Configure S3 in Preferences" = "在偏好設定中設定 S3";
+"Sign in to Google Drive in Preferences" = "在偏好設定中登入 Google Drive";
+"Video upload requires Google Drive or S3" = "影片上傳需要 Google Drive 或 S3";
+
+/* Preferences - About */
+"Pinlume" = "Pinlume";
+"Version %@ (%@)" = "版本 %@（%@）";
+"Made by" = "開發者";
+"Licensed under the GPLv3" = "以 GPLv3 授權";
+"A free, open-source screenshot & screen recording tool for macOS.\nFully native — built with Swift and AppKit." = "免費、開放原始碼的 macOS 螢幕截圖與錄製工具。\n完全原生 — 以 Swift 和 AppKit 打造。";
+
+/* Alerts */
+"No Image on Clipboard" = "剪貼簿中沒有影像";
+"No Image or Text on Clipboard" = "剪貼簿中沒有影像或文字";
+"Copy an image to the clipboard first, then try again." = "請先將影像拷貝到剪貼簿，然後再試一次。";
+"Copy an image or text to the clipboard first, then try again." = "請先將影像或文字拷貝到剪貼簿，然後再試一次。";
+"OK" = "好";
+"Accessibility Access Required" = "需要輔助使用權限";
+"Pinlume needs Accessibility permission to auto-scroll other apps. Please grant access in System Settings, then try again." = "Pinlume 需要「輔助使用」權限才能自動捲動其他 App。請在系統設定中授予權限，然後再試一次。";
+"Pinlume needs Accessibility permission for scroll capture. Please grant access in System Settings, then try again." = "Pinlume 需要輔助使用權限才能進行捲動擷取。請在系統設定中授予存取權限，然後重試。";
+"Open Settings" = "打開設定";
+"Cancel" = "取消";
+"Microphone Access Required" = "需要麥克風權限";
+"Pinlume needs microphone permission to record voice audio. Open System Settings to grant access." = "Pinlume 需要麥克風權限才能錄製語音。請打開系統設定以授予權限。";
+"Upload to Google Drive?" = "上傳至 Google Drive？";
+"Upload to S3?" = "上傳至 S3？";
+"Upload to imgbb.com?" = "上傳至 imgbb.com？";
+"Your screenshot will be uploaded." = "您的螢幕截圖將被上傳。";
+
+/* Permission Onboarding */
+"Welcome to Pinlume" = "歡迎使用 Pinlume";
+"Pinlume needs one permission" = "Pinlume 需要一項權限";
+"Screen Recording not yet granted" = "尚未授予螢幕錄製權限";
+"Screen Recording granted!" = "螢幕錄製權限已授予！";
+"Enable Pinlume, then try taking a screenshot" = "啟用 Pinlume，然後試試擷取螢幕截圖";
+"Open Screen Recording Settings" = "打開螢幕錄製設定";
+"Continue" = "繼續";
+
+/* OCR Window */
+"Text Recognition" = "文字辨識";
+"Text & QR Recognition" = "文字與 QR 辨識";
+"Translate to:" = "翻譯為：";
+"%d chars · %d words" = "%d 字元 · %d 詞";
+"Copy  ⌘↩" = "拷貝  ⌘↩";
+"AI Search" = "AI 搜尋";
+"Show Original" = "顯示原文";
+"Translation Failed" = "翻譯失敗";
+"Translation" = "翻譯";
+"(No text detected in the selected area)" = "（在選取區域中未偵測到文字）";
+
+/* Upload Toast */
+"URL copied to the clipboard" = "URL 已拷貝至剪貼簿";
+"Uploading... %d%%" = "上傳中⋯ %d%%";
+"Upload failed: %@" = "上傳失敗：%@";
+"Uploaded! Link copied." = "上傳完成！連結已拷貝。";
+"Uploading to %@... %d%%" = "上傳至 %@⋯ %d%%";
+"Open" = "開啟";
+
+/* Recording Toast */
+"Recording saved" = "錄製已儲存";
+"%@ • Recording saved" = "%@ · 錄製已儲存";
+"Copy Path" = "拷貝路徑";
+"Path copied!" = "路徑已拷貝！";
+
+/* Video Editor */
+"Pinlume Video Editor" = "Pinlume 影片編輯器";
+"%@ selected" = "已選取 %@";
+"Exporting..." = "輸出中⋯";
+"Export failed" = "輸出失敗";
+"Saved to %@" = "已儲存至 %@";
+"Save failed" = "儲存失敗";
+
+/* Barcode Detector */
+/* "Open" and "Copy" are shared with other sections */
+
+/* Save Panel */
+"Save As..." = "另存新檔⋯";
+"Choose a folder" = "選擇檔案夾";
+"Save All to Folder…" = "全部儲存至檔案夾⋯";
+
+/* Scroll Capture HUD */
+"Auto Scroll" = "自動捲動";
+"Stop" = "停止";
+"Scrolling..." = "捲動中⋯";
+
+/* Effects Picker (Adjust popover) */
+"Presets" = "預設";
+"Adjustments" = "調整";
+"Brightness" = "亮度";
+"Contrast" = "對比";
+"Saturation" = "飽和度";
+"Sharpness" = "銳利度";
+
+/* Time Ago */
+"just now" = "剛剛";
+"%ds ago" = "%d 秒前";
+"%dm ago" = "%d 分鐘前";
+"%dh ago" = "%d 小時前";
+
+/* Hotkey Labels */
+"History" = "歷史記錄";
+
+/* Preferences - Shortcuts note */
+"Click \"Record\" and press a key combination with at least one modifier (⌘, ⌥, ⌃, ⇧) to set a shortcut." = "點按 \"錄製\" 並按下包含至少一個修飾鍵（⌘、⌥、⌃、⇧）的組合鍵來設定快捷鍵。";
+
+/* Recording — GIF Processing */
+"Processing GIF…" = "正在處理 GIF…";
+
+/* Recording — Input Monitoring Permission */
+"Input Monitoring Required" = "需要輸入監控權限";
+"Pinlume needs Input Monitoring permission to show keystrokes during recording. Please grant access in System Settings, then try again." = "Pinlume 需要「輸入監控」權限才能在錄製時顯示按鍵。請在 System Settings 中授予權限，然後再試一次。";
+"Pinlume needs Accessibility permission to show keystrokes during recording. Please grant access in System Settings, then try again." = "Pinlume 需要「輔助使用」權限才能在錄製時顯示按鍵。請在 System Settings 中授予權限，然後再試一次。";
+
+/* Recording — Keystroke Overlay */
+"Show Keystrokes" = "顯示按鍵";
+"Shortcuts Only" = "僅快捷鍵";
+"All Keystrokes" = "所有按鍵";
+
+/* Recording — Settings Popover */
+"Delay:" = "延遲：";
+
+/* Video Editor */
+"Copied to clipboard!" = "已拷貝至剪貼簿！";
+
+/* Webcam Overlay */
+"Webcam Overlay" = "網路攝影機疊加";
+"Camera Access Required" = "需要攝影機權限";
+"Pinlume needs camera permission for the webcam overlay. Open System Settings to grant access." = "Pinlume 需要攝影機權限才能使用網路攝影機疊加。請打開系統設定以授予權限。";
+"Webcam" = "網路攝影機";
+"Bottom Right" = "右下";
+"Bottom Left" = "左下";
+"Top Right" = "右上";
+"Top Left" = "左上";
+"Small" = "小";
+"Large" = "大";
+"Webcam Size Small" = "小";
+"Webcam Size Medium" = "中";
+"Webcam Size Large" = "大";
+"Webcam Size Extra Large" = "特大";
+"Circle" = "圓形";
+"Rounded Rectangle" = "圓角矩形";
+"Cam pos:" = "攝影機位置：";
+"Cam size:" = "攝影機大小：";
+"Cam shape:" = "攝影機形狀：";
+
+/* New Strings */
+"Settings" = "設定";
+"Settings..." = "設定...";
+"Pinlume Settings" = "Pinlume 設定";
+"Also open in Editor" = "同時在編輯器中開啟";
+"Hide controls" = "隱藏控制";
+"Hide recording controls" = "隱藏錄製控制";
+"Stop recording from the menu bar icon instead." = "改為從選單列圖像停止錄製。";
+"Pixelate" = "馬賽克";
+"Blur" = "模糊";
+"Solid" = "填色";
+"Erase" = "清除";
+"Done" = "完成";
+"Do nothing" = "不執行任何動作";
+"Overlay / Editor Shortcuts" = "覆蓋層 / 編輯器快捷鍵";
+"Set" = "設定";
+"Press..." = "按下⋯";
+"Reset to default" = "重置為預設";
+"Press a single key to assign it as the shortcut for that tool. These work when the overlay or editor is active." = "按下一個按鍵將其指定為該工具的快捷鍵。這些快捷鍵在覆蓋層或編輯器啟用時有效。";
+"Keep Separate" = "保持分離";
+"Merge Audio" = "合併音訊";
+"Audio Tracks" = "音訊軌道";
+"Adjust volume for each audio track:" = "調整每個音訊軌道的音量：";
+"Microphone:" = "麥克風：";
+"System audio:" = "系統音訊：";
+"Loupe" = "放大鏡";
+"Stamp" = "圖章";
+"Unlimited" = "不限";
+
+/* Save Confirmation / Recording / Translation / Upload / Inspector */
+"Save changes?" = "儲存更改？";
+"Your annotations will be lost if you close without saving." = "如果不儲存就關閉，您的標註將會遺失。";
+"Save & Close" = "儲存並關閉";
+"Discard" = "捨棄";
+"Stop Recording" = "停止錄製";
+"Pause" = "暫停";
+"Resume" = "繼續";
+"Engine:" = "引擎：";
+"Google Translate" = "Google Translate";
+"Apple (on-device)" = "Apple（裝置端）";
+"Apple translation is faster and works offline. Google Translate supports more languages." = "Apple 翻譯更快且支援離線使用。Google Translate 支援更多語言。";
+"Download language packs in System Settings…" = "在系統設定中下載語言套件⋯";
+"Configure S3 in Settings" = "在設定中設定 S3";
+"Sign in to Google Drive in Settings" = "在設定中登入 Google Drive";
+"Offline build: upload and cloud storage integrations are removed. Update checks may still connect to Pinlume's update server. Screenshots and recordings stay local unless you share or save them yourself." = "離線版本：已移除上傳和雲端儲存整合。檢查更新時可能仍會連接到 Pinlume 的更新伺服器。除非你自行分享或儲存，否則截圖和錄製內容只會保留在本機。";
+"Position:" = "位置：";
+"  Position:" = "  位置：";
+"Size:" = "大小：";
+"Shape:" = "形狀：";
+
+"Same as screenshots" = "與截圖相同";
+"  Preview size:" = "  預覽大小:";
+"(0 = off)" = "(0 = 關閉)";
+"Clear All" = "清除全部";
+"Clear History?" = "清除歷史記錄？";
+"This will permanently delete all screenshots from history." = "這將從歷史記錄中永久刪除所有截圖。";
+"Click \"Set\" and press a key combination with at least one modifier (⌘, ⌥, ⌃, ⇧) to set a shortcut." = "點擊\"設定\"，然後按下包含至少一個修飾鍵（⌘、⌥、⌃、⇧）的組合鍵來設定快捷鍵。";
+"Files are uploaded to a \"Pinlume\" folder in your Google Drive. Everything stays private — nothing is shared publicly." = "檔案將上傳至您 Google Drive 中的\"Pinlume\"資料夾。所有內容均保持私密——不會公開分享任何內容。";
+
+"Pressure" = "壓感";
+
+/* Added for v4.1.0-beta.3 — video editor, effects, open-video, shortcuts help */
+"Open Video..." = "開啟影片⋯";
+"Choose a video to open in Pinlume editor" = "選擇一個影片以在 Pinlume 編輯器中開啟";
+"Click to add effects" = "點按以加入效果";
+"Add Zoom" = "加入縮放";
+"Add Censor" = "加入遮蔽";
+"Add Cut" = "加入剪輯";
+"Add Speed" = "加入速度";
+"Add Freeze" = "加入凍結";
+"Add Text" = "加入文字";
+"Delete Zoom" = "刪除縮放";
+"Delete Censor" = "刪除遮蔽";
+"Delete Cut" = "刪除剪輯";
+"Delete Speed" = "刪除速度";
+"Delete Freeze" = "刪除凍結";
+"Delete Text" = "刪除文字";
+"Edit Text…" = "編輯文字⋯";
+"Huge" = "特大";
+"Bold" = "粗體";
+"Italic" = "斜體";
+"Alignment" = "對齊";
+"Left" = "靠左";
+"Center" = "置中";
+"Right" = "靠右";
+"Text Color" = "文字顏色";
+"Background Color" = "背景顏色";
+"Rounded" = "圓角";
+"Custom…" = "自訂⋯";
+"Transparent" = "透明";
+"Black" = "黑色";
+"White" = "白色";
+"Yellow" = "黃色";
+"Red" = "紅色";
+"Green" = "綠色";
+"Blue" = "藍色";
+"Untitled" = "未命名";
+"Add effect" = "加入效果";
+"Fade" = "淡化";
+"High" = "高";
+"Low" = "低";
+"Not enough room here" = "此處空間不足";
+"Copied!" = "已拷貝！";
+"Converting to GIF…" = "正在轉換為 GIF⋯";
+"GIF conversion failed" = "GIF 轉換失敗";
+"No video track found" = "找不到影片軌道";
+"Preview:" = "預覽：";
+"Copy Screen Info" = "拷貝螢幕資訊";
+"Copies display and capture diagnostics to clipboard" = "將顯示器與擷取診斷資訊拷貝至剪貼簿";
+"Accent" = "強調";
+"Icon" = "圖像";
+"Background" = "背景";
+"Custom" = "自訂";
+"Theme:" = "主題：";
+"Application" = "應用程式";
+"Capture area and extract text" = "擷取區域並提取文字";
+"Capture the full screen" = "擷取全螢幕";
+"Counter for multi-screen captures" = "多螢幕擷取計數器";
+"8-character random string (e.g. k3j7x9q2)" = "8 位隨機字串（例如 k3j7x9q2）";
+"Filename Template Tokens" = "檔案名稱範本代碼";
+"Filename tokens" = "檔案名稱代碼";
+"Filename:" = "檔案名稱：";
+"Open an image file in the editor" = "在編輯器中開啟影像檔案";
+"Open the recent captures overlay" = "開啟最近擷取的覆蓋層";
+"Open this settings window" = "開啟此設定視窗";
+"Quick capture (uses your Enter action)" = "快速擷取（使用您的 Enter 動作）";
+"Re-capture the last selected area" = "重新擷取上次選取的區域";
+"Screenshots only — captured window title (blank otherwise)" = "僅螢幕截圖 — 已擷取的視窗標題（否則為空白）";
+"Show available filename tokens" = "顯示可用的檔案名稱代碼";
+"Show supported URL scheme commands" = "顯示支援的 URL scheme 指令";
+"Start area capture" = "開始區域擷取";
+"Start area recording" = "開始區域錄製";
+"Start full-screen recording" = "開始全螢幕錄製";
+"Start scroll capture" = "開始捲動擷取";
+"Stop the current recording" = "停止目前的錄製";
+"Supported URL Scheme Commands" = "支援的 URL Scheme 指令";
+"The file extension is appended automatically. Slashes and colons in {window} become dashes." = "副檔名會自動附加。{window} 中的斜線與冒號會變成破折號。";
+"Trigger Pinlume from Raycast, Alfred, Shortcuts, or any tool that opens URLs." = "從 Raycast、Alfred、Shortcuts 或任何可開啟 URL 的工具觸發 Pinlume。";
+"URL scheme info" = "URL scheme 資訊";
+"Enable pinlume:// URL scheme" = "啟用 pinlume:// URL scheme";
+"sec (0 = never)" = "秒（0 = 永不）";
+"Pin zoom anchors to mouse position" = "貼圖縮放錨定滑鼠位置";
+"Show floating window after Quick Capture" = "快速擷取後顯示浮動視窗";
+"Choose an image to pin to screen" = "選擇要固定到螢幕的圖片";
+
+/* Localized current UI keys. Existing translations above are preserved. */
+"Plus build: personal build with update checks disabled. Preferences, history, and permissions are separate from the original Pinlume app." = "Plus 個人版已關閉更新檢查。偏好設定、歷史記錄和權限與原始 Pinlume 應用程式分離。";
+"Light" = "淺色";
+"Press Option to hide magnifier" = "按 Option 隱藏放大鏡";
+"Changes to the selected profile are saved automatically." = "對目前配置的調整會自動儲存。";
+"Show Pin Shadow" = "顯示貼圖陰影";
+"Arrow Keys" = "方向鍵";
+"Source Language" = "原始語言";
+"Translation Pin" = "翻譯貼圖";
+"Color Scheme:" = "配色：";
+"Text Recognition / QR" = "文字辨識 / 二維碼";
+"Basic" = "基礎版";
+"Full" = "滿血版";
+"Menu Bar Menu" = "狀態列選單";
+"Screenshot history and editable annotations" = "截圖歷史與可編輯標註";
+"Press Shift to switch RGB/HEX" = "按 Shift 切換 RGB/HEX";
+"Clipboard image backups" = "剪貼簿圖片備份";
+"Double-click to Toggle Thumbnail" = "雙擊切換縮圖";
+"Compare" = "對照";
+"Apple translation does not support %@ → %@." = "Apple 翻譯不支援 %@ → %@。";
+"Profile:" = "配置：";
+"Move to Applications" = "移動到“應用程式”";
+"Filled Rectangle" = "實心矩形";
+"Google translation is unavailable because sending text is disabled." = "Google 翻譯不可用，因為已禁止傳送文字。";
+"Adjust Area and Edit" = "調整區域並編輯";
+"Clear Local Data…" = "清除本機資料…";
+"Swap Languages" = "交換語言";
+"Ignore window occlusion" = "忽略視窗遮擋";
+"Graphite Blue" = "石墨藍";
+"Copy Original" = "複製原文";
+"Pin Shadow" = "貼圖陰影";
+"Translation Window" = "翻譯視窗";
+"Show Translation" = "顯示譯文";
+"Enable %@:// URL scheme" = "啟用 %@:// URL scheme";
+"Disabled by default. Keeps up to 7 days or 2 MB; never writes screenshots, OCR text, clipboard contents, or keys." = "預設關閉。啟用後最多保留 7 天或 2 MB；不會寫入截圖、OCR 文字、剪貼簿內容或金鑰。";
+"Strength" = "強度";
+"Auto-Redact Sensitive Information" = "自動遮擋敏感資訊";
+"More Tools" = "更多工具";
+"Move Magnifier Sample Point 1 Pixel" = "移動放大鏡取色點 1 像素";
+"Translating…" = "正在翻譯…";
+"Pin Scroll Zoom" = "貼圖滾輪縮放";
+"Copy Text (shown for text pins only)" = "複製文字（僅文字貼圖顯示）";
+"Copy Pinned Text" = "複製文字貼圖內容";
+"Forest" = "森林綠";
+"Brush" = "塗抹";
+"Allow Scroll Zoom on Pins" = "允許貼圖滾輪縮放";
+"Could not copy configuration." = "無法複製配置。";
+"Allow sending text to Google Translate" = "允許將文字傳送給 Google 翻譯";
+"Export…" = "匯出…";
+"Choose local data to clear" = "選擇要清除的本機數據";
+"Delete Configuration?" = "刪除配置？";
+"Non-Drawing Actions" = "非畫筆工具";
+"Restored pins (closes current pins immediately)" = "已恢復的貼圖（會立即關閉目前貼圖）";
+"Professional" = "專業版";
+"Move to More Tools" = "移到更多工具";
+"Translation failed; original text shown." = "翻譯失敗，已顯示原文。";
+"Target Language" = "目標語言";
+"About Pinlume" = "關於 Pinlume";
+"No text found" = "未識別到文字";
+"Automatic" = "自動";
+"Select Text" = "選擇文字";
+"Move Down" = "下移";
+"Don't ask again" = "不再詢問";
+"Space to move. Release to annotate and edit" = "按空白鍵移動。鬆開以標註和編輯";
+"Transparent Annotation" = "透明標註";
+"Speak Source" = "朗讀原文";
+"Press %@ to move selection 1 pixel" = "按 %@ 將選取範圍移動 1 像素";
+"Pin Scroll Opacity" = "貼圖滾輪調整透明度";
+"OCR Pin" = "OCR 貼圖";
+"Double-click" = "按兩下";
+"Rename Configuration" = "重新命名配置";
+"When shortcuts conflict, the settings list is matched from top to bottom and the first entry takes priority." = "快捷鍵衝突時，按設定列表從上到下匹配，排在前面的設定優先。";
+"Original / Translation" = "原圖 / 譯圖";
+"Move Toolbar" = "移動工具條";
+"Beautify Screenshot" = "美化截圖";
+"Opacity %d%%" = "不透明度 %d%%";
+"Configuration" = "配置";
+"Press %@ to show/hide magnifier" = "按 %@ 顯示/隱藏放大鏡";
+"Anchor to Mouse Position" = "固定到滑鼠位置";
+"Press C to copy color" = "按 C 複製顏色值";
+"Import…" = "導入…";
+"Apple translation language availability is unknown." = "無法確定 Apple 翻譯語言包狀態。";
+"Unable to capture selection" = "無法取得選取範圍影像";
+"Translated Text" = "譯文";
+"Show partial image in compact Pin" = "縮圖顯示局部貼圖";
+"Translation complete" = "翻譯完成";
+"Show Original / Translation" = "切換原文 / 譯文";
+"Languages swapped; edited translation was preserved" = "語言已交換；已保留手動編輯的譯文";
+"Image Adjustments" = "圖片調節";
+"Hide All Pins" = "隱藏所有貼圖";
+"Make Common" = "設為常用";
+"Storage & Diagnostics" = "儲存與診斷";
+"Size %d%%" = "大小 %d%%";
+"Enter a new name for this custom configuration." = "請輸入這個自訂配置的新名稱。";
+"Preparing full window…" = "正在準備完整視窗…";
+"This affects both the capture selection toolbar and pin toolbar. Common tools appear in the first row; additional tools move into the More menu." = "這裡會同時影響截圖選取工具列和貼圖工具列。常用工具直接顯示在第一排，更多工具會收進更多選單。";
+"Pinlume needs Accessibility permission to translate selected text. Open System Settings to grant access. If Pinlume is not listed, click the + button and choose the running Pinlume app." = "Pinlume 需要輔助功能權限才能翻譯選取的文字。請開啟系統設定授予權限；如果清單中沒有 Pinlume，請點選 + 並選擇目前執行的 Pinlume 應用程式。";
+"These shortcuts work only in a capture selection or selected pin; on-screen hints follow the current settings." = "這些快速鍵只在截圖選取範圍或已選取的貼圖中生效；說明提示會同步顯示目前設定。";
+"Copy Configuration" = "複製";
+"Deep Teal" = "深海青";
+"Could not apply configuration profile." = "無法套用配置方案。";
+"Switch Magnifier RGB/HEX" = "切換放大鏡 RGB/HEX";
+"Anchor to Top Left" = "固定在左上角";
+"Amber" = "琥珀";
+"Configuration:" = "配置：";
+"Selectable Text Capture" = "選擇文字";
+"Hide/Show All Pins" = "隱藏/顯示所有貼圖";
+"Unable to capture full window" = "無法捕捉完整窗口";
+"Toolbar Layout" = "工具列佈局";
+"Move Up" = "上移";
+"Enable Hotkeys" = "啟用快速鍵";
+"OCR Selection" = "OCR 選區";
+"%@ is running from a disk image. Move it to your Applications folder for stable permissions and the best experience." = "%@ 正從磁碟映像運作。請將它移到「應用程式」資料夾，以獲得穩定的權限和最佳體驗。";
+"System Default" = "跟隨系統";
+"Midnight Indigo" = "午夜靛藍";
+"Shortcut unavailable (error %d)" = "快捷鍵不可用（錯誤 %d）";
+"Auto Detect" = "自動偵測";
+"Copy of %@" = "%@副本";
+"Choose which actions appear in the status bar menu and arrange the order of common and additional tools. Settings, version, and quit remain fixed." = "選擇狀態列選單中的功能，並調整常用工具和更多工具的順序。設定、版本和退出固定保留。";
+"Sentence Comparison" = "逐句對照";
+"Could not rename configuration." = "無法重命名配置。";
+"No items" = "無專案";
+"Diagnostic logs" = "診斷日誌";
+"Not Now" = "暫不";
+"Text copied" = "文字已複製";
+"Scroll capture copied to clipboard" = "滾動截圖已拷貝到剪貼簿";
+"Rename…" = "重命名…";
+"Calculating…" = "正在計算…";
+"Disable Hotkeys" = "停用快速鍵";
+"Enable diagnostic logging (status, timing, coordinates, and errors only)" = "啟用診斷日誌（僅記錄狀態、耗時、座標和錯誤）";
+"Hold %@ to show magnifier" = "按住 %@ 顯示放大鏡";
+"Choose which dedicated OCR and translation tools are visible. Keyboard shortcuts are in Shortcuts." = "選擇要顯示的 OCR 與翻譯專有工具；快速鍵在「快速鍵」中設定。";
+"Hold to Show Magnifier" = "按住顯示放大鏡";
+"Show All Pins" = "顯示所有貼圖";
+"The configuration “%@” will be deleted and Basic will be applied." = "配置“%@”將被刪除，並自動套用基礎版。";
+"These are actions rather than drawing tools. They appear in More Tools; disabling one hides it from both selections and pins." = "這些不是畫筆工具，會出現在更多工具中；關閉後選取範圍和貼圖都不會顯示對應入口。";
+"Images saved to a folder you choose will not be deleted." = "儲存到你選擇資料夾的圖片不會被刪除。";
+"Press %@ to switch RGB/HEX" = "按 %@ 切換 RGB/HEX";
+"Space to move. Release to finish" = "按空白鍵移動。鬆開以完成";
+"Show/Hide Magnifier" = "顯示/隱藏放大鏡";
+"Speak" = "朗讀";
+"Eraser" = "橡皮擦";
+"Current Configuration" = "目前配置";
+"Screen Translation Capture" = "螢幕截圖翻譯";
+"Copy Translation" = "複製譯文";
+"Move to Applications folder?" = "移動到“應用程式”資料夾？";
+"Double-click to Close Pin" = "雙擊關閉貼圖";
+"Slim" = "精簡版";
+"Could not move to Applications" = "無法移動到應用程式資料夾";
+"Please drag Pinlume to your Applications folder manually.\n\n%@" = "請手動將 Pinlume 拖到「應用程式」資料夾。\n\n%@";
+"Could not import configuration." = "無法導入配置。";
+"These are actions rather than drawing tools. Disabling one hides it from ordinary selections and pins." = "這些不是畫筆工具；關閉後普通選取範圍和普通貼圖都不會顯示對應入口。";
+"Turn this off to keep translation text on this Mac. Google translation will be unavailable." = "關閉後翻譯文字只保留在本機，Google 翻譯將無法使用。";
+"Could not delete configuration." = "無法刪除配置。";
+"Screen translation must stay on one display" = "截圖翻譯選取範圍必須位於同一顯示器";
+"Hide Pin Shadow" = "隱藏貼圖陰影";
+"Translation Status" = "翻譯狀態";
+"Monochrome" = "石墨單色";
+"Translate before swapping languages" = "請先完成翻譯再交換語言";
+"Export" = "匯出";
+"Dark" = "深色";
+"Apple translation needs the %@ → %@ language pack. Download it in System Settings." = "Apple 翻譯需要 %@ → %@ 語言包，請在系統設定中下載。";
+"Press %@ to move the sample point 1 pixel" = "按 %@ 將取色點移動 1 像素";
+"Move Selection 1 Pixel" = "移動選區 1 像素";
+"Screen Translation" = "螢幕截圖翻譯";
+"Smooth Pin Zoom" = "貼圖平滑縮放";
+"The current settings were kept unchanged." = "目前設定保持不變。";
+"Presentation Drawing" = "示範畫筆";
+"Interface Theme:" = "介面主題：";
+"Quick capture copied to clipboard" = "快速捕獲已拷貝到剪貼簿";
+"Translate selected text" = "翻譯選取的文字";
+"Import" = "導入";
+"  Pin Zoom Anchor:" = "貼圖縮放錨點：";
+"Source Text" = "原文";
+"Open Translation Window" = "開啟翻譯視窗";
+"Configuration Profiles" = "配置";
+"Text recognition failed" = "文字辨識失敗";
+"Continue with Clipboard" = "繼續使用剪貼簿";
+"Allow Trackpad Pinch Zoom on Pins" = "允許貼圖觸控板捏合縮放";
+"Actions in More Tools" = "更多工具中的功能入口";
+"Clear Selected Data" = "清除所選內容";
+"Could not export configuration." = "無法導出配置。";
+"Copy Source" = "複製原文";
+"Common Tools" = "常用工具";
+"Swap" = "交換";
+"Recognize Text" = "辨識文字";
+"Speak Translation" = "朗讀譯文";
+"These are actions rather than drawing tools. Disabling one hides it wherever that action is available." = "這些不是畫筆工具；關閉後會在該動作可用的所有位置隱藏。";
+"Common tools appear in the first row; additional tools move into the More menu. Actions unavailable for the current context do not appear." = "常用工具直接顯示在第一排，更多工具會收進更多選單；不適用於目前上下文的動作不會顯示。";
+"Not enough space for comparison" = "沒有足夠空間顯示對照";
+"Set the Select Text pin action, translation engine, and privacy policy here. Keyboard shortcuts are in Shortcuts." = "在這裡設定貼圖選擇文字、翻譯引擎和隱私策略；快捷鍵在「快捷鍵」中設定。";
+"Recognizing Text…" = "正在識別文字…";
+"Release %@ to hide magnifier" = "鬆開 %@ 隱藏式放大鏡";
+"Rename" = "重新命名";
+"Translate Now" = "立即翻譯";
+"Mouse Wheel" = "滑鼠滾輪";
+"Google translation is disabled in Settings." = "設定中已停用 Google 翻譯。";
+"Could not determine the source language." = "無法確定來源語言。";
+"Copy Text" = "複製文字";
+"Selection & Pin Interactions" = "選區與貼圖操作";
+"OCR & Translation" = "OCR 與翻譯";
+"Rotate Clockwise" = "順時針旋轉";

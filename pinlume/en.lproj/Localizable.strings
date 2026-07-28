@@ -1,0 +1,846 @@
+/* English (Base) — Pinlume localization
+ *
+ * To add a new language:
+ * 1. Create a new folder: pinlume/<lang-code>.lproj/
+ * 2. Copy this file into that folder
+ * 3. Translate all values (right side of = sign)
+ * 4. Add the language to LanguageManager.availableLanguages in Services/LanguageManager.swift
+ * 5. Add the language code to knownRegions in pinlume.xcodeproj/project.pbxproj
+ * 6. Submit a pull request!
+ *
+ * Keys use the English text. Values should be the translation.
+ * Format strings use %@ for strings, %d for integers.
+ * Keep keyboard shortcuts (like ⌘C) untranslated.
+ * Keep brand names (Pinlume, Google Drive, imgbb, S3) untranslated.
+ */
+
+/* Menu Bar */
+"Capture Area" = "Capture Area";
+"Transparent Annotation" = "Transparent Annotation";
+"Presentation Drawing" = "Presentation Drawing";
+"Move Toolbar" = "Move Toolbar";
+"Capture Screen" = "Capture Screen";
+"Capture OCR" = "Capture OCR";
+"Capture OCR & QR" = "Capture OCR & QR";
+"Quick Capture" = "Quick Capture";
+"Scroll Capture" = "Scroll Capture";
+"Capture Delay" = "Capture Delay";
+"None" = "None";
+"%d seconds" = "%d seconds";
+"Record Area" = "Record Area";
+"Record Screen" = "Record Screen";
+"Recent Captures" = "Recent Captures";
+"Show History Panel" = "Show History Panel";
+"Open Image..." = "Open Image...";
+"Open from Clipboard" = "Open from Clipboard";
+"Pin from Clipboard" = "Pin from Clipboard";
+"Disable Hotkeys" = "Disable Hotkeys";
+"Enable Hotkeys" = "Enable Hotkeys";
+"Check for Updates..." = "Check for Updates...";
+"Quit Pinlume" = "Quit Pinlume";
+"No recent captures" = "No recent captures";
+"Clear History" = "Clear History";
+
+/* History Panel */
+"Copy" = "Copy";
+"Open in Editor" = "Open in Editor";
+"Pin to Screen" = "Pin to Screen";
+"Quick Look" = "Quick Look";
+"Delete" = "Delete";
+"All" = "All";
+"Screenshots" = "Screenshots";
+"GIFs" = "GIFs";
+"Click to copy · Drag to app" = "Click to copy · Drag to app";
+"No captures yet" = "No captures yet";
+
+/* Floating Thumbnail */
+"Close All" = "Close All";
+"Save Recording" = "Save Recording";
+"Save" = "Save";
+
+/* Editor Top Bar */
+"Zoom In" = "Zoom In";
+"Zoom Out" = "Zoom Out";
+"Fit Canvas" = "Fit Canvas";
+"Crop" = "Crop";
+"Flip Horizontal" = "Flip Horizontal";
+"Flip Vertical" = "Flip Vertical";
+"Add Capture" = "Add Capture";
+
+/* Toolbar - Tools */
+"Arrow" = "Arrow";
+"Line" = "Line";
+"Rectangle" = "Rectangle";
+"Brush" = "Brush";
+"Strength" = "Strength";
+"Ellipse" = "Ellipse";
+"Pencil" = "Pencil";
+"Pencil (Draw)" = "Pencil (Draw)";
+"Marker" = "Marker";
+"Text" = "Text";
+"Number" = "Number";
+"Number / Counter" = "Number / Counter";
+"Stamp / Emoji" = "Stamp / Emoji";
+"Censor" = "Censor";
+"Censor (Pixelate / Blur / Solid)" = "Censor (Pixelate / Blur / Solid)";
+"Highlight" = "Highlight";
+"Highlight (Spotlight)" = "Highlight (Spotlight)";
+"Dim" = "Dim";
+"Measure" = "Measure";
+"Measure (px)" = "Measure (px)";
+"Magnify (Loupe)" = "Magnify (Loupe)";
+"Color Sampler" = "Color Sampler";
+"Color Picker" = "Color Picker";
+"Select & Edit" = "Select & Edit";
+"Color" = "Color";
+
+/* Toolbar - Actions */
+"Copy to Clipboard" = "Copy to Clipboard";
+"Save to File" = "Save to File";
+"Save to" = "Save to";
+"Open in Editor Window" = "Open in Editor Window";
+"Pin on Screen" = "Pin on Screen";
+"Pin" = "Pin";
+"Pin (floating window)" = "Pin (floating window)";
+"OCR" = "OCR";
+"OCR Text" = "OCR Text";
+"OCR (extract text)" = "OCR (extract text)";
+"OCR & QR" = "OCR & QR";
+"Run OCR & QR" = "Run OCR & QR";
+"Upload" = "Upload";
+"Share" = "Share";
+"Undo" = "Undo";
+"Redo" = "Redo";
+"Close" = "Close";
+"Remove Background" = "Remove Background";
+"Beautify" = "Beautify";
+"Adjust" = "Adjust";
+"Adjust Area and Edit" = "Adjust Area and Edit";
+"Adjust (Image Effects)" = "Adjust (Image Effects)";
+"Invert Colors" = "Invert Colors";
+"Record" = "Record";
+"Record screen" = "Record screen";
+"Translate" = "Translate";
+"Auto-Redact sensitive data" = "Auto-Redact sensitive data";
+"Move Selection" = "Move Selection";
+
+/* Toolbar - Recording */
+"Start Recording" = "Start Recording";
+"Cancel Recording" = "Cancel Recording";
+"Highlight Mouse Clicks" = "Highlight Mouse Clicks";
+"Record System Audio" = "Record System Audio";
+"Record Microphone" = "Record Microphone";
+"Webcam Overlay" = "Webcam Overlay";
+"Camera Access Required" = "Camera Access Required";
+"Pinlume needs camera permission for the webcam overlay. Open System Settings to grant access." = "Pinlume needs camera permission for the webcam overlay. Open System Settings to grant access.";
+"Recording Settings" = "Recording Settings";
+"Webcam" = "Webcam";
+"Bottom Right" = "Bottom Right";
+"Bottom Left" = "Bottom Left";
+"Top Right" = "Top Right";
+"Top Left" = "Top Left";
+"Small" = "Small";
+"Large" = "Large";
+"Webcam Size Small" = "Small";
+"Webcam Size Medium" = "Medium";
+"Webcam Size Large" = "Large";
+"Webcam Size Extra Large" = "Extra Large";
+"Circle" = "Circle";
+"Rounded Rectangle" = "Rounded Rectangle";
+"Cam pos:" = "Cam pos:";
+"Cam size:" = "Cam size:";
+"Cam shape:" = "Cam shape:";
+
+/* Tool Options */
+"Size" = "Size";
+"Stroke" = "Stroke";
+"Zoom" = "Zoom";
+"Radius" = "Radius";
+"Start:" = "Start:";
+"Draw:" = "Draw:";
+"Auto:" = "Auto:";
+"Fill" = "Fill";
+"Outline" = "Outline";
+"More Emojis" = "More Emojis";
+"Load Image" = "Load Image";
+"Gradient Style" = "Gradient Style";
+"On" = "On";
+"Text Only" = "Text Only";
+"All Text" = "All Text";
+"PII" = "PII";
+"Faces" = "Faces";
+"People" = "People";
+"Confirm before upload" = "Confirm before upload";
+"Flip" = "Flip";
+"Smooth" = "Smooth";
+"Refined" = "Refined";
+"Smart" = "Smart";
+"Padding" = "Padding";
+"Shadow" = "Shadow";
+"Right-click to add points" = "Right-click to add points";
+"Hold 1 auto-vertical  ·  Hold 2 auto-horizontal" = "Hold 1 auto-vertical  ·  Hold 2 auto-horizontal";
+
+/* Overlay / Canvas */
+"Click a window  ·  Drag for custom area  ·  F for full screen" = "Click a window  ·  Drag for custom area  ·  F for full screen";
+"Drag to select  ·  Click for full screen" = "Drag to select  ·  Click for full screen";
+"Release to annotate and edit" = "Release to annotate and edit";
+"Release to finish" = "Release to finish";
+"Space to move. Release to annotate and edit" = "Space to move. Release to annotate and edit";
+"Space to move. Release to finish" = "Space to move. Release to finish";
+"Window snap: " = "Window snap: ";
+"ON" = "ON";
+"OFF" = "OFF";
+"  (Tab to toggle)" = "  (Tab to toggle)";
+"Right-click to copy" = "Right-click to copy";
+"Copied %@" = "Copied %@";
+"Set color %@" = "Set color %@";
+"Draw something first to use the move tool." = "Draw something first to use the move tool.";
+"Drag to reposition" = "Drag to reposition";
+
+/* Overlay - Popovers */
+"Format:" = "Format:";
+"FPS:" = "FPS:";
+"When done:" = "When done:";
+"Open editor" = "Open editor";
+"Show in Finder" = "Show in Finder";
+"Copy to clipboard" = "Copy to clipboard";
+
+/* Preferences - General */
+"Pinlume Preferences" = "Pinlume Preferences";
+"General" = "General";
+"Tools" = "Tools";
+"Recording" = "Recording";
+"About" = "About";
+"Shortcuts" = "Shortcuts";
+"Uploads" = "Uploads";
+"Language" = "Language";
+"Language:" = "Language:";
+"Restart the app to fully apply the new language." = "Restart the app to fully apply the new language.";
+"Capture" = "Capture";
+"Play sound on capture" = "Play sound on capture";
+"Remember last selected tool" = "Remember last selected tool";
+"Show floating thumbnail after capture" = "Show floating thumbnail after capture";
+"Show partial image in compact Pin" = "Show partial image in compact Pin";
+"Launch at login" = "Launch at login";
+"Show snap alignment guides" = "Show snap alignment guides";
+"Snap selection edges to image boundaries" = "Snap selection edges to image boundaries";
+"Ignore window occlusion" = "Ignore window occlusion";
+"Preparing full window…" = "Preparing full window…";
+"Unable to capture full window" = "Unable to capture full window";
+"Capture mouse cursor in screenshot" = "Capture mouse cursor in screenshot";
+"Double-click selection to copy" = "Double-click selection to copy";
+"Hide capture instructions" = "Hide capture instructions";
+"Disable shadow outside selection" = "Disable shadow outside selection";
+"Translate selected text" = "Translate selected text";
+"Use window title in saved filename" = "Use window title in saved filename";
+"Hide menu bar icon" = "Hide menu bar icon";
+"Hotkeys still work. To show the icon again, re-launch Pinlume." = "Hotkeys still work. To show the icon again, re-launch Pinlume.";
+"Check for updates automatically" = "Check for updates automatically";
+"Check for beta updates" = "Check for beta updates";
+"Thumbnail" = "Thumbnail";
+"  Dismiss after:" = "  Dismiss after:";
+"seconds before auto-dismiss (0 = never)" = "seconds before auto-dismiss (0 = never)";
+"  Multiple previews:" = "  Multiple previews:";
+"  Position:" = "  Position:";
+"Stack (keep all)" = "Stack (keep all)";
+"Replace (show only latest)" = "Replace (show only latest)";
+"Menu Bar Order" = "Menu Bar Order";
+"Choose the order of capture actions in the Pinlume menu bar menu." = "Choose the order of capture actions in the Pinlume menu bar menu.";
+"Move up" = "Move up";
+"Move down" = "Move down";
+"Output" = "Output";
+"Image format:" = "Image format:";
+"Quality:" = "Quality:";
+"Automatic" = "Automatic";
+"%d%%" = "%d%%";
+"Save at standard resolution (1x)" = "Save at standard resolution (1x)";
+"Halves dimensions on Retina displays, ~4x smaller files" = "Halves dimensions on Retina displays, ~4x smaller files";
+"Embed sRGB color profile" = "Embed sRGB color profile";
+"Ensures consistent colors across different displays" = "Ensures consistent colors across different displays";
+"Enable pinlume:// URL scheme" = "Enable pinlume:// URL scheme";
+"Screenshot History" = "Screenshot History";
+"History size:" = "History size:";
+"screenshots kept on disk (0 = off)" = "screenshots kept on disk (0 = off)";
+"Order history by last edit" = "Order history by last edit";
+"Edited screenshots move to the top. Off keeps them in capture order." = "Edited screenshots move to the top. Off keeps them in capture order.";
+"Save Directory" = "Save Directory";
+"Save folder:" = "Save folder:";
+"Browse…" = "Browse…";
+"Appearance" = "Appearance";
+"Configuration Profiles" = "Configuration Profiles";
+"Profile:" = "Profile:";
+"Configuration" = "Configuration";
+"Configuration:" = "Configuration:";
+"Basic" = "Basic";
+"Slim" = "Slim";
+"Full" = "Full";
+"Professional" = "Professional";
+"Graphite Blue" = "Graphite Blue";
+"Midnight Indigo" = "Midnight Indigo";
+"Deep Teal" = "Deep Teal";
+"Amber" = "Amber";
+"Forest" = "Forest";
+"Monochrome" = "Monochrome";
+"Current Configuration" = "Current Configuration";
+"Copy Configuration" = "Copy";
+"Copy of %@" = "Copy of %@";
+"Could not copy configuration." = "Could not copy configuration.";
+"Changes to the selected profile are saved automatically." = "Changes to the selected profile are saved automatically.";
+"Could not apply configuration profile." = "Could not apply configuration profile.";
+"The current settings were kept unchanged." = "The current settings were kept unchanged.";
+"Rename…" = "Rename…";
+"Rename Configuration" = "Rename Configuration";
+"Enter a new name for this custom configuration." = "Enter a new name for this custom configuration.";
+"Rename" = "Rename";
+"Could not rename configuration." = "Could not rename configuration.";
+"Import…" = "Import…";
+"Export…" = "Export…";
+"Import" = "Import";
+"Export" = "Export";
+"Delete Configuration?" = "Delete Configuration?";
+"The configuration “%@” will be deleted and Basic will be applied." = "The configuration “%@” will be deleted and Basic will be applied.";
+"Could not import configuration." = "Could not import configuration.";
+"Could not export configuration." = "Could not export configuration.";
+"Could not delete configuration." = "Could not delete configuration.";
+"Freeform" = "Freeform";
+"Custom · %@" = "Custom · %@";
+"Space" = "Space";
+"Aspect ratio & resolution presets" = "Aspect ratio & resolution presets";
+"Aspect ratio" = "Aspect ratio";
+"Resolution" = "Resolution";
+"Keep ratio for next captures" = "Keep ratio for next captures";
+"Units" = "Units";
+"Default" = "Default";
+"Custom symbol" = "Custom symbol";
+"Menu bar icon:" = "Menu bar icon:";
+"Enter any SF Symbol name (e.g. camera.fill) or pick a preset. Browse names in Apple's SF Symbols app. Invalid names fall back to the default icon." = "Enter any SF Symbol name (e.g. camera.fill) or pick a preset. Browse names in Apple's SF Symbols app. Invalid names fall back to the default icon.";
+"Hold Space to move. Release to annotate and edit" = "Hold Space to move. Release to annotate and edit";
+"Hold Space to move. Release to finish" = "Hold Space to move. Release to finish";
+"Rotate Left" = "Rotate Left";
+"Rotate Right" = "Rotate Right";
+"Open With" = "Open With";
+"No Apps Available" = "No Apps Available";
+"No Share Services" = "No Share Services";
+"Accent color:" = "Accent color:";
+"Icon color:" = "Icon color:";
+"Background color:" = "Background color:";
+"Reset" = "Reset";
+"OCR Capture:" = "OCR Capture:";
+"OCR & QR Capture:" = "OCR & QR Capture:";
+"Show window + copy to clipboard" = "Show window + copy to clipboard";
+"Show window only" = "Show window only";
+"Copy to clipboard only" = "Copy to clipboard only";
+"Enter / Quick Capture:" = "Enter / Quick Capture:";
+"Save action:" = "Save action:";
+"Save to default folder" = "Save to default folder";
+"Ask where to save" = "Ask where to save";
+"Save to file" = "Save to file";
+"Save + copy to clipboard" = "Save + copy to clipboard";
+"OCR Action" = "OCR Action";
+
+/* Preferences - Shortcuts */
+"Keyboard Shortcuts" = "Keyboard Shortcuts";
+"Hotkeys" = "Hotkeys";
+"Clear shortcut" = "Clear shortcut";
+"Press keys..." = "Press keys...";
+"Waiting..." = "Waiting...";
+
+/* Preferences - Tools */
+"Annotation Tools" = "Annotation Tools";
+"Hidden tools are removed from the bottom toolbar." = "Hidden tools are removed from the bottom toolbar.";
+"Capture Actions" = "Capture Actions";
+"Bottom Toolbar Actions" = "Bottom Toolbar Actions";
+"Hidden actions are removed from the bottom toolbar." = "Hidden actions are removed from the bottom toolbar.";
+"Editor Actions" = "Editor Actions";
+"Right Toolbar Actions" = "Right Toolbar Actions";
+"Hidden actions are removed from the right toolbar." = "Hidden actions are removed from the right toolbar.";
+
+/* Preferences - Recording */
+"Frame rate:" = "Frame rate:";
+"After recording:" = "After recording:";
+"Save recording to:" = "Save recording to:";
+"Clear" = "Clear";
+"Max height:" = "Max height:";
+"px (0 = unlimited)" = "px (0 = unlimited)";
+"Behavior" = "Behavior";
+"Auto-scroll (sends synthetic scroll events)" = "Auto-scroll (sends synthetic scroll events)";
+"Detect fixed/sticky headers" = "Detect fixed/sticky headers";
+"Scroll speed:" = "Scroll speed:";
+"Slow" = "Slow";
+"Medium" = "Medium";
+"Fast" = "Fast";
+"Very fast" = "Very fast";
+"5 fps" = "5 fps";
+"10 fps" = "10 fps";
+"15 fps" = "15 fps";
+"24 fps" = "24 fps";
+"30 fps" = "30 fps";
+"60 fps" = "60 fps";
+"120 fps" = "120 fps";
+"MP4 (H.264)" = "MP4 (H.264)";
+"GIF" = "GIF";
+
+/* Preferences - Upload */
+"Upload Service" = "Upload Service";
+"Upload Provider" = "Upload Provider";
+"Provider:" = "Provider:";
+"Google Drive" = "Google Drive";
+"Google Drive (images + videos)" = "Google Drive (images + videos)";
+"imgbb (images only)" = "imgbb (images only)";
+"S3-Compatible (images + videos)" = "S3-Compatible (images + videos)";
+"S3-Compatible Storage" = "S3-Compatible Storage";
+"Sign In with Google" = "Sign In with Google";
+"Sign Out" = "Sign Out";
+"Signed in" = "Signed in";
+"Not signed in" = "Not signed in";
+"Account:" = "Account:";
+"Test Connection" = "Test Connection";
+"Fill in endpoint, bucket, and credentials first" = "Fill in endpoint, bucket, and credentials first";
+"Testing..." = "Testing...";
+"Connection successful!" = "Connection successful!";
+"Leave empty to use default" = "Leave empty to use default";
+"Endpoint:" = "Endpoint:";
+"Region:" = "Region:";
+"Bucket:" = "Bucket:";
+"Access Key:" = "Access Key:";
+"Secret Key:" = "Secret Key:";
+"Public URL:" = "Public URL:";
+"Path Prefix:" = "Path Prefix:";
+"API key:" = "API key:";
+"Upload History" = "Upload History";
+"No uploads yet." = "No uploads yet.";
+"Base URL for public access. If empty, the S3 endpoint URL is used (may not be publicly accessible)." = "Base URL for public access. If empty, the S3 endpoint URL is used (may not be publicly accessible).";
+"A shared key is included — get your own free key at imgbb.com/api if you hit rate limits. Images only (no video support)." = "A shared key is included — get your own free key at imgbb.com/api if you hit rate limits. Images only (no video support).";
+"Works with AWS S3, Cloudflare R2, MinIO, DigitalOcean Spaces, Backblaze B2, and other S3-compatible services. Supports images and videos." = "Works with AWS S3, Cloudflare R2, MinIO, DigitalOcean Spaces, Backblaze B2, and other S3-compatible services. Supports images and videos.";
+"Configure S3 in Preferences" = "Configure S3 in Preferences";
+"Sign in to Google Drive in Preferences" = "Sign in to Google Drive in Preferences";
+"Video upload requires Google Drive or S3" = "Video upload requires Google Drive or S3";
+
+/* Preferences - About */
+"Pinlume" = "Pinlume";
+"Version %@ (%@)" = "Version %@ (%@)";
+"Made by" = "Made by";
+"Licensed under the GPLv3" = "Licensed under the GPLv3";
+"A free, open-source screenshot & screen recording tool for macOS.\nFully native — built with Swift and AppKit." = "A free, open-source screenshot & screen recording tool for macOS.\nFully native — built with Swift and AppKit.";
+
+/* Alerts */
+"No Image on Clipboard" = "No Image on Clipboard";
+"Copy an image to the clipboard first, then try again." = "Copy an image to the clipboard first, then try again.";
+"No Image or Text on Clipboard" = "No Image or Text on Clipboard";
+"Copy an image or text to the clipboard first, then try again." = "Copy an image or text to the clipboard first, then try again.";
+"OK" = "OK";
+"Accessibility Access Required" = "Accessibility Access Required";
+"Pinlume needs Accessibility permission to auto-scroll other apps. Please grant access in System Settings, then try again." = "Pinlume needs Accessibility permission to auto-scroll other apps. Please grant access in System Settings, then try again.";
+"Pinlume needs Accessibility permission for scroll capture. Please grant access in System Settings, then try again." = "Pinlume needs Accessibility permission for scroll capture. Please grant access in System Settings, then try again.";
+"Pinlume needs Accessibility permission to translate selected text. Open System Settings to grant access. If Pinlume is not listed, click the + button and choose the running Pinlume app." = "Pinlume needs Accessibility permission to translate selected text. Open System Settings to grant access. If Pinlume is not listed, click the + button and choose the running Pinlume app.";
+"Open Settings" = "Open Settings";
+"Continue with Clipboard" = "Continue with Clipboard";
+"Cancel" = "Cancel";
+"Microphone Access Required" = "Microphone Access Required";
+"Pinlume needs microphone permission to record voice audio. Open System Settings to grant access." = "Pinlume needs microphone permission to record voice audio. Open System Settings to grant access.";
+"Upload to Google Drive?" = "Upload to Google Drive?";
+"Upload to S3?" = "Upload to S3?";
+"Upload to imgbb.com?" = "Upload to imgbb.com?";
+"Your screenshot will be uploaded." = "Your screenshot will be uploaded.";
+
+/* Permission Onboarding */
+"Welcome to Pinlume" = "Welcome to Pinlume";
+"Pinlume needs one permission" = "Pinlume needs one permission";
+"Screen Recording not yet granted" = "Screen Recording not yet granted";
+"Screen Recording granted!" = "Screen Recording granted!";
+"Enable Pinlume, then try taking a screenshot" = "Enable Pinlume, then try taking a screenshot";
+"Open Screen Recording Settings" = "Open Screen Recording Settings";
+"Continue" = "Continue";
+
+/* OCR Window */
+"Text Recognition" = "Text Recognition";
+"Text & QR Recognition" = "Text & QR Recognition";
+"Translate to:" = "Translate to:";
+"%d chars · %d words" = "%d chars · %d words";
+"Copy  ⌘↩" = "Copy  ⌘↩";
+"AI Search" = "AI Search";
+"Show Original" = "Show Original";
+"Translation Failed" = "Translation Failed";
+"Translation" = "Translation";
+"(No text detected in the selected area)" = "(No text detected in the selected area)";
+"QR Code" = "QR Code";
+"QR Codes" = "QR Codes";
+"Open Link" = "Open Link";
+
+/* Upload Toast */
+"URL copied to the clipboard" = "URL copied to the clipboard";
+"Uploading... %d%%" = "Uploading... %d%%";
+"Upload failed: %@" = "Upload failed: %@";
+"Uploaded! Link copied." = "Uploaded! Link copied.";
+"Uploading to %@... %d%%" = "Uploading to %@... %d%%";
+"Open" = "Open";
+
+/* Recording Toast */
+"Recording saved" = "Recording saved";
+"%@ • Recording saved" = "%@ • Recording saved";
+"Copy Path" = "Copy Path";
+"Path copied!" = "Path copied!";
+
+/* Video Editor */
+"Pinlume Video Editor" = "Pinlume Video Editor";
+"%@ selected" = "%@ selected";
+"Exporting..." = "Exporting...";
+"Export failed" = "Export failed";
+"Saved to %@" = "Saved to %@";
+"Save failed" = "Save failed";
+
+/* Barcode Detector */
+/* "Open" and "Copy" are shared with other sections */
+
+/* Save Panel */
+"Save As..." = "Save As...";
+"Choose a folder" = "Choose a folder";
+"Save All to Folder…" = "Save All to Folder…";
+
+/* Scroll Capture HUD */
+"Auto Scroll" = "Auto Scroll";
+"Stop" = "Stop";
+"Scrolling..." = "Scrolling...";
+
+/* Effects Picker (Adjust popover) */
+"Presets" = "Presets";
+"Adjustments" = "Adjustments";
+"Brightness" = "Brightness";
+"Contrast" = "Contrast";
+"Saturation" = "Saturation";
+"Sharpness" = "Sharpness";
+
+/* Time Ago */
+"just now" = "just now";
+"%ds ago" = "%ds ago";
+"%dm ago" = "%dm ago";
+"%dh ago" = "%dh ago";
+
+/* Hotkey Labels */
+"History" = "History";
+"Capture Last Area" = "Capture Last Area";
+
+/* Preferences - Shortcuts note */
+"Click \"Record\" and press a key combination with at least one modifier (⌘, ⌥, ⌃, ⇧) to set a shortcut." = "Click \"Record\" and press a key combination with at least one modifier (⌘, ⌥, ⌃, ⇧) to set a shortcut.";
+
+/* Recording — GIF Processing */
+"Processing GIF…" = "Processing GIF…";
+
+/* Recording — Input Monitoring Permission */
+"Input Monitoring Required" = "Input Monitoring Required";
+"Pinlume needs Input Monitoring permission to show keystrokes during recording. Please grant access in System Settings, then try again." = "Pinlume needs Input Monitoring permission to show keystrokes during recording. Please grant access in System Settings, then try again.";
+"Pinlume needs Accessibility permission to show keystrokes during recording. Please grant access in System Settings, then try again." = "Pinlume needs Accessibility permission to show keystrokes during recording. Please grant access in System Settings, then try again.";
+
+/* Recording — Keystroke Overlay */
+"Show Keystrokes" = "Show Keystrokes";
+"Shortcuts Only" = "Shortcuts Only";
+"All Keystrokes" = "All Keystrokes";
+
+/* Recording — Settings Popover */
+"Delay:" = "Delay:";
+
+/* Video Editor */
+"Copied to clipboard!" = "Copied to clipboard!";
+
+/* Recently added strings */
+"About Pinlume" = "About Pinlume";
+"Actions in More Tools" = "Actions in More Tools";
+"Non-Drawing Actions" = "Non-Drawing Actions";
+"Allow Scroll Zoom on Pins" = "Allow Scroll Zoom on Pins";
+"Allow Trackpad Pinch Zoom on Pins" = "Allow Trackpad Pinch Zoom on Pins";
+"Anchor to Mouse Position" = "Anchor to Mouse Position";
+"Anchor to Top Left" = "Anchor to Top Left";
+"Arrow Keys" = "Arrow Keys";
+"Auto-Redact Sensitive Information" = "Auto-Redact Sensitive Information";
+"Beautify Screenshot" = "Beautify Screenshot";
+"Choose local data to clear" = "Choose local data to clear";
+"Choose which actions appear in the status bar menu and arrange the order of common and additional tools. Settings, version, and quit remain fixed." = "Choose which actions appear in the status bar menu and arrange the order of common and additional tools. Settings, version, and quit remain fixed.";
+"Clear Local Data…" = "Clear Local Data…";
+"Clear Selected Data" = "Clear Selected Data";
+"Clipboard image backups" = "Clipboard image backups";
+"Calculating…" = "Calculating…";
+"Common Tools" = "Common Tools";
+"Copy Pinned Text" = "Copy Pinned Text";
+"Copy Text" = "Copy Text";
+"Copy Text (shown for text pins only)" = "Copy Text (shown for text pins only)";
+"Could not move to Applications" = "Could not move to Applications";
+"Diagnostic logs" = "Diagnostic logs";
+"Disabled by default. Keeps up to 7 days or 2 MB; never writes screenshots, OCR text, clipboard contents, or keys." = "Disabled by default. Keeps up to 7 days or 2 MB; never writes screenshots, OCR text, clipboard contents, or keys.";
+"Double-click" = "Double-click";
+"Double-click to Close Pin" = "Double-click to Close Pin";
+"Double-click to Toggle Thumbnail" = "Double-click to Toggle Thumbnail";
+"Enable %@:// URL scheme" = "Enable %@:// URL scheme";
+"Enable diagnostic logging (status, timing, coordinates, and errors only)" = "Enable diagnostic logging (status, timing, coordinates, and errors only)";
+"Eraser" = "Eraser";
+"Filled Rectangle" = "Filled Rectangle";
+"Hide Pin Shadow" = "Hide Pin Shadow";
+"Image Adjustments" = "Image Adjustments";
+"Images saved to a folder you choose will not be deleted." = "Images saved to a folder you choose will not be deleted.";
+"Make Common" = "Make Common";
+"Menu Bar Menu" = "Menu Bar Menu";
+"Mouse Wheel" = "Mouse Wheel";
+"Move Down" = "Move Down";
+"Move Magnifier Sample Point 1 Pixel" = "Move Magnifier Sample Point 1 Pixel";
+"Move Selection 1 Pixel" = "Move Selection 1 Pixel";
+"Move Up" = "Move Up";
+"Move to More Tools" = "Move to More Tools";
+"No items" = "No items";
+"Opacity %d%%" = "Opacity %d%%";
+"Pin Scroll Opacity" = "Pin Scroll Opacity";
+"Pin Scroll Zoom" = "Pin Scroll Zoom";
+"Pin Shadow" = "Pin Shadow";
+"Plus build: personal build with update checks disabled. Preferences, history, and permissions are separate from the original Pinlume app." = "Plus build: personal build with update checks disabled. Preferences, history, and permissions are separate from the original Pinlume app.";
+"Press %@ to move selection 1 pixel" = "Press %@ to move selection 1 pixel";
+"Press %@ to move the sample point 1 pixel" = "Press %@ to move the sample point 1 pixel";
+"Press %@ to show/hide magnifier" = "Press %@ to show/hide magnifier";
+"Hold %@ to show magnifier" = "Hold %@ to show magnifier";
+"Press C to copy color" = "Press C to copy color";
+"Press Option to hide magnifier" = "Press Option to hide magnifier";
+"Release %@ to hide magnifier" = "Release %@ to hide magnifier";
+"Press Shift to switch RGB/HEX" = "Press Shift to switch RGB/HEX";
+"Press %@ to switch RGB/HEX" = "Press %@ to switch RGB/HEX";
+"Quick capture copied to clipboard" = "Quick capture copied to clipboard";
+"Quit Pinlume" = "Quit Pinlume";
+"Restored pins (closes current pins immediately)" = "Restored pins (closes current pins immediately)";
+"Rotate Clockwise" = "Rotate Clockwise";
+"Screenshot history and editable annotations" = "Screenshot history and editable annotations";
+"Scroll capture copied to clipboard" = "Scroll capture copied to clipboard";
+"Selection & Pin Interactions" = "Selection & Pin Interactions";
+"Show Pin Shadow" = "Show Pin Shadow";
+"Show/Hide Magnifier" = "Show/Hide Magnifier";
+"Hold to Show Magnifier" = "Hold to Show Magnifier";
+"Size %d%%" = "Size %d%%";
+"Smooth Pin Zoom" = "Smooth Pin Zoom";
+"Storage & Diagnostics" = "Storage & Diagnostics";
+"Switch Magnifier RGB/HEX" = "Switch Magnifier RGB/HEX";
+"Text Recognition / QR" = "Text Recognition / QR";
+"These are actions rather than drawing tools. They appear in More Tools; disabling one hides it from both selections and pins." = "These are actions rather than drawing tools. They appear in More Tools; disabling one hides it from both selections and pins.";
+"These are actions rather than drawing tools. Disabling one hides it from ordinary selections and pins." = "These are actions rather than drawing tools. Disabling one hides it from ordinary selections and pins.";
+"These shortcuts work only in a capture selection or selected pin; on-screen hints follow the current settings." = "These shortcuts work only in a capture selection or selected pin; on-screen hints follow the current settings.";
+"This affects both the capture selection toolbar and pin toolbar. Common tools appear in the first row; additional tools move into the More menu." = "This affects both the capture selection toolbar and pin toolbar. Common tools appear in the first row; additional tools move into the More menu.";
+"Common tools appear in the first row; additional tools move into the More menu. Actions unavailable for the current context do not appear." = "Common tools appear in the first row; additional tools move into the More menu. Actions unavailable for the current context do not appear.";
+"These are actions rather than drawing tools. Disabling one hides it wherever that action is available." = "These are actions rather than drawing tools. Disabling one hides it wherever that action is available.";
+"Toolbar Layout" = "Toolbar Layout";
+"When shortcuts conflict, the settings list is matched from top to bottom and the first entry takes priority." = "When shortcuts conflict, the settings list is matched from top to bottom and the first entry takes priority.";
+"Selectable Text Capture" = "Selectable Text Capture";
+"Shortcut unavailable (error %d)" = "Shortcut unavailable (error %d)";
+"Recognize Text" = "Recognize Text";
+"Text copied" = "Text copied";
+"Recognizing Text…" = "Recognizing Text…";
+"No text found" = "No text found";
+"Select Text" = "Select Text";
+"OCR & Translation" = "OCR & Translation";
+"Set the Select Text pin action, translation engine, and privacy policy here. Keyboard shortcuts are in Shortcuts." = "Set the Select Text pin action, translation engine, and privacy policy here. Keyboard shortcuts are in Shortcuts.";
+"Text recognition failed" = "Text recognition failed";
+"  Pin Zoom Anchor:" = "  Pin Zoom Anchor:";
+"Play sound on copy" = "Play sound on copy";
+"Preferences..." = "Preferences...";
+"Pinlume Settings" = "Pinlume Settings";
+"Also open in Editor" = "Also open in Editor";
+"Hide controls" = "Hide controls";
+"Hide recording controls" = "Hide recording controls";
+"Stop recording from the menu bar icon instead." = "Stop recording from the menu bar icon instead.";
+"Pixelate" = "Pixelate";
+"Blur" = "Blur";
+"Solid" = "Solid";
+"Erase" = "Erase";
+"Done" = "Done";
+"Do nothing" = "Do nothing";
+"Overlay / Editor Shortcuts" = "Overlay / Editor Shortcuts";
+"Show shortcuts in tooltips" = "Show shortcuts in tooltips";
+"Set" = "Set";
+"Press..." = "Press...";
+"Reset to default" = "Reset to default";
+"Press a single key to assign it as the shortcut for that tool. These work when the overlay or editor is active." = "Press a single key to assign it as the shortcut for that tool. These work when the overlay or editor is active.";
+"Keep Separate" = "Keep Separate";
+"Merge Audio" = "Merge Audio";
+"Audio Tracks" = "Audio Tracks";
+"Adjust volume for each audio track:" = "Adjust volume for each audio track:";
+"Microphone:" = "Microphone:";
+"System audio:" = "System audio:";
+"Loupe" = "Loupe";
+"Stamp" = "Stamp";
+"Unlimited" = "Unlimited";
+
+/* Save dialog + misc */
+"Save changes?" = "Save changes?";
+"Your annotations will be lost if you close without saving." = "Your annotations will be lost if you close without saving.";
+"Save & Close" = "Save & Close";
+"Discard" = "Discard";
+"Stop Recording" = "Stop Recording";
+"Pause" = "Pause";
+"Resume" = "Resume";
+"Engine:" = "Engine:";
+"Google Translate" = "Google Translate";
+"Apple (on-device)" = "Apple (on-device)";
+"Apple translation is faster and works offline. Google Translate supports more languages." = "Apple translation is faster and works offline. Google Translate supports more languages.";
+"Allow sending text to Google Translate" = "Allow sending text to Google Translate";
+"Turn this off to keep translation text on this Mac. Google translation will be unavailable." = "Turn this off to keep translation text on this Mac. Google translation will be unavailable.";
+"Google translation is unavailable because sending text is disabled." = "Google translation is unavailable because sending text is disabled.";
+"Google translation is disabled in Settings." = "Google translation is disabled in Settings.";
+"Download language packs in System Settings…" = "Download language packs in System Settings…";
+"Configure S3 in Settings" = "Configure S3 in Settings";
+"Sign in to Google Drive in Settings" = "Sign in to Google Drive in Settings";
+"Position:" = "Position:";
+"Size:" = "Size:";
+"Shape:" = "Shape:";
+"Same as screenshots" = "Same as screenshots";
+"  Preview size:" = "  Preview size:";
+"(0 = off)" = "(0 = off)";
+"Clear All" = "Clear All";
+"Clear History?" = "Clear History?";
+"This will permanently delete all screenshots from history." = "This will permanently delete all screenshots from history.";
+"Click \"Set\" and press a key combination with at least one modifier (⌘, ⌥, ⌃, ⇧) to set a shortcut." = "Click \"Set\" and press a key combination with at least one modifier (⌘, ⌥, ⌃, ⇧) to set a shortcut.";
+"Files are uploaded to a \"Pinlume\" folder in your Google Drive. Everything stays private — nothing is shared publicly." = "Files are uploaded to a \"Pinlume\" folder in your Google Drive. Everything stays private — nothing is shared publicly.";
+
+"Pressure" = "Pressure";
+
+/* Added for v4.1.0-beta.3 — video editor, effects, open-video, shortcuts help */
+"Open Video..." = "Open Video...";
+"Choose a video to open in Pinlume editor" = "Choose a video to open in Pinlume editor";
+"Click to add effects" = "Click to add effects";
+"Add Zoom" = "Add Zoom";
+"Add Censor" = "Add Censor";
+"Add Cut" = "Add Cut";
+"Add Speed" = "Add Speed";
+"Add Freeze" = "Add Freeze";
+"Add Text" = "Add Text";
+"Delete Zoom" = "Delete Zoom";
+"Delete Censor" = "Delete Censor";
+"Delete Cut" = "Delete Cut";
+"Delete Speed" = "Delete Speed";
+"Delete Freeze" = "Delete Freeze";
+"Delete Text" = "Delete Text";
+"Edit Text…" = "Edit Text…";
+"Huge" = "Huge";
+"Bold" = "Bold";
+"Italic" = "Italic";
+"Alignment" = "Alignment";
+"Left" = "Left";
+"Center" = "Center";
+"Right" = "Right";
+"Text Color" = "Text Color";
+"Background Color" = "Background Color";
+"Rounded" = "Rounded";
+"Custom…" = "Custom…";
+"Transparent" = "Transparent";
+"Black" = "Black";
+"White" = "White";
+"Yellow" = "Yellow";
+"Red" = "Red";
+"Green" = "Green";
+"Blue" = "Blue";
+"Untitled" = "Untitled";
+"Add effect" = "Add effect";
+"Fade" = "Fade";
+"High" = "High";
+"Low" = "Low";
+"Not enough room here" = "Not enough room here";
+"Copied!" = "Copied!";
+"Converting to GIF…" = "Converting to GIF…";
+"GIF conversion failed" = "GIF conversion failed";
+"No video track found" = "No video track found";
+"Preview:" = "Preview:";
+"Copy Screen Info" = "Copy Screen Info";
+"Copies display and capture diagnostics to clipboard" = "Copies display and capture diagnostics to clipboard";
+
+/* Appearance / Settings */
+"Accent" = "Accent";
+"Icon" = "Icon";
+"Background" = "Background";
+"Custom" = "Custom";
+"Theme:" = "Theme:";
+"Interface Theme:" = "Interface Theme:";
+"Color Scheme:" = "Color Scheme:";
+"Light" = "Light";
+"Dark" = "Dark";
+
+/* Settings — shortcuts help text */
+"Application" = "Application";
+"Capture area and extract text" = "Capture area and extract text";
+"Capture area and read text/QR codes" = "Capture area and read text/QR codes";
+"Capture the full screen" = "Capture the full screen";
+"Counter for multi-screen captures" = "Counter for multi-screen captures";
+"8-character random string (e.g. k3j7x9q2)" = "8-character random string (e.g. k3j7x9q2)";
+"Filename Template Tokens" = "Filename Template Tokens";
+"Filename tokens" = "Filename tokens";
+"Filename:" = "Filename:";
+"Open an image file in the editor" = "Open an image file in the editor";
+"Open the recent captures overlay" = "Open the recent captures overlay";
+"Open this settings window" = "Open this settings window";
+"Quick capture (uses your Enter action)" = "Quick capture (uses your Enter action)";
+"Re-capture the last selected area" = "Re-capture the last selected area";
+"Screenshots only — captured window title (blank otherwise)" = "Screenshots only — captured window title (blank otherwise)";
+"Show available filename tokens" = "Show available filename tokens";
+"Show supported URL scheme commands" = "Show supported URL scheme commands";
+"Start area capture" = "Start area capture";
+"Start area recording" = "Start area recording";
+"Start full-screen recording" = "Start full-screen recording";
+"Start scroll capture" = "Start scroll capture";
+"Stop the current recording" = "Stop the current recording";
+"Supported URL Scheme Commands" = "Supported URL Scheme Commands";
+"The file extension is appended automatically. Slashes and colons in {window} become dashes." = "The file extension is appended automatically. Slashes and colons in {window} become dashes.";
+"Trigger Pinlume from Raycast, Alfred, Shortcuts, or any tool that opens URLs." = "Trigger Pinlume from Raycast, Alfred, Shortcuts, or any tool that opens URLs.";
+"URL scheme info" = "URL scheme info";
+"sec (0 = never)" = "sec (0 = never)";
+"Settings" = "Settings";
+"Offline build: upload and cloud storage integrations are removed. Update checks may still connect to Pinlume's update server. Screenshots and recordings stay local unless you share or save them yourself." = "Offline build: upload and cloud storage integrations are removed. Update checks may still connect to Pinlume's update server. Screenshots and recordings stay local unless you share or save them yourself.";
+"More Tools" = "More Tools";
+"Hide/Show All Pins" = "Hide/Show All Pins";
+"Hide All Pins" = "Hide All Pins";
+"Show All Pins" = "Show All Pins";
+"Settings..." = "Settings...";
+"System Default" = "System Default";
+"Please drag Pinlume to your Applications folder manually.\n\n%@" = "Please drag Pinlume to your Applications folder manually.\n\n%@";
+"Move to Applications folder?" = "Move to Applications folder?";
+"%@ is running from a disk image. Move it to your Applications folder for stable permissions and the best experience." = "%@ is running from a disk image. Move it to your Applications folder for stable permissions and the best experience.";
+"Move to Applications" = "Move to Applications";
+"Not Now" = "Not Now";
+"Don't ask again" = "Don't ask again";
+"Translation Window" = "Translation Window";
+"Auto Detect" = "Auto Detect";
+"Source Language" = "Source Language";
+"Target Language" = "Target Language";
+"Swap" = "Swap";
+"Swap Languages" = "Swap Languages";
+"Translate Now" = "Translate Now";
+"Translation Status" = "Translation Status";
+"Source Text" = "Source Text";
+"Translated Text" = "Translated Text";
+"Speak" = "Speak";
+"Speak Translation" = "Speak Translation";
+"Copy Translation" = "Copy Translation";
+"Sentence Comparison" = "Sentence Comparison";
+"Translating…" = "Translating…";
+"Speak Source" = "Speak Source";
+"Copy Source" = "Copy Source";
+"Translation complete" = "Translation complete";
+"Translation failed; original text shown." = "Translation failed; original text shown.";
+"Languages swapped; edited translation was preserved" = "Languages swapped; edited translation was preserved";
+"Translate before swapping languages" = "Translate before swapping languages";
+"Screen Translation Capture" = "Screen Translation Capture";
+"Screen Translation" = "Screen Translation";
+"Compare" = "Compare";
+"Original / Translation" = "Original / Translation";
+"Copy Original" = "Copy Original";
+"Open Translation Window" = "Open Translation Window";
+"Not enough space for comparison" = "Not enough space for comparison";
+"Screen translation must stay on one display" = "Screen translation must stay on one display";
+"Show Translation" = "Show Translation";
+"Unable to capture selection" = "Unable to capture selection";
+"Choose which dedicated OCR and translation tools are visible. Keyboard shortcuts are in Shortcuts." = "Choose which dedicated OCR and translation tools are visible. Keyboard shortcuts are in Shortcuts.";
+"OCR Selection" = "OCR Selection";
+"OCR Pin" = "OCR Pin";
+"Translation Pin" = "Translation Pin";
+"Show Original / Translation" = "Show Original / Translation";
+"Could not determine the source language." = "Could not determine the source language.";
+"Apple translation needs the %@ → %@ language pack. Download it in System Settings." = "Apple translation needs the %@ → %@ language pack. Download it in System Settings.";
+"Apple translation does not support %@ → %@." = "Apple translation does not support %@ → %@.";
+"Apple translation language availability is unknown." = "Apple translation language availability is unknown.";
+"Pin zoom anchors to mouse position" = "Pin zoom anchors to mouse position";
+"Show floating window after Quick Capture" = "Show floating window after Quick Capture";
+"Choose an image to pin to screen" = "Choose an image to pin to screen";
+"Restore All Default Shortcuts" = "Restore All Default Shortcuts";
+"Restore All Default Shortcuts?" = "Restore All Default Shortcuts?";
+"This restores global, tool, selection, and pin interaction shortcuts. Other settings will not change." = "This restores global, tool, selection, and pin interaction shortcuts. Other settings will not change.";
+"Restore Defaults" = "Restore Defaults";

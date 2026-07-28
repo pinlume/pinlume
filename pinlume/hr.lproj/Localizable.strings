@@ -1,0 +1,844 @@
+/* Hrvatski — Pinlume localization
+ *
+ * To add a new language:
+ * 1. Create a new folder: pinlume/<lang-code>.lproj/
+ * 2. Copy this file into that folder
+ * 3. Translate all values (right side of = sign)
+ * 4. Add the language to LanguageManager.availableLanguages in Services/LanguageManager.swift
+ * 5. Add the language code to knownRegions in pinlume.xcodeproj/project.pbxproj
+ * 6. Submit a pull request!
+ *
+ * Keys use the English text. Values should be the translation.
+ * Format strings use %@ for strings, %d for integers.
+ * Keep keyboard shortcuts (like ⌘C) untranslated.
+ * Keep brand names (Pinlume, Google Drive, imgbb, S3) untranslated.
+ */
+
+/* Menu Bar */
+"Capture Area" = "Snimi podrucje";
+"Capture Screen" = "Snimi zaslon";
+"Capture OCR" = "Snimi OCR";
+"Capture OCR & QR" = "Snimi OCR i QR";
+"Capture area and read text/QR codes" = "Snimi područje i očitaj tekst/QR kodove";
+"Quick Capture" = "Brzo snimanje";
+"Scroll Capture" = "Snimanje pomicanjem";
+"Capture Last Area" = "Snimi zadnje područje";
+"Capture Delay" = "Odgoda snimanja";
+"None" = "Nema";
+"%d seconds" = "%d sekundi";
+"Record Area" = "Snimi podrucje (video)";
+"Record Screen" = "Snimi zaslon (video)";
+"Recent Captures" = "Nedavna snimanja";
+"Show History Panel" = "Prikazi plocu povijesti";
+"Open Image..." = "Otvori sliku...";
+"Open from Clipboard" = "Otvori iz meduspremnika";
+"Pin from Clipboard" = "Prikvaci iz meduspremnika";
+"Preferences..." = "Postavke...";
+"Check for Updates..." = "Provjeri azuriranja...";
+"Quit Pinlume" = "Zatvori Pinlume";
+"No recent captures" = "Nema nedavnih snimanja";
+"Clear History" = "Ocisti povijest";
+
+/* History Panel */
+"Copy" = "Kopiraj";
+"Save As..." = "Spremi kao...";
+"Open in Editor" = "Otvori u uredivacku";
+"Pin to Screen" = "Prikvaci na zaslon";
+"Quick Look" = "Brzi pregled";
+"Delete" = "Obrisi";
+"All" = "Sve";
+"Screenshots" = "Snimke zaslona";
+"GIFs" = "GIFs";
+"Click to copy · Drag to app" = "Klikni za kopiranje · Povuci u aplikaciju";
+"No captures yet" = "Nema snimki";
+
+/* Floating Thumbnail */
+"Close All" = "Zatvori sve";
+"Save All to Folder…" = "Spremi sve u mapu...";
+"Save" = "Spremi";
+
+/* Editor Top Bar */
+"Zoom In" = "Povecaj";
+"Zoom Out" = "Smanji";
+"Fit Canvas" = "Prilagodi platnu";
+"Crop" = "Izrezi";
+"Flip Horizontal" = "Okreni vodoravno";
+"Flip Vertical" = "Okreni okomito";
+"Rotate Left" = "Zakreni ulijevo";
+"Rotate Right" = "Zakreni udesno";
+"Zoom" = "Zumiranje";
+"Add Capture" = "Dodaj snimku";
+
+/* Toolbar - Tools */
+"Arrow" = "Strelica";
+"Line" = "Linija";
+"Rectangle" = "Pravokutnik";
+"Ellipse" = "Elipsa";
+"Pencil" = "Olovka";
+"Pencil (Draw)" = "Olovka (Crtanje)";
+"Marker" = "Marker";
+"Text" = "Tekst";
+"Number" = "Broj";
+"Number / Counter" = "Broj / Brojac";
+"Stamp / Emoji" = "Pecat / Emoji";
+"Censor" = "Cenzura";
+"Censor (Pixelate / Blur / Solid)" = "Cenzura (Pikselizacija / Zamucenje / Ispuna)";
+"Measure" = "Mjerenje";
+"Measure (px)" = "Mjerenje (px)";
+"Magnify (Loupe)" = "Povecalo (Lupa)";
+"Highlight" = "Istakni";
+"Highlight (Spotlight)" = "Istakni (Reflektor)";
+"Dim" = "Zatamni";
+"Color Sampler" = "Uzorkovanje boje";
+"Color Picker" = "Birac boja";
+"Select & Edit" = "Odaberi i uredi";
+"Color" = "Boja";
+
+/* Aspect ratio & resolution presets */
+"Aspect ratio & resolution presets" = "Predlošci omjera i razlučivosti";
+"Aspect ratio" = "Omjer slike";
+"Resolution" = "Razlučivost";
+"Freeform" = "Slobodan oblik";
+"Units" = "Jedinice";
+"Keep ratio for next captures" = "Zadrži omjer za sljedeća snimanja";
+"Custom · %@" = "Prilagođeno · %@";
+
+/* Toolbar - Actions */
+"Copy to Clipboard" = "Kopiraj u meduspremnik";
+"Save to File" = "Spremi u datoteku";
+"Save to" = "Spremi u";
+"Open in Editor Window" = "Otvori u prozoru uredivacka";
+"Pin on Screen" = "Prikvaci na zaslon";
+"Pin" = "Prikvaci";
+"Pin (floating window)" = "Prikvaci (plutajuci prozor)";
+"OCR" = "OCR";
+"OCR Text" = "OCR tekst";
+"OCR (extract text)" = "OCR (izdvoji tekst)";
+"OCR & QR" = "OCR i QR";
+"Run OCR & QR" = "Pokreni OCR i QR";
+"Text & QR Recognition" = "Prepoznavanje teksta i QR";
+"QR Code" = "QR kod";
+"QR Codes" = "QR kodovi";
+"Open Link" = "Otvori poveznicu";
+"Open With" = "Otvori pomoću";
+"No Apps Available" = "Nema dostupnih aplikacija";
+"No Share Services" = "Nema usluga dijeljenja";
+"Upload" = "Ucitaj";
+"Share" = "Podijeli";
+"Undo" = "Ponisti";
+"Redo" = "Ponovi";
+"Close" = "Zatvori";
+"Remove Background" = "Ukloni pozadinu";
+"Beautify" = "Uljepsaj";
+"Adjust" = "Prilagodi";
+"Adjust (Image Effects)" = "Prilagodi (Efekti slike)";
+"Invert Colors" = "Obrni boje";
+"Record" = "Snimaj";
+"Record screen" = "Snimaj zaslon";
+"Translate" = "Prevedi";
+"Auto-Redact sensitive data" = "Automatski cenzuriraj osjetljive podatke";
+"Move Selection" = "Pomakni odabir";
+"Move up" = "Pomakni gore";
+"Move down" = "Pomakni dolje";
+"Menu Bar Order" = "Redoslijed u traci izbornika";
+"Choose the order of capture actions in the Pinlume menu bar menu." = "Odaberite redoslijed radnji snimanja u izborniku Pinlume u traci izbornika.";
+
+/* Toolbar - Recording */
+"Start Recording" = "Pocni snimanje";
+"Cancel Recording" = "Otkazi snimanje";
+"Highlight Mouse Clicks" = "Istakni klikove misa";
+"Record System Audio" = "Snimaj zvuk sustava";
+"Record Microphone" = "Snimaj mikrofon";
+"Recording Settings" = "Postavke snimanja";
+
+/* Tool Options */
+"Size" = "Velicina";
+"Stroke" = "Potez";
+"Radius" = "Polumjer";
+"Start:" = "Pocetak:";
+"Draw:" = "Crtanje:";
+"Auto:" = "Auto:";
+"Fill" = "Ispuna";
+"Outline" = "Obrub";
+"More Emojis" = "Vise emojija";
+"Load Image" = "Ucitaj sliku";
+"Gradient Style" = "Stil gradijenta";
+"On" = "Ukljuceno";
+"Text Only" = "Samo tekst";
+"All Text" = "Sav tekst";
+"PII" = "PII";
+"Faces" = "Lica";
+"People" = "Osobe";
+"Confirm before upload" = "Potvrdi prije ucitavanja";
+"Flip" = "Okreni";
+"Smooth" = "Glatkoca";
+"Refined" = "Profinjeno";
+"Smart" = "Pametno";
+"Padding" = "Razmak";
+"Shadow" = "Sjena";
+"Right-click to add points" = "Desni klik za dodavanje tocaka";
+"Hold 1 auto-vertical  ·  Hold 2 auto-horizontal" = "Drzi 1 auto-okomito  ·  Drzi 2 auto-vodoravno";
+
+/* Overlay / Canvas */
+"Click a window  ·  Drag for custom area  ·  F for full screen" = "Klikni prozor  ·  Povuci za podrucje  ·  F za cijeli zaslon";
+"Drag to select  ·  Click for full screen" = "Povuci za odabir  ·  Klikni za cijeli zaslon";
+"Release to annotate and edit" = "Pusti za oznacavanje i uredivanje";
+"Release to finish" = "Pusti za završetak";
+"Hold Space to move. Release to annotate and edit" = "Držite Razmaknicu za pomicanje. Pustite za označavanje i uređivanje";
+"Hold Space to move. Release to finish" = "Držite Razmaknicu za pomicanje. Pustite za završetak";
+"Window snap: " = "Hvatanje prozora: ";
+"ON" = "UKLJ.";
+"OFF" = "ISKLJ.";
+"  (Tab to toggle)" = "  (Tab za prebacivanje)";
+"Space" = "Razmaknica";
+"Right-click to copy" = "Desni klik za kopiranje";
+"Copied %@" = "Kopirano %@";
+"Set color %@" = "Postavi boju %@";
+"Draw something first to use the move tool." = "Najprije nacrtajte nesto da biste koristili alat za pomicanje.";
+"Drag to reposition" = "Povuci za premjestanje";
+
+/* Overlay - Popovers */
+"Format:" = "Format:";
+"FPS:" = "FPS:";
+"When done:" = "Po zavrsetku:";
+"Open editor" = "Otvori uredivack";
+"Show in Finder" = "Prikazi u Finder";
+"Copy to clipboard" = "Kopiraj u meduspremnik";
+
+/* Preferences - General */
+"Pinlume Preferences" = "Pinlume Postavke";
+"General" = "Opcenito";
+"Tools" = "Alati";
+"Recording" = "Snimanje";
+"About" = "O programu";
+"Shortcuts" = "Precaci";
+"Uploads" = "Ucitavanja";
+"Language" = "Jezik";
+"Language:" = "Jezik:";
+"Restart the app to fully apply the new language." = "Ponovno pokrenite aplikaciju za potpunu primjenu novog jezika.";
+"Capture" = "Snimanje";
+"Play sound on capture" = "Reproduciraj zvuk pri snimanju";
+"Play sound on copy" = "Reproduciraj zvuk pri kopiranju";
+"Remember last selected tool" = "Zapamti zadnji odabrani alat";
+"Show floating thumbnail after capture" = "Prikazi plutajucu minijaturu nakon snimanja";
+"Launch at login" = "Pokreni pri prijavi";
+"Show snap alignment guides" = "Prikazi vodilice za poravnanje";
+"Snap selection edges to image boundaries" = "Privezi rubove odabira uz granice slike";
+"Capture mouse cursor in screenshot" = "Snimi kursor misa na snimci zaslona";
+"Double-click selection to copy" = "Kopiraj dvostrukim klikom na odabir";
+"Hide capture instructions" = "Sakrij upute pri snimanju";
+"Use window title in saved filename" = "Koristi naslov prozora u nazivu datoteke";
+"Hide menu bar icon" = "Sakrij ikonu u traci izbornika";
+"Hotkeys still work. To show the icon again, re-launch Pinlume." = "Tipkovni precaci i dalje rade. Za ponovni prikaz ikone ponovno pokrenite Pinlume.";
+"Check for updates automatically" = "Automatski provjeravaj azuriranja";
+"Check for beta updates" = "Provjeri beta ažuriranja";
+"Thumbnail" = "Minijatura";
+"  Dismiss after:" = "  Odbaci nakon:";
+"seconds before auto-dismiss (0 = never)" = "sekundi prije automatskog odbacivanja (0 = nikad)";
+"  Multiple previews:" = "  Visestruki pregledi:";
+"Stack (keep all)" = "Slozi (zadrzi sve)";
+"Replace (show only latest)" = "Zamijeni (prikazi samo najnovije)";
+"Output" = "Izlaz";
+"Image format:" = "Format slike:";
+"Quality:" = "Kvaliteta:";
+"%d%%" = "%d%%";
+"Save at standard resolution (1x)" = "Spremi u standardnoj razlucivosti (1x)";
+"Halves dimensions on Retina displays, ~4x smaller files" = "Prepolavlja dimenzije na Retina zaslonima, ~4x manje datoteke";
+"Embed sRGB color profile" = "Ugradi sRGB profil boja";
+"Ensures consistent colors across different displays" = "Osigurava dosljedne boje na razlicitim zaslonima";
+"Screenshot History" = "Povijest snimki zaslona";
+"History size:" = "Velicina povijesti:";
+"screenshots kept on disk (0 = off)" = "snimki zaslona na disku (0 = iskljuceno)";
+"Order history by last edit" = "Poredaj povijest po zadnjoj izmjeni";
+"Edited screenshots move to the top. Off keeps them in capture order." = "Uređene snimke premještaju se na vrh. Isključeno zadržava redoslijed snimanja.";
+"Save Directory" = "Mapa za spremanje";
+"Save folder:" = "Mapa za spremanje:";
+"Browse…" = "Pregledaj...";
+"Appearance" = "Izgled";
+"Accent color:" = "Naglasna boja:";
+"Icon color:" = "Boja ikone:";
+"Background color:" = "Boja pozadine:";
+"Reset" = "Ponisti";
+"OCR Capture:" = "OCR snimanje:";
+"OCR & QR Capture:" = "OCR i QR snimanje:";
+"Show window + copy to clipboard" = "Prikazi prozor + kopiraj u meduspremnik";
+"Show window only" = "Samo prikazi prozor";
+"Copy to clipboard only" = "Samo kopiraj u meduspremnik";
+"Enter / Quick Capture:" = "Enter / Brzo snimanje:";
+"Save to file" = "Spremi u datoteku";
+"Save + copy to clipboard" = "Spremi + kopiraj u meduspremnik";
+"OCR Action" = "OCR radnja";
+"Save action:" = "Radnja spremanja:";
+"Save to default folder" = "Spremi u zadanu mapu";
+"Ask where to save" = "Pitaj gdje spremiti";
+"Show shortcuts in tooltips" = "Prikaži prečace u opisima";
+"Disable shadow outside selection" = "Onemogući sjenu izvan odabira";
+"Menu bar icon:" = "Ikona u traci izbornika:";
+"Default" = "Zadano";
+"Custom symbol" = "Prilagođeni simbol";
+"Enter any SF Symbol name (e.g. camera.fill) or pick a preset. Browse names in Apple's SF Symbols app. Invalid names fall back to the default icon." = "Unesite bilo koje SF Symbol ime (npr. camera.fill) ili odaberite predložak. Pregledajte imena u Apple SF Symbols aplikaciji. Nevažeća imena vraćaju se na zadanu ikonu.";
+
+/* Preferences - Shortcuts */
+"Keyboard Shortcuts" = "Tipkovni precaci";
+"Hotkeys" = "Precaci";
+"Clear shortcut" = "Obrisi precac";
+"Press keys..." = "Pritisnite tipke...";
+"Waiting..." = "Cekanje...";
+
+/* Preferences - Tools */
+"Annotation Tools" = "Alati za oznacavanje";
+"Hidden tools are removed from the bottom toolbar." = "Skriveni alati se uklanjaju iz donje alatne trake.";
+"Capture Actions" = "Radnje snimanja";
+"Bottom Toolbar Actions" = "Radnje donje alatne trake";
+"Hidden actions are removed from the bottom toolbar." = "Skrivene radnje se uklanjaju iz donje alatne trake.";
+"Editor Actions" = "Radnje uredivacka";
+"Right Toolbar Actions" = "Radnje desne alatne trake";
+"Hidden actions are removed from the right toolbar." = "Skrivene radnje se uklanjaju iz desne alatne trake.";
+
+/* Preferences - Recording */
+"Frame rate:" = "Broj sli. u sek.:";
+"After recording:" = "Nakon snimanja:";
+"Save recording to:" = "Spremi snimku u:";
+"Save Recording" = "Spremi snimku";
+"Clear" = "Ocisti";
+"Max height:" = "Maks. visina:";
+"px (0 = unlimited)" = "px (0 = neograniceno)";
+"Behavior" = "Ponasanje";
+"Auto-scroll (sends synthetic scroll events)" = "Automatsko pomicanje (salje sinteticke dogadaje pomicanja)";
+"Detect fixed/sticky headers" = "Otkrij fiksna/ljepljiva zaglavlja";
+"Scroll speed:" = "Brzina pomicanja:";
+"Slow" = "Sporo";
+"Medium" = "Srednje";
+"Fast" = "Brzo";
+"Very fast" = "Vrlo brzo";
+"5 fps" = "5 fps";
+"10 fps" = "10 fps";
+"15 fps" = "15 fps";
+"24 fps" = "24 fps";
+"30 fps" = "30 fps";
+"60 fps" = "60 fps";
+"120 fps" = "120 fps";
+"MP4 (H.264)" = "MP4 (H.264)";
+"GIF" = "GIF";
+
+/* Preferences - Upload */
+"Upload Service" = "Usluga ucitavanja";
+"Upload Provider" = "Pruzatelj ucitavanja";
+"Provider:" = "Pruzatelj:";
+"Google Drive" = "Google Drive";
+"Google Drive (images + videos)" = "Google Drive (slike + videozapisi)";
+"imgbb (images only)" = "imgbb (samo slike)";
+"S3-Compatible (images + videos)" = "S3-kompatibilno (slike + videozapisi)";
+"S3-Compatible Storage" = "S3-kompatibilna pohrana";
+"Sign In with Google" = "Prijava putem Googlea";
+"Sign Out" = "Odjava";
+"Signed in" = "Prijavljeni";
+"Not signed in" = "Niste prijavljeni";
+"Account:" = "Racun:";
+"Test Connection" = "Testiraj vezu";
+"Fill in endpoint, bucket, and credentials first" = "Najprije unesite krajnju tocku, spremnik i vjerodajnice";
+"Testing..." = "Testiranje...";
+"Connection successful!" = "Veza uspjesna!";
+"Leave empty to use default" = "Ostavite prazno za zadanu vrijednost";
+"Endpoint:" = "Krajnja tocka:";
+"Region:" = "Regija:";
+"Bucket:" = "Spremnik:";
+"Access Key:" = "Pristupni kljuc:";
+"Secret Key:" = "Tajni kljuc:";
+"Public URL:" = "Javni URL:";
+"Path Prefix:" = "Prefiks putanje:";
+"API key:" = "API kljuc:";
+"Upload History" = "Povijest ucitavanja";
+"No uploads yet." = "Nema ucitavanja.";
+"Base URL for public access. If empty, the S3 endpoint URL is used (may not be publicly accessible)." = "Osnovni URL za javni pristup. Ako je prazno, koristi se URL S3 krajnje tocke (mozda nije javno dostupan).";
+"A shared key is included — get your own free key at imgbb.com/api if you hit rate limits. Images only (no video support)." = "Dijeljeni kljuc je ukljucen — nabavite vlastiti besplatni kljuc na imgbb.com/api ako dosegnete ogranicenje. Samo slike (bez podrske za video).";
+"Works with AWS S3, Cloudflare R2, MinIO, DigitalOcean Spaces, Backblaze B2, and other S3-compatible services. Supports images and videos." = "Radi s AWS S3, Cloudflare R2, MinIO, DigitalOcean Spaces, Backblaze B2 i drugim S3-kompatibilnim uslugama. Podrzava slike i videozapise.";
+"Configure S3 in Preferences" = "Konfigurirajte S3 u Postavkama";
+"Sign in to Google Drive in Preferences" = "Prijavite se na Google Drive u Postavkama";
+"Video upload requires Google Drive or S3" = "Ucitavanje videa zahtijeva Google Drive ili S3";
+
+/* Preferences - About */
+"Pinlume" = "Pinlume";
+"Version %@ (%@)" = "Verzija %@ (%@)";
+"Made by" = "Izradio";
+"Licensed under the GPLv3" = "Licencirano pod GPLv3";
+"A free, open-source screenshot & screen recording tool for macOS.\nFully native — built with Swift and AppKit." = "Besplatan alat otvorenog koda za snimanje zaslona i ekrana za macOS.\nU potpunosti izvoran — izgraden sa Swift i AppKit.";
+
+/* Alerts */
+"No Image on Clipboard" = "Nema slike u meduspremniku";
+"No Image or Text on Clipboard" = "Nema slike ni teksta u meduspremniku";
+"Copy an image to the clipboard first, then try again." = "Najprije kopirajte sliku u meduspremnik, zatim pokusajte ponovo.";
+"Copy an image or text to the clipboard first, then try again." = "Najprije kopirajte sliku ili tekst u meduspremnik, zatim pokusajte ponovo.";
+"OK" = "U redu";
+"Accessibility Access Required" = "Potreban pristup pristupacnosti";
+"Pinlume needs Accessibility permission to auto-scroll other apps. Please grant access in System Settings, then try again." = "Pinlume treba dozvolu pristupacnosti za automatsko pomicanje drugih aplikacija. Odobrite pristup u Postavkama sustava, zatim pokusajte ponovo.";
+"Pinlume needs Accessibility permission for scroll capture. Please grant access in System Settings, then try again." = "Pinlume treba dozvolu pristupačnosti za snimanje pomicanjem. Odobrite pristup u Postavkama sustava i pokušajte ponovno.";
+"Open Settings" = "Otvori postavke";
+"Cancel" = "Odustani";
+"Microphone Access Required" = "Potreban pristup mikrofonu";
+"Pinlume needs microphone permission to record voice audio. Open System Settings to grant access." = "Pinlume treba dozvolu mikrofona za snimanje glasa. Otvorite Postavke sustava za odobravanje pristupa.";
+"Upload to Google Drive?" = "Ucitaj na Google Drive?";
+"Upload to S3?" = "Ucitaj na S3?";
+"Upload to imgbb.com?" = "Ucitaj na imgbb.com?";
+"Your screenshot will be uploaded." = "Vasa snimka zaslona ce biti ucitana.";
+
+/* Permission Onboarding */
+"Welcome to Pinlume" = "Dobrodosli u Pinlume";
+"Pinlume needs one permission" = "Pinlume treba jednu dozvolu";
+"Screen Recording not yet granted" = "Snimanje zaslona jos nije odobreno";
+"Screen Recording granted!" = "Snimanje zaslona odobreno!";
+"Enable Pinlume, then try taking a screenshot" = "Omogucite Pinlume, zatim pokusajte snimiti zaslon";
+"Open Screen Recording Settings" = "Otvori postavke snimanja zaslona";
+"Continue" = "Nastavi";
+
+/* OCR Window */
+"Text Recognition" = "Prepoznavanje teksta";
+"Translate to:" = "Prevedi na:";
+"%d chars · %d words" = "%d znakova · %d rijeci";
+"Copy  ⌘↩" = "Kopiraj  ⌘↩";
+"AI Search" = "AI pretraga";
+"Show Original" = "Prikazi izvornik";
+"Translation Failed" = "Prijevod nije uspio";
+"Translation" = "Prijevod";
+"(No text detected in the selected area)" = "(Nije prepoznat tekst u odabranom podrucju)";
+
+/* Upload Toast */
+"URL copied to the clipboard" = "URL kopiran u meduspremnik";
+"Uploading... %d%%" = "Ucitavanje... %d%%";
+"Upload failed: %@" = "Ucitavanje neuspjelo: %@";
+"Uploaded! Link copied." = "Ucitano! Poveznica kopirana.";
+"Uploading to %@... %d%%" = "Ucitavanje na %@... %d%%";
+"Open" = "Otvori";
+
+/* Recording Toast */
+"Recording saved" = "Snimka spremljena";
+"%@ • Recording saved" = "%@ • Snimka spremljena";
+"Copy Path" = "Kopiraj putanju";
+"Path copied!" = "Putanja kopirana!";
+
+/* Video Editor */
+"Pinlume Video Editor" = "Pinlume Video uredivack";
+"%@ selected" = "%@ odabrano";
+"Exporting..." = "Izvoz...";
+"Export failed" = "Izvoz neuspjeo";
+"Saved to %@" = "Spremljeno u %@";
+"Save failed" = "Spremanje neuspjelo";
+
+/* Barcode Detector */
+/* "Open" and "Copy" are shared with other sections */
+
+/* Save Panel */
+"Save As..." = "Spremi kao...";
+"Choose a folder" = "Odaberite mapu";
+"Save All to Folder…" = "Spremi sve u mapu...";
+
+/* Scroll Capture HUD */
+"Auto Scroll" = "Automatsko pomicanje";
+"Stop" = "Zaustavi";
+"Scrolling..." = "Pomicanje...";
+
+/* Effects Picker (Adjust popover) */
+"Presets" = "Predloski";
+"Adjustments" = "Prilagodbe";
+"Brightness" = "Svjetlina";
+"Contrast" = "Kontrast";
+"Saturation" = "Zasicenost";
+"Sharpness" = "Ostrina";
+
+/* Time Ago */
+"just now" = "upravo sada";
+"%ds ago" = "prije %ds";
+"%dm ago" = "prije %dm";
+"%dh ago" = "prije %dh";
+
+/* Hotkey Labels */
+"History" = "Povijest";
+
+/* Preferences - Shortcuts note */
+"Click \"Record\" and press a key combination with at least one modifier (⌘, ⌥, ⌃, ⇧) to set a shortcut." = "Kliknite \"Snimaj\" i pritisnite kombinaciju tipki s barem jednom modifikatorskom tipkom (⌘, ⌥, ⌃, ⇧) za postavljanje precaca.";
+
+/* Recording — GIF Processing */
+"Processing GIF…" = "Obrada GIF-a…";
+
+/* Recording — Input Monitoring Permission */
+"Input Monitoring Required" = "Potrebno pracenje unosa";
+"Pinlume needs Input Monitoring permission to show keystrokes during recording. Please grant access in System Settings, then try again." = "Pinlume treba dozvolu pracenja unosa za prikaz pritisaka tipki tijekom snimanja. Odobrite pristup u System Settings, zatim pokusajte ponovo.";
+"Pinlume needs Accessibility permission to show keystrokes during recording. Please grant access in System Settings, then try again." = "Pinlume treba dozvolu pristupacnosti za prikaz pritisaka tipki tijekom snimanja. Odobrite pristup u System Settings, zatim pokusajte ponovo.";
+
+/* Recording — Keystroke Overlay */
+"Show Keystrokes" = "Prikazi pritiske tipki";
+"Shortcuts Only" = "Samo precaci";
+"All Keystrokes" = "Svi pritisci tipki";
+
+/* Recording — Settings Popover */
+"Delay:" = "Odgoda:";
+
+/* Video Editor */
+"Copied to clipboard!" = "Kopirano u meduspremnik!";
+
+/* Webcam Overlay */
+"Webcam Overlay" = "Preklapanje web-kamere";
+"Camera Access Required" = "Potreban pristup kameri";
+"Pinlume needs camera permission for the webcam overlay. Open System Settings to grant access." = "Pinlume treba dozvolu kamere za preklapanje web-kamere. Otvorite Postavke sustava za odobravanje pristupa.";
+"Webcam" = "Web-kamera";
+"Bottom Right" = "Dolje desno";
+"Bottom Left" = "Dolje lijevo";
+"Top Right" = "Gore desno";
+"Top Left" = "Gore lijevo";
+"Small" = "Malo";
+"Large" = "Veliko";
+"Webcam Size Small" = "Malo";
+"Webcam Size Medium" = "Srednje";
+"Webcam Size Large" = "Veliko";
+"Webcam Size Extra Large" = "Izuzetno veliko";
+"Circle" = "Krug";
+"Rounded Rectangle" = "Zaobljeni pravokutnik";
+"Cam pos:" = "Poz. kamere:";
+"Cam size:" = "Vel. kamere:";
+"Cam shape:" = "Oblik kamere:";
+
+/* New Strings */
+"Settings" = "Postavke";
+"Offline build: upload and cloud storage integrations are removed. Update checks may still connect to Pinlume's update server. Screenshots and recordings stay local unless you share or save them yourself." = "Izvanmrežna verzija: integracije za prijenos i pohranu u oblaku uklonjene su. Provjere ažuriranja i dalje se mogu povezivati s Pinlumeovim poslužiteljem za ažuriranja. Snimke zaslona i snimke ostaju lokalne osim ako ih sami ne podijelite ili spremite.";
+"Settings..." = "Postavke...";
+"Pinlume Settings" = "Pinlume Postavke";
+"Also open in Editor" = "Otvori i u uredivacku";
+"Hide controls" = "Sakrij kontrole";
+"Hide recording controls" = "Sakrij kontrole snimanja";
+"Stop recording from the menu bar icon instead." = "Umjesto toga zaustavite snimanje putem ikone u traci izbornika.";
+"Pixelate" = "Pikselizacija";
+"Blur" = "Zamucenje";
+"Solid" = "Ispuna";
+"Erase" = "Obrisi";
+"Done" = "Gotovo";
+"Do nothing" = "Ne radi nista";
+"Overlay / Editor Shortcuts" = "Precaci preklapanja / uredivacka";
+"Set" = "Postavi";
+"Press..." = "Pritisnite...";
+"Reset to default" = "Vrati na zadano";
+"Press a single key to assign it as the shortcut for that tool. These work when the overlay or editor is active." = "Pritisnite jednu tipku da je dodijelite kao precac za taj alat. Rade kad je preklapanje ili uredivack aktivan.";
+"Keep Separate" = "Zadrzi odvojeno";
+"Merge Audio" = "Spoji zvuk";
+"Audio Tracks" = "Zvucne zapise";
+"Adjust volume for each audio track:" = "Prilagodite glasnocu za svaku zvucnu stopu:";
+"Microphone:" = "Mikrofon:";
+"System audio:" = "Zvuk sustava:";
+"Loupe" = "Lupa";
+"Stamp" = "Pecat";
+"Unlimited" = "Neograniceno";
+"Save changes?" = "Spremiti promjene?";
+"Your annotations will be lost if you close without saving." = "Vase oznake ce biti izgubljene ako zatvorite bez spremanja.";
+"Save & Close" = "Spremi i zatvori";
+"Discard" = "Odbaci";
+"Stop Recording" = "Zaustavi snimanje";
+"Pause" = "Pauziraj";
+"Resume" = "Nastavi";
+"Engine:" = "Pokretac:";
+"Google Translate" = "Google Translate";
+"Apple (on-device)" = "Apple (na uredaju)";
+"Apple translation is faster and works offline. Google Translate supports more languages." = "Apple prijevod je brzi i radi bez mreze. Google Translate podrzava vise jezika.";
+"Download language packs in System Settings…" = "Preuzmite jezicne pakete u Postavkama sustava…";
+"Configure S3 in Settings" = "Konfigurirajte S3 u Postavkama";
+"Sign in to Google Drive in Settings" = "Prijavite se na Google Drive u Postavkama";
+"Position:" = "Pozicija:";
+"  Position:" = "  Pozicija:";
+"Size:" = "Velicina:";
+"Shape:" = "Oblik:";
+
+"Same as screenshots" = "Isto kao snimke zaslona";
+"  Preview size:" = "  Veličina pregleda:";
+"(0 = off)" = "(0 = isključeno)";
+"Clear All" = "Obriši sve";
+"Clear History?" = "Obrisati povijest?";
+"This will permanently delete all screenshots from history." = "Ovo će trajno izbrisati sve snimke zaslona iz povijesti.";
+"Click \"Set\" and press a key combination with at least one modifier (⌘, ⌥, ⌃, ⇧) to set a shortcut." = "Kliknite \"Postavi\" i pritisnite kombinaciju tipki s barem jednim modifikatorom (⌘, ⌥, ⌃, ⇧) za postavljanje prečaca.";
+"Files are uploaded to a \"Pinlume\" folder in your Google Drive. Everything stays private — nothing is shared publicly." = "Datoteke se učitavaju u mapu \"Pinlume\" na vašem Google Disku. Sve ostaje privatno — ništa se ne dijeli javno.";
+
+"Pressure" = "Pritisak";
+
+/* Added for v4.1.0-beta.3 — video editor, effects, open-video, shortcuts help */
+"Open Video..." = "Otvori video...";
+"Choose a video to open in Pinlume editor" = "Odaberite videozapis za otvaranje u Pinlume uređivaču";
+"Click to add effects" = "Kliknite za dodavanje efekata";
+"Add Zoom" = "Dodaj zumiranje";
+"Add Censor" = "Dodaj cenzuru";
+"Add Cut" = "Dodaj rez";
+"Add Speed" = "Dodaj brzinu";
+"Add Freeze" = "Dodaj zamrznuti kadar";
+"Add Text" = "Dodaj tekst";
+"Delete Zoom" = "Obriši zumiranje";
+"Delete Censor" = "Obriši cenzuru";
+"Delete Cut" = "Obriši rez";
+"Delete Speed" = "Obriši brzinu";
+"Delete Freeze" = "Obriši zamrznuti kadar";
+"Delete Text" = "Obriši tekst";
+"Edit Text…" = "Uredi tekst…";
+"Huge" = "Ogromno";
+"Bold" = "Podebljano";
+"Italic" = "Kurziv";
+"Alignment" = "Poravnanje";
+"Left" = "Lijevo";
+"Center" = "Sredina";
+"Right" = "Desno";
+"Text Color" = "Boja teksta";
+"Background Color" = "Boja pozadine";
+"Rounded" = "Zaobljeno";
+"Custom…" = "Prilagođeno…";
+"Transparent" = "Prozirno";
+"Black" = "Crna";
+"White" = "Bijela";
+"Yellow" = "Žuta";
+"Red" = "Crvena";
+"Green" = "Zelena";
+"Blue" = "Plava";
+"Untitled" = "Bez naslova";
+"Add effect" = "Dodaj efekt";
+"Fade" = "Prijelaz";
+"High" = "Visoko";
+"Low" = "Nisko";
+"Not enough room here" = "Nema dovoljno prostora ovdje";
+"Copied!" = "Kopirano!";
+"Converting to GIF…" = "Pretvaranje u GIF…";
+"GIF conversion failed" = "Pretvaranje u GIF nije uspjelo";
+"No video track found" = "Videozapis nije pronađen";
+"Preview:" = "Pregled:";
+"Copy Screen Info" = "Kopiraj informacije o zaslonu";
+"Copies display and capture diagnostics to clipboard" = "Kopira dijagnostiku zaslona i snimanja u međuspremnik";
+"Accent" = "Naglasak";
+"Icon" = "Ikona";
+"Background" = "Pozadina";
+"Custom" = "Prilagođeno";
+"Theme:" = "Tema:";
+"Application" = "Aplikacija";
+"Capture area and extract text" = "Snimi područje i izdvoji tekst";
+"Capture the full screen" = "Snimi cijeli zaslon";
+"Counter for multi-screen captures" = "Brojač za snimanja s više zaslona";
+"8-character random string (e.g. k3j7x9q2)" = "Nasumični niz od 8 znakova (npr. k3j7x9q2)";
+"Filename Template Tokens" = "Oznake predloška naziva datoteke";
+"Filename tokens" = "Oznake naziva datoteke";
+"Filename:" = "Naziv datoteke:";
+"Open an image file in the editor" = "Otvori datoteku slike u uređivaču";
+"Open the recent captures overlay" = "Otvori preklapanje nedavnih snimanja";
+"Open this settings window" = "Otvori ovaj prozor postavki";
+"Quick capture (uses your Enter action)" = "Brzo snimanje (koristi vašu Enter radnju)";
+"Re-capture the last selected area" = "Ponovno snimi zadnje odabrano područje";
+"Screenshots only — captured window title (blank otherwise)" = "Samo snimke zaslona — naslov snimljenog prozora (inače prazno)";
+"Show available filename tokens" = "Prikaži dostupne oznake naziva datoteke";
+"Show supported URL scheme commands" = "Prikaži podržane naredbe URL sheme";
+"Start area capture" = "Započni snimanje područja";
+"Start area recording" = "Započni snimanje područja (video)";
+"Start full-screen recording" = "Započni snimanje cijelog zaslona";
+"Start scroll capture" = "Započni snimanje pomicanjem";
+"Stop the current recording" = "Zaustavi trenutno snimanje";
+"Supported URL Scheme Commands" = "Podržane naredbe URL sheme";
+"The file extension is appended automatically. Slashes and colons in {window} become dashes." = "Ekstenzija datoteke dodaje se automatski. Kose crte i dvotočke u {window} pretvaraju se u crtice.";
+"Trigger Pinlume from Raycast, Alfred, Shortcuts, or any tool that opens URLs." = "Pokrenite Pinlume iz Raycast, Alfred, Shortcuts ili bilo kojeg alata koji otvara URL-ove.";
+"Enable pinlume:// URL scheme" = "Omogući URL shemu pinlume://";
+"URL scheme info" = "Informacije o URL shemi";
+"sec (0 = never)" = "s (0 = nikad)";
+
+/* Localized current UI keys. Existing translations above are preserved. */
+"Plus build: personal build with update checks disabled. Preferences, history, and permissions are separate from the original Pinlume app." = "Plus gradnja: osobna gradnja s onemogućenim provjerama ažuriranja. Postavke, povijest i dopuštenja odvojeni su od izvorne aplikacije Pinlume.";
+"Light" = "svjetlo";
+"Press Option to hide magnifier" = "Pritisnite Option za skrivanje povećala";
+"Changes to the selected profile are saved automatically." = "Promjene odabranog profila automatski se spremaju.";
+"Show Pin Shadow" = "Prikaži sjenu pribadače";
+"Arrow Keys" = "Tipke sa strelicama";
+"Source Language" = "Izvorni jezik";
+"Translation Pin" = "Prijevod Pin";
+"Color Scheme:" = "Shema boja:";
+"Text Recognition / QR" = "Prepoznavanje teksta / QR";
+"Basic" = "Osnovno";
+"Full" = "puna";
+"Menu Bar Menu" = "Traka izbornika Izbornik";
+"Screenshot history and editable annotations" = "Povijest snimaka zaslona i bilješke koje je moguće uređivati";
+"Press Shift to switch RGB/HEX" = "Pritisnite Shift za promjenu RGB/HEX";
+"Clipboard image backups" = "Sigurnosne kopije slika međuspremnika";
+"Double-click to Toggle Thumbnail" = "Dvaput kliknite za prebacivanje sličice";
+"Compare" = "Usporedi";
+"Apple translation does not support %@ → %@." = "Apple prijevod ne podržava %@ → %@.";
+"Profile:" = "Profil:";
+"Move to Applications" = "Prijeđite na Aplikacije";
+"Filled Rectangle" = "Ispunjeni pravokutnik";
+"Google translation is unavailable because sending text is disabled." = "Google prijevod nije dostupan jer je slanje teksta onemogućeno.";
+"Adjust Area and Edit" = "Podesite područje i uredite";
+"Clear Local Data…" = "Obriši lokalne podatke...";
+"Swap Languages" = "Zamijeni jezike";
+"Ignore window occlusion" = "Ignorirajte okluziju prozora";
+"Graphite Blue" = "Grafitno plava";
+"Copy Original" = "Kopiraj Izvornik";
+"Pin Shadow" = "Pin Shadow";
+"Translation Window" = "Prozor za prijevod";
+"Show Translation" = "Prikaži prijevod";
+"Enable %@:// URL scheme" = "Omogući %@:// URL shemu";
+"Disabled by default. Keeps up to 7 days or 2 MB; never writes screenshots, OCR text, clipboard contents, or keys." = "Onemogućeno prema zadanim postavkama. Čuva do 7 dana ili 2 MB; nikada ne piše snimke zaslona, ​​OCR tekst, sadržaj međuspremnika ili ključeve.";
+"Strength" = "Snaga";
+"Auto-Redact Sensitive Information" = "Automatsko uređivanje osjetljivih informacija";
+"More Tools" = "Više alata";
+"Move Magnifier Sample Point 1 Pixel" = "Pomaknite točku uzorka povećala za 1 piksel";
+"Translating…" = "Prevođenje...";
+"Pin Scroll Zoom" = "Pin Scroll Zoom";
+"Copy Text (shown for text pins only)" = "Kopiraj tekst (prikazano samo za tekstualne pribadače)";
+"Copy Pinned Text" = "Kopiraj prikvačeni tekst";
+"Forest" = "šuma";
+"Show floating window after Quick Capture" = "Prikaži plutajući prozor nakon brzog snimanja";
+"Brush" = "Četkom";
+"Allow Scroll Zoom on Pins" = "Dopusti Scroll Zoom na pribadačama";
+"Could not copy configuration." = "Nije moguće kopirati konfiguraciju.";
+"Allow sending text to Google Translate" = "Dopusti slanje teksta Google prevoditelju";
+"Export…" = "Izvoz…";
+"Choose local data to clear" = "Odaberite lokalne podatke za brisanje";
+"Delete Configuration?" = "Izbrisati konfiguraciju?";
+"Non-Drawing Actions" = "Radnje bez crtanja";
+"Restored pins (closes current pins immediately)" = "Obnovljene pribadače (odmah zatvara trenutne pribadače)";
+"Professional" = "Profesionalni";
+"Move to More Tools" = "Prijeđi na Više alata";
+"Translation failed; original text shown." = "Prijevod nije uspio; prikazan izvorni tekst.";
+"Target Language" = "Ciljni jezik";
+"About Pinlume" = "O Pinlumeu";
+"No text found" = "Tekst nije pronađen";
+"Automatic" = "Automatski";
+"Select Text" = "Odaberite Tekst";
+"Move Down" = "Pomakni dolje";
+"Don't ask again" = "Ne pitaj više";
+"Space to move. Release to annotate and edit" = "Prostor za kretanje. Otpustite za komentiranje i uređivanje";
+"Transparent Annotation" = "Transparentna napomena";
+"Speak Source" = "Govori izvor";
+"Press %@ to move selection 1 pixel" = "Pritisnite %@ za pomicanje odabira za 1 piksel";
+"Pin Scroll Opacity" = "Neprozirnost pomicanja pribadače";
+"OCR Pin" = "OCR igla";
+"Double-click" = "Dupli klik";
+"Rename Configuration" = "Preimenuj konfiguraciju";
+"When shortcuts conflict, the settings list is matched from top to bottom and the first entry takes priority." = "Kada su prečaci u sukobu, popis postavki se slaže odozgo prema dolje i prvi unos ima prioritet.";
+"Original / Translation" = "Izvornik / Prijevod";
+"Move Toolbar" = "Premjesti alatnu traku";
+"Beautify Screenshot" = "Uljepšajte snimku zaslona";
+"Opacity %d%%" = "Neprozirnost %d%%";
+"Configuration" = "Konfiguracija";
+"Press %@ to show/hide magnifier" = "Pritisnite %@ za prikaz/sakrij povećala";
+"Anchor to Mouse Position" = "Sidro na položaj miša";
+"Press C to copy color" = "Pritisnite C za kopiranje u boji";
+"Import…" = "Uvezi...";
+"Apple translation language availability is unknown." = "Dostupnost Apple jezika prijevoda nije poznata.";
+"Unable to capture selection" = "Nije moguće snimiti odabir";
+"Translated Text" = "Prevedeni tekst";
+"Show partial image in compact Pin" = "Prikaži djelomičnu sliku u kompaktnoj pribadači";
+"Translation complete" = "Prijevod završen";
+"Show Original / Translation" = "Prikaži izvornik / prijevod";
+"Languages swapped; edited translation was preserved" = "Zamijenjeni jezici; sačuvan je uređeni prijevod";
+"Image Adjustments" = "Prilagodbe slike";
+"Hide All Pins" = "Sakrij sve pribadače";
+"Make Common" = "Učini zajedničkim";
+"Storage & Diagnostics" = "Pohrana i dijagnostika";
+"Size %d%%" = "Veličina %d%%";
+"Enter a new name for this custom configuration." = "Unesite novi naziv za ovu prilagođenu konfiguraciju.";
+"Preparing full window…" = "Priprema cijelog prozora…";
+"This affects both the capture selection toolbar and pin toolbar. Common tools appear in the first row; additional tools move into the More menu." = "To utječe i na alatnu traku za odabir snimanja i na alatnu traku za pribadaču. Uobičajeni alati pojavljuju se u prvom redu; dodatni alati premještaju se u izbornik Više.";
+"Pinlume needs Accessibility permission to translate selected text. Open System Settings to grant access. If Pinlume is not listed, click the + button and choose the running Pinlume app." = "Pinlume treba dopuštenje pristupačnosti za prijevod odabranog teksta. Otvorite Postavke sustava da biste odobrili pristup. Ako Pinlume nije naveden, kliknite gumb + i odaberite pokrenutu aplikaciju Pinlume.";
+"These shortcuts work only in a capture selection or selected pin; on-screen hints follow the current settings." = "Ovi prečaci rade samo u odabiru snimanja ili odabranoj pribadači; savjeti na zaslonu slijede trenutne postavke.";
+"Copy Configuration" = "Kopiraj";
+"Deep Teal" = "Deep Teal";
+"Could not apply configuration profile." = "Nije moguće primijeniti konfiguracijski profil.";
+"Switch Magnifier RGB/HEX" = "Promjena povećala RGB/HEX";
+"Anchor to Top Left" = "Sidro gore lijevo";
+"Amber" = "Jantar";
+"Configuration:" = "Konfiguracija:";
+"Selectable Text Capture" = "Snimanje teksta koje se može odabrati";
+"Hide/Show All Pins" = "Sakrij/prikaži sve pribadače";
+"Unable to capture full window" = "Nije moguće snimiti cijeli prozor";
+"Toolbar Layout" = "Izgled alatne trake";
+"Move Up" = "Pomakni se gore";
+"Enable Hotkeys" = "Omogući prečace";
+"Choose an image to pin to screen" = "Odaberite sliku za prikvačivanje na zaslon";
+"OCR Selection" = "OCR odabir";
+"%@ is running from a disk image. Move it to your Applications folder for stable permissions and the best experience." = "%@ pokreće se sa slike diska. Premjestite ga u svoju mapu Applications za stabilna dopuštenja i najbolje iskustvo.";
+"System Default" = "Zadane postavke sustava";
+"Midnight Indigo" = "Ponoćni indigo";
+"Shortcut unavailable (error %d)" = "Prečac nije dostupan (pogreška %d)";
+"Auto Detect" = "Automatsko otkrivanje";
+"Copy of %@" = "Kopija %@";
+"Choose which actions appear in the status bar menu and arrange the order of common and additional tools. Settings, version, and quit remain fixed." = "Odaberite koje se akcije pojavljuju u izborniku statusne trake i rasporedite redoslijed uobičajenih i dodatnih alata. Postavke, verzija i izlaz ostaju fiksni.";
+"Sentence Comparison" = "Usporedba rečenica";
+"Could not rename configuration." = "Nije moguće promijeniti naziv konfiguracije.";
+"No items" = "Nema predmeta";
+"Diagnostic logs" = "Dijagnostički zapisnici";
+"Not Now" = "Ne sada";
+"Text copied" = "Tekst je kopiran";
+"Scroll capture copied to clipboard" = "Snimka pomicanja kopirana je u međuspremnik";
+"Rename…" = "Preimenuj...";
+"Calculating…" = "Izračunavanje...";
+"Disable Hotkeys" = "Onemogući prečace";
+"Enable diagnostic logging (status, timing, coordinates, and errors only)" = "Omogući bilježenje dijagnostike (samo status, vrijeme, koordinate i pogreške)";
+"Hold %@ to show magnifier" = "Držite %@ za prikaz povećala";
+"Choose which dedicated OCR and translation tools are visible. Keyboard shortcuts are in Shortcuts." = "Odaberite koji su namjenski OCR i alati za prevođenje vidljivi. Tipkovnički prečaci nalaze se u Prečacima.";
+"Hold to Show Magnifier" = "Držite za prikaz povećala";
+"Show All Pins" = "Prikaži sve pribadače";
+"The configuration “%@” will be deleted and Basic will be applied." = "Konfiguracija “%@” bit će izbrisana i primijenit će se Basic.";
+"These are actions rather than drawing tools. They appear in More Tools; disabling one hides it from both selections and pins." = "Ovo su radnje, a ne alati za crtanje. Pojavljuju se u Više alata; onemogućavanjem jednog skriva se i od odabira i od pribadača.";
+"Images saved to a folder you choose will not be deleted." = "Slike spremljene u mapu koju odaberete neće biti izbrisane.";
+"Press %@ to switch RGB/HEX" = "Pritisnite %@ za promjenu RGB/HEX";
+"Space to move. Release to finish" = "Prostor za kretanje. Otpustite za završetak";
+"Show/Hide Magnifier" = "Prikaži/sakrij povećalo";
+"Speak" = "govori";
+"Eraser" = "Gumica za brisanje";
+"Current Configuration" = "Trenutna konfiguracija";
+"Screen Translation Capture" = "Snimanje prijevoda zaslona";
+"Copy Translation" = "Kopiraj prijevod";
+"Move to Applications folder?" = "Premjestiti u mapu Aplikacije?";
+"Double-click to Close Pin" = "Dvaput kliknite za zatvaranje pribadače";
+"Slim" = "vitak";
+"Could not move to Applications" = "Nije moguće premjestiti u Aplikacije";
+"Please drag Pinlume to your Applications folder manually.\n\n%@" = "Ručno povucite Pinlume u mapu Applications.\n\n%@";
+"Could not import configuration." = "Nije moguće uvesti konfiguraciju.";
+"These are actions rather than drawing tools. Disabling one hides it from ordinary selections and pins." = "Ovo su radnje, a ne alati za crtanje. Onemogućivanjem jednoga on se skriva od uobičajenih odabira i pribadača.";
+"Turn this off to keep translation text on this Mac. Google translation will be unavailable." = "Isključite ovo da biste zadržali prijevod teksta na ovom Macu. Google prijevod neće biti dostupan.";
+"Could not delete configuration." = "Nije moguće izbrisati konfiguraciju.";
+"Screen translation must stay on one display" = "Prijevod zaslona mora ostati na jednom zaslonu";
+"Hide Pin Shadow" = "Sakrij sjenu pribadače";
+"Translation Status" = "Status prijevoda";
+"Monochrome" = "Jednobojni";
+"Translate before swapping languages" = "Prevedite prije zamjene jezika";
+"Export" = "Izvoz";
+"Dark" = "tamno";
+"Apple translation needs the %@ → %@ language pack. Download it in System Settings." = "Apple prijevodu potreban je jezični paket %@ → %@. Preuzmite ga u postavkama sustava.";
+"Press %@ to move the sample point 1 pixel" = "Pritisnite %@ za pomicanje uzorka za 1 piksel";
+"Move Selection 1 Pixel" = "Premjesti odabir za 1 piksel";
+"Screen Translation" = "Prijevod zaslona";
+"Smooth Pin Zoom" = "Smooth Pin Zoom";
+"The current settings were kept unchanged." = "Trenutne postavke ostale su nepromijenjene.";
+"Presentation Drawing" = "Prezentacijski crtež";
+"Interface Theme:" = "Tema sučelja:";
+"Quick capture copied to clipboard" = "Brzo snimanje kopirano u međuspremnik";
+"Translate selected text" = "Prevedite odabrani tekst";
+"Import" = "uvoz";
+"  Pin Zoom Anchor:" = "Prikvači sidro zumiranja:";
+"Source Text" = "Izvorni tekst";
+"Open Translation Window" = "Otvaranje prozora prijevoda";
+"Configuration Profiles" = "Konfiguracijski profili";
+"Text recognition failed" = "Prepoznavanje teksta nije uspjelo";
+"Continue with Clipboard" = "Nastavite s međuspremnikom";
+"Allow Trackpad Pinch Zoom on Pins" = "Dopusti zumiranje pribadačama na dodirnoj podlozi";
+"Actions in More Tools" = "Radnje u Više alata";
+"Clear Selected Data" = "Obriši odabrane podatke";
+"Could not export configuration." = "Nije moguće izvesti konfiguraciju.";
+"Copy Source" = "Kopiraj izvor";
+"Common Tools" = "Uobičajeni alati";
+"Swap" = "Zamjena";
+"Recognize Text" = "Prepoznavanje teksta";
+"Speak Translation" = "Izgovori prijevod";
+"These are actions rather than drawing tools. Disabling one hides it wherever that action is available." = "Ovo su radnje, a ne alati za crtanje. Onemogućivanjem jednog sakrit ćete ga gdje god je ta radnja dostupna.";
+"Common tools appear in the first row; additional tools move into the More menu. Actions unavailable for the current context do not appear." = "Uobičajeni alati pojavljuju se u prvom redu; dodatni alati premještaju se u izbornik Više. Ne pojavljuju se radnje koje nisu dostupne za trenutni kontekst.";
+"Not enough space for comparison" = "Nema dovoljno prostora za usporedbu";
+"Set the Select Text pin action, translation engine, and privacy policy here. Keyboard shortcuts are in Shortcuts." = "Ovdje postavite akciju pribadače Odaberite tekst, mehanizam za prevođenje i pravila privatnosti. Tipkovnički prečaci nalaze se u Prečacima.";
+"Recognizing Text…" = "Prepoznavanje teksta…";
+"Release %@ to hide magnifier" = "Otpustite %@ da biste sakrili povećalo";
+"Rename" = "Preimenuj";
+"Translate Now" = "Prevedite odmah";
+"Mouse Wheel" = "Kotačić miša";
+"Google translation is disabled in Settings." = "Google prijevod je onemogućen u postavkama.";
+"Could not determine the source language." = "Nije moguće odrediti izvorni jezik.";
+"Copy Text" = "Kopiraj tekst";
+"Selection & Pin Interactions" = "Interakcije odabira i pribadače";
+"Pin zoom anchors to mouse position" = "Pričvrstite sidra zumiranja na položaj miša";
+"OCR & Translation" = "OCR i prijevod";
+"Rotate Clockwise" = "Rotirajte u smjeru kazaljke na satu";

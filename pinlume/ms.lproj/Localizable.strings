@@ -1,0 +1,846 @@
+/* Bahasa Melayu — Pinlume localization
+ *
+ * To add a new language:
+ * 1. Create a new folder: pinlume/<lang-code>.lproj/
+ * 2. Copy this file into that folder
+ * 3. Translate all values (right side of = sign)
+ * 4. Add the language to LanguageManager.availableLanguages in Services/LanguageManager.swift
+ * 5. Add the language code to knownRegions in pinlume.xcodeproj/project.pbxproj
+ * 6. Submit a pull request!
+ *
+ * Keys use the English text. Values should be the translation.
+ * Format strings use %@ for strings, %d for integers.
+ * Keep keyboard shortcuts (like ⌘C) untranslated.
+ * Keep brand names (Pinlume, Google Drive, imgbb, S3) untranslated.
+ */
+
+/* Menu Bar */
+"Capture Area" = "Tangkap Kawasan";
+"Capture Screen" = "Tangkap Skrin";
+"Capture OCR" = "Tangkap OCR";
+"Capture OCR & QR" = "Tangkap OCR & QR";
+"Capture area and read text/QR codes" = "Tangkap kawasan dan baca teks/kod QR";
+"Quick Capture" = "Tangkapan Pantas";
+"Scroll Capture" = "Tangkapan Tatal";
+"Capture Last Area" = "Tangkap Kawasan Terakhir";
+"Capture Delay" = "Lengah Tangkapan";
+"None" = "Tiada";
+"%d seconds" = "%d saat";
+"Record Area" = "Rakam Kawasan";
+"Record Screen" = "Rakam Skrin";
+"Recent Captures" = "Tangkapan Terkini";
+"Show History Panel" = "Tunjuk Panel Sejarah";
+"Open Image..." = "Buka Imej...";
+"Open from Clipboard" = "Buka dari Papan Keratan";
+"Pin from Clipboard" = "Semat dari Papan Keratan";
+"Preferences..." = "Keutamaan...";
+"Check for Updates..." = "Semak Kemas Kini...";
+"Quit Pinlume" = "Keluar Pinlume";
+"No recent captures" = "Tiada tangkapan terkini";
+"Clear History" = "Padam Sejarah";
+
+/* History Panel */
+"Copy" = "Salin";
+"Save As..." = "Simpan Sebagai...";
+"Open in Editor" = "Buka dalam Editor";
+"Pin to Screen" = "Semat ke Skrin";
+"Quick Look" = "Imbas Pantas";
+"Delete" = "Padam";
+"All" = "Semua";
+"Screenshots" = "Tangkapan Skrin";
+"GIFs" = "GIFs";
+"Click to copy · Drag to app" = "Klik untuk salin · Seret ke aplikasi";
+"No captures yet" = "Belum ada tangkapan";
+
+/* Floating Thumbnail */
+"Close All" = "Tutup Semua";
+"Save All to Folder…" = "Simpan Semua ke Folder…";
+"Save" = "Simpan";
+
+/* Editor Top Bar */
+"Zoom In" = "Zum Masuk";
+"Zoom Out" = "Zum Keluar";
+"Zoom" = "Zum";
+"Fit Canvas" = "Muat Kanvas";
+"Crop" = "Pangkas";
+"Flip Horizontal" = "Balik Mendatar";
+"Flip Vertical" = "Balik Menegak";
+"Rotate Left" = "Putar Kiri";
+"Rotate Right" = "Putar Kanan";
+"Add Capture" = "Tambah Tangkapan";
+
+/* Toolbar - Tools */
+"Arrow" = "Anak Panah";
+"Line" = "Garisan";
+"Rectangle" = "Segi Empat";
+"Ellipse" = "Elips";
+"Pencil" = "Pensel";
+"Pencil (Draw)" = "Pensel (Lukis)";
+"Marker" = "Penanda";
+"Text" = "Teks";
+"Number" = "Nombor";
+"Number / Counter" = "Nombor / Pembilang";
+"Stamp / Emoji" = "Setem / Emoji";
+"Censor" = "Sensor";
+"Censor (Pixelate / Blur / Solid)" = "Sensor (Piksel / Kabur / Padu)";
+"Measure" = "Ukur";
+"Measure (px)" = "Ukur (px)";
+"Magnify (Loupe)" = "Besarkan (Kanta)";
+"Highlight" = "Sorot";
+"Highlight (Spotlight)" = "Sorot (Lampu Sorot)";
+"Dim" = "Malapkan";
+"Color Sampler" = "Penyampel Warna";
+"Color Picker" = "Pemilih Warna";
+"Select & Edit" = "Pilih & Sunting";
+"Color" = "Warna";
+
+/* Toolbar - Actions */
+"Copy to Clipboard" = "Salin ke Papan Keratan";
+"Save to File" = "Simpan ke Fail";
+"Save to" = "Simpan ke";
+"Open in Editor Window" = "Buka dalam Tetingkap Editor";
+"Pin on Screen" = "Semat pada Skrin";
+"Pin" = "Semat";
+"Pin (floating window)" = "Semat (tetingkap terapung)";
+"OCR" = "OCR";
+"OCR Text" = "Teks OCR";
+"OCR (extract text)" = "OCR (ekstrak teks)";
+"OCR & QR" = "OCR & QR";
+"Run OCR & QR" = "Jalankan OCR & QR";
+"Text & QR Recognition" = "Pengecaman Teks & QR";
+"QR Code" = "Kod QR";
+"QR Codes" = "Kod QR";
+"Open Link" = "Buka Pautan";
+"Upload" = "Muat Naik";
+"Share" = "Kongsi";
+"Open With" = "Buka Dengan";
+"No Apps Available" = "Tiada Aplikasi Tersedia";
+"No Share Services" = "Tiada Perkhidmatan Kongsi";
+"Undo" = "Buat Asal";
+"Redo" = "Buat Semula";
+"Close" = "Tutup";
+"Remove Background" = "Buang Latar Belakang";
+"Beautify" = "Cantikkan";
+"Adjust" = "Laras";
+"Adjust (Image Effects)" = "Laras (Kesan Imej)";
+"Invert Colors" = "Songsang Warna";
+"Record" = "Rakam";
+"Record screen" = "Rakam skrin";
+"Translate" = "Terjemah";
+"Auto-Redact sensitive data" = "Redak Auto data sensitif";
+"Move Selection" = "Alih Pilihan";
+
+/* Toolbar - Recording */
+"Start Recording" = "Mula Rakaman";
+"Cancel Recording" = "Batal Rakaman";
+"Highlight Mouse Clicks" = "Serlahkan Klik Tetikus";
+"Record System Audio" = "Rakam Audio Sistem";
+"Record Microphone" = "Rakam Mikrofon";
+"Recording Settings" = "Tetapan Rakaman";
+
+/* Tool Options */
+"Size" = "Saiz";
+"Stroke" = "Garisan";
+"Radius" = "Jejari";
+"Start:" = "Mula:";
+"Draw:" = "Lukis:";
+"Auto:" = "Auto:";
+"Fill" = "Isi";
+"Outline" = "Rangka";
+"More Emojis" = "Lagi Emoji";
+"Load Image" = "Muat Imej";
+"Gradient Style" = "Gaya Kecerunan";
+"On" = "Hidup";
+"Text Only" = "Teks Sahaja";
+"All Text" = "Semua Teks";
+"PII" = "PII";
+"Faces" = "Muka";
+"People" = "Orang";
+"Confirm before upload" = "Sahkan sebelum muat naik";
+"Flip" = "Balik";
+"Smooth" = "Lembut";
+"Refined" = "Diperhalusi";
+"Smart" = "Pintar";
+"Padding" = "Pelapik";
+"Shadow" = "Bayang";
+"Right-click to add points" = "Klik kanan untuk tambah titik";
+"Hold 1 auto-vertical  ·  Hold 2 auto-horizontal" = "Tahan 1 auto-menegak  ·  Tahan 2 auto-mendatar";
+
+/* Overlay / Canvas */
+"Click a window  ·  Drag for custom area  ·  F for full screen" = "Klik tetingkap  ·  Seret untuk kawasan tersuai  ·  F untuk skrin penuh";
+"Drag to select  ·  Click for full screen" = "Seret untuk memilih  ·  Klik untuk skrin penuh";
+"Release to annotate and edit" = "Lepaskan untuk anotasi dan sunting";
+"Release to finish" = "Lepaskan untuk selesai";
+"Hold Space to move. Release to annotate and edit" = "Tahan Space untuk alih. Lepaskan untuk anotasi dan sunting";
+"Hold Space to move. Release to finish" = "Tahan Space untuk alih. Lepaskan untuk selesai";
+"Space" = "Space";
+"Window snap: " = "Lekat tetingkap: ";
+"ON" = "HIDUP";
+"OFF" = "MATI";
+"  (Tab to toggle)" = "  (Tab untuk togol)";
+"Right-click to copy" = "Klik kanan untuk salin";
+"Copied %@" = "Disalin %@";
+"Set color %@" = "Tetapkan warna %@";
+"Draw something first to use the move tool." = "Lukis sesuatu dahulu untuk menggunakan alat alih.";
+"Drag to reposition" = "Seret untuk letak semula";
+
+/* Aspect ratio & resolution presets */
+"Aspect ratio & resolution presets" = "Pratetap nisbah aspek & resolusi";
+"Aspect ratio" = "Nisbah aspek";
+"Resolution" = "Resolusi";
+"Freeform" = "Bebas";
+"Units" = "Unit";
+"Keep ratio for next captures" = "Kekalkan nisbah untuk tangkapan seterusnya";
+"Custom · %@" = "Tersuai · %@";
+"Order history by last edit" = "Susun sejarah mengikut suntingan terakhir";
+"Edited screenshots move to the top. Off keeps them in capture order." = "Tangkapan skrin yang disunting akan beralih ke atas. Matikan untuk mengekalkan susunan tangkapan.";
+
+/* Overlay - Popovers */
+"Format:" = "Format:";
+"FPS:" = "FPS:";
+"When done:" = "Apabila selesai:";
+"Open editor" = "Buka editor";
+"Show in Finder" = "Tunjuk dalam Finder";
+"Copy to clipboard" = "Salin ke papan keratan";
+
+/* Preferences - General */
+"Pinlume Preferences" = "Keutamaan Pinlume";
+"General" = "Umum";
+"Tools" = "Alatan";
+"Recording" = "Rakaman";
+"About" = "Perihal";
+"Shortcuts" = "Pintasan";
+"Uploads" = "Muat Naik";
+"Language" = "Bahasa";
+"Language:" = "Bahasa:";
+"Restart the app to fully apply the new language." = "Mulakan semula aplikasi untuk menerapkan bahasa baharu sepenuhnya.";
+"Capture" = "Tangkapan";
+"Play sound on capture" = "Main bunyi semasa tangkapan";
+"Play sound on copy" = "Main bunyi semasa salin";
+"Remember last selected tool" = "Ingat alat pilihan terakhir";
+"Show floating thumbnail after capture" = "Tunjuk lakaran kecil terapung selepas tangkapan";
+"Launch at login" = "Lancar semasa log masuk";
+"Show snap alignment guides" = "Tunjuk panduan penjajaran lekat";
+"Snap selection edges to image boundaries" = "Lekatkan tepi pilihan pada sempadan imej";
+"Capture mouse cursor in screenshot" = "Tangkap kursor tetikus dalam tangkapan skrin";
+"Double-click selection to copy" = "Dwiklik pilihan untuk menyalin";
+"Hide capture instructions" = "Sembunyikan arahan tangkapan skrin";
+"Disable shadow outside selection" = "Lumpuhkan bayang di luar pilihan";
+"Show shortcuts in tooltips" = "Tunjuk pintasan dalam tooltip";
+"Use window title in saved filename" = "Guna tajuk tetingkap dalam nama fail yang disimpan";
+"Hide menu bar icon" = "Sembunyikan ikon bar menu";
+"Hotkeys still work. To show the icon again, re-launch Pinlume." = "Kekunci panas masih berfungsi. Untuk menunjukkan ikon semula, lancar semula Pinlume.";
+"Menu Bar Order" = "Susunan Bar Menu";
+"Choose the order of capture actions in the Pinlume menu bar menu." = "Pilih susunan tindakan tangkapan dalam menu bar menu Pinlume.";
+"Move up" = "Alih ke atas";
+"Move down" = "Alih ke bawah";
+"Check for updates automatically" = "Semak kemas kini secara automatik";
+"Check for beta updates" = "Semak kemas kini beta";
+"Thumbnail" = "Lakaran Kecil";
+"  Dismiss after:" = "  Ketepikan selepas:";
+"seconds before auto-dismiss (0 = never)" = "saat sebelum ketepikan auto (0 = tidak pernah)";
+"  Multiple previews:" = "  Berbilang pratonton:";
+"Stack (keep all)" = "Tindanan (simpan semua)";
+"Replace (show only latest)" = "Ganti (tunjuk terkini sahaja)";
+"Output" = "Output";
+"Image format:" = "Format imej:";
+"Quality:" = "Kualiti:";
+"%d%%" = "%d%%";
+"Save at standard resolution (1x)" = "Simpan pada resolusi standard (1x)";
+"Halves dimensions on Retina displays, ~4x smaller files" = "Separuh dimensi pada paparan Retina, ~4x fail lebih kecil";
+"Embed sRGB color profile" = "Benamkan profil warna sRGB";
+"Ensures consistent colors across different displays" = "Memastikan warna konsisten merentas paparan berbeza";
+"Screenshot History" = "Sejarah Tangkapan Skrin";
+"History size:" = "Saiz sejarah:";
+"screenshots kept on disk (0 = off)" = "tangkapan skrin disimpan pada cakera (0 = mati)";
+"Save Directory" = "Direktori Simpan";
+"Save folder:" = "Folder simpan:";
+"Browse…" = "Layari…";
+"Appearance" = "Penampilan";
+"Accent color:" = "Warna aksen:";
+"Icon color:" = "Warna ikon:";
+"Background color:" = "Warna latar belakang:";
+"Reset" = "Set Semula";
+"Menu bar icon:" = "Ikon bar menu:";
+"Custom symbol" = "Simbol tersuai";
+"Default" = "Lalai";
+"Enter any SF Symbol name (e.g. camera.fill) or pick a preset. Browse names in Apple's SF Symbols app. Invalid names fall back to the default icon." = "Masukkan mana-mana nama SF Symbol (cth. camera.fill) atau pilih pratetap. Layari nama dalam aplikasi SF Symbols Apple. Nama tidak sah akan kembali ke ikon lalai.";
+"OCR Capture:" = "Tangkapan OCR:";
+"OCR & QR Capture:" = "Tangkapan OCR & QR:";
+"Save action:" = "Tindakan simpan:";
+"Ask where to save" = "Tanya lokasi simpan";
+"Save to default folder" = "Simpan ke folder lalai";
+"Show window + copy to clipboard" = "Tunjuk tetingkap + salin ke papan keratan";
+"Show window only" = "Tunjuk tetingkap sahaja";
+"Copy to clipboard only" = "Salin ke papan keratan sahaja";
+"Enter / Quick Capture:" = "Enter / Tangkapan Pantas:";
+"Save to file" = "Simpan ke fail";
+"Save + copy to clipboard" = "Simpan + salin ke papan keratan";
+"OCR Action" = "Tindakan OCR";
+
+/* Preferences - Shortcuts */
+"Keyboard Shortcuts" = "Pintasan Papan Kekunci";
+"Hotkeys" = "Kekunci Panas";
+"Clear shortcut" = "Padam pintasan";
+"Press keys..." = "Tekan kekunci...";
+"Waiting..." = "Menunggu...";
+
+/* Preferences - Tools */
+"Annotation Tools" = "Alatan Anotasi";
+"Hidden tools are removed from the bottom toolbar." = "Alatan tersembunyi dibuang dari bar alatan bawah.";
+"Capture Actions" = "Tindakan Tangkapan";
+"Bottom Toolbar Actions" = "Tindakan Bar Alatan Bawah";
+"Hidden actions are removed from the bottom toolbar." = "Tindakan tersembunyi dibuang dari bar alatan bawah.";
+"Editor Actions" = "Tindakan Editor";
+"Right Toolbar Actions" = "Tindakan Bar Alatan Kanan";
+"Hidden actions are removed from the right toolbar." = "Tindakan tersembunyi dibuang dari bar alatan kanan.";
+
+/* Preferences - Recording */
+"Frame rate:" = "Kadar bingkai:";
+"After recording:" = "Selepas rakaman:";
+"Save recording to:" = "Simpan rakaman ke:";
+"Save Recording" = "Simpan Rakaman";
+"Clear" = "Kosongkan";
+"Max height:" = "Tinggi maks:";
+"px (0 = unlimited)" = "px (0 = tiada had)";
+"Behavior" = "Tingkah Laku";
+"Auto-scroll (sends synthetic scroll events)" = "Auto-tatal (menghantar peristiwa tatal sintetik)";
+"Detect fixed/sticky headers" = "Kesan pengepala tetap/lekat";
+"Scroll speed:" = "Kelajuan tatal:";
+"Slow" = "Perlahan";
+"Medium" = "Sederhana";
+"Fast" = "Laju";
+"Very fast" = "Sangat laju";
+"5 fps" = "5 fps";
+"10 fps" = "10 fps";
+"15 fps" = "15 fps";
+"24 fps" = "24 fps";
+"30 fps" = "30 fps";
+"60 fps" = "60 fps";
+"120 fps" = "120 fps";
+"MP4 (H.264)" = "MP4 (H.264)";
+"GIF" = "GIF";
+
+/* Preferences - Upload */
+"Upload Service" = "Perkhidmatan Muat Naik";
+"Upload Provider" = "Pembekal Muat Naik";
+"Provider:" = "Pembekal:";
+"Google Drive" = "Google Drive";
+"Google Drive (images + videos)" = "Google Drive (imej + video)";
+"imgbb (images only)" = "imgbb (imej sahaja)";
+"S3-Compatible (images + videos)" = "S3-Compatible (imej + video)";
+"S3-Compatible Storage" = "Storan S3-Compatible";
+"Sign In with Google" = "Log Masuk dengan Google";
+"Sign Out" = "Log Keluar";
+"Signed in" = "Sudah log masuk";
+"Not signed in" = "Belum log masuk";
+"Account:" = "Akaun:";
+"Test Connection" = "Uji Sambungan";
+"Fill in endpoint, bucket, and credentials first" = "Isi endpoint, bucket, dan kelayakan dahulu";
+"Testing..." = "Menguji...";
+"Connection successful!" = "Sambungan berjaya!";
+"Leave empty to use default" = "Biarkan kosong untuk gunakan lalai";
+"Endpoint:" = "Endpoint:";
+"Region:" = "Rantau:";
+"Bucket:" = "Bucket:";
+"Access Key:" = "Kunci Akses:";
+"Secret Key:" = "Kunci Rahsia:";
+"Public URL:" = "URL Awam:";
+"Path Prefix:" = "Awalan Laluan:";
+"API key:" = "Kunci API:";
+"Upload History" = "Sejarah Muat Naik";
+"No uploads yet." = "Belum ada muat naik.";
+"Base URL for public access. If empty, the S3 endpoint URL is used (may not be publicly accessible)." = "URL asas untuk akses awam. Jika kosong, URL endpoint S3 digunakan (mungkin tidak boleh diakses secara awam).";
+"A shared key is included — get your own free key at imgbb.com/api if you hit rate limits. Images only (no video support)." = "Kunci dikongsi disertakan — dapatkan kunci percuma anda sendiri di imgbb.com/api jika anda terkena had kadar. Imej sahaja (tiada sokongan video).";
+"Works with AWS S3, Cloudflare R2, MinIO, DigitalOcean Spaces, Backblaze B2, and other S3-compatible services. Supports images and videos." = "Berfungsi dengan AWS S3, Cloudflare R2, MinIO, DigitalOcean Spaces, Backblaze B2, dan perkhidmatan serasi S3 yang lain. Menyokong imej dan video.";
+"Configure S3 in Preferences" = "Konfigurasi S3 dalam Keutamaan";
+"Sign in to Google Drive in Preferences" = "Log masuk ke Google Drive dalam Keutamaan";
+"Video upload requires Google Drive or S3" = "Muat naik video memerlukan Google Drive atau S3";
+
+/* Preferences - About */
+"Pinlume" = "Pinlume";
+"Version %@ (%@)" = "Versi %@ (%@)";
+"Made by" = "Dibuat oleh";
+"Licensed under the GPLv3" = "Dilesenkan di bawah GPLv3";
+"A free, open-source screenshot & screen recording tool for macOS.\nFully native — built with Swift and AppKit." = "Alat tangkapan skrin & rakaman skrin sumber terbuka percuma untuk macOS.\nSepenuhnya natif — dibina dengan Swift dan AppKit.";
+
+/* Alerts */
+"No Image on Clipboard" = "Tiada Imej pada Papan Keratan";
+"No Image or Text on Clipboard" = "Tiada Imej atau Teks pada Papan Keratan";
+"Copy an image to the clipboard first, then try again." = "Salin imej ke papan keratan dahulu, kemudian cuba lagi.";
+"Copy an image or text to the clipboard first, then try again." = "Salin imej atau teks ke papan keratan dahulu, kemudian cuba lagi.";
+"OK" = "OK";
+"Accessibility Access Required" = "Akses Kebolehcapaian Diperlukan";
+"Pinlume needs Accessibility permission to auto-scroll other apps. Please grant access in System Settings, then try again." = "Pinlume memerlukan kebenaran Kebolehcapaian untuk auto-tatal aplikasi lain. Sila berikan akses dalam Tetapan Sistem, kemudian cuba lagi.";
+"Pinlume needs Accessibility permission for scroll capture. Please grant access in System Settings, then try again." = "Pinlume memerlukan kebenaran Kebolehcapaian untuk tangkapan tatal. Sila berikan akses dalam Tetapan Sistem, kemudian cuba lagi.";
+"Open Settings" = "Buka Tetapan";
+"Cancel" = "Batal";
+"Microphone Access Required" = "Akses Mikrofon Diperlukan";
+"Pinlume needs microphone permission to record voice audio. Open System Settings to grant access." = "Pinlume memerlukan kebenaran mikrofon untuk merakam audio suara. Buka Tetapan Sistem untuk memberikan akses.";
+"Upload to Google Drive?" = "Muat naik ke Google Drive?";
+"Upload to S3?" = "Muat naik ke S3?";
+"Upload to imgbb.com?" = "Muat naik ke imgbb.com?";
+"Your screenshot will be uploaded." = "Tangkapan skrin anda akan dimuat naik.";
+
+/* Permission Onboarding */
+"Welcome to Pinlume" = "Selamat datang ke Pinlume";
+"Pinlume needs one permission" = "Pinlume memerlukan satu kebenaran";
+"Screen Recording not yet granted" = "Rakaman Skrin belum diberikan";
+"Screen Recording granted!" = "Rakaman Skrin diberikan!";
+"Enable Pinlume, then try taking a screenshot" = "Dayakan Pinlume, kemudian cuba ambil tangkapan skrin";
+"Open Screen Recording Settings" = "Buka Tetapan Rakaman Skrin";
+"Continue" = "Teruskan";
+
+/* OCR Window */
+"Text Recognition" = "Pengecaman Teks";
+"Translate to:" = "Terjemah ke:";
+"%d chars · %d words" = "%d aksara · %d perkataan";
+"Copy  ⌘↩" = "Salin  ⌘↩";
+"AI Search" = "Carian AI";
+"Show Original" = "Tunjuk Asal";
+"Translation Failed" = "Terjemahan Gagal";
+"Translation" = "Terjemahan";
+"(No text detected in the selected area)" = "(Tiada teks dikesan dalam kawasan yang dipilih)";
+
+/* Upload Toast */
+"URL copied to the clipboard" = "URL disalin ke papan keratan";
+"Uploading... %d%%" = "Memuat naik... %d%%";
+"Upload failed: %@" = "Muat naik gagal: %@";
+"Uploaded! Link copied." = "Dimuat naik! Pautan disalin.";
+"Uploading to %@... %d%%" = "Memuat naik ke %@... %d%%";
+"Open" = "Buka";
+
+/* Recording Toast */
+"Recording saved" = "Rakaman disimpan";
+"%@ • Recording saved" = "%@ • Rakaman disimpan";
+"Copy Path" = "Salin Laluan";
+"Path copied!" = "Laluan disalin!";
+
+/* Video Editor */
+"Pinlume Video Editor" = "Editor Video Pinlume";
+"%@ selected" = "%@ dipilih";
+"Exporting..." = "Mengeksport...";
+"Export failed" = "Eksport gagal";
+"Saved to %@" = "Disimpan ke %@";
+"Save failed" = "Simpan gagal";
+
+/* Barcode Detector */
+/* "Open" and "Copy" are shared with other sections */
+
+/* Save Panel */
+"Save As..." = "Simpan Sebagai...";
+"Choose a folder" = "Pilih folder";
+"Save All to Folder…" = "Simpan Semua ke Folder…";
+
+/* Scroll Capture HUD */
+"Auto Scroll" = "Auto Tatal";
+"Stop" = "Berhenti";
+"Scrolling..." = "Menatal...";
+
+/* Effects Picker (Adjust popover) */
+"Presets" = "Pratetap";
+"Adjustments" = "Pelarasan";
+"Brightness" = "Kecerahan";
+"Contrast" = "Kontras";
+"Saturation" = "Ketepuan";
+"Sharpness" = "Ketajaman";
+
+/* Time Ago */
+"just now" = "baru sahaja";
+"%ds ago" = "%ds lalu";
+"%dm ago" = "%dm lalu";
+"%dh ago" = "%dj lalu";
+
+/* Hotkey Labels */
+"History" = "Sejarah";
+
+/* Preferences - Shortcuts note */
+"Click \"Record\" and press a key combination with at least one modifier (⌘, ⌥, ⌃, ⇧) to set a shortcut." = "Klik \"Record\" dan tekan kombinasi kekunci dengan sekurang-kurangnya satu pengubah suai (⌘, ⌥, ⌃, ⇧) untuk menetapkan pintasan.";
+
+/* Recording — GIF Processing */
+"Processing GIF…" = "Memproses GIF…";
+
+/* Recording — Input Monitoring Permission */
+"Input Monitoring Required" = "Pemantauan Input Diperlukan";
+"Pinlume needs Input Monitoring permission to show keystrokes during recording. Please grant access in System Settings, then try again." = "Pinlume memerlukan kebenaran Pemantauan Input untuk menunjukkan ketukan kekunci semasa rakaman. Sila berikan akses dalam System Settings, kemudian cuba lagi.";
+"Pinlume needs Accessibility permission to show keystrokes during recording. Please grant access in System Settings, then try again." = "Pinlume memerlukan kebenaran Kebolehcapaian untuk menunjukkan ketukan kekunci semasa rakaman. Sila berikan akses dalam System Settings, kemudian cuba lagi.";
+
+/* Recording — Keystroke Overlay */
+"Show Keystrokes" = "Tunjuk Ketukan Kekunci";
+"Shortcuts Only" = "Pintasan Sahaja";
+"All Keystrokes" = "Semua Ketukan Kekunci";
+
+/* Recording — Settings Popover */
+"Delay:" = "Lengah:";
+
+/* Video Editor */
+"Copied to clipboard!" = "Disalin ke papan keratan!";
+
+/* Webcam Overlay */
+"Webcam Overlay" = "Tindanan Webcam";
+"Camera Access Required" = "Akses Kamera Diperlukan";
+"Pinlume needs camera permission for the webcam overlay. Open System Settings to grant access." = "Pinlume memerlukan kebenaran kamera untuk tindanan webcam. Buka Tetapan Sistem untuk memberikan akses.";
+"Webcam" = "Webcam";
+"Bottom Right" = "Kanan Bawah";
+"Bottom Left" = "Kiri Bawah";
+"Top Right" = "Kanan Atas";
+"Top Left" = "Kiri Atas";
+"Small" = "Kecil";
+"Large" = "Besar";
+"Webcam Size Small" = "Kecil";
+"Webcam Size Medium" = "Sederhana";
+"Webcam Size Large" = "Besar";
+"Webcam Size Extra Large" = "Sangat Besar";
+"Circle" = "Bulatan";
+"Rounded Rectangle" = "Segi Empat Bulat";
+"Cam pos:" = "Pos. kam:";
+"Cam size:" = "Saiz kam:";
+"Cam shape:" = "Bentuk kam:";
+
+/* Settings */
+"Settings" = "Tetapan";
+"Offline build: upload and cloud storage integrations are removed. Update checks may still connect to Pinlume's update server. Screenshots and recordings stay local unless you share or save them yourself." = "Binaan luar talian: integrasi muat naik dan storan awan dialih keluar. Semakan kemas kini mungkin masih menyambung ke pelayan kemas kini Pinlume. Tangkapan skrin dan rakaman kekal setempat melainkan anda berkongsi atau menyimpannya sendiri.";
+"Settings..." = "Tetapan...";
+"Pinlume Settings" = "Tetapan Pinlume";
+"Also open in Editor" = "Buka juga dalam Editor";
+"Hide controls" = "Sembunyikan kawalan";
+"Hide recording controls" = "Sembunyikan kawalan rakaman";
+"Stop recording from the menu bar icon instead." = "Hentikan rakaman dari ikon bar menu sebaliknya.";
+"Pixelate" = "Piksel";
+"Blur" = "Kabur";
+"Solid" = "Padu";
+"Erase" = "Padam";
+"Done" = "Selesai";
+"Do nothing" = "Tidak buat apa-apa";
+"Overlay / Editor Shortcuts" = "Pintasan Tindanan / Editor";
+"Set" = "Tetapkan";
+"Press..." = "Tekan...";
+"Reset to default" = "Set semula ke lalai";
+"Press a single key to assign it as the shortcut for that tool. These work when the overlay or editor is active." = "Tekan satu kekunci untuk menetapkannya sebagai pintasan untuk alat tersebut. Ini berfungsi apabila tindanan atau editor aktif.";
+"Keep Separate" = "Kekal Berasingan";
+"Merge Audio" = "Gabung Audio";
+"Audio Tracks" = "Trek Audio";
+"Adjust volume for each audio track:" = "Laraskan kelantangan untuk setiap trek audio:";
+"Microphone:" = "Mikrofon:";
+"System audio:" = "Audio sistem:";
+"Loupe" = "Kanta";
+"Stamp" = "Setem";
+"Unlimited" = "Tanpa had";
+
+/* Save/Discard, Recording, Translation Engine, Upload, Inspector */
+"Save changes?" = "Simpan perubahan?";
+"Your annotations will be lost if you close without saving." = "Anotasi anda akan hilang jika anda menutup tanpa menyimpan.";
+"Save & Close" = "Simpan & Tutup";
+"Discard" = "Buang";
+"Stop Recording" = "Hentikan Rakaman";
+"Pause" = "Jeda";
+"Resume" = "Sambung";
+"Engine:" = "Enjin:";
+"Google Translate" = "Google Translate";
+"Apple (on-device)" = "Apple (pada peranti)";
+"Apple translation is faster and works offline. Google Translate supports more languages." = "Terjemahan Apple lebih pantas dan berfungsi luar talian. Google Translate menyokong lebih banyak bahasa.";
+"Download language packs in System Settings…" = "Muat turun pek bahasa dalam Tetapan Sistem…";
+"Configure S3 in Settings" = "Konfigurasi S3 dalam Tetapan";
+"Sign in to Google Drive in Settings" = "Log masuk ke Google Drive dalam Tetapan";
+"Position:" = "Kedudukan:";
+"  Position:" = "  Kedudukan:";
+"Size:" = "Saiz:";
+"Shape:" = "Bentuk:";
+
+"Same as screenshots" = "Sama seperti tangkapan skrin";
+"  Preview size:" = "  Saiz pratonton:";
+"(0 = off)" = "(0 = mati)";
+"Clear All" = "Kosongkan Semua";
+"Clear History?" = "Kosongkan Sejarah?";
+"This will permanently delete all screenshots from history." = "Ini akan memadamkan semua tangkapan skrin daripada sejarah secara kekal.";
+"Click \"Set\" and press a key combination with at least one modifier (⌘, ⌥, ⌃, ⇧) to set a shortcut." = "Klik \"Tetapkan\" dan tekan kombinasi kekunci dengan sekurang-kurangnya satu pengubah suai (⌘, ⌥, ⌃, ⇧) untuk menetapkan pintasan.";
+"Files are uploaded to a \"Pinlume\" folder in your Google Drive. Everything stays private — nothing is shared publicly." = "Fail dimuat naik ke folder \"Pinlume\" dalam Google Drive anda. Semua maklumat kekal peribadi — tiada apa yang dikongsi secara awam.";
+
+"Pressure" = "Tekanan";
+
+/* Added for v4.1.0-beta.3 — video editor, effects, open-video, shortcuts help */
+"Open Video..." = "Buka Video...";
+"Choose a video to open in Pinlume editor" = "Pilih video untuk dibuka dalam editor Pinlume";
+"Click to add effects" = "Klik untuk menambah kesan";
+"Add Zoom" = "Tambah Zum";
+"Add Censor" = "Tambah Sensor";
+"Add Cut" = "Tambah Potongan";
+"Add Speed" = "Tambah Kelajuan";
+"Add Freeze" = "Tambah Bekukan";
+"Add Text" = "Tambah Teks";
+"Delete Zoom" = "Padam Zum";
+"Delete Censor" = "Padam Sensor";
+"Delete Cut" = "Padam Potongan";
+"Delete Speed" = "Padam Kelajuan";
+"Delete Freeze" = "Padam Bekukan";
+"Delete Text" = "Padam Teks";
+"Edit Text…" = "Edit Teks…";
+"Huge" = "Sangat Besar";
+"Bold" = "Tebal";
+"Italic" = "Condong";
+"Alignment" = "Penjajaran";
+"Left" = "Kiri";
+"Center" = "Tengah";
+"Right" = "Kanan";
+"Text Color" = "Warna Teks";
+"Background Color" = "Warna Latar";
+"Rounded" = "Bulat";
+"Custom…" = "Tersuai…";
+"Transparent" = "Lutsinar";
+"Black" = "Hitam";
+"White" = "Putih";
+"Yellow" = "Kuning";
+"Red" = "Merah";
+"Green" = "Hijau";
+"Blue" = "Biru";
+"Untitled" = "Tanpa Tajuk";
+"Add effect" = "Tambah kesan";
+"Fade" = "Pudar";
+"High" = "Tinggi";
+"Low" = "Rendah";
+"Not enough room here" = "Tidak cukup ruang di sini";
+"Copied!" = "Disalin!";
+"Converting to GIF…" = "Menukar ke GIF…";
+"GIF conversion failed" = "Penukaran GIF gagal";
+"No video track found" = "Tiada trek video ditemui";
+"Preview:" = "Pratonton:";
+"Copy Screen Info" = "Salin Maklumat Skrin";
+"Copies display and capture diagnostics to clipboard" = "Menyalin diagnostik paparan dan tangkapan ke papan keratan";
+"Accent" = "Aksen";
+"Icon" = "Ikon";
+"Background" = "Latar Belakang";
+"Custom" = "Tersuai";
+"Theme:" = "Tema:";
+"Application" = "Aplikasi";
+"Capture area and extract text" = "Tangkap kawasan dan ekstrak teks";
+"Capture the full screen" = "Tangkap skrin penuh";
+"Counter for multi-screen captures" = "Pembilang untuk tangkapan berbilang skrin";
+"8-character random string (e.g. k3j7x9q2)" = "Rentetan rawak 8 aksara (cth. k3j7x9q2)";
+"Filename Template Tokens" = "Token Templat Nama Fail";
+"Filename tokens" = "Token nama fail";
+"Filename:" = "Nama fail:";
+"Open an image file in the editor" = "Buka fail imej dalam editor";
+"Open the recent captures overlay" = "Buka tindanan tangkapan terkini";
+"Open this settings window" = "Buka tetingkap tetapan ini";
+"Quick capture (uses your Enter action)" = "Tangkapan pantas (menggunakan tindakan Enter anda)";
+"Re-capture the last selected area" = "Tangkap semula kawasan yang dipilih terakhir";
+"Screenshots only — captured window title (blank otherwise)" = "Tangkapan skrin sahaja — tajuk tetingkap yang ditangkap (kosong sebaliknya)";
+"Show available filename tokens" = "Tunjuk token nama fail yang tersedia";
+"Show supported URL scheme commands" = "Tunjuk arahan skema URL yang disokong";
+"Start area capture" = "Mulakan tangkapan kawasan";
+"Start area recording" = "Mulakan rakaman kawasan";
+"Start full-screen recording" = "Mulakan rakaman skrin penuh";
+"Start scroll capture" = "Mulakan tangkapan tatal";
+"Stop the current recording" = "Hentikan rakaman semasa";
+"Supported URL Scheme Commands" = "Arahan Skema URL yang Disokong";
+"The file extension is appended automatically. Slashes and colons in {window} become dashes." = "Sambungan fail ditambah secara automatik. Garis miring dan titik bertindih dalam {window} menjadi sengkang.";
+"Trigger Pinlume from Raycast, Alfred, Shortcuts, or any tool that opens URLs." = "Cetuskan Pinlume dari Raycast, Alfred, Shortcuts, atau mana-mana alat yang membuka URL.";
+"URL scheme info" = "Maklumat skema URL";
+"Enable pinlume:// URL scheme" = "Dayakan skema URL pinlume://";
+"sec (0 = never)" = "saat (0 = tidak pernah)";
+
+/* Localized current UI keys. Existing translations above are preserved. */
+"Plus build: personal build with update checks disabled. Preferences, history, and permissions are separate from the original Pinlume app." = "Binaan tambahan: binaan peribadi dengan semakan kemas kini dilumpuhkan. Pilihan, sejarah dan kebenaran adalah berasingan daripada apl Pinlume asal.";
+"Light" = "Cahaya";
+"Press Option to hide magnifier" = "Tekan Pilihan untuk menyembunyikan pembesar";
+"Changes to the selected profile are saved automatically." = "Perubahan pada profil yang dipilih disimpan secara automatik.";
+"Show Pin Shadow" = "Tunjukkan Pin Shadow";
+"Arrow Keys" = "Kekunci Anak panah";
+"Source Language" = "Bahasa Sumber";
+"Translation Pin" = "Pin Terjemahan";
+"Color Scheme:" = "Skim Warna:";
+"Text Recognition / QR" = "Pengecaman Teks / QR";
+"Basic" = "asas";
+"Full" = "penuh";
+"Menu Bar Menu" = "Menu Bar Menu";
+"Screenshot history and editable annotations" = "Sejarah tangkapan skrin dan anotasi boleh diedit";
+"Press Shift to switch RGB/HEX" = "Tekan Shift untuk menukar RGB/HEX";
+"Clipboard image backups" = "Sandaran imej papan klip";
+"Double-click to Toggle Thumbnail" = "Klik dua kali untuk Togol Thumbnail";
+"Compare" = "Bandingkan";
+"Apple translation does not support %@ → %@." = "Terjemahan Apple tidak menyokong %@ → %@.";
+"Profile:" = "Profil:";
+"Move to Applications" = "Beralih ke Aplikasi";
+"Filled Rectangle" = "Segiempat Terisi";
+"Google translation is unavailable because sending text is disabled." = "Terjemahan Google tidak tersedia kerana penghantaran teks dilumpuhkan.";
+"Adjust Area and Edit" = "Laraskan Kawasan dan Edit";
+"Clear Local Data…" = "Kosongkan Data Setempat…";
+"Swap Languages" = "Tukar Bahasa";
+"Ignore window occlusion" = "Abaikan oklusi tingkap";
+"Graphite Blue" = "Biru Grafit";
+"Copy Original" = "Salin Asal";
+"Pin Shadow" = "Bayang Pin";
+"Translation Window" = "Tetingkap Terjemahan";
+"Show Translation" = "Tunjukkan Terjemahan";
+"Enable %@:// URL scheme" = "Dayakan %@:// skema URL";
+"Disabled by default. Keeps up to 7 days or 2 MB; never writes screenshots, OCR text, clipboard contents, or keys." = "Dilumpuhkan secara lalai. Menyimpan sehingga 7 hari atau 2 MB; tidak pernah menulis tangkapan skrin, teks OCR, kandungan papan keratan atau kekunci.";
+"Strength" = "kekuatan";
+"Auto-Redact Sensitive Information" = "Auto-Redact Maklumat Sensitif";
+"More Tools" = "Lebih Banyak Alat";
+"Move Magnifier Sample Point 1 Pixel" = "Gerakkan Titik Sampel Pembesar 1 Piksel";
+"Translating…" = "Menterjemah…";
+"Pin Scroll Zoom" = "Zum Tatal Pin";
+"Copy Text (shown for text pins only)" = "Salin Teks (ditunjukkan untuk pin teks sahaja)";
+"Copy Pinned Text" = "Salin Teks Disemat";
+"Forest" = "Hutan";
+"Show floating window after Quick Capture" = "Tunjukkan tetingkap terapung selepas Tangkapan Pantas";
+"Brush" = "Berus";
+"Allow Scroll Zoom on Pins" = "Benarkan Zum Tatal pada Pin";
+"Could not copy configuration." = "Tidak dapat menyalin konfigurasi.";
+"Allow sending text to Google Translate" = "Benarkan menghantar teks ke Terjemahan Google";
+"Export…" = "Eksport…";
+"Choose local data to clear" = "Pilih data setempat untuk dikosongkan";
+"Delete Configuration?" = "Padamkan Konfigurasi?";
+"Non-Drawing Actions" = "Tindakan Bukan Lukisan";
+"Restored pins (closes current pins immediately)" = "Pin yang dipulihkan (menutup pin semasa serta-merta)";
+"Professional" = "Profesional";
+"Move to More Tools" = "Beralih ke Lebih Banyak Alat";
+"Translation failed; original text shown." = "Terjemahan gagal; teks asal ditunjukkan.";
+"Target Language" = "Bahasa Sasaran";
+"About Pinlume" = "Mengenai Pinlume";
+"No text found" = "Tiada teks ditemui";
+"Automatic" = "Automatik";
+"Select Text" = "Pilih Teks";
+"Move Down" = "Bergerak ke Bawah";
+"Don't ask again" = "Jangan tanya lagi";
+"Space to move. Release to annotate and edit" = "Ruang untuk bergerak. Keluarkan untuk menganotasi dan mengedit";
+"Transparent Annotation" = "Anotasi Telus";
+"Speak Source" = "Cakap Sumber";
+"Press %@ to move selection 1 pixel" = "Tekan %@ untuk mengalihkan pilihan 1 piksel";
+"Pin Scroll Opacity" = "Kelegapan Tatal Pin";
+"OCR Pin" = "Pin OCR";
+"Double-click" = "Klik dua kali";
+"Rename Configuration" = "Namakan semula Konfigurasi";
+"When shortcuts conflict, the settings list is matched from top to bottom and the first entry takes priority." = "Apabila pintasan bercanggah, senarai tetapan dipadankan dari atas ke bawah dan entri pertama diutamakan.";
+"Original / Translation" = "Asal / Terjemahan";
+"Move Toolbar" = "Gerakkan Bar Alat";
+"Beautify Screenshot" = "Cantikkan Tangkapan Skrin";
+"Opacity %d%%" = "Kelegapan %d%%";
+"Configuration" = "Konfigurasi";
+"Press %@ to show/hide magnifier" = "Tekan %@ untuk menunjukkan/menyembunyikan pembesar";
+"Anchor to Mouse Position" = "Sauh kepada Kedudukan Tetikus";
+"Press C to copy color" = "Tekan C untuk menyalin warna";
+"Import…" = "Import…";
+"Apple translation language availability is unknown." = "Ketersediaan bahasa terjemahan Apple tidak diketahui.";
+"Unable to capture selection" = "Tidak dapat menangkap pilihan";
+"Translated Text" = "Teks Terjemahan";
+"Show partial image in compact Pin" = "Tunjukkan imej separa dalam Pin padat";
+"Translation complete" = "Terjemahan selesai";
+"Show Original / Translation" = "Tunjukkan Asal / Terjemahan";
+"Languages swapped; edited translation was preserved" = "Bahasa bertukar; terjemahan yang disunting telah dipelihara";
+"Image Adjustments" = "Pelarasan Imej";
+"Hide All Pins" = "Sembunyikan Semua Pin";
+"Make Common" = "Jadikan Biasa";
+"Storage & Diagnostics" = "Storan & Diagnostik";
+"Size %d%%" = "Saiz %d%%";
+"Enter a new name for this custom configuration." = "Masukkan nama baharu untuk konfigurasi tersuai ini.";
+"Preparing full window…" = "Menyediakan tetingkap penuh…";
+"This affects both the capture selection toolbar and pin toolbar. Common tools appear in the first row; additional tools move into the More menu." = "Ini menjejaskan kedua-dua bar alat pemilihan tangkapan dan bar alat pin. Alat biasa muncul di baris pertama; alatan tambahan beralih ke menu Lagi.";
+"Pinlume needs Accessibility permission to translate selected text. Open System Settings to grant access. If Pinlume is not listed, click the + button and choose the running Pinlume app." = "Pinlume memerlukan kebenaran Kebolehaksesan untuk menterjemah teks yang dipilih. Buka Tetapan Sistem untuk memberikan akses. Jika Pinlume tidak disenaraikan, klik butang + dan pilih apl Pinlume yang sedang berjalan.";
+"These shortcuts work only in a capture selection or selected pin; on-screen hints follow the current settings." = "Pintasan ini hanya berfungsi dalam pemilihan tangkapan atau pin terpilih; petunjuk pada skrin mengikut tetapan semasa.";
+"Copy Configuration" = "salin";
+"Deep Teal" = "Deep Teal";
+"Could not apply configuration profile." = "Tidak dapat menggunakan profil konfigurasi.";
+"Switch Magnifier RGB/HEX" = "Tukar Pembesar RGB/HEX";
+"Anchor to Top Left" = "Sauh ke Kiri Atas";
+"Amber" = "Amber";
+"Configuration:" = "Konfigurasi:";
+"Selectable Text Capture" = "Tangkapan Teks Boleh Dipilih";
+"Hide/Show All Pins" = "Sembunyikan/Tunjukkan Semua Pin";
+"Unable to capture full window" = "Tidak dapat menangkap tetingkap penuh";
+"Toolbar Layout" = "Reka Letak Bar Alat";
+"Move Up" = "Bergerak Ke Atas";
+"Enable Hotkeys" = "Dayakan Kekunci Panas";
+"Choose an image to pin to screen" = "Pilih imej untuk disematkan pada skrin";
+"OCR Selection" = "Pemilihan OCR";
+"%@ is running from a disk image. Move it to your Applications folder for stable permissions and the best experience." = "%@ dijalankan daripada imej cakera. Alihkannya ke folder Aplikasi anda untuk mendapatkan kebenaran yang stabil dan pengalaman terbaik.";
+"System Default" = "Lalai Sistem";
+"Midnight Indigo" = "Indigo tengah malam";
+"Shortcut unavailable (error %d)" = "Pintasan tidak tersedia (ralat %d)";
+"Auto Detect" = "Auto Mengesan";
+"Copy of %@" = "Salinan %@";
+"Choose which actions appear in the status bar menu and arrange the order of common and additional tools. Settings, version, and quit remain fixed." = "Pilih tindakan yang muncul dalam menu bar status dan susun susunan alat biasa dan tambahan. Tetapan, versi dan berhenti kekal tetap.";
+"Sentence Comparison" = "Perbandingan Ayat";
+"Could not rename configuration." = "Tidak dapat menamakan semula konfigurasi.";
+"No items" = "Tiada barang";
+"Diagnostic logs" = "Log diagnostik";
+"Not Now" = "Bukan Sekarang";
+"Text copied" = "Teks disalin";
+"Scroll capture copied to clipboard" = "Tangkapan tatal disalin ke papan keratan";
+"Rename…" = "Namakan semula…";
+"Calculating…" = "Mengira…";
+"Disable Hotkeys" = "Lumpuhkan Kekunci Panas";
+"Enable diagnostic logging (status, timing, coordinates, and errors only)" = "Dayakan pengelogan diagnostik (status, masa, koordinat dan ralat sahaja)";
+"Hold %@ to show magnifier" = "Pegang %@ untuk menunjukkan pembesar";
+"Choose which dedicated OCR and translation tools are visible. Keyboard shortcuts are in Shortcuts." = "Pilih alat OCR dan terjemahan khusus yang boleh dilihat. Pintasan papan kekunci berada dalam Pintasan.";
+"Hold to Show Magnifier" = "Tahan untuk Tunjukkan Pembesar";
+"Show All Pins" = "Tunjukkan Semua Pin";
+"The configuration “%@” will be deleted and Basic will be applied." = "Konfigurasi \"%@\" akan dipadamkan dan Asas akan digunakan.";
+"These are actions rather than drawing tools. They appear in More Tools; disabling one hides it from both selections and pins." = "Ini adalah tindakan dan bukannya alat lukisan. Ia muncul dalam Lebih Banyak Alat; melumpuhkan satu menyembunyikannya daripada kedua-dua pilihan dan pin.";
+"Images saved to a folder you choose will not be deleted." = "Imej yang disimpan ke folder yang anda pilih tidak akan dipadamkan.";
+"Press %@ to switch RGB/HEX" = "Tekan %@ untuk menukar RGB/HEX";
+"Space to move. Release to finish" = "Ruang untuk bergerak. Lepaskan untuk selesai";
+"Show/Hide Magnifier" = "Tunjukkan/Sembunyikan Pembesar";
+"Speak" = "Cakap";
+"Eraser" = "Pemadam";
+"Current Configuration" = "Konfigurasi Semasa";
+"Screen Translation Capture" = "Tangkapan Terjemahan Skrin";
+"Copy Translation" = "Salin Terjemahan";
+"Move to Applications folder?" = "Pindah ke folder Aplikasi?";
+"Double-click to Close Pin" = "Klik dua kali untuk Tutup Pin";
+"Slim" = "Langsing";
+"Could not move to Applications" = "Tidak dapat beralih ke Aplikasi";
+"Please drag Pinlume to your Applications folder manually.\n\n%@" = "Sila seret Pinlume ke folder Aplikasi anda secara manual.\n\n%@";
+"Could not import configuration." = "Tidak dapat mengimport konfigurasi.";
+"These are actions rather than drawing tools. Disabling one hides it from ordinary selections and pins." = "Ini adalah tindakan dan bukannya alat lukisan. Melumpuhkan satu menyembunyikannya daripada pilihan dan pin biasa.";
+"Turn this off to keep translation text on this Mac. Google translation will be unavailable." = "Matikan ini untuk menyimpan teks terjemahan pada Mac ini. Terjemahan Google tidak akan tersedia.";
+"Could not delete configuration." = "Tidak dapat memadamkan konfigurasi.";
+"Screen translation must stay on one display" = "Terjemahan skrin mesti kekal pada satu paparan";
+"Hide Pin Shadow" = "Sembunyikan Pin Shadow";
+"Translation Status" = "Status Terjemahan";
+"Monochrome" = "Monokrom";
+"Translate before swapping languages" = "Terjemah sebelum bertukar bahasa";
+"Export" = "Eksport";
+"Dark" = "Gelap";
+"Apple translation needs the %@ → %@ language pack. Download it in System Settings." = "Terjemahan Apple memerlukan %@ → %@ pek bahasa. Muat turunnya dalam Tetapan Sistem.";
+"Press %@ to move the sample point 1 pixel" = "Tekan %@ untuk mengalihkan titik sampel 1 piksel";
+"Move Selection 1 Pixel" = "Pindahkan Pilihan 1 Piksel";
+"Screen Translation" = "Terjemahan Skrin";
+"Smooth Pin Zoom" = "Zum Pin Lancar";
+"The current settings were kept unchanged." = "Tetapan semasa dikekalkan tidak berubah.";
+"Presentation Drawing" = "Lukisan Persembahan";
+"Interface Theme:" = "Tema Antara Muka:";
+"Quick capture copied to clipboard" = "Tangkapan pantas disalin ke papan keratan";
+"Translate selected text" = "Terjemah teks yang dipilih";
+"Import" = "Import";
+"  Pin Zoom Anchor:" = "Pin Zum Sauh:";
+"Source Text" = "Teks Sumber";
+"Open Translation Window" = "Buka Tetingkap Terjemahan";
+"Configuration Profiles" = "Profil Konfigurasi";
+"Text recognition failed" = "Pengecaman teks gagal";
+"Continue with Clipboard" = "Teruskan dengan Papan Klip";
+"Allow Trackpad Pinch Zoom on Pins" = "Benarkan Zum Cubit Pad Jejak pada Pin";
+"Actions in More Tools" = "Tindakan dalam Lebih Banyak Alat";
+"Clear Selected Data" = "Kosongkan Data yang Dipilih";
+"Could not export configuration." = "Tidak dapat mengeksport konfigurasi.";
+"Copy Source" = "Salin Sumber";
+"Common Tools" = "Alat Biasa";
+"Swap" = "Tukar";
+"Recognize Text" = "Mengenal Teks";
+"Speak Translation" = "Cakap Terjemahan";
+"These are actions rather than drawing tools. Disabling one hides it wherever that action is available." = "Ini adalah tindakan dan bukannya alat lukisan. Melumpuhkan satu menyembunyikannya di mana sahaja tindakan itu tersedia.";
+"Common tools appear in the first row; additional tools move into the More menu. Actions unavailable for the current context do not appear." = "Alat biasa muncul di baris pertama; alatan tambahan beralih ke menu Lagi. Tindakan yang tidak tersedia untuk konteks semasa tidak muncul.";
+"Not enough space for comparison" = "Tidak cukup ruang untuk perbandingan";
+"Set the Select Text pin action, translation engine, and privacy policy here. Keyboard shortcuts are in Shortcuts." = "Tetapkan tindakan pin Pilih Teks, enjin terjemahan dan dasar privasi di sini. Pintasan papan kekunci berada dalam Pintasan.";
+"Recognizing Text…" = "Mengecam Teks…";
+"Release %@ to hide magnifier" = "Keluarkan %@ untuk menyembunyikan pembesar";
+"Rename" = "Namakan semula";
+"Translate Now" = "Terjemah Sekarang";
+"Mouse Wheel" = "Roda Tetikus";
+"Google translation is disabled in Settings." = "Terjemahan Google dilumpuhkan dalam Tetapan.";
+"Could not determine the source language." = "Tidak dapat menentukan bahasa sumber.";
+"Copy Text" = "Salin Teks";
+"Selection & Pin Interactions" = "Interaksi Pemilihan & Pin";
+"Pin zoom anchors to mouse position" = "Sematkan sauh zum pada kedudukan tetikus";
+"OCR & Translation" = "OCR & Terjemahan";
+"Rotate Clockwise" = "Putar mengikut arah jam";

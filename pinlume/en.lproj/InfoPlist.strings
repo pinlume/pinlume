@@ -1,0 +1,3 @@
+"Privacy - Screen Capture Usage Description" = "Pinlume needs screen recording permission to capture screenshots.";
+"NSMicrophoneUsageDescription" = "Pinlume can record microphone audio during screen recordings.";
+"NSCameraUsageDescription" = "Pinlume can show a webcam overlay during screen recordings.";

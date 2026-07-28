@@ -1,0 +1,846 @@
+/* Deutsch — Pinlume localization
+ *
+ * To add a new language:
+ * 1. Create a new folder: pinlume/<lang-code>.lproj/
+ * 2. Copy this file into that folder
+ * 3. Translate all values (right side of = sign)
+ * 4. Add the language to LanguageManager.availableLanguages in Services/LanguageManager.swift
+ * 5. Add the language code to knownRegions in pinlume.xcodeproj/project.pbxproj
+ * 6. Submit a pull request!
+ *
+ * Keys use the English text. Values should be the translation.
+ * Format strings use %@ for strings, %d for integers.
+ * Keep keyboard shortcuts (like ⌘C) untranslated.
+ * Keep brand names (Pinlume, Google Drive, imgbb, S3) untranslated.
+ */
+
+/* Menu Bar */
+"Capture Area" = "Bereich aufnehmen";
+"Capture Screen" = "Bildschirm aufnehmen";
+"Capture OCR" = "OCR-Aufnahme";
+"Capture OCR & QR" = "OCR & QR aufnehmen";
+"Capture area and read text/QR codes" = "Bereich aufnehmen und Text/QR-Codes lesen";
+"Quick Capture" = "Schnellaufnahme";
+"Scroll Capture" = "Scroll-Aufnahme";
+"Capture Last Area" = "Letzten Bereich aufnehmen";
+"Capture Delay" = "Aufnahmeverzögerung";
+"None" = "Keine";
+"%d seconds" = "%d Sekunden";
+"Record Area" = "Bereich aufzeichnen";
+"Record Screen" = "Bildschirm aufzeichnen";
+"Recent Captures" = "Letzte Aufnahmen";
+"Show History Panel" = "Verlaufspanel anzeigen";
+"Open Image..." = "Bild öffnen ...";
+"Open from Clipboard" = "Aus Zwischenablage öffnen";
+"Pin from Clipboard" = "Aus Zwischenablage anheften";
+"Preferences..." = "Einstellungen ...";
+"Check for Updates..." = "Nach Updates suchen ...";
+"Quit Pinlume" = "Pinlume beenden";
+"No recent captures" = "Keine letzten Aufnahmen";
+"Clear History" = "Verlauf löschen";
+
+/* History Panel */
+"Copy" = "Kopieren";
+"Save As..." = "Sichern unter ...";
+"Open in Editor" = "Im Editor öffnen";
+"Pin to Screen" = "An Bildschirm anheften";
+"Quick Look" = "Übersicht";
+"Delete" = "Löschen";
+"All" = "Alle";
+"Screenshots" = "Screenshots";
+"GIFs" = "GIFs";
+"Click to copy · Drag to app" = "Klicken zum Kopieren · In App ziehen";
+"No captures yet" = "Noch keine Aufnahmen";
+
+/* Floating Thumbnail */
+"Close All" = "Alle schließen";
+"Save All to Folder…" = "Alle in Ordner sichern …";
+"Save" = "Sichern";
+
+/* Editor Top Bar */
+"Zoom In" = "Vergrößern";
+"Zoom Out" = "Verkleinern";
+"Fit Canvas" = "An Leinwand anpassen";
+"Crop" = "Zuschneiden";
+"Flip Horizontal" = "Horizontal spiegeln";
+"Flip Vertical" = "Vertikal spiegeln";
+"Rotate Left" = "Nach links drehen";
+"Rotate Right" = "Nach rechts drehen";
+"Zoom" = "Zoom";
+"Add Capture" = "Aufnahme hinzufügen";
+
+/* Toolbar - Tools */
+"Arrow" = "Pfeil";
+"Line" = "Linie";
+"Rectangle" = "Rechteck";
+"Ellipse" = "Ellipse";
+"Pencil" = "Stift";
+"Pencil (Draw)" = "Stift (Zeichnen)";
+"Marker" = "Textmarker";
+"Text" = "Text";
+"Number" = "Nummer";
+"Number / Counter" = "Nummer / Zähler";
+"Stamp / Emoji" = "Stempel / Emoji";
+"Censor" = "Zensieren";
+"Censor (Pixelate / Blur / Solid)" = "Zensieren (Verpixeln / Weichzeichnen / Vollton)";
+"Measure" = "Messen";
+"Measure (px)" = "Messen (px)";
+"Magnify (Loupe)" = "Lupe";
+"Highlight" = "Hervorheben";
+"Highlight (Spotlight)" = "Hervorheben (Spotlight)";
+"Dim" = "Abdunkeln";
+"Color Sampler" = "Farbpipette";
+"Color Picker" = "Farbwahl";
+"Select & Edit" = "Auswählen & Bearbeiten";
+"Color" = "Farbe";
+
+/* Toolbar - Actions */
+"Copy to Clipboard" = "In Zwischenablage kopieren";
+"Save to File" = "Als Datei sichern";
+"Save to" = "Sichern in";
+"Open in Editor Window" = "Im Editor-Fenster öffnen";
+"Pin on Screen" = "An Bildschirm anheften";
+"Pin" = "Anheften";
+"Pin (floating window)" = "Anheften (schwebendes Fenster)";
+"OCR" = "OCR";
+"OCR Text" = "OCR-Text";
+"OCR (extract text)" = "OCR (Text erkennen)";
+"OCR & QR" = "OCR & QR";
+"Run OCR & QR" = "OCR & QR ausführen";
+"Text & QR Recognition" = "Text- & QR-Erkennung";
+"QR Code" = "QR-Code";
+"QR Codes" = "QR-Codes";
+"Upload" = "Hochladen";
+"Share" = "Teilen";
+"Open With" = "Öffnen mit";
+"Open Link" = "Link öffnen";
+"No Apps Available" = "Keine Apps verfügbar";
+"No Share Services" = "Keine Teilen-Dienste";
+"Undo" = "Widerrufen";
+"Redo" = "Wiederherstellen";
+"Close" = "Schließen";
+"Remove Background" = "Hintergrund entfernen";
+"Beautify" = "Verschönern";
+"Adjust" = "Anpassen";
+"Adjust (Image Effects)" = "Anpassen (Bildeffekte)";
+"Invert Colors" = "Farben umkehren";
+"Record" = "Aufzeichnen";
+"Record screen" = "Bildschirm aufzeichnen";
+"Translate" = "Übersetzen";
+"Auto-Redact sensitive data" = "Sensible Daten automatisch schwärzen";
+"Move Selection" = "Auswahl verschieben";
+
+/* Toolbar - Recording */
+"Start Recording" = "Aufzeichnung starten";
+"Cancel Recording" = "Aufzeichnung abbrechen";
+"Highlight Mouse Clicks" = "Mausklicks hervorheben";
+"Record System Audio" = "Systemaudio aufzeichnen";
+"Record Microphone" = "Mikrofon aufzeichnen";
+"Recording Settings" = "Aufzeichnungseinstellungen";
+
+/* Tool Options */
+"Size" = "Größe";
+"Stroke" = "Strichstärke";
+"Radius" = "Radius";
+"Start:" = "Start:";
+"Draw:" = "Zeichnen:";
+"Auto:" = "Auto:";
+"Fill" = "Füllung";
+"Outline" = "Kontur";
+"More Emojis" = "Weitere Emojis";
+"Load Image" = "Bild laden";
+"Gradient Style" = "Verlaufsstil";
+"On" = "An";
+"Text Only" = "Nur Text";
+"All Text" = "Gesamter Text";
+"PII" = "PII";
+"Faces" = "Gesichter";
+"People" = "Personen";
+"Confirm before upload" = "Vor dem Hochladen bestätigen";
+"Flip" = "Spiegeln";
+"Smooth" = "Glätten";
+"Refined" = "Verfeinert";
+"Smart" = "Intelligent";
+"Padding" = "Abstand";
+"Shadow" = "Schatten";
+"Right-click to add points" = "Rechtsklick zum Hinzufügen von Punkten";
+"Hold 1 auto-vertical  ·  Hold 2 auto-horizontal" = "1 halten: auto-vertikal  ·  2 halten: auto-horizontal";
+
+/* Overlay / Canvas */
+"Click a window  ·  Drag for custom area  ·  F for full screen" = "Fenster klicken  ·  Ziehen für eigenen Bereich  ·  F für Vollbild";
+"Drag to select  ·  Click for full screen" = "Ziehen zum Auswählen  ·  Klicken für Vollbild";
+"Release to annotate and edit" = "Loslassen zum Beschriften und Bearbeiten";
+"Release to finish" = "Loslassen zum Abschließen";
+"Hold Space to move. Release to annotate and edit" = "Leertaste halten zum Verschieben. Loslassen zum Beschriften und Bearbeiten";
+"Hold Space to move. Release to finish" = "Leertaste halten zum Verschieben. Loslassen zum Abschließen";
+"Window snap: " = "Fenster-Einrasten: ";
+"ON" = "AN";
+"OFF" = "AUS";
+"  (Tab to toggle)" = "  (Tab zum Umschalten)";
+"Right-click to copy" = "Rechtsklick zum Kopieren";
+"Copied %@" = "%@ kopiert";
+"Set color %@" = "Farbe %@ gesetzt";
+"Draw something first to use the move tool." = "Zeichnen Sie zuerst etwas, um das Verschiebewerkzeug zu nutzen.";
+"Drag to reposition" = "Ziehen zum Neupositionieren";
+
+/* Overlay - Popovers */
+"Format:" = "Format:";
+"FPS:" = "FPS:";
+"When done:" = "Danach:";
+"Open editor" = "Editor öffnen";
+"Show in Finder" = "Im Finder anzeigen";
+"Copy to clipboard" = "In Zwischenablage kopieren";
+
+/* Preferences - General */
+"Pinlume Preferences" = "Pinlume Einstellungen";
+"General" = "Allgemein";
+"Tools" = "Werkzeuge";
+"Recording" = "Aufzeichnung";
+"About" = "Über";
+"Shortcuts" = "Kurzbefehle";
+"Uploads" = "Uploads";
+"Language" = "Sprache";
+"Language:" = "Sprache:";
+"Restart the app to fully apply the new language." = "Starten Sie die App neu, um die neue Sprache vollständig zu übernehmen.";
+"Capture" = "Aufnahme";
+"Play sound on capture" = "Ton bei Aufnahme abspielen";
+"Play sound on copy" = "Ton beim Kopieren abspielen";
+"Remember last selected tool" = "Letztes Werkzeug merken";
+"Show floating thumbnail after capture" = "Schwebendes Vorschaubild nach Aufnahme anzeigen";
+"Launch at login" = "Bei Anmeldung starten";
+"Show snap alignment guides" = "Ausrichtungshilfen anzeigen";
+"Snap selection edges to image boundaries" = "Auswahlkanten an Bildgrenzen ausrichten";
+"Capture mouse cursor in screenshot" = "Mauszeiger im Screenshot aufnehmen";
+"Double-click selection to copy" = "Doppelklick auf Auswahl zum Kopieren";
+"Hide capture instructions" = "Aufnahmehinweise ausblenden";
+"Disable shadow outside selection" = "Schatten außerhalb der Auswahl deaktivieren";
+"Show shortcuts in tooltips" = "Kurzbefehle in Tooltips anzeigen";
+"Use window title in saved filename" = "Fenstertitel im Dateinamen verwenden";
+"Hide menu bar icon" = "Menüleistensymbol ausblenden";
+"Hotkeys still work. To show the icon again, re-launch Pinlume." = "Kurzbefehle funktionieren weiterhin. Um das Symbol wieder anzuzeigen, starten Sie Pinlume neu.";
+"Check for updates automatically" = "Automatisch nach Updates suchen";
+"Check for beta updates" = "Nach Beta-Updates suchen";
+"Thumbnail" = "Vorschaubild";
+"  Dismiss after:" = "  Ausblenden nach:";
+"seconds before auto-dismiss (0 = never)" = "Sekunden bis zum automatischen Ausblenden (0 = nie)";
+"  Multiple previews:" = "  Mehrere Vorschauen:";
+"Stack (keep all)" = "Stapeln (alle behalten)";
+"Replace (show only latest)" = "Ersetzen (nur letzte anzeigen)";
+"  Position:" = "  Position:";
+"Menu Bar Order" = "Menüleisten-Reihenfolge";
+"Choose the order of capture actions in the Pinlume menu bar menu." = "Wählen Sie die Reihenfolge der Aufnahmeaktionen im Pinlume-Menüleistenmenü.";
+"Move up" = "Nach oben verschieben";
+"Move down" = "Nach unten verschieben";
+"Output" = "Ausgabe";
+"Image format:" = "Bildformat:";
+"Quality:" = "Qualität:";
+"%d%%" = "%d%%";
+"Save at standard resolution (1x)" = "In Standardauflösung speichern (1x)";
+"Halves dimensions on Retina displays, ~4x smaller files" = "Halbiert die Abmessungen auf Retina-Displays, ca. 4x kleinere Dateien";
+"Embed sRGB color profile" = "sRGB-Farbprofil einbetten";
+"Ensures consistent colors across different displays" = "Sorgt für einheitliche Farben auf verschiedenen Bildschirmen";
+"Screenshot History" = "Screenshot-Verlauf";
+"Order history by last edit" = "Verlauf nach letzter Bearbeitung sortieren";
+"Edited screenshots move to the top. Off keeps them in capture order." = "Bearbeitete Screenshots wandern nach oben. Aus behält die Aufnahmereihenfolge bei.";
+"History size:" = "Verlaufsgröße:";
+"screenshots kept on disk (0 = off)" = "Screenshots auf der Festplatte (0 = aus)";
+"Save Directory" = "Speicherort";
+"Save folder:" = "Speicherordner:";
+"Browse…" = "Durchsuchen …";
+"Save action:" = "Speicheraktion:";
+"Save to default folder" = "In Standardordner sichern";
+"Ask where to save" = "Nach Speicherort fragen";
+"Appearance" = "Erscheinungsbild";
+"Accent color:" = "Akzentfarbe:";
+"Icon color:" = "Symbolfarbe:";
+"Background color:" = "Hintergrundfarbe:";
+"Menu bar icon:" = "Menüleistensymbol:";
+"Default" = "Standard";
+"Custom symbol" = "Eigenes Symbol";
+"Enter any SF Symbol name (e.g. camera.fill) or pick a preset. Browse names in Apple's SF Symbols app. Invalid names fall back to the default icon." = "Geben Sie einen beliebigen SF Symbol-Namen ein (z. B. camera.fill) oder wählen Sie eine Vorgabe. Durchsuchen Sie Namen in Apples SF Symbols-App. Ungültige Namen fallen auf das Standardsymbol zurück.";
+"Reset" = "Zurücksetzen";
+"OCR Capture:" = "OCR-Aufnahme:";
+"OCR & QR Capture:" = "OCR & QR-Aufnahme:";
+"Show window + copy to clipboard" = "Fenster anzeigen + in Zwischenablage kopieren";
+"Show window only" = "Nur Fenster anzeigen";
+"Copy to clipboard only" = "Nur in Zwischenablage kopieren";
+"Enter / Quick Capture:" = "Enter / Schnellaufnahme:";
+"Save to file" = "Als Datei sichern";
+"Save + copy to clipboard" = "Sichern + in Zwischenablage kopieren";
+"OCR Action" = "OCR-Aktion";
+
+/* Preferences - Shortcuts */
+"Keyboard Shortcuts" = "Tastaturkurzbefehle";
+"Hotkeys" = "Kurzbefehle";
+"Clear shortcut" = "Kurzbefehl löschen";
+"Press keys..." = "Tasten drücken ...";
+"Waiting..." = "Warten ...";
+
+/* Preferences - Tools */
+"Annotation Tools" = "Beschriftungswerkzeuge";
+"Hidden tools are removed from the bottom toolbar." = "Ausgeblendete Werkzeuge werden aus der unteren Leiste entfernt.";
+"Capture Actions" = "Aufnahmeaktionen";
+"Bottom Toolbar Actions" = "Aktionen der unteren Leiste";
+"Hidden actions are removed from the bottom toolbar." = "Ausgeblendete Aktionen werden aus der unteren Leiste entfernt.";
+"Editor Actions" = "Editor-Aktionen";
+"Right Toolbar Actions" = "Aktionen der rechten Leiste";
+"Hidden actions are removed from the right toolbar." = "Ausgeblendete Aktionen werden aus der rechten Leiste entfernt.";
+
+/* Preferences - Recording */
+"Frame rate:" = "Bildrate:";
+"After recording:" = "Nach der Aufzeichnung:";
+"Save recording to:" = "Aufzeichnung sichern in:";
+"Clear" = "Leeren";
+"Max height:" = "Max. Höhe:";
+"px (0 = unlimited)" = "px (0 = unbegrenzt)";
+"Behavior" = "Verhalten";
+"Auto-scroll (sends synthetic scroll events)" = "Automatisches Scrollen (sendet synthetische Scroll-Ereignisse)";
+"Detect fixed/sticky headers" = "Fixierte/klebende Kopfzeilen erkennen";
+"Scroll speed:" = "Scrollgeschwindigkeit:";
+"Slow" = "Langsam";
+"Medium" = "Mittel";
+"Fast" = "Schnell";
+"Very fast" = "Sehr schnell";
+"5 fps" = "5 fps";
+"10 fps" = "10 fps";
+"15 fps" = "15 fps";
+"24 fps" = "24 fps";
+"30 fps" = "30 fps";
+"60 fps" = "60 fps";
+"120 fps" = "120 fps";
+"MP4 (H.264)" = "MP4 (H.264)";
+"GIF" = "GIF";
+
+/* Preferences - Upload */
+"Upload Service" = "Upload-Dienst";
+"Upload Provider" = "Upload-Anbieter";
+"Provider:" = "Anbieter:";
+"Google Drive" = "Google Drive";
+"Google Drive (images + videos)" = "Google Drive (Bilder + Videos)";
+"imgbb (images only)" = "imgbb (nur Bilder)";
+"S3-Compatible (images + videos)" = "S3-kompatibel (Bilder + Videos)";
+"S3-Compatible Storage" = "S3-kompatibler Speicher";
+"Sign In with Google" = "Mit Google anmelden";
+"Sign Out" = "Abmelden";
+"Signed in" = "Angemeldet";
+"Not signed in" = "Nicht angemeldet";
+"Account:" = "Konto:";
+"Test Connection" = "Verbindung testen";
+"Fill in endpoint, bucket, and credentials first" = "Geben Sie zuerst Endpunkt, Bucket und Anmeldedaten ein";
+"Testing..." = "Teste ...";
+"Connection successful!" = "Verbindung erfolgreich!";
+"Leave empty to use default" = "Leer lassen für Standardwert";
+"Endpoint:" = "Endpunkt:";
+"Region:" = "Region:";
+"Bucket:" = "Bucket:";
+"Access Key:" = "Zugriffsschlüssel:";
+"Secret Key:" = "Geheimer Schlüssel:";
+"Public URL:" = "Öffentliche URL:";
+"Path Prefix:" = "Pfad-Präfix:";
+"API key:" = "API-Schlüssel:";
+"Upload History" = "Upload-Verlauf";
+"No uploads yet." = "Noch keine Uploads.";
+"Base URL for public access. If empty, the S3 endpoint URL is used (may not be publicly accessible)." = "Basis-URL für öffentlichen Zugriff. Wenn leer, wird die S3-Endpunkt-URL verwendet (möglicherweise nicht öffentlich zugänglich).";
+"A shared key is included — get your own free key at imgbb.com/api if you hit rate limits. Images only (no video support)." = "Ein gemeinsamer Schlüssel ist enthalten — holen Sie sich einen eigenen kostenlosen Schlüssel auf imgbb.com/api, falls Sie Ratenlimits erreichen. Nur Bilder (keine Videounterstützung).";
+"Works with AWS S3, Cloudflare R2, MinIO, DigitalOcean Spaces, Backblaze B2, and other S3-compatible services. Supports images and videos." = "Funktioniert mit AWS S3, Cloudflare R2, MinIO, DigitalOcean Spaces, Backblaze B2 und anderen S3-kompatiblen Diensten. Unterstützt Bilder und Videos.";
+"Configure S3 in Preferences" = "S3 in den Einstellungen konfigurieren";
+"Sign in to Google Drive in Preferences" = "In den Einstellungen bei Google Drive anmelden";
+"Video upload requires Google Drive or S3" = "Video-Upload erfordert Google Drive oder S3";
+
+/* Preferences - About */
+"Pinlume" = "Pinlume";
+"Version %@ (%@)" = "Version %@ (%@)";
+"Made by" = "Entwickelt von";
+"Licensed under the GPLv3" = "Lizenziert unter der GPLv3";
+"A free, open-source screenshot & screen recording tool for macOS.\nFully native — built with Swift and AppKit." = "Ein kostenloses Open-Source-Werkzeug für Screenshots und Bildschirmaufzeichnung unter macOS.\nVollständig nativ — entwickelt mit Swift und AppKit.";
+
+/* Alerts */
+"No Image on Clipboard" = "Kein Bild in der Zwischenablage";
+"No Image or Text on Clipboard" = "Kein Bild oder Text in der Zwischenablage";
+"Copy an image to the clipboard first, then try again." = "Kopieren Sie zuerst ein Bild in die Zwischenablage und versuchen Sie es dann erneut.";
+"Copy an image or text to the clipboard first, then try again." = "Kopieren Sie zuerst ein Bild oder einen Text in die Zwischenablage und versuchen Sie es dann erneut.";
+"OK" = "OK";
+"Accessibility Access Required" = "Bedienungshilfen-Zugriff erforderlich";
+"Pinlume needs Accessibility permission to auto-scroll other apps. Please grant access in System Settings, then try again." = "Pinlume benötigt die Bedienungshilfen-Berechtigung, um in anderen Apps automatisch zu scrollen. Bitte gewähren Sie den Zugriff in den Systemeinstellungen und versuchen Sie es erneut.";
+"Pinlume needs Accessibility permission for scroll capture. Please grant access in System Settings, then try again." = "Pinlume benötigt die Bedienungshilfen-Berechtigung für Scroll-Aufnahmen. Bitte gewähren Sie den Zugriff in den Systemeinstellungen und versuchen Sie es erneut.";
+"Open Settings" = "Einstellungen öffnen";
+"Cancel" = "Abbrechen";
+"Microphone Access Required" = "Mikrofonzugriff erforderlich";
+"Pinlume needs microphone permission to record voice audio. Open System Settings to grant access." = "Pinlume benötigt die Mikrofonberechtigung zur Sprachaufzeichnung. Öffnen Sie die Systemeinstellungen, um den Zugriff zu gewähren.";
+"Upload to Google Drive?" = "Auf Google Drive hochladen?";
+"Upload to S3?" = "Auf S3 hochladen?";
+"Upload to imgbb.com?" = "Auf imgbb.com hochladen?";
+"Your screenshot will be uploaded." = "Ihr Screenshot wird hochgeladen.";
+
+/* Permission Onboarding */
+"Welcome to Pinlume" = "Willkommen bei Pinlume";
+"Pinlume needs one permission" = "Pinlume benötigt eine Berechtigung";
+"Screen Recording not yet granted" = "Bildschirmaufnahme noch nicht erlaubt";
+"Screen Recording granted!" = "Bildschirmaufnahme erlaubt!";
+"Enable Pinlume, then try taking a screenshot" = "Aktivieren Sie Pinlume und erstellen Sie dann einen Screenshot";
+"Open Screen Recording Settings" = "Bildschirmaufnahme-Einstellungen öffnen";
+"Continue" = "Weiter";
+
+/* OCR Window */
+"Text Recognition" = "Texterkennung";
+"Translate to:" = "Übersetzen nach:";
+"%d chars · %d words" = "%d Zeichen · %d Wörter";
+"Copy  ⌘↩" = "Kopieren  ⌘↩";
+"AI Search" = "KI-Suche";
+"Show Original" = "Original anzeigen";
+"Translation Failed" = "Übersetzung fehlgeschlagen";
+"Translation" = "Übersetzung";
+"(No text detected in the selected area)" = "(Kein Text im ausgewählten Bereich erkannt)";
+
+/* Upload Toast */
+"URL copied to the clipboard" = "URL in die Zwischenablage kopiert";
+"Uploading... %d%%" = "Hochladen … %d%%";
+"Upload failed: %@" = "Hochladen fehlgeschlagen: %@";
+"Uploaded! Link copied." = "Hochgeladen! Link kopiert.";
+"Uploading to %@... %d%%" = "Hochladen auf %@ … %d%%";
+"Open" = "Öffnen";
+
+/* Recording Toast */
+"Recording saved" = "Aufzeichnung gesichert";
+"%@ • Recording saved" = "%@ · Aufzeichnung gesichert";
+"Copy Path" = "Pfad kopieren";
+"Path copied!" = "Pfad kopiert!";
+
+/* Video Editor */
+"Pinlume Video Editor" = "Pinlume Video-Editor";
+"%@ selected" = "%@ ausgewählt";
+"Exporting..." = "Exportieren …";
+"Export failed" = "Export fehlgeschlagen";
+"Saved to %@" = "Gesichert in %@";
+"Save failed" = "Sichern fehlgeschlagen";
+
+/* Barcode Detector */
+/* "Open" and "Copy" are shared with other sections */
+
+/* Save Panel */
+"Save As..." = "Sichern unter …";
+"Save Recording" = "Aufzeichnung sichern";
+"Choose a folder" = "Ordner auswählen";
+"Save All to Folder…" = "Alle in Ordner sichern …";
+
+/* Scroll Capture HUD */
+"Auto Scroll" = "Automatisches Scrollen";
+"Stop" = "Stopp";
+"Scrolling..." = "Scrolle …";
+
+/* Effects Picker (Adjust popover) */
+"Presets" = "Voreinstellungen";
+"Adjustments" = "Anpassungen";
+"Brightness" = "Helligkeit";
+"Contrast" = "Kontrast";
+"Saturation" = "Sättigung";
+"Sharpness" = "Schärfe";
+
+/* Time Ago */
+"just now" = "gerade eben";
+"%ds ago" = "vor %ds";
+"%dm ago" = "vor %dm";
+"%dh ago" = "vor %dh";
+
+/* Hotkey Labels */
+"History" = "Verlauf";
+
+/* Preferences - Shortcuts note */
+"Click \"Record\" and press a key combination with at least one modifier (⌘, ⌥, ⌃, ⇧) to set a shortcut." = "Klicken Sie auf \"Aufzeichnen\" und drücken Sie eine Tastenkombination mit mindestens einem Modifikator (⌘, ⌥, ⌃, ⇧), um einen Kurzbefehl festzulegen.";
+
+/* Recording — GIF Processing */
+"Processing GIF…" = "GIF wird verarbeitet …";
+
+/* Recording — Input Monitoring Permission */
+"Input Monitoring Required" = "Eingabeüberwachung erforderlich";
+"Pinlume needs Input Monitoring permission to show keystrokes during recording. Please grant access in System Settings, then try again." = "Pinlume benötigt die Eingabeüberwachungs-Berechtigung, um Tastenanschläge während der Aufzeichnung anzuzeigen. Bitte gewähren Sie den Zugriff in den System Settings und versuchen Sie es erneut.";
+"Pinlume needs Accessibility permission to show keystrokes during recording. Please grant access in System Settings, then try again." = "Pinlume benötigt die Bedienungshilfen-Berechtigung, um Tastenanschläge während der Aufzeichnung anzuzeigen. Bitte gewähren Sie den Zugriff in den System Settings und versuchen Sie es erneut.";
+
+/* Recording — Keystroke Overlay */
+"Show Keystrokes" = "Tastenanschläge anzeigen";
+"Shortcuts Only" = "Nur Kurzbefehle";
+"All Keystrokes" = "Alle Tastenanschläge";
+
+/* Recording — Settings Popover */
+"Delay:" = "Verzögerung:";
+
+/* Video Editor */
+"Copied to clipboard!" = "In die Zwischenablage kopiert!";
+
+/* Webcam Overlay */
+"Webcam Overlay" = "Webcam-Einblendung";
+"Camera Access Required" = "Kamerazugriff erforderlich";
+"Pinlume needs camera permission for the webcam overlay. Open System Settings to grant access." = "Pinlume benötigt die Kameraberechtigung für die Webcam-Einblendung. Öffnen Sie die Systemeinstellungen, um den Zugriff zu gewähren.";
+"Webcam" = "Webcam";
+"Bottom Right" = "Unten rechts";
+"Bottom Left" = "Unten links";
+"Top Right" = "Oben rechts";
+"Top Left" = "Oben links";
+"Small" = "Klein";
+"Large" = "Groß";
+"Webcam Size Small" = "Klein";
+"Webcam Size Medium" = "Mittel";
+"Webcam Size Large" = "Groß";
+"Webcam Size Extra Large" = "Sehr groß";
+"Circle" = "Kreis";
+"Rounded Rectangle" = "Abgerundetes Rechteck";
+"Cam pos:" = "Kam.-Pos.:";
+"Cam size:" = "Kam.-Größe:";
+"Cam shape:" = "Kam.-Form:";
+
+/* New strings */
+"Settings" = "Einstellungen";
+"Settings..." = "Einstellungen ...";
+"Pinlume Settings" = "Pinlume Einstellungen";
+"Also open in Editor" = "Auch im Editor öffnen";
+"Hide controls" = "Steuerung ausblenden";
+"Hide recording controls" = "Aufzeichnungssteuerung ausblenden";
+"Stop recording from the menu bar icon instead." = "Aufzeichnung stattdessen über das Menüleistensymbol beenden.";
+"Pixelate" = "Verpixeln";
+"Blur" = "Weichzeichnen";
+"Solid" = "Vollton";
+"Erase" = "Löschen";
+"Done" = "Fertig";
+"Do nothing" = "Nichts tun";
+"Overlay / Editor Shortcuts" = "Overlay- / Editor-Kurzbefehle";
+"Set" = "Festlegen";
+"Press..." = "Drücken ...";
+"Reset to default" = "Auf Standard zurücksetzen";
+"Press a single key to assign it as the shortcut for that tool. These work when the overlay or editor is active." = "Drücken Sie eine einzelne Taste, um sie als Kurzbefehl für dieses Werkzeug zuzuweisen. Diese funktionieren, wenn das Overlay oder der Editor aktiv ist.";
+"Keep Separate" = "Getrennt lassen";
+"Merge Audio" = "Audio zusammenführen";
+"Audio Tracks" = "Audiospuren";
+"Adjust volume for each audio track:" = "Lautstärke für jede Audiospur anpassen:";
+"Microphone:" = "Mikrofon:";
+"System audio:" = "Systemaudio:";
+"Loupe" = "Lupe";
+"Stamp" = "Stempel";
+"Unlimited" = "Unbegrenzt";
+"Save changes?" = "Änderungen sichern?";
+"Your annotations will be lost if you close without saving." = "Ihre Anmerkungen gehen verloren, wenn Sie ohne Sichern schließen.";
+"Save & Close" = "Sichern & Schließen";
+"Discard" = "Verwerfen";
+"Stop Recording" = "Aufzeichnung beenden";
+"Pause" = "Pause";
+"Resume" = "Fortsetzen";
+"Engine:" = "Engine:";
+"Google Translate" = "Google Translate";
+"Apple (on-device)" = "Apple (auf dem Gerät)";
+"Apple translation is faster and works offline. Google Translate supports more languages." = "Apple-Übersetzung ist schneller und funktioniert offline. Google Translate unterstützt mehr Sprachen.";
+"Download language packs in System Settings…" = "Sprachpakete in den Systemeinstellungen laden …";
+"Configure S3 in Settings" = "S3 in den Einstellungen konfigurieren";
+"Sign in to Google Drive in Settings" = "In den Einstellungen bei Google Drive anmelden";
+"Offline build: upload and cloud storage integrations are removed. Update checks may still connect to Pinlume's update server. Screenshots and recordings stay local unless you share or save them yourself." = "Offline-Build: Upload- und Cloud-Speicher-Integrationen sind entfernt. Updateprüfungen können weiterhin eine Verbindung zum Updateserver von Pinlume herstellen. Screenshots und Aufnahmen bleiben lokal, sofern du sie nicht selbst teilst oder speicherst.";
+"Position:" = "Position:";
+"Size:" = "Größe:";
+"Shape:" = "Form:";
+
+"Same as screenshots" = "Wie Screenshots";
+"  Preview size:" = "  Vorschaugröße:";
+"(0 = off)" = "(0 = aus)";
+"Clear All" = "Alles löschen";
+"Clear History?" = "Verlauf löschen?";
+"This will permanently delete all screenshots from history." = "Dadurch werden alle Screenshots dauerhaft aus dem Verlauf gelöscht.";
+"Click \"Set\" and press a key combination with at least one modifier (⌘, ⌥, ⌃, ⇧) to set a shortcut." = "Klicke auf \"Festlegen\" und drücke eine Tastenkombination mit mindestens einem Sonderzeichen (⌘, ⌥, ⌃, ⇧), um ein Kürzel festzulegen.";
+"Files are uploaded to a \"Pinlume\" folder in your Google Drive. Everything stays private — nothing is shared publicly." = "Dateien werden in einen \"Pinlume\"-Ordner in deinem Google Drive hochgeladen. Alles bleibt privat — nichts wird öffentlich geteilt.";
+
+"Pressure" = "Druck";
+
+/* Resolution / Aspect ratio presets */
+"Aspect ratio & resolution presets" = "Seitenverhältnis- & Auflösungsvorgaben";
+"Aspect ratio" = "Seitenverhältnis";
+"Resolution" = "Auflösung";
+"Freeform" = "Freiform";
+"Custom · %@" = "Benutzerdefiniert · %@";
+"Units" = "Einheiten";
+"Keep ratio for next captures" = "Verhältnis für nächste Aufnahmen beibehalten";
+
+/* Added for v4.1.0-beta.3 — video editor, effects, open-video, shortcuts help */
+"Open Video..." = "Video öffnen ...";
+"Choose a video to open in Pinlume editor" = "Video auswählen, um es im Pinlume-Editor zu öffnen";
+"Click to add effects" = "Klicken, um Effekte hinzuzufügen";
+"Add Zoom" = "Zoom hinzufügen";
+"Add Censor" = "Zensur hinzufügen";
+"Add Cut" = "Schnitt hinzufügen";
+"Add Speed" = "Geschwindigkeit hinzufügen";
+"Add Freeze" = "Standbild hinzufügen";
+"Add Text" = "Text hinzufügen";
+"Delete Zoom" = "Zoom löschen";
+"Delete Censor" = "Zensur löschen";
+"Delete Cut" = "Schnitt löschen";
+"Delete Speed" = "Geschwindigkeit löschen";
+"Delete Freeze" = "Standbild löschen";
+"Delete Text" = "Text löschen";
+"Edit Text…" = "Text bearbeiten…";
+"Huge" = "Riesig";
+"Bold" = "Fett";
+"Italic" = "Kursiv";
+"Alignment" = "Ausrichtung";
+"Left" = "Links";
+"Center" = "Zentriert";
+"Right" = "Rechts";
+"Text Color" = "Textfarbe";
+"Background Color" = "Hintergrundfarbe";
+"Rounded" = "Abgerundet";
+"Custom…" = "Eigene…";
+"Transparent" = "Transparent";
+"Black" = "Schwarz";
+"White" = "Weiß";
+"Yellow" = "Gelb";
+"Red" = "Rot";
+"Green" = "Grün";
+"Blue" = "Blau";
+"Untitled" = "Ohne Titel";
+"Add effect" = "Effekt hinzufügen";
+"Fade" = "Überblenden";
+"High" = "Hoch";
+"Low" = "Niedrig";
+"Not enough room here" = "Hier ist nicht genug Platz";
+"Copied!" = "Kopiert!";
+"Converting to GIF…" = "Konvertiere zu GIF …";
+"GIF conversion failed" = "GIF-Konvertierung fehlgeschlagen";
+"No video track found" = "Keine Videospur gefunden";
+"Preview:" = "Vorschau:";
+"Copy Screen Info" = "Bildschirminfo kopieren";
+"Copies display and capture diagnostics to clipboard" = "Kopiert Anzeige- und Aufnahmediagnose in die Zwischenablage";
+"Accent" = "Akzent";
+"Icon" = "Symbol";
+"Background" = "Hintergrund";
+"Custom" = "Eigene";
+"Theme:" = "Thema:";
+"Application" = "Anwendung";
+"Capture area and extract text" = "Bereich aufnehmen und Text extrahieren";
+"Capture the full screen" = "Vollbild aufnehmen";
+"Counter for multi-screen captures" = "Zähler für Mehrbildschirmaufnahmen";
+"8-character random string (e.g. k3j7x9q2)" = "Zufällige 8-stellige Zeichenfolge (z. B. k3j7x9q2)";
+"Filename Template Tokens" = "Dateiname-Vorlagentoken";
+"Filename tokens" = "Dateinametoken";
+"Filename:" = "Dateiname:";
+"Open an image file in the editor" = "Eine Bilddatei im Editor öffnen";
+"Open the recent captures overlay" = "Overlay der letzten Aufnahmen öffnen";
+"Open this settings window" = "Dieses Einstellungsfenster öffnen";
+"Quick capture (uses your Enter action)" = "Schnellaufnahme (verwendet deine Enter-Aktion)";
+"Re-capture the last selected area" = "Letzten ausgewählten Bereich erneut aufnehmen";
+"Screenshots only — captured window title (blank otherwise)" = "Nur Screenshots — Titel des aufgenommenen Fensters (sonst leer)";
+"Show available filename tokens" = "Verfügbare Dateinametoken anzeigen";
+"Show supported URL scheme commands" = "Unterstützte URL-Schema-Befehle anzeigen";
+"Enable pinlume:// URL scheme" = "pinlume:// URL-Schema aktivieren";
+"Start area capture" = "Bereichsaufnahme starten";
+"Start area recording" = "Bereichsaufzeichnung starten";
+"Start full-screen recording" = "Vollbildaufzeichnung starten";
+"Start scroll capture" = "Scroll-Aufnahme starten";
+"Stop the current recording" = "Aktuelle Aufzeichnung beenden";
+"Supported URL Scheme Commands" = "Unterstützte URL-Schema-Befehle";
+"The file extension is appended automatically. Slashes and colons in {window} become dashes." = "Die Dateiendung wird automatisch angehängt. Schrägstriche und Doppelpunkte in {window} werden zu Bindestrichen.";
+"Trigger Pinlume from Raycast, Alfred, Shortcuts, or any tool that opens URLs." = "Pinlume aus Raycast, Alfred, Shortcuts oder jedem Tool, das URLs öffnet, auslösen.";
+"URL scheme info" = "URL-Schema-Info";
+"sec (0 = never)" = "Sek. (0 = nie)";
+
+/* Keyboard key names */
+"Space" = "Leertaste";
+
+/* Localized current UI keys. Existing translations above are preserved. */
+"Plus build: personal build with update checks disabled. Preferences, history, and permissions are separate from the original Pinlume app." = "Plus-Build: persönlicher Build mit deaktivierten Update-Prüfungen. Einstellungen, Verlauf und Berechtigungen sind von der ursprünglichen Pinlume-App getrennt.";
+"Light" = "Licht";
+"Press Option to hide magnifier" = "Drücken Sie die Optionstaste, um die Lupe auszublenden";
+"Changes to the selected profile are saved automatically." = "Änderungen am ausgewählten Profil werden automatisch gespeichert.";
+"Show Pin Shadow" = "Pin-Schatten anzeigen";
+"Arrow Keys" = "Pfeiltasten";
+"Source Language" = "Quellsprache";
+"Translation Pin" = "Übersetzungs-Pin";
+"Color Scheme:" = "Farbschema:";
+"Text Recognition / QR" = "Texterkennung / QR";
+"Basic" = "Einfach";
+"Full" = "Voll";
+"Menu Bar Menu" = "Menüleistenmenü";
+"Screenshot history and editable annotations" = "Screenshot-Verlauf und bearbeitbare Anmerkungen";
+"Press Shift to switch RGB/HEX" = "Drücken Sie die Umschalttaste, um RGB/HEX umzuschalten";
+"Clipboard image backups" = "Bildsicherungen in der Zwischenablage";
+"Double-click to Toggle Thumbnail" = "Doppelklicken Sie, um die Miniaturansicht umzuschalten";
+"Compare" = "Vergleichen";
+"Apple translation does not support %@ → %@." = "Die Apple-Übersetzung unterstützt %@ → %@ nicht.";
+"Profile:" = "Profil:";
+"Move to Applications" = "Gehen Sie zu Anwendungen";
+"Filled Rectangle" = "Gefülltes Rechteck";
+"Google translation is unavailable because sending text is disabled." = "Die Google-Übersetzung ist nicht verfügbar, da das Senden von Text deaktiviert ist.";
+"Adjust Area and Edit" = "Bereich anpassen und bearbeiten";
+"Clear Local Data…" = "Lokale Daten löschen…";
+"Swap Languages" = "Sprachen tauschen";
+"Ignore window occlusion" = "Fensterverdeckung ignorieren";
+"Graphite Blue" = "Graphitblau";
+"Copy Original" = "Original kopieren";
+"Pin Shadow" = "Pin Schatten";
+"Translation Window" = "Übersetzungsfenster";
+"Show Translation" = "Übersetzung anzeigen";
+"Enable %@:// URL scheme" = "Aktivieren Sie das URL-Schema %@://";
+"Disabled by default. Keeps up to 7 days or 2 MB; never writes screenshots, OCR text, clipboard contents, or keys." = "Standardmäßig deaktiviert. Hält bis zu 7 Tage oder 2 MB; Schreibt niemals Screenshots, OCR-Text, Inhalte der Zwischenablage oder Schlüssel.";
+"Strength" = "Stärke";
+"Auto-Redact Sensitive Information" = "Vertrauliche Informationen automatisch schwärzen";
+"More Tools" = "Weitere Tools";
+"Move Magnifier Sample Point 1 Pixel" = "Verschieben Sie den Beispielpunkt der Lupe um 1 Pixel";
+"Translating…" = "Übersetzen…";
+"Pin Scroll Zoom" = "Pin-Scroll-Zoom";
+"Copy Text (shown for text pins only)" = "Text kopieren (wird nur für Text-Pins angezeigt)";
+"Copy Pinned Text" = "Angehefteten Text kopieren";
+"Forest" = "Wald";
+"Show floating window after Quick Capture" = "Schwebendes Fenster nach Quick Capture anzeigen";
+"Brush" = "Pinsel";
+"Allow Scroll Zoom on Pins" = "Scroll-Zoom auf Pins zulassen";
+"Could not copy configuration." = "Die Konfiguration konnte nicht kopiert werden.";
+"Allow sending text to Google Translate" = "Erlauben Sie das Senden von Text an Google Translate";
+"Export…" = "Exportieren…";
+"Choose local data to clear" = "Wählen Sie lokale Daten zum Löschen aus";
+"Delete Configuration?" = "Konfiguration löschen?";
+"Non-Drawing Actions" = "Nicht zeichnende Aktionen";
+"Restored pins (closes current pins immediately)" = "Pins wiederhergestellt (aktuelle Pins werden sofort geschlossen)";
+"Professional" = "Professionell";
+"Move to More Tools" = "Gehen Sie zu „Weitere Tools“.";
+"Translation failed; original text shown." = "Übersetzung fehlgeschlagen; Originaltext angezeigt.";
+"Target Language" = "Zielsprache";
+"About Pinlume" = "Über Pinlume";
+"No text found" = "Kein Text gefunden";
+"Automatic" = "Automatisch";
+"Select Text" = "Wählen Sie Text aus";
+"Move Down" = "Nach unten bewegen";
+"Don't ask again" = "Fragen Sie nicht noch einmal";
+"Space to move. Release to annotate and edit" = "Raum zum Bewegen. Zum Kommentieren und Bearbeiten loslassen";
+"Transparent Annotation" = "Transparente Anmerkung";
+"Speak Source" = "Quelle sprechen";
+"Press %@ to move selection 1 pixel" = "Drücken Sie %@, um die Auswahl um 1 Pixel zu verschieben";
+"Pin Scroll Opacity" = "Pin-Scroll-Deckkraft";
+"OCR Pin" = "OCR-Pin";
+"Double-click" = "Doppelklicken";
+"Rename Configuration" = "Konfiguration umbenennen";
+"When shortcuts conflict, the settings list is matched from top to bottom and the first entry takes priority." = "Bei Verknüpfungskonflikten wird die Einstellungsliste von oben nach unten abgeglichen und der erste Eintrag hat Priorität.";
+"Original / Translation" = "Original / Übersetzung";
+"Move Toolbar" = "Symbolleiste verschieben";
+"Beautify Screenshot" = "Screenshot verschönern";
+"Opacity %d%%" = "Deckkraft %d %%";
+"Configuration" = "Konfiguration";
+"Press %@ to show/hide magnifier" = "Drücken Sie %@, um die Lupe ein-/auszublenden";
+"Anchor to Mouse Position" = "Anker an der Mausposition";
+"Press C to copy color" = "Drücken Sie C, um Farbe zu kopieren";
+"Import…" = "Importieren…";
+"Apple translation language availability is unknown." = "Die Verfügbarkeit der Apple-Übersetzungssprache ist nicht bekannt.";
+"Unable to capture selection" = "Die Auswahl konnte nicht erfasst werden";
+"Translated Text" = "Übersetzter Text";
+"Show partial image in compact Pin" = "Teilbild im kompakten Pin anzeigen";
+"Translation complete" = "Übersetzung abgeschlossen";
+"Show Original / Translation" = "Original/Übersetzung anzeigen";
+"Languages swapped; edited translation was preserved" = "Sprachen getauscht; Die bearbeitete Übersetzung blieb erhalten";
+"Image Adjustments" = "Bildanpassungen";
+"Hide All Pins" = "Alle Pins ausblenden";
+"Make Common" = "Gemeinsam machen";
+"Storage & Diagnostics" = "Lagerung und Diagnose";
+"Size %d%%" = "Größe %d%%";
+"Enter a new name for this custom configuration." = "Geben Sie einen neuen Namen für diese benutzerdefinierte Konfiguration ein.";
+"Preparing full window…" = "Vollständiges Fenster wird vorbereitet…";
+"This affects both the capture selection toolbar and pin toolbar. Common tools appear in the first row; additional tools move into the More menu." = "Dies betrifft sowohl die Capture-Auswahl-Symbolleiste als auch die Pin-Symbolleiste. In der ersten Zeile werden häufig verwendete Werkzeuge angezeigt. Zusätzliche Werkzeuge werden in das Menü „Mehr“ verschoben.";
+"Pinlume needs Accessibility permission to translate selected text. Open System Settings to grant access. If Pinlume is not listed, click the + button and choose the running Pinlume app." = "Pinlume benötigt eine Barrierefreiheitsberechtigung, um ausgewählten Text zu übersetzen. Öffnen Sie die Systemeinstellungen, um Zugriff zu gewähren. Wenn Pinlume nicht aufgeführt ist, klicken Sie auf die Schaltfläche „+“ und wählen Sie die laufende Pinlume-App aus.";
+"These shortcuts work only in a capture selection or selected pin; on-screen hints follow the current settings." = "Diese Verknüpfungen funktionieren nur in einer Aufnahmeauswahl oder einem ausgewählten Pin; Hinweise auf dem Bildschirm folgen den aktuellen Einstellungen.";
+"Copy Configuration" = "Kopieren";
+"Deep Teal" = "Tiefblaugrün";
+"Could not apply configuration profile." = "Das Konfigurationsprofil konnte nicht angewendet werden.";
+"Switch Magnifier RGB/HEX" = "Lupe RGB/HEX umschalten";
+"Anchor to Top Left" = "Anker oben links";
+"Amber" = "Bernstein";
+"Configuration:" = "Konfiguration:";
+"Selectable Text Capture" = "Auswählbare Texterfassung";
+"Hide/Show All Pins" = "Alle Pins ausblenden/anzeigen";
+"Unable to capture full window" = "Das vollständige Fenster kann nicht erfasst werden";
+"Toolbar Layout" = "Symbolleistenlayout";
+"Move Up" = "Nach oben bewegen";
+"Enable Hotkeys" = "Aktivieren Sie Hotkeys";
+"Choose an image to pin to screen" = "Wählen Sie ein Bild aus, das Sie an den Bildschirm anheften möchten";
+"OCR Selection" = "OCR-Auswahl";
+"%@ is running from a disk image. Move it to your Applications folder for stable permissions and the best experience." = "%@ wird von einem Disk-Image ausgeführt. Verschieben Sie es für stabile Berechtigungen und das beste Erlebnis in Ihren Anwendungsordner.";
+"System Default" = "Systemstandard";
+"Midnight Indigo" = "Mitternachts-Indigo";
+"Shortcut unavailable (error %d)" = "Verknüpfung nicht verfügbar (Fehler %d)";
+"Auto Detect" = "Automatische Erkennung";
+"Copy of %@" = "Kopie von %@";
+"Choose which actions appear in the status bar menu and arrange the order of common and additional tools. Settings, version, and quit remain fixed." = "Wählen Sie aus, welche Aktionen im Statusleistenmenü angezeigt werden, und legen Sie die Reihenfolge allgemeiner und zusätzlicher Tools fest. Einstellungen, Version und Beenden bleiben unverändert.";
+"Sentence Comparison" = "Satzvergleich";
+"Could not rename configuration." = "Die Konfiguration konnte nicht umbenannt werden.";
+"No items" = "Keine Artikel";
+"Diagnostic logs" = "Diagnoseprotokolle";
+"Not Now" = "Nicht jetzt";
+"Text copied" = "Text kopiert";
+"Scroll capture copied to clipboard" = "Scroll-Aufnahme in die Zwischenablage kopiert";
+"Rename…" = "Umbenennen…";
+"Calculating…" = "Berechnen…";
+"Disable Hotkeys" = "Hotkeys deaktivieren";
+"Enable diagnostic logging (status, timing, coordinates, and errors only)" = "Diagnoseprotokollierung aktivieren (nur Status, Zeit, Koordinaten und Fehler)";
+"Hold %@ to show magnifier" = "Halten Sie %@ gedrückt, um die Lupe anzuzeigen";
+"Choose which dedicated OCR and translation tools are visible. Keyboard shortcuts are in Shortcuts." = "Wählen Sie aus, welche dedizierten OCR- und Übersetzungstools sichtbar sind. Tastaturkürzel finden Sie unter „Kurzbefehle“.";
+"Hold to Show Magnifier" = "Halten Sie gedrückt, um die Lupe anzuzeigen";
+"Show All Pins" = "Alle Pins anzeigen";
+"The configuration “%@” will be deleted and Basic will be applied." = "Die Konfiguration „%@“ wird gelöscht und Basic wird angewendet.";
+"These are actions rather than drawing tools. They appear in More Tools; disabling one hides it from both selections and pins." = "Hierbei handelt es sich eher um Aktionen als um Zeichenwerkzeuge. Sie werden unter „Weitere Tools“ angezeigt. Durch Deaktivieren wird es sowohl in der Auswahl als auch in den Pins ausgeblendet.";
+"Images saved to a folder you choose will not be deleted." = "Bilder, die in einem von Ihnen gewählten Ordner gespeichert sind, werden nicht gelöscht.";
+"Press %@ to switch RGB/HEX" = "Drücken Sie %@, um RGB/HEX umzuschalten";
+"Space to move. Release to finish" = "Raum zum Bewegen. Zum Beenden loslassen";
+"Show/Hide Magnifier" = "Lupe ein-/ausblenden";
+"Speak" = "Sprich";
+"Eraser" = "Radiergummi";
+"Current Configuration" = "Aktuelle Konfiguration";
+"Screen Translation Capture" = "Bildschirmübersetzungserfassung";
+"Copy Translation" = "Übersetzung kopieren";
+"Move to Applications folder?" = "In den Anwendungsordner verschieben?";
+"Double-click to Close Pin" = "Doppelklicken Sie, um den Pin zu schließen";
+"Slim" = "Schlank";
+"Could not move to Applications" = "Konnte nicht zu „Anwendungen“ wechseln";
+"Please drag Pinlume to your Applications folder manually.\n\n%@" = "Bitte ziehen Sie Pinlume manuell in Ihren Anwendungsordner.\n\n%@";
+"Could not import configuration." = "Die Konfiguration konnte nicht importiert werden.";
+"These are actions rather than drawing tools. Disabling one hides it from ordinary selections and pins." = "Hierbei handelt es sich eher um Aktionen als um Zeichenwerkzeuge. Durch Deaktivieren wird es vor normalen Auswahlen und Pins ausgeblendet.";
+"Turn this off to keep translation text on this Mac. Google translation will be unavailable." = "Deaktivieren Sie diese Option, um den übersetzten Text auf diesem Mac beizubehalten. Die Google-Übersetzung ist nicht verfügbar.";
+"Could not delete configuration." = "Die Konfiguration konnte nicht gelöscht werden.";
+"Screen translation must stay on one display" = "Die Bildschirmübersetzung muss auf einem Display bleiben";
+"Hide Pin Shadow" = "Pin-Schatten ausblenden";
+"Translation Status" = "Übersetzungsstatus";
+"Monochrome" = "Monochrom";
+"Translate before swapping languages" = "Übersetzen Sie, bevor Sie die Sprache wechseln";
+"Export" = "Exportieren";
+"Dark" = "Dunkel";
+"Apple translation needs the %@ → %@ language pack. Download it in System Settings." = "Für die Apple-Übersetzung ist das Sprachpaket %@ → %@ erforderlich. Laden Sie es in den Systemeinstellungen herunter.";
+"Press %@ to move the sample point 1 pixel" = "Drücken Sie %@, um den Abtastpunkt um 1 Pixel zu verschieben";
+"Move Selection 1 Pixel" = "Auswahl um 1 Pixel verschieben";
+"Screen Translation" = "Bildschirmübersetzung";
+"Smooth Pin Zoom" = "Sanfter Pin-Zoom";
+"The current settings were kept unchanged." = "Die aktuellen Einstellungen wurden unverändert beibehalten.";
+"Presentation Drawing" = "Präsentationszeichnung";
+"Interface Theme:" = "Schnittstellenthema:";
+"Quick capture copied to clipboard" = "Schnelle Aufnahme in die Zwischenablage kopiert";
+"Translate selected text" = "Ausgewählten Text übersetzen";
+"Import" = "Importieren";
+"  Pin Zoom Anchor:" = "Pin-Zoom-Anker:";
+"Source Text" = "Quelltext";
+"Open Translation Window" = "Öffnen Sie das Übersetzungsfenster";
+"Configuration Profiles" = "Konfigurationsprofile";
+"Text recognition failed" = "Die Texterkennung ist fehlgeschlagen";
+"Continue with Clipboard" = "Fahren Sie mit der Zwischenablage fort";
+"Allow Trackpad Pinch Zoom on Pins" = "Pinch-Zoom mit dem Trackpad auf Pins zulassen";
+"Actions in More Tools" = "Aktionen in „Weitere Tools“.";
+"Clear Selected Data" = "Ausgewählte Daten löschen";
+"Could not export configuration." = "Die Konfiguration konnte nicht exportiert werden.";
+"Copy Source" = "Quelle kopieren";
+"Common Tools" = "Gemeinsame Werkzeuge";
+"Swap" = "Tauschen";
+"Recognize Text" = "Text erkennen";
+"Speak Translation" = "Sprechen Sie Übersetzung";
+"These are actions rather than drawing tools. Disabling one hides it wherever that action is available." = "Hierbei handelt es sich eher um Aktionen als um Zeichenwerkzeuge. Wenn Sie eine Funktion deaktivieren, wird sie überall dort ausgeblendet, wo diese Aktion verfügbar ist.";
+"Common tools appear in the first row; additional tools move into the More menu. Actions unavailable for the current context do not appear." = "In der ersten Zeile werden häufig verwendete Werkzeuge angezeigt. Zusätzliche Werkzeuge werden in das Menü „Mehr“ verschoben. Aktionen, die für den aktuellen Kontext nicht verfügbar sind, werden nicht angezeigt.";
+"Not enough space for comparison" = "Für einen Vergleich reicht der Platz nicht aus";
+"Set the Select Text pin action, translation engine, and privacy policy here. Keyboard shortcuts are in Shortcuts." = "Legen Sie hier die Pin-Aktion „Text auswählen“, die Übersetzungs-Engine und die Datenschutzrichtlinie fest. Tastaturkürzel finden Sie unter „Kurzbefehle“.";
+"Recognizing Text…" = "Text erkennen…";
+"Release %@ to hide magnifier" = "Lassen Sie %@ los, um die Lupe auszublenden";
+"Rename" = "Umbenennen";
+"Translate Now" = "Jetzt übersetzen";
+"Mouse Wheel" = "Mausrad";
+"Google translation is disabled in Settings." = "Die Google-Übersetzung ist in den Einstellungen deaktiviert.";
+"Could not determine the source language." = "Die Ausgangssprache konnte nicht ermittelt werden.";
+"Copy Text" = "Text kopieren";
+"Selection & Pin Interactions" = "Auswahl und Pin-Interaktionen";
+"Pin zoom anchors to mouse position" = "Zoomanker an der Mausposition befestigen";
+"OCR & Translation" = "OCR und Übersetzung";
+"Rotate Clockwise" = "Im Uhrzeigersinn drehen";

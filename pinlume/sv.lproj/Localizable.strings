@@ -1,0 +1,844 @@
+/* Svenska — Pinlume localization
+ *
+ * To add a new language:
+ * 1. Create a new folder: pinlume/<lang-code>.lproj/
+ * 2. Copy this file into that folder
+ * 3. Translate all values (right side of = sign)
+ * 4. Add the language to LanguageManager.availableLanguages in Services/LanguageManager.swift
+ * 5. Add the language code to knownRegions in pinlume.xcodeproj/project.pbxproj
+ * 6. Submit a pull request!
+ *
+ * Keys use the English text. Values should be the translation.
+ * Format strings use %@ for strings, %d for integers.
+ * Keep keyboard shortcuts (like ⌘C) untranslated.
+ * Keep brand names (Pinlume, Google Drive, imgbb, S3) untranslated.
+ */
+
+/* Menu Bar */
+"Capture Area" = "Ta bild av omr\U00E5de";
+"Capture Screen" = "Ta bild av sk\U00E4rm";
+"Capture OCR" = "OCR-f\U00E5ngst";
+"Capture OCR & QR" = "OCR- & QR-f\U00E5ngst";
+"Capture area and read text/QR codes" = "F\U00E5nga omr\U00E5de och l\U00E4s text/QR-koder";
+"Quick Capture" = "Snabbf\U00E5ngst";
+"Scroll Capture" = "Rullf\U00E5ngst";
+"Capture Last Area" = "Fånga senaste området";
+"Capture Delay" = "F\U00F6rdr\U00F6jning";
+"None" = "Ingen";
+"%d seconds" = "%d sekunder";
+"Record Area" = "Spela in omr\U00E5de";
+"Record Screen" = "Spela in sk\U00E4rm";
+"Recent Captures" = "Senaste f\U00E5ngster";
+"Show History Panel" = "Visa historikpanel";
+"Open Image..." = "\U00D6ppna bild...";
+"Open from Clipboard" = "\U00D6ppna fr\U00E5n urklipp";
+"Pin from Clipboard" = "F\U00E4st fr\U00E5n urklipp";
+"Preferences..." = "Inst\U00E4llningar...";
+"Check for Updates..." = "S\U00F6k efter uppdateringar...";
+"Quit Pinlume" = "Avsluta Pinlume";
+"No recent captures" = "Inga senaste f\U00E5ngster";
+"Clear History" = "Rensa historik";
+
+/* History Panel */
+"Copy" = "Kopiera";
+"Save As..." = "Spara som...";
+"Open in Editor" = "\U00D6ppna i redigeraren";
+"Pin to Screen" = "F\U00E4st p\U00E5 sk\U00E4rmen";
+"Quick Look" = "\U00D6verblick";
+"Delete" = "Radera";
+"All" = "Alla";
+"Screenshots" = "Sk\U00E4rmbilder";
+"GIFs" = "GIFs";
+"Click to copy \U00B7 Drag to app" = "Klicka f\U00F6r att kopiera \U00B7 Dra till app";
+"No captures yet" = "Inga f\U00E5ngster \U00E4nnu";
+
+/* Floating Thumbnail */
+"Close All" = "St\U00E4ng alla";
+"Save All to Folder\U2026" = "Spara alla till mapp\U2026";
+"Save" = "Spara";
+
+/* Editor Top Bar */
+"Zoom" = "Zoom";
+"Zoom In" = "Zooma in";
+"Zoom Out" = "Zooma ut";
+"Fit Canvas" = "Anpassa arbetsyta";
+"Crop" = "Besk\U00E4r";
+"Rotate Left" = "Rotera v\U00E4nster";
+"Rotate Right" = "Rotera h\U00F6ger";
+"Flip Horizontal" = "V\U00E4nd horisontellt";
+"Flip Vertical" = "V\U00E4nd vertikalt";
+"Add Capture" = "L\U00E4gg till f\U00E5ngst";
+
+/* Toolbar - Tools */
+"Arrow" = "Pil";
+"Line" = "Linje";
+"Rectangle" = "Rektangel";
+"Ellipse" = "Ellips";
+"Pencil" = "Penna";
+"Pencil (Draw)" = "Penna (Rita)";
+"Marker" = "Markering";
+"Text" = "Text";
+"Number" = "Nummer";
+"Number / Counter" = "Nummer / R\U00E4knare";
+"Stamp / Emoji" = "St\U00E4mpel / Emoji";
+"Censor" = "Censur";
+"Censor (Pixelate / Blur / Solid)" = "Censur (Pixelera / Oskarp / Solid)";
+"Measure" = "M\U00E4t";
+"Measure (px)" = "M\U00E4t (px)";
+"Magnify (Loupe)" = "F\U00F6rstora (Lupp)";
+"Highlight" = "Fokus";
+"Highlight (Spotlight)" = "Fokus (Str\U00E5lkastare)";
+"Dim" = "D\U00E4mpa";
+"Color Sampler" = "F\U00E4rgv\U00E4ljare";
+"Color Picker" = "F\U00E4rgv\U00E4ljare";
+"Select & Edit" = "Markera och redigera";
+"Color" = "F\U00E4rg";
+
+/* Toolbar - Actions */
+"Copy to Clipboard" = "Kopiera till urklipp";
+"Save to File" = "Spara till fil";
+"Save to" = "Spara till";
+"Open in Editor Window" = "\U00D6ppna i redigeringsf\U00F6nster";
+"Pin on Screen" = "F\U00E4st p\U00E5 sk\U00E4rmen";
+"Pin" = "F\U00E4st";
+"Pin (floating window)" = "F\U00E4st (flytande f\U00F6nster)";
+"OCR" = "OCR";
+"OCR Text" = "OCR-text";
+"OCR (extract text)" = "OCR (extrahera text)";
+"OCR & QR" = "OCR & QR";
+"Run OCR & QR" = "K\U00F6r OCR & QR";
+"Text & QR Recognition" = "Text- & QR-igenk\U00E4nning";
+"QR Code" = "QR-kod";
+"QR Codes" = "QR-koder";
+"Open Link" = "\U00D6ppna l\U00E4nk";
+"Upload" = "Ladda upp";
+"Share" = "Dela";
+"Undo" = "\U00C5ngra";
+"Redo" = "G\U00F6r om";
+"Close" = "St\U00E4ng";
+"Remove Background" = "Ta bort bakgrund";
+"Beautify" = "F\U00F6rsk\U00F6na";
+"Adjust" = "Justera";
+"Adjust (Image Effects)" = "Justera (Bildeffekter)";
+"Invert Colors" = "Invertera f\U00E4rger";
+"Record" = "Spela in";
+"Record screen" = "Spela in sk\U00E4rm";
+"Translate" = "\U00D6vers\U00E4tt";
+"Auto-Redact sensitive data" = "Maskera k\U00E4nslig data automatiskt";
+"Move Selection" = "Flytta markering";
+"Aspect ratio & resolution presets" = "F\U00F6rinst\U00E4llningar f\U00F6r bildf\U00F6rh\U00E5llande och uppl\U00F6sning";
+"Aspect ratio" = "Bildf\U00F6rh\U00E5llande";
+"Custom \U00B7 %@" = "Anpassat \U00B7 %@";
+"Resolution" = "Uppl\U00F6sning";
+"Freeform" = "Fri form";
+"Units" = "Enheter";
+"Keep ratio for next captures" = "Beh\U00E5ll f\U00F6rh\U00E5llande f\U00F6r kommande f\U00E5ngster";
+
+/* Toolbar - Recording */
+"Start Recording" = "Starta inspelning";
+"Cancel Recording" = "Avbryt inspelning";
+"Highlight Mouse Clicks" = "Markera musklick";
+"Record System Audio" = "Spela in systemljud";
+"Record Microphone" = "Spela in mikrofon";
+"Recording Settings" = "Inspelningsinst\U00E4llningar";
+
+/* Tool Options */
+"Size" = "Storlek";
+"Stroke" = "Linje";
+"Radius" = "Radie";
+"Start:" = "Start:";
+"Draw:" = "Rita:";
+"Auto:" = "Auto:";
+"Fill" = "Fyll";
+"Outline" = "Kontur";
+"More Emojis" = "Fler emojis";
+"Load Image" = "Ladda bild";
+"Gradient Style" = "Gradientstil";
+"On" = "P\U00E5";
+"Text Only" = "Endast text";
+"All Text" = "All text";
+"PII" = "PII";
+"Faces" = "Ansikten";
+"People" = "Personer";
+"Confirm before upload" = "Bekr\U00E4fta f\U00F6re uppladdning";
+"Flip" = "V\U00E4nd";
+"Smooth" = "Mjuk";
+"Refined" = "Förfinad";
+"Smart" = "Smart";
+"Padding" = "Utfyllnad";
+"Shadow" = "Skugga";
+"Right-click to add points" = "H\U00F6gerklicka f\U00F6r att l\U00E4gga till punkter";
+"Hold 1 auto-vertical  \U00B7  Hold 2 auto-horizontal" = "H\U00E5ll 1 auto-vertikalt  \U00B7  H\U00E5ll 2 auto-horisontellt";
+
+/* Overlay / Canvas */
+"Click a window  \U00B7  Drag for custom area  \U00B7  F for full screen" = "Klicka p\U00E5 ett f\U00F6nster  \U00B7  Dra f\U00F6r eget omr\U00E5de  \U00B7  F f\U00F6r helsk\U00E4rm";
+"Drag to select  \U00B7  Click for full screen" = "Dra f\U00F6r att markera  \U00B7  Klicka f\U00F6r helsk\U00E4rm";
+"Release to annotate and edit" = "Sl\U00E4pp f\U00F6r att anteckna och redigera";
+"Release to finish" = "Sl\U00E4pp f\U00F6r att avsluta";
+"Hold Space to move. Release to annotate and edit" = "H\U00E5ll mellanslag f\U00F6r att flytta. Sl\U00E4pp f\U00F6r att anteckna och redigera";
+"Hold Space to move. Release to finish" = "H\U00E5ll mellanslag f\U00F6r att flytta. Sl\U00E4pp f\U00F6r att avsluta";
+"Space" = "Blanksteg";
+"Window snap: " = "F\U00F6nsterf\U00E5ngst: ";
+"ON" = "P\U00C5";
+"OFF" = "AV";
+"  (Tab to toggle)" = "  (Tab f\U00F6r att v\U00E4xla)";
+"Right-click to copy" = "H\U00F6gerklicka f\U00F6r att kopiera";
+"Copied %@" = "Kopierade %@";
+"Set color %@" = "Valde f\U00E4rg %@";
+"Draw something first to use the move tool." = "Rita n\U00E5got f\U00F6rst f\U00F6r att anv\U00E4nda flytta-verktyget.";
+"Drag to reposition" = "Dra f\U00F6r att flytta";
+
+/* Overlay - Popovers */
+"Format:" = "Format:";
+"FPS:" = "FPS:";
+"When done:" = "N\U00E4r klar:";
+"Open editor" = "\U00D6ppna redigeraren";
+"Open With" = "\U00D6ppna med";
+"No Apps Available" = "Inga appar tillg\U00E4ngliga";
+"No Share Services" = "Inga delningstj\U00E4nster";
+"Show in Finder" = "Visa i Finder";
+"Copy to clipboard" = "Kopiera till urklipp";
+
+/* Preferences - General */
+"Pinlume Preferences" = "Pinlume-inst\U00E4llningar";
+"General" = "Allm\U00E4nt";
+"Tools" = "Verktyg";
+"Recording" = "Inspelning";
+"About" = "Om";
+"Shortcuts" = "Genv\U00E4gar";
+"Uploads" = "Uppladdningar";
+"Language" = "Spr\U00E5k";
+"Language:" = "Spr\U00E5k:";
+"Restart the app to fully apply the new language." = "Starta om appen f\U00F6r att till\U00E4mpa det nya spr\U00E5ket.";
+"Capture" = "F\U00E5ngst";
+"Play sound on capture" = "Spela ljud vid skärmdump";
+"Play sound on copy" = "Spela ljud vid kopiering";
+"Remember last selected tool" = "Kom ih\U00E5g senast valt verktyg";
+"Show floating thumbnail after capture" = "Visa flytande miniatyrbild efter f\U00E5ngst";
+"Launch at login" = "Starta vid inloggning";
+"Show snap alignment guides" = "Visa f\U00E4stlinjer";
+"Snap selection edges to image boundaries" = "F\U00E4st markeringskanter mot bildgr\U00E4nser";
+"Capture mouse cursor in screenshot" = "F\U00E5nga muspekaren i sk\U00E4rmbild";
+"Double-click selection to copy" = "Dubbelklicka p\U00E5 markeringen f\U00F6r att kopiera";
+"Hide capture instructions" = "D\U00F6lj instruktioner vid sk\U00E4rmbild";
+"Use window title in saved filename" = "Anv\U00E4nd f\U00F6nstertitel i filnamn";
+"Hide menu bar icon" = "D\U00F6lj menyradsikon";
+"Hotkeys still work. To show the icon again, re-launch Pinlume." = "Kortkommandon fungerar fortfarande. F\U00F6r att visa ikonen igen, starta om Pinlume.";
+"Check for updates automatically" = "S\U00F6k efter uppdateringar automatiskt";
+"Check for beta updates" = "S\U00F6k efter betauppdateringar";
+"Thumbnail" = "Miniatyrbild";
+"  Dismiss after:" = "  St\U00E4ng efter:";
+"seconds before auto-dismiss (0 = never)" = "sekunder f\U00F6re automatisk st\U00E4ngning (0 = aldrig)";
+"  Multiple previews:" = "  Flera f\U00F6rhandsvisningar:";
+"Stack (keep all)" = "Stapla (beh\U00E5ll alla)";
+"Replace (show only latest)" = "Ers\U00E4tt (visa bara senaste)";
+"Output" = "Utdata";
+"Image format:" = "Bildformat:";
+"Quality:" = "Kvalitet:";
+"%d%%" = "%d%%";
+"Save at standard resolution (1x)" = "Spara i standarduppl\U00F6sning (1x)";
+"Halves dimensions on Retina displays, ~4x smaller files" = "Halverar dimensionerna p\U00E5 Retina-sk\U00E4rmar, ~4x mindre filer";
+"Embed sRGB color profile" = "B\U00E4dda in sRGB-f\U00E4rgprofil";
+"Ensures consistent colors across different displays" = "S\U00E4kerst\U00E4ller konsekvent f\U00E4rg\U00E5tergivning mellan olika sk\U00E4rmar";
+"Screenshot History" = "Sk\U00E4rmbildshistorik";
+"History size:" = "Historikstorlek:";
+"screenshots kept on disk (0 = off)" = "sk\U00E4rmbilder sparade p\U00E5 disk (0 = av)";
+"Order history by last edit" = "Sortera historik efter senaste redigering";
+"Edited screenshots move to the top. Off keeps them in capture order." = "Redigerade sk\U00E4rmbilder flyttas \U00F6verst. Av beh\U00E5ller dem i f\U00E5ngstordning.";
+"Save Directory" = "Spara-mapp";
+"Save folder:" = "Spara-mapp:";
+"Browse\U2026" = "Bl\U00E4ddra\U2026";
+"Appearance" = "Utseende";
+"Accent color:" = "Accentf\U00E4rg:";
+"Icon color:" = "Ikonf\U00E4rg:";
+"Background color:" = "Bakgrundsfärg:";
+"Reset" = "\U00C5terst\U00E4ll";
+"OCR Capture:" = "OCR-f\U00E5ngst:";
+"OCR & QR Capture:" = "OCR- & QR-f\U00E5ngst:";
+"Show window + copy to clipboard" = "Visa f\U00F6nster + kopiera till urklipp";
+"Show window only" = "Visa f\U00F6nster";
+"Copy to clipboard only" = "Kopiera till urklipp";
+"Enter / Quick Capture:" = "Enter / Snabbf\U00E5ngst:";
+"Save to file" = "Spara till fil";
+"Save + copy to clipboard" = "Spara + kopiera till urklipp";
+"OCR Action" = "OCR-\U00E5tg\U00E4rd";
+"Save action:" = "Spara\U00E5tg\U00E4rd:";
+"Save to default folder" = "Spara till standardmapp";
+"Ask where to save" = "Fr\U00E5ga var det ska sparas";
+"Disable shadow outside selection" = "Inaktivera skugga utanf\U00F6r markering";
+"Show shortcuts in tooltips" = "Visa genv\U00E4gar i verktygstips";
+"Menu bar icon:" = "Menyradsikon:";
+"Default" = "Standard";
+"Custom symbol" = "Anpassad symbol";
+"Enter any SF Symbol name (e.g. camera.fill) or pick a preset. Browse names in Apple's SF Symbols app. Invalid names fall back to the default icon." = "Ange valfritt SF Symbol-namn (t.ex. camera.fill) eller v\U00E4lj en f\U00F6rinst\U00E4llning. Bl\U00E4ddra bland namn i Apples SF Symbols-app. Ogiltiga namn \U00E5terg\U00E5r till standardikonen.";
+
+/* Preferences - Shortcuts */
+"Keyboard Shortcuts" = "Kortkommandon";
+"Hotkeys" = "Snabbknappar";
+"Clear shortcut" = "Rensa genv\U00E4g";
+"Press keys..." = "Tryck p\U00E5 tangenter...";
+"Waiting..." = "V\U00E4ntar...";
+
+/* Preferences - Tools */
+"Annotation Tools" = "Anteckningsverktyg";
+"Hidden tools are removed from the bottom toolbar." = "Dolda verktyg tas bort fr\U00E5n det nedre verktygsf\U00E4ltet.";
+"Capture Actions" = "F\U00E5ngst\U00E5tg\U00E4rder";
+"Menu Bar Order" = "Menyradens ordning";
+"Choose the order of capture actions in the Pinlume menu bar menu." = "V\U00E4lj ordningen p\U00E5 f\U00E5ngst\U00E5tg\U00E4rderna i menyn p\U00E5 Pinlume-menyraden.";
+"Move up" = "Flytta upp";
+"Move down" = "Flytta ned";
+"Bottom Toolbar Actions" = "\U00C5tg\U00E4rder i nedre verktygsf\U00E4ltet";
+"Hidden actions are removed from the bottom toolbar." = "Dolda \U00E5tg\U00E4rder tas bort fr\U00E5n det nedre verktygsf\U00E4ltet.";
+"Editor Actions" = "Redigerings\U00E5tg\U00E4rder";
+"Right Toolbar Actions" = "\U00C5tg\U00E4rder i h\U00F6gra verktygsf\U00E4ltet";
+"Hidden actions are removed from the right toolbar." = "Dolda \U00E5tg\U00E4rder tas bort fr\U00E5n det h\U00F6gra verktygsf\U00E4ltet.";
+
+/* Preferences - Recording */
+"Frame rate:" = "Bildfrekvens:";
+"After recording:" = "Efter inspelning:";
+"Save recording to:" = "Spara inspelning till:";
+"Save Recording" = "Spara inspelning";
+"Clear" = "Rensa";
+"Max height:" = "Maxh\U00F6jd:";
+"px (0 = unlimited)" = "px (0 = obegr\U00E4nsat)";
+"Behavior" = "Beteende";
+"Auto-scroll (sends synthetic scroll events)" = "Auto-rullning (skickar syntetiska rullh\U00E4ndelser)";
+"Detect fixed/sticky headers" = "Identifiera fasta/klistrade rubriker";
+"Scroll speed:" = "Rullhastighet:";
+"Slow" = "L\U00E5ngsam";
+"Medium" = "Medel";
+"Fast" = "Snabb";
+"Very fast" = "V\U00E4ldigt snabb";
+"5 fps" = "5 fps";
+"10 fps" = "10 fps";
+"15 fps" = "15 fps";
+"24 fps" = "24 fps";
+"30 fps" = "30 fps";
+"60 fps" = "60 fps";
+"120 fps" = "120 fps";
+"MP4 (H.264)" = "MP4 (H.264)";
+"GIF" = "GIF";
+
+/* Preferences - Upload */
+"Upload Service" = "Uppladdningstj\U00E4nst";
+"Upload Provider" = "Uppladdningsleverant\U00F6r";
+"Provider:" = "Leverant\U00F6r:";
+"Google Drive" = "Google Drive";
+"Google Drive (images + videos)" = "Google Drive (bilder + videor)";
+"imgbb (images only)" = "imgbb (endast bilder)";
+"S3-Compatible (images + videos)" = "S3-kompatibel (bilder + videor)";
+"S3-Compatible Storage" = "S3-kompatibel lagring";
+"Sign In with Google" = "Logga in med Google";
+"Sign Out" = "Logga ut";
+"Signed in" = "Inloggad";
+"Not signed in" = "Inte inloggad";
+"Account:" = "Konto:";
+"Test Connection" = "Testa anslutning";
+"Fill in endpoint, bucket, and credentials first" = "Fyll i endpoint, bucket och inloggningsuppgifter f\U00F6rst";
+"Testing..." = "Testar...";
+"Connection successful!" = "Anslutningen lyckades!";
+"Leave empty to use default" = "L\U00E4mna tomt f\U00F6r att anv\U00E4nda standard";
+"Endpoint:" = "Endpoint:";
+"Region:" = "Region:";
+"Bucket:" = "Bucket:";
+"Access Key:" = "\U00C5tkomstnyckel:";
+"Secret Key:" = "Hemlig nyckel:";
+"Public URL:" = "Publik URL:";
+"Path Prefix:" = "S\U00F6kv\U00E4gsprefix:";
+"API key:" = "API-nyckel:";
+"Upload History" = "Uppladdningshistorik";
+"No uploads yet." = "Inga uppladdningar \U00E4nnu.";
+"Base URL for public access. If empty, the S3 endpoint URL is used (may not be publicly accessible)." = "Bas-URL f\U00F6r publik \U00E5tkomst. Om tomt anv\U00E4nds S3-endpointens URL (kanske inte publikt tillg\U00E4nglig).";
+"A shared key is included \U2014 get your own free key at imgbb.com/api if you hit rate limits. Images only (no video support)." = "En delad nyckel ing\U00E5r \U2014 skaffa din egen gratis nyckel p\U00E5 imgbb.com/api om du n\U00E5r hastighetsgr\U00E4nsen. Endast bilder (inget videost\U00F6d).";
+"Works with AWS S3, Cloudflare R2, MinIO, DigitalOcean Spaces, Backblaze B2, and other S3-compatible services. Supports images and videos." = "Fungerar med AWS S3, Cloudflare R2, MinIO, DigitalOcean Spaces, Backblaze B2 och andra S3-kompatibla tj\U00E4nster. St\U00F6der bilder och videor.";
+"Configure S3 in Preferences" = "Konfigurera S3 i Inst\U00E4llningar";
+"Sign in to Google Drive in Preferences" = "Logga in p\U00E5 Google Drive i Inst\U00E4llningar";
+"Video upload requires Google Drive or S3" = "Videouppladdning kr\U00E4ver Google Drive eller S3";
+
+/* Preferences - About */
+"Pinlume" = "Pinlume";
+"Version %@ (%@)" = "Version %@ (%@)";
+"Made by" = "Skapad av";
+"Licensed under the GPLv3" = "Licensierad under GPLv3";
+"A free, open-source screenshot & screen recording tool for macOS.\nFully native \U2014 built with Swift and AppKit." = "Ett gratis sk\U00E4rmbilds- och sk\U00E4rminspelningsverktyg med \U00F6ppen k\U00E4llkod f\U00F6r macOS.\nHelt inbyggt \U2014 byggt med Swift och AppKit.";
+
+/* Alerts */
+"No Image on Clipboard" = "Ingen bild i urklipp";
+"No Image or Text on Clipboard" = "Ingen bild eller text i urklipp";
+"Copy an image to the clipboard first, then try again." = "Kopiera en bild till urklipp f\U00F6rst och f\U00F6rs\U00F6k sedan igen.";
+"Copy an image or text to the clipboard first, then try again." = "Kopiera en bild eller text till urklipp f\U00F6rst och f\U00F6rs\U00F6k sedan igen.";
+"OK" = "OK";
+"Accessibility Access Required" = "Tillg\U00E4nglighets\U00E5tkomst kr\U00E4vs";
+"Pinlume needs Accessibility permission to auto-scroll other apps. Please grant access in System Settings, then try again." = "Pinlume beh\U00F6ver tillg\U00E4nglighetsbeh\U00F6righet f\U00F6r att auto-rulla andra appar. Ge \U00E5tkomst i Systeminst\U00E4llningar och f\U00F6rs\U00F6k sedan igen.";
+"Pinlume needs Accessibility permission for scroll capture. Please grant access in System Settings, then try again." = "Pinlume behöver behörighet för Tillgänglighet för rullningsfångst. Ge åtkomst i Systeminställningar och försök igen.";
+"Open Settings" = "\U00D6ppna Inst\U00E4llningar";
+"Cancel" = "Avbryt";
+"Microphone Access Required" = "Mikrofon\U00E5tkomst kr\U00E4vs";
+"Pinlume needs microphone permission to record voice audio. Open System Settings to grant access." = "Pinlume beh\U00F6ver mikrofonbeh\U00F6righet f\U00F6r att spela in r\U00F6stljud. \U00D6ppna Systeminst\U00E4llningar f\U00F6r att ge \U00E5tkomst.";
+"Upload to Google Drive?" = "Ladda upp till Google Drive?";
+"Upload to S3?" = "Ladda upp till S3?";
+"Upload to imgbb.com?" = "Ladda upp till imgbb.com?";
+"Your screenshot will be uploaded." = "Din sk\U00E4rmbild kommer att laddas upp.";
+
+/* Permission Onboarding */
+"Welcome to Pinlume" = "V\U00E4lkommen till Pinlume";
+"Pinlume needs one permission" = "Pinlume beh\U00F6ver en beh\U00F6righet";
+"Screen Recording not yet granted" = "Sk\U00E4rminspelning \U00E4nnu inte beviljad";
+"Screen Recording granted!" = "Sk\U00E4rminspelning beviljad!";
+"Enable Pinlume, then try taking a screenshot" = "Aktivera Pinlume och ta sedan en sk\U00E4rmbild";
+"Open Screen Recording Settings" = "\U00D6ppna inst\U00E4llningar f\U00F6r sk\U00E4rminspelning";
+"Continue" = "Forts\U00E4tt";
+
+/* OCR Window */
+"Text Recognition" = "Textigenk\U00E4nning";
+"Translate to:" = "\U00D6vers\U00E4tt till:";
+"%d chars \U00B7 %d words" = "%d tecken \U00B7 %d ord";
+"Copy  \U2318\U21A9" = "Kopiera  \U2318\U21A9";
+"AI Search" = "AI-s\U00F6kning";
+"Show Original" = "Visa original";
+"Translation Failed" = "\U00D6vers\U00E4ttning misslyckades";
+"Translation" = "\U00D6vers\U00E4ttning";
+"(No text detected in the selected area)" = "(Ingen text uppt\U00E4cktes i det markerade omr\U00E5det)";
+
+/* Upload Toast */
+"URL copied to the clipboard" = "URL kopierad till urklipp";
+"Uploading... %d%%" = "Laddar upp... %d%%";
+"Upload failed: %@" = "Uppladdning misslyckades: %@";
+"Uploaded! Link copied." = "Uppladdat! L\U00E4nk kopierad.";
+"Uploading to %@... %d%%" = "Laddar upp till %@... %d%%";
+"Open" = "\U00D6ppna";
+
+/* Recording Toast */
+"Recording saved" = "Inspelning sparad";
+"%@ \U2022 Recording saved" = "%@ \U2022 Inspelning sparad";
+"Copy Path" = "Kopiera s\U00F6kv\U00E4g";
+"Path copied!" = "S\U00F6kv\U00E4g kopierad!";
+
+/* Video Editor */
+"Pinlume Video Editor" = "Pinlume Videoredigerare";
+"%@ selected" = "%@ markerat";
+"Exporting..." = "Exporterar...";
+"Export failed" = "Export misslyckades";
+"Saved to %@" = "Sparad till %@";
+"Save failed" = "Kunde inte spara";
+
+/* Barcode Detector */
+/* "Open" and "Copy" are shared with other sections */
+
+/* Save Panel */
+"Save As..." = "Spara som...";
+"Choose a folder" = "V\U00E4lj en mapp";
+"Save All to Folder\U2026" = "Spara alla till mapp\U2026";
+
+/* Scroll Capture HUD */
+"Auto Scroll" = "Auto-rullning";
+"Stop" = "Stoppa";
+"Scrolling..." = "Rullar...";
+
+/* Effects Picker (Adjust popover) */
+"Presets" = "F\U00F6rinst\U00E4llningar";
+"Adjustments" = "Justeringar";
+"Brightness" = "Ljusstyrka";
+"Contrast" = "Kontrast";
+"Saturation" = "M\U00E4ttnad";
+"Sharpness" = "Sk\U00E4rpa";
+
+/* Time Ago */
+"just now" = "just nu";
+"%ds ago" = "%ds sedan";
+"%dm ago" = "%dm sedan";
+"%dh ago" = "%dh sedan";
+
+/* Hotkey Labels */
+"History" = "Historik";
+
+/* Preferences - Shortcuts note */
+"Click \"Record\" and press a key combination with at least one modifier (\U2318, \U2325, \U2303, \U21E7) to set a shortcut." = "Klicka p\U00E5 \"Record\" och tryck p\U00E5 en tangentkombination med minst en modifierare (\U2318, \U2325, \U2303, \U21E7) f\U00F6r att st\U00E4lla in en genv\U00E4g.";
+
+/* Recording \U2014 GIF Processing */
+"Processing GIF\U2026" = "Bearbetar GIF\U2026";
+
+/* Recording \U2014 Input Monitoring Permission */
+"Input Monitoring Required" = "Inmatnings\U00F6vervakning kr\U00E4vs";
+"Pinlume needs Input Monitoring permission to show keystrokes during recording. Please grant access in System Settings, then try again." = "Pinlume beh\U00F6ver beh\U00F6righet f\U00F6r inmatnings\U00F6vervakning f\U00F6r att visa tangenttryckningar under inspelning. Ge \U00E5tkomst i System Settings och f\U00F6rs\U00F6k sedan igen.";
+"Pinlume needs Accessibility permission to show keystrokes during recording. Please grant access in System Settings, then try again." = "Pinlume beh\U00F6ver tillg\U00E4nglighetsbeh\U00F6righet f\U00F6r att visa tangenttryckningar under inspelning. Ge \U00E5tkomst i System Settings och f\U00F6rs\U00F6k sedan igen.";
+
+/* Recording \U2014 Keystroke Overlay */
+"Show Keystrokes" = "Visa tangenttryckningar";
+"Shortcuts Only" = "Endast genv\U00E4gar";
+"All Keystrokes" = "Alla tangenttryckningar";
+
+/* Recording \U2014 Settings Popover */
+"Delay:" = "F\U00F6rdr\U00F6jning:";
+
+/* Video Editor */
+"Copied to clipboard!" = "Kopierat till urklipp!";
+
+/* Webcam Overlay */
+"Webcam Overlay" = "Webbkamera\U00F6verlagring";
+"Camera Access Required" = "Kamera\U00E5tkomst kr\U00E4vs";
+"Pinlume needs camera permission for the webcam overlay. Open System Settings to grant access." = "Pinlume beh\U00F6ver kamerabeh\U00F6righet f\U00F6r webbkamera\U00F6verlagringen. \U00D6ppna Systeminst\U00E4llningar f\U00F6r att ge \U00E5tkomst.";
+"Webcam" = "Webbkamera";
+"Bottom Right" = "Nedre h\U00F6ger";
+"Bottom Left" = "Nedre v\U00E4nster";
+"Top Right" = "\U00D6vre h\U00F6ger";
+"Top Left" = "\U00D6vre v\U00E4nster";
+"Small" = "Liten";
+"Large" = "Stor";
+"Webcam Size Small" = "Liten";
+"Webcam Size Medium" = "Medel";
+"Webcam Size Large" = "Stor";
+"Webcam Size Extra Large" = "Extra stor";
+"Circle" = "Cirkel";
+"Rounded Rectangle" = "Rundad rektangel";
+"Cam pos:" = "Kam. pos.:";
+"Cam size:" = "Kam. storlek:";
+"Cam shape:" = "Kam. form:";
+"  Position:" = "  Position:";
+
+/* New Strings */
+"Settings" = "Inställningar";
+"Settings..." = "Inst\U00E4llningar...";
+"Pinlume Settings" = "Pinlume-inst\U00E4llningar";
+"Also open in Editor" = "\U00D6ppna \U00E4ven i redigeraren";
+"Hide controls" = "D\U00F6lj kontroller";
+"Hide recording controls" = "D\U00F6lj inspelningskontroller";
+"Stop recording from the menu bar icon instead." = "Stoppa inspelningen fr\U00E5n menyradsikonen ist\U00E4llet.";
+"Pixelate" = "Pixelera";
+"Blur" = "Oskarp";
+"Solid" = "Solid";
+"Erase" = "Radera";
+"Done" = "Klar";
+"Do nothing" = "G\U00F6r ingenting";
+"Overlay / Editor Shortcuts" = "\U00D6verlagring / Redigeringsgenv\U00E4gar";
+"Set" = "St\U00E4ll in";
+"Press..." = "Tryck...";
+"Reset to default" = "\U00C5terst\U00E4ll till standard";
+"Press a single key to assign it as the shortcut for that tool. These work when the overlay or editor is active." = "Tryck p\U00E5 en tangent f\U00F6r att tilldela den som genv\U00E4g f\U00F6r det verktyget. Dessa fungerar n\U00E4r \U00F6verlagringen eller redigeraren \U00E4r aktiv.";
+"Keep Separate" = "Beh\U00E5ll separata";
+"Merge Audio" = "Sammanfoga ljud";
+"Audio Tracks" = "Ljudsp\U00E5r";
+"Adjust volume for each audio track:" = "Justera volymen f\U00F6r varje ljudsp\U00E5r:";
+"Microphone:" = "Mikrofon:";
+"System audio:" = "Systemljud:";
+"Loupe" = "Lupp";
+"Stamp" = "St\U00E4mpel";
+"Unlimited" = "Obegr\U00E4nsat";
+
+/* Save Confirmation / Recording / Translation / Upload / Inspector */
+"Save changes?" = "Spara \U00E4ndringar?";
+"Your annotations will be lost if you close without saving." = "Dina anteckningar f\U00F6rloras om du st\U00E4nger utan att spara.";
+"Save & Close" = "Spara och st\U00E4ng";
+"Discard" = "Kasta";
+"Stop Recording" = "Stoppa inspelning";
+"Pause" = "Pausa";
+"Resume" = "\U00C5teruppta";
+"Engine:" = "Motor:";
+"Google Translate" = "Google Translate";
+"Apple (on-device)" = "Apple (p\U00E5 enheten)";
+"Apple translation is faster and works offline. Google Translate supports more languages." = "Apple-\U00F6vers\U00E4ttning \U00E4r snabbare och fungerar offline. Google Translate st\U00F6der fler spr\U00E5k.";
+"Download language packs in System Settings\U2026" = "Ladda ner spr\U00E5kpaket i Systeminst\U00E4llningar\U2026";
+"Configure S3 in Settings" = "Konfigurera S3 i Inst\U00E4llningar";
+"Sign in to Google Drive in Settings" = "Logga in p\U00E5 Google Drive i Inst\U00E4llningar";
+"Offline build: upload and cloud storage integrations are removed. Update checks may still connect to Pinlume's update server. Screenshots and recordings stay local unless you share or save them yourself." = "Offline-version: integrationer för uppladdning och molnlagring är borttagna. Sökning efter uppdateringar kan fortfarande ansluta till Pinlumes uppdateringsserver. Skärmbilder och inspelningar förblir lokala om du inte delar eller sparar dem själv.";
+"Position:" = "Position:";
+"Size:" = "Storlek:";
+"Shape:" = "Form:";
+
+"Same as screenshots" = "Samma som skärmdumpar";
+"  Preview size:" = "  Förhandsgranskningsstorlek:";
+"(0 = off)" = "(0 = av)";
+"Clear All" = "Rensa alla";
+"Clear History?" = "Rensa historik?";
+"This will permanently delete all screenshots from history." = "Detta kommer permanent att ta bort alla skärmdumpar från historiken.";
+"Click \"Set\" and press a key combination with at least one modifier (⌘, ⌥, ⌃, ⇧) to set a shortcut." = "Klicka på \"Ange\" och tryck på en tangentkombination med minst en modifierare (⌘, ⌥, ⌃, ⇧) för att ange en genväg.";
+"Files are uploaded to a \"Pinlume\" folder in your Google Drive. Everything stays private — nothing is shared publicly." = "Filer laddas upp till en \"Pinlume\"-mapp i din Google Drive. Allt förblir privat — inget delas offentligt.";
+
+"Pressure" = "Tryck";
+
+/* Added for v4.1.0-beta.3 — video editor, effects, open-video, shortcuts help */
+"Open Video..." = "Öppna video...";
+"Choose a video to open in Pinlume editor" = "Välj en video att öppna i Pinlume-redigeraren";
+"Click to add effects" = "Klicka för att lägga till effekter";
+"Add Zoom" = "Lägg till zoom";
+"Add Censor" = "Lägg till censur";
+"Add Cut" = "Lägg till klipp";
+"Add Speed" = "Lägg till hastighet";
+"Add Freeze" = "Lägg till frysning";
+"Add Text" = "Lägg till text";
+"Delete Zoom" = "Ta bort zoom";
+"Delete Censor" = "Ta bort censur";
+"Delete Cut" = "Ta bort klipp";
+"Delete Speed" = "Ta bort hastighet";
+"Delete Freeze" = "Ta bort frysning";
+"Delete Text" = "Ta bort text";
+"Edit Text…" = "Redigera text…";
+"Huge" = "Enorm";
+"Bold" = "Fet";
+"Italic" = "Kursiv";
+"Alignment" = "Justering";
+"Left" = "Vänster";
+"Center" = "Centrerad";
+"Right" = "Höger";
+"Text Color" = "Textfärg";
+"Background Color" = "Bakgrundsfärg";
+"Rounded" = "Rundad";
+"Custom…" = "Anpassad…";
+"Transparent" = "Genomskinlig";
+"Black" = "Svart";
+"White" = "Vit";
+"Yellow" = "Gul";
+"Red" = "Röd";
+"Green" = "Grön";
+"Blue" = "Blå";
+"Untitled" = "Namnlös";
+"Add effect" = "Lägg till effekt";
+"Fade" = "Toning";
+"High" = "Hög";
+"Low" = "Låg";
+"Not enough room here" = "Inte tillräckligt med plats här";
+"Copied!" = "Kopierat!";
+"Converting to GIF…" = "Konverterar till GIF…";
+"GIF conversion failed" = "GIF-konvertering misslyckades";
+"No video track found" = "Inget videospår hittades";
+"Preview:" = "Förhandsvisning:";
+"Copy Screen Info" = "Kopiera skärminfo";
+"Copies display and capture diagnostics to clipboard" = "Kopierar skärm- och fångstdiagnostik till urklipp";
+"Accent" = "Accent";
+"Icon" = "Ikon";
+"Background" = "Bakgrund";
+"Custom" = "Anpassad";
+"Theme:" = "Tema:";
+"Application" = "Applikation";
+"Capture area and extract text" = "Fånga område och extrahera text";
+"Capture the full screen" = "Fånga hela skärmen";
+"Counter for multi-screen captures" = "Räknare för fångster över flera skärmar";
+"8-character random string (e.g. k3j7x9q2)" = "8-teckens slumpmässig sträng (t.ex. k3j7x9q2)";
+"Filename Template Tokens" = "Filnamnsmalltoken";
+"Filename tokens" = "Filnamnstoken";
+"Filename:" = "Filnamn:";
+"Open an image file in the editor" = "Öppna en bildfil i redigeraren";
+"Open the recent captures overlay" = "Öppna överlagringen för senaste fångster";
+"Open this settings window" = "Öppna detta inställningsfönster";
+"Quick capture (uses your Enter action)" = "Snabbfångst (använder din Enter-åtgärd)";
+"Re-capture the last selected area" = "Fånga det senast markerade området igen";
+"Screenshots only — captured window title (blank otherwise)" = "Endast skärmbilder — fångad fönstertitel (tomt annars)";
+"Show available filename tokens" = "Visa tillgängliga filnamnstoken";
+"Show supported URL scheme commands" = "Visa kommandon som stöds av URL-schemat";
+"Start area capture" = "Starta områdesfångst";
+"Start area recording" = "Starta områdesinspelning";
+"Start full-screen recording" = "Starta helskärmsinspelning";
+"Start scroll capture" = "Starta rullfångst";
+"Stop the current recording" = "Stoppa aktuell inspelning";
+"Supported URL Scheme Commands" = "Kommandon som stöds av URL-schemat";
+"The file extension is appended automatically. Slashes and colons in {window} become dashes." = "Filändelsen läggs till automatiskt. Snedstreck och kolon i {window} blir bindestreck.";
+"Trigger Pinlume from Raycast, Alfred, Shortcuts, or any tool that opens URLs." = "Utlös Pinlume från Raycast, Alfred, Shortcuts eller valfritt verktyg som öppnar URL:er.";
+"URL scheme info" = "URL-scheminfo";
+"Enable pinlume:// URL scheme" = "Aktivera pinlume://-URL-schema";
+"sec (0 = never)" = "sek (0 = aldrig)";
+
+/* Localized current UI keys. Existing translations above are preserved. */
+"Plus build: personal build with update checks disabled. Preferences, history, and permissions are separate from the original Pinlume app." = "Plusbyggt: personligt bygge med uppdateringskontroller inaktiverade. Inställningar, historik och behörigheter är separata från den ursprungliga Pinlume-appen.";
+"Light" = "Ljus";
+"Press Option to hide magnifier" = "Tryck på Alternativ för att dölja förstoringsglaset";
+"Changes to the selected profile are saved automatically." = "Ändringar av den valda profilen sparas automatiskt.";
+"Show Pin Shadow" = "Visa Pin Shadow";
+"Arrow Keys" = "Piltangenter";
+"Source Language" = "Källspråk";
+"Translation Pin" = "Översättningsstift";
+"Color Scheme:" = "Färgschema:";
+"Text Recognition / QR" = "Textigenkänning / QR";
+"Basic" = "Grundläggande";
+"Full" = "Full";
+"Menu Bar Menu" = "Menyraden Meny";
+"Screenshot history and editable annotations" = "Skärmdumpshistorik och redigerbara kommentarer";
+"Press Shift to switch RGB/HEX" = "Tryck på Shift för att byta RGB/HEX";
+"Clipboard image backups" = "Säkerhetskopiering av bilder från Urklipp";
+"Double-click to Toggle Thumbnail" = "Dubbelklicka för att växla miniatyrbild";
+"Compare" = "Jämför";
+"Apple translation does not support %@ → %@." = "Apple-översättning stöder inte %@ → %@.";
+"Profile:" = "Profil:";
+"Move to Applications" = "Flytta till Applikationer";
+"Filled Rectangle" = "Fylld rektangel";
+"Google translation is unavailable because sending text is disabled." = "Google översättning är inte tillgänglig eftersom sändning av text är inaktiverad.";
+"Adjust Area and Edit" = "Justera område och redigera";
+"Clear Local Data…" = "Rensa lokal data...";
+"Swap Languages" = "Byt språk";
+"Ignore window occlusion" = "Ignorera fönsterocklusion";
+"Graphite Blue" = "Grafitblå";
+"Copy Original" = "Kopiera original";
+"Pin Shadow" = "Pin Shadow";
+"Translation Window" = "Översättningsfönster";
+"Show Translation" = "Visa översättning";
+"Enable %@:// URL scheme" = "Aktivera %@:// URL-schema";
+"Disabled by default. Keeps up to 7 days or 2 MB; never writes screenshots, OCR text, clipboard contents, or keys." = "Inaktiverad som standard. Håller upp till 7 dagar eller 2 MB; skriver aldrig skärmdumpar, OCR-text, urklippsinnehåll eller nycklar.";
+"Strength" = "Styrka";
+"Auto-Redact Sensitive Information" = "Auto-redigera känslig information";
+"More Tools" = "Fler verktyg";
+"Move Magnifier Sample Point 1 Pixel" = "Move Magnifier Sample Point 1 Pixel";
+"Translating…" = "Översätter...";
+"Pin Scroll Zoom" = "Pin Scroll Zoom";
+"Copy Text (shown for text pins only)" = "Kopiera text (visas endast för textnålar)";
+"Copy Pinned Text" = "Kopiera fäst text";
+"Forest" = "Skog";
+"Show floating window after Quick Capture" = "Visa flytande fönster efter Quick Capture";
+"Brush" = "Borsta";
+"Allow Scroll Zoom on Pins" = "Tillåt rullningszoom på nålar";
+"Could not copy configuration." = "Det gick inte att kopiera konfigurationen.";
+"Allow sending text to Google Translate" = "Tillåt att text skickas till Google Översätt";
+"Export…" = "Exportera...";
+"Choose local data to clear" = "Välj lokal data att rensa";
+"Delete Configuration?" = "Ta bort konfiguration?";
+"Non-Drawing Actions" = "Icke-ritningsåtgärder";
+"Restored pins (closes current pins immediately)" = "Återställda stift (stänger nuvarande stift omedelbart)";
+"Professional" = "Professionell";
+"Move to More Tools" = "Flytta till Fler verktyg";
+"Translation failed; original text shown." = "Översättning misslyckades; originaltext visas.";
+"Target Language" = "Målspråk";
+"About Pinlume" = "Om Pinlume";
+"No text found" = "Ingen text hittades";
+"Automatic" = "Automatisk";
+"Select Text" = "Välj Text";
+"Move Down" = "Flytta ner";
+"Don't ask again" = "Fråga inte igen";
+"Space to move. Release to annotate and edit" = "Utrymme att röra sig på. Släpp för att kommentera och redigera";
+"Transparent Annotation" = "Transparent anteckning";
+"Speak Source" = "Tala källa";
+"Press %@ to move selection 1 pixel" = "Tryck på %@ för att flytta markeringen 1 pixel";
+"Pin Scroll Opacity" = "Pin Scroll Opacitet";
+"OCR Pin" = "OCR-stift";
+"Double-click" = "Dubbelklicka";
+"Rename Configuration" = "Byt namn på konfiguration";
+"When shortcuts conflict, the settings list is matched from top to bottom and the first entry takes priority." = "När genvägar kommer i konflikt matchas inställningslistan uppifrån och ned och den första posten har prioritet.";
+"Original / Translation" = "Original / översättning";
+"Move Toolbar" = "Flytta verktygsfältet";
+"Beautify Screenshot" = "Försköna skärmdump";
+"Opacity %d%%" = "Opacitet %d %%";
+"Configuration" = "Konfiguration";
+"Press %@ to show/hide magnifier" = "Tryck på %@ för att visa/dölja förstoringsglaset";
+"Anchor to Mouse Position" = "Ankare till musposition";
+"Press C to copy color" = "Tryck på C för att kopiera färg";
+"Import…" = "Importera...";
+"Apple translation language availability is unknown." = "Tillgängligheten för Apples översättningsspråk är okänd.";
+"Unable to capture selection" = "Det gick inte att fånga urvalet";
+"Translated Text" = "Översatt text";
+"Show partial image in compact Pin" = "Visa en del av bilden i kompakt Pin";
+"Translation complete" = "Översättning klar";
+"Show Original / Translation" = "Visa original/översättning";
+"Languages swapped; edited translation was preserved" = "Språk bytte; redigerad översättning bevarades";
+"Image Adjustments" = "Bildjusteringar";
+"Hide All Pins" = "Dölj alla pins";
+"Make Common" = "Gör gemensamt";
+"Storage & Diagnostics" = "Förvaring och diagnostik";
+"Size %d%%" = "Storlek %d %%";
+"Enter a new name for this custom configuration." = "Ange ett nytt namn för den här anpassade konfigurationen.";
+"Preparing full window…" = "Förbereder hela fönstret...";
+"This affects both the capture selection toolbar and pin toolbar. Common tools appear in the first row; additional tools move into the More menu." = "Detta påverkar både verktygsfältet för val av infångning och verktygsfältet. Vanliga verktyg visas i första raden; ytterligare verktyg flyttas till menyn Mer.";
+"Pinlume needs Accessibility permission to translate selected text. Open System Settings to grant access. If Pinlume is not listed, click the + button and choose the running Pinlume app." = "Pinlume behöver tillgänglighetsbehörighet för att översätta vald text. Öppna Systeminställningar för att bevilja åtkomst. Om Pinlume inte finns med i listan, klicka på +-knappen och välj den Pinlume-appen som körs.";
+"These shortcuts work only in a capture selection or selected pin; on-screen hints follow the current settings." = "Dessa genvägar fungerar bara i ett fångstval eller vald nål; tips på skärmen följer de aktuella inställningarna.";
+"Copy Configuration" = "Kopiera";
+"Deep Teal" = "Djup kricka";
+"Could not apply configuration profile." = "Det gick inte att tillämpa konfigurationsprofilen.";
+"Switch Magnifier RGB/HEX" = "Switch Magnifier RGB/HEX";
+"Anchor to Top Left" = "Ankare upp till vänster";
+"Amber" = "Amber";
+"Configuration:" = "Konfiguration:";
+"Selectable Text Capture" = "Valbar textinsamling";
+"Hide/Show All Pins" = "Dölj/visa alla pins";
+"Unable to capture full window" = "Det gick inte att fånga hela fönstret";
+"Toolbar Layout" = "Verktygsfältets layout";
+"Move Up" = "Flytta upp";
+"Enable Hotkeys" = "Aktivera snabbtangenter";
+"Choose an image to pin to screen" = "Välj en bild att fästa på skärmen";
+"OCR Selection" = "OCR-val";
+"%@ is running from a disk image. Move it to your Applications folder for stable permissions and the best experience." = "%@ körs från en diskavbildning. Flytta den till din Applications-mapp för stabila behörigheter och den bästa upplevelsen.";
+"System Default" = "System Standard";
+"Midnight Indigo" = "Midnatt Indigo";
+"Shortcut unavailable (error %d)" = "Genväg inte tillgänglig (fel %d)";
+"Auto Detect" = "Autoavkänning";
+"Copy of %@" = "Kopia av %@";
+"Choose which actions appear in the status bar menu and arrange the order of common and additional tools. Settings, version, and quit remain fixed." = "Välj vilka åtgärder som ska visas i statusfältets meny och ordna ordningen på vanliga och ytterligare verktyg. Inställningar, version och quit förblir fixerade.";
+"Sentence Comparison" = "Meningsjämförelse";
+"Could not rename configuration." = "Det gick inte att byta namn på konfigurationen.";
+"No items" = "Inga föremål";
+"Diagnostic logs" = "Diagnostiska loggar";
+"Not Now" = "Inte nu";
+"Text copied" = "Text kopierad";
+"Scroll capture copied to clipboard" = "Scroll capture kopieras till urklipp";
+"Rename…" = "Byt namn...";
+"Calculating…" = "Beräknar...";
+"Disable Hotkeys" = "Inaktivera snabbtangenter";
+"Enable diagnostic logging (status, timing, coordinates, and errors only)" = "Aktivera diagnostisk loggning (endast status, timing, koordinater och fel)";
+"Hold %@ to show magnifier" = "Håll %@ för att visa förstoringsglaset";
+"Choose which dedicated OCR and translation tools are visible. Keyboard shortcuts are in Shortcuts." = "Välj vilka dedikerade OCR- och översättningsverktyg som är synliga. Kortkommandon finns i Genvägar.";
+"Hold to Show Magnifier" = "Håll ned för att visa förstoringsglaset";
+"Show All Pins" = "Visa alla pins";
+"The configuration “%@” will be deleted and Basic will be applied." = "Konfigurationen \"%@\" kommer att tas bort och Basic kommer att tillämpas.";
+"These are actions rather than drawing tools. They appear in More Tools; disabling one hides it from both selections and pins." = "Dessa är åtgärder snarare än ritverktyg. De visas i Fler verktyg; om du inaktiverar en döljer den från både markeringar och stift.";
+"Images saved to a folder you choose will not be deleted." = "Bilder som sparats i en mapp du väljer kommer inte att raderas.";
+"Press %@ to switch RGB/HEX" = "Tryck på %@ för att byta RGB/HEX";
+"Space to move. Release to finish" = "Utrymme att röra sig på. Släpp för att avsluta";
+"Show/Hide Magnifier" = "Visa/dölj förstoringsglas";
+"Speak" = "Tala";
+"Eraser" = "Suddgummi";
+"Current Configuration" = "Aktuell konfiguration";
+"Screen Translation Capture" = "Skärmöversättningsfångst";
+"Copy Translation" = "Kopiera översättning";
+"Move to Applications folder?" = "Flytta till mappen Applications?";
+"Double-click to Close Pin" = "Dubbelklicka för att stänga pin";
+"Slim" = "Smal";
+"Could not move to Applications" = "Det gick inte att flytta till applikationer";
+"Please drag Pinlume to your Applications folder manually.\n\n%@" = "Dra Pinlume till din Applications-mapp manuellt.\n\n%@";
+"Could not import configuration." = "Det gick inte att importera konfigurationen.";
+"These are actions rather than drawing tools. Disabling one hides it from ordinary selections and pins." = "Dessa är åtgärder snarare än ritverktyg. Om du inaktiverar en döljs den från vanliga val och stift.";
+"Turn this off to keep translation text on this Mac. Google translation will be unavailable." = "Inaktivera detta för att behålla översättningstext på denna Mac. Google översättning kommer inte att vara tillgänglig.";
+"Could not delete configuration." = "Det gick inte att ta bort konfigurationen.";
+"Screen translation must stay on one display" = "Skärmöversättning måste stanna på en skärm";
+"Hide Pin Shadow" = "Göm Pin Shadow";
+"Translation Status" = "Översättningsstatus";
+"Monochrome" = "Monokrom";
+"Translate before swapping languages" = "Översätt innan du byter språk";
+"Export" = "Exportera";
+"Dark" = "Mörkt";
+"Apple translation needs the %@ → %@ language pack. Download it in System Settings." = "Apple-översättning behöver språkpaketet %@ → %@. Ladda ner den i Systeminställningar.";
+"Press %@ to move the sample point 1 pixel" = "Tryck på %@ för att flytta provpunkten 1 pixel";
+"Move Selection 1 Pixel" = "Flytta markering 1 pixel";
+"Screen Translation" = "Skärmöversättning";
+"Smooth Pin Zoom" = "Smidig stiftzoom";
+"The current settings were kept unchanged." = "De nuvarande inställningarna behölls oförändrade.";
+"Presentation Drawing" = "Presentationsritning";
+"Interface Theme:" = "Gränssnittstema:";
+"Quick capture copied to clipboard" = "Snabbinspelning kopierad till urklipp";
+"Translate selected text" = "Översätt vald text";
+"Import" = "Importera";
+"  Pin Zoom Anchor:" = "Pin Zoom Anchor:";
+"Source Text" = "Källtext";
+"Open Translation Window" = "Öppna översättningsfönstret";
+"Configuration Profiles" = "Konfigurationsprofiler";
+"Text recognition failed" = "Textigenkänning misslyckades";
+"Continue with Clipboard" = "Fortsätt med Urklipp";
+"Allow Trackpad Pinch Zoom on Pins" = "Tillåt styrplattan nypzoom på stift";
+"Actions in More Tools" = "Åtgärder i Fler verktyg";
+"Clear Selected Data" = "Rensa valda data";
+"Could not export configuration." = "Det gick inte att exportera konfigurationen.";
+"Copy Source" = "Kopiera källa";
+"Common Tools" = "Vanliga verktyg";
+"Swap" = "Byt";
+"Recognize Text" = "Känna igen text";
+"Speak Translation" = "Tala översättning";
+"These are actions rather than drawing tools. Disabling one hides it wherever that action is available." = "Dessa är åtgärder snarare än ritverktyg. Om du inaktiverar en döljs den varhelst den åtgärden är tillgänglig.";
+"Common tools appear in the first row; additional tools move into the More menu. Actions unavailable for the current context do not appear." = "Vanliga verktyg visas i första raden; ytterligare verktyg flyttas till menyn Mer. Åtgärder som inte är tillgängliga för det aktuella sammanhanget visas inte.";
+"Not enough space for comparison" = "Inte tillräckligt med utrymme för jämförelse";
+"Set the Select Text pin action, translation engine, and privacy policy here. Keyboard shortcuts are in Shortcuts." = "Ställ in åtgärden Välj textstift, översättningsmotorn och sekretesspolicyn här. Kortkommandon finns i Genvägar.";
+"Recognizing Text…" = "Känner igen text...";
+"Release %@ to hide magnifier" = "Släpp %@ för att dölja förstoringsglaset";
+"Rename" = "Byt namn";
+"Translate Now" = "Översätt nu";
+"Mouse Wheel" = "Mushjul";
+"Google translation is disabled in Settings." = "Google översättning är inaktiverad i Inställningar.";
+"Could not determine the source language." = "Det gick inte att fastställa källspråket.";
+"Copy Text" = "Kopiera text";
+"Selection & Pin Interactions" = "Urval & Pin-interaktioner";
+"Pin zoom anchors to mouse position" = "Fäst zoomankare i muspositionen";
+"OCR & Translation" = "OCR och översättning";
+"Rotate Clockwise" = "Vrid medurs";

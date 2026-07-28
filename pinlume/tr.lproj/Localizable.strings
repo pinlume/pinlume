@@ -1,0 +1,846 @@
+/* Türkçe — Pinlume localization
+ *
+ * To add a new language:
+ * 1. Create a new folder: pinlume/<lang-code>.lproj/
+ * 2. Copy this file into that folder
+ * 3. Translate all values (right side of = sign)
+ * 4. Add the language to LanguageManager.availableLanguages in Services/LanguageManager.swift
+ * 5. Add the language code to knownRegions in pinlume.xcodeproj/project.pbxproj
+ * 6. Submit a pull request!
+ *
+ * Keys use the English text. Values should be the translation.
+ * Format strings use %@ for strings, %d for integers.
+ * Keep keyboard shortcuts (like ⌘C) untranslated.
+ * Keep brand names (Pinlume, Google Drive, imgbb, S3) untranslated.
+ */
+
+/* Menu Bar */
+"Capture Area" = "Alan Yakala";
+"Capture Screen" = "Ekran Yakala";
+"Capture OCR" = "OCR Yakala";
+"Quick Capture" = "Hızlı Yakalama";
+"Scroll Capture" = "Kaydırmalı Yakalama";
+"Capture Last Area" = "Son Alanı Yakala";
+"Capture Delay" = "Gecikmeli Yakalama";
+"None" = "Yok";
+"%d seconds" = "%d saniye";
+"Record Area" = "Alan Kaydet";
+"Record Screen" = "Ekran Kaydet";
+"Recent Captures" = "Son Yakalamalar";
+"Show History Panel" = "Geçmiş Panelini Göster";
+"Open Image..." = "Görsel Aç...";
+"Open from Clipboard" = "Panodan Aç";
+"Pin from Clipboard" = "Panodan Sabitle";
+"Preferences..." = "Tercihler...";
+"Check for Updates..." = "Güncellemeleri Denetle...";
+"Quit Pinlume" = "Pinlume'tan Çık";
+"No recent captures" = "Son yakalama yok";
+"Clear History" = "Geçmişi Temizle";
+
+/* History Panel */
+"Copy" = "Kopyala";
+"Save As..." = "Farklı Kaydet...";
+"Open in Editor" = "Düzenleyicide Aç";
+"Open With" = "Birlikte Aç";
+"Open Link" = "Bağlantıyı Aç";
+"No Apps Available" = "Kullanılabilir Uygulama Yok";
+"No Share Services" = "Paylaşım Servisi Yok";
+"Pin to Screen" = "Ekrana Sabitle";
+"Quick Look" = "Göz At";
+"Delete" = "Sil";
+"All" = "Tümü";
+"Screenshots" = "Ekran Görüntüleri";
+"GIFs" = "GIF'ler";
+"Click to copy · Drag to app" = "Kopyalamak için tıkla · Uygulamaya sürükle";
+"No captures yet" = "Henüz yakalama yok";
+
+/* Floating Thumbnail */
+"Close All" = "Tümünü Kapat";
+"Save All to Folder…" = "Tümünü Klasöre Kaydet…";
+"Save" = "Kaydet";
+
+/* Editor Top Bar */
+"Zoom" = "Yakınlaştırma";
+"Zoom In" = "Yakınlaştır";
+"Zoom Out" = "Uzaklaştır";
+"Fit Canvas" = "Tuvale Sığdır";
+"Crop" = "Kırp";
+"Rotate Left" = "Sola Döndür";
+"Rotate Right" = "Sağa Döndür";
+"Flip Horizontal" = "Yatay Çevir";
+"Flip Vertical" = "Dikey Çevir";
+"Add Capture" = "Yakalama Ekle";
+
+/* Toolbar - Tools */
+"Arrow" = "Ok";
+"Line" = "Çizgi";
+"Rectangle" = "Dikdörtgen";
+"Ellipse" = "Elips";
+"Pencil" = "Kalem";
+"Pencil (Draw)" = "Kalem (Çizim)";
+"Marker" = "İşaretleyici";
+"Text" = "Metin";
+"Number" = "Numara";
+"Number / Counter" = "Numara / Sayaç";
+"Stamp / Emoji" = "Damga / Emoji";
+"Censor" = "Sansür";
+"Censor (Pixelate / Blur / Solid)" = "Sansür (Pikselleştir / Bulanıklaştır / Düz)";
+"Measure" = "Ölçüm";
+"Measure (px)" = "Ölçüm (px)";
+"Magnify (Loupe)" = "Büyüteç (Lup)";
+"Highlight" = "Vurgula";
+"Highlight (Spotlight)" = "Vurgula (Spot Işığı)";
+"Dim" = "Karart";
+"Color Sampler" = "Renk Örnekleyici";
+"Color Picker" = "Renk Seçici";
+"Select & Edit" = "Seç ve Düzenle";
+"Color" = "Renk";
+
+/* Toolbar - Actions */
+"Copy to Clipboard" = "Panoya Kopyala";
+"Save to File" = "Dosyaya Kaydet";
+"Save to" = "Kaydet:";
+"Open in Editor Window" = "Düzenleyici Penceresinde Aç";
+"Pin on Screen" = "Ekrana Sabitle";
+"Pin" = "Sabitle";
+"Pin (floating window)" = "Sabitle (kayan pencere)";
+"OCR" = "OCR";
+"OCR Text" = "OCR Metin";
+"OCR (extract text)" = "OCR (metin çıkar)";
+"Upload" = "Yükle";
+"Share" = "Paylaş";
+"Undo" = "Geri Al";
+"Redo" = "Yinele";
+"Close" = "Kapat";
+"Remove Background" = "Arka Planı Kaldır";
+"Beautify" = "Güzelleştir";
+"Adjust" = "Ayarla";
+"Adjust (Image Effects)" = "Ayarla (Görsel Efektler)";
+"Invert Colors" = "Renkleri Ters Çevir";
+"Record" = "Kayıt";
+"Record screen" = "Ekran kaydet";
+"Translate" = "Çevir";
+"Auto-Redact sensitive data" = "Hassas verileri otomatik gizle";
+"Move Selection" = "Seçimi Taşı";
+
+/* Toolbar - Recording */
+"Start Recording" = "Kaydı Başlat";
+"Cancel Recording" = "Kaydı İptal Et";
+"Highlight Mouse Clicks" = "Fare Tıklamalarını Vurgula";
+"Record System Audio" = "Sistem Sesini Kaydet";
+"Record Microphone" = "Mikrofonu Kaydet";
+"Recording Settings" = "Kayıt Ayarları";
+
+/* Tool Options */
+"Size" = "Boyut";
+"Stroke" = "Çizgi";
+"Radius" = "Yarıçap";
+"Start:" = "Başlangıç:";
+"Draw:" = "Çizim:";
+"Auto:" = "Otomatik:";
+"Fill" = "Dolu";
+"Outline" = "Çerçeve";
+"More Emojis" = "Daha Fazla Emoji";
+"Load Image" = "Görsel Yükle";
+"Gradient Style" = "Gradyan Stili";
+"On" = "Açık";
+"Text Only" = "Yalnızca Metin";
+"All Text" = "Tüm Metin";
+"PII" = "Kişisel Veri";
+"Faces" = "Yüzler";
+"People" = "Kişiler";
+"Confirm before upload" = "Yüklemeden önce onayla";
+"Flip" = "Çevir";
+"Smooth" = "Yumuşat";
+"Refined" = "İnce";
+"Smart" = "Akıllı";
+"Padding" = "Dolgu";
+"Shadow" = "Gölge";
+"Right-click to add points" = "Nokta eklemek için sağ tıklayın";
+"Hold 1 auto-vertical  ·  Hold 2 auto-horizontal" = "1 basılı tut: otomatik dikey  ·  2 basılı tut: otomatik yatay";
+
+/* Overlay / Canvas */
+"Click a window  ·  Drag for custom area  ·  F for full screen" = "Pencereye tıklayın  ·  Özel alan için sürükleyin  ·  Tam ekran için F";
+"Drag to select  ·  Click for full screen" = "Seçmek için sürükleyin  ·  Tam ekran için tıklayın";
+"Release to annotate and edit" = "Açıklama eklemek ve düzenlemek için bırakın";
+"Release to finish" = "Bitirmek için bırakın";
+"Hold Space to move. Release to annotate and edit" = "Taşımak için Space tuşunu basılı tutun. Açıklama eklemek ve düzenlemek için bırakın";
+"Hold Space to move. Release to finish" = "Taşımak için Space tuşunu basılı tutun. Bitirmek için bırakın";
+"Window snap: " = "Pencere yakalama: ";
+"ON" = "AÇIK";
+"OFF" = "KAPALI";
+"  (Tab to toggle)" = "  (Değiştirmek için Tab)";
+"Right-click to copy" = "Kopyalamak için sağ tıklayın";
+"Copied %@" = "%@ kopyalandı";
+"Set color %@" = "Renk ayarlandı %@";
+"Draw something first to use the move tool." = "Taşıma aracını kullanmak için önce bir şey çizin.";
+"Drag to reposition" = "Yeniden konumlandırmak için sürükleyin";
+
+/* Overlay - Popovers */
+"Format:" = "Biçim:";
+"FPS:" = "FPS:";
+"When done:" = "Tamamlandığında:";
+"Open editor" = "Düzenleyiciyi aç";
+"Show in Finder" = "Finder'da Göster";
+"Copy to clipboard" = "Panoya kopyala";
+
+/* Preferences - General */
+"Pinlume Preferences" = "Pinlume Tercihleri";
+"General" = "Genel";
+"Tools" = "Araçlar";
+"Recording" = "Kayıt";
+"About" = "Hakkında";
+"Shortcuts" = "Kısayollar";
+"Uploads" = "Yüklemeler";
+"Language" = "Dil";
+"Language:" = "Dil:";
+"Restart the app to fully apply the new language." = "Yeni dili tamamen uygulamak için uygulamayı yeniden başlatın.";
+"Capture" = "Yakalama";
+"Play sound on capture" = "Yakalama sırasında ses çal";
+"Play sound on copy" = "Kopyalamada ses çal";
+"Remember last selected tool" = "Son seçilen aracı hatırla";
+"Show floating thumbnail after capture" = "Yakalamadan sonra kayan küçük resim göster";
+"Launch at login" = "Oturum açılışında başlat";
+"Show snap alignment guides" = "Hizalama kılavuzlarını göster";
+"Snap selection edges to image boundaries" = "Seçim kenarlarını görüntü sınırlarına yapıştır";
+"Capture mouse cursor in screenshot" = "Ekran görüntüsünde fare imlecini yakala";
+"Double-click selection to copy" = "Kopyalamak için seçime çift tıkla";
+"Hide capture instructions" = "Yakalama talimatlarını gizle";
+"Disable shadow outside selection" = "Seçim dışındaki gölgeyi devre dışı bırak";
+"Show shortcuts in tooltips" = "Kısayolları ipuçlarında göster";
+"Use window title in saved filename" = "Kaydedilen dosya adında pencere başlığını kullan";
+"Hide menu bar icon" = "Menü çubuğu simgesini gizle";
+"Hotkeys still work. To show the icon again, re-launch Pinlume." = "Kısayol tuşları çalışmaya devam eder. Simgeyi tekrar göstermek için Pinlume'u yeniden başlatın.";
+"Menu bar icon:" = "Menü çubuğu simgesi:";
+"Default" = "Varsayılan";
+"Custom symbol" = "Özel sembol";
+"Enter any SF Symbol name (e.g. camera.fill) or pick a preset. Browse names in Apple's SF Symbols app. Invalid names fall back to the default icon." = "Herhangi bir SF Symbol adı girin (örn. camera.fill) veya bir hazır ayar seçin. Adlara Apple'ın SF Symbols uygulamasından göz atın. Geçersiz adlar varsayılan simgeye döner.";
+"Check for updates automatically" = "Güncellemeleri otomatik denetle";
+"Check for beta updates" = "Beta güncellemelerini denetle";
+"Thumbnail" = "Küçük Resim";
+"  Dismiss after:" = "  Kapatma süresi:";
+"seconds before auto-dismiss (0 = never)" = "saniye sonra otomatik kapat (0 = asla)";
+"  Multiple previews:" = "  Birden fazla önizleme:";
+"  Position:" = "  Konum:";
+"Stack (keep all)" = "Yığınla (tümünü tut)";
+"Replace (show only latest)" = "Değiştir (yalnızca son)";
+"Menu Bar Order" = "Menü Çubuğu Sırası";
+"Choose the order of capture actions in the Pinlume menu bar menu." = "Pinlume menü çubuğu menüsündeki yakalama eylemlerinin sırasını seçin.";
+"Move up" = "Yukarı taşı";
+"Move down" = "Aşağı taşı";
+"Output" = "Çıktı";
+"Image format:" = "Görsel biçimi:";
+"Quality:" = "Kalite:";
+"%d%%" = "%%%d";
+"Save at standard resolution (1x)" = "Standart çözünürlükte kaydet (1x)";
+"Halves dimensions on Retina displays, ~4x smaller files" = "Retina ekranlarda boyutları yarıya indirir, ~4 kat küçük dosyalar";
+"Embed sRGB color profile" = "sRGB renk profilini göm";
+"Ensures consistent colors across different displays" = "Farklı ekranlar arasında tutarlı renkler sağlar";
+"Screenshot History" = "Ekran Görüntüsü Geçmişi";
+"History size:" = "Geçmiş boyutu:";
+"screenshots kept on disk (0 = off)" = "diskte saklanan ekran görüntüsü (0 = kapalı)";
+"Order history by last edit" = "Geçmişi son düzenlemeye göre sırala";
+"Edited screenshots move to the top. Off keeps them in capture order." = "Düzenlenen ekran görüntüleri en üste taşınır. Kapalıyken yakalama sırasında kalır.";
+"Custom · %@" = "Özel · %@";
+"Space" = "Boşluk";
+"Save Directory" = "Kayıt Dizini";
+"Save folder:" = "Kayıt klasörü:";
+"Browse…" = "Gözat…";
+"Save action:" = "Kaydetme eylemi:";
+"Save to default folder" = "Varsayılan klasöre kaydet";
+"Ask where to save" = "Nereye kaydedileceğini sor";
+"Appearance" = "Görünüm";
+"Accent color:" = "Vurgu rengi:";
+"Icon color:" = "Simge rengi:";
+"Background color:" = "Arka plan rengi:";
+"Reset" = "Sıfırla";
+"OCR Capture:" = "OCR Yakalama:";
+"Show window + copy to clipboard" = "Pencere göster + panoya kopyala";
+"Show window only" = "Yalnızca pencere göster";
+"Copy to clipboard only" = "Yalnızca panoya kopyala";
+"Enter / Quick Capture:" = "Enter / Hızlı Yakalama:";
+"Save to file" = "Dosyaya kaydet";
+"Save + copy to clipboard" = "Kaydet + panoya kopyala";
+"OCR Action" = "OCR Eylemi";
+"OCR & QR Capture:" = "OCR ve QR Yakalama:";
+"OCR & QR" = "OCR ve QR";
+"Text & QR Recognition" = "Metin ve QR Tanıma";
+"Capture OCR & QR" = "OCR ve QR Yakala";
+"Capture area and read text/QR codes" = "Alan yakala ve metin/QR kodlarını oku";
+"Run OCR & QR" = "OCR ve QR Çalıştır";
+"QR Code" = "QR Kodu";
+"QR Codes" = "QR Kodları";
+
+/* Preferences - Shortcuts */
+"Keyboard Shortcuts" = "Klavye Kısayolları";
+"Hotkeys" = "Kısayol Tuşları";
+"Clear shortcut" = "Kısayolu temizle";
+"Press keys..." = "Tuşlara basın...";
+"Waiting..." = "Bekleniyor...";
+
+/* Preferences - Tools */
+"Annotation Tools" = "Açıklama Araçları";
+"Hidden tools are removed from the bottom toolbar." = "Gizli araçlar alt araç çubuğundan kaldırılır.";
+"Capture Actions" = "Yakalama Eylemleri";
+"Bottom Toolbar Actions" = "Alt Araç Çubuğu Eylemleri";
+"Hidden actions are removed from the bottom toolbar." = "Gizli eylemler alt araç çubuğundan kaldırılır.";
+"Editor Actions" = "Düzenleyici Eylemleri";
+"Right Toolbar Actions" = "Sağ Araç Çubuğu Eylemleri";
+"Hidden actions are removed from the right toolbar." = "Gizli eylemler sağ araç çubuğundan kaldırılır.";
+
+/* Preferences - Recording */
+"Frame rate:" = "Kare hızı:";
+"After recording:" = "Kayıttan sonra:";
+"Save recording to:" = "Kaydı şuraya kaydet:";
+"Save Recording" = "Kaydı Kaydet";
+"Clear" = "Temizle";
+"Max height:" = "Maks. yükseklik:";
+"px (0 = unlimited)" = "px (0 = sınırsız)";
+"Behavior" = "Davranış";
+"Auto-scroll (sends synthetic scroll events)" = "Otomatik kaydır (yapay kaydırma olayları gönderir)";
+"Detect fixed/sticky headers" = "Sabit/yapışkan üst bilgileri algıla";
+"Scroll speed:" = "Kaydırma hızı:";
+"Slow" = "Yavaş";
+"Medium" = "Orta";
+"Fast" = "Hızlı";
+"Very fast" = "Çok hızlı";
+"5 fps" = "5 fps";
+"10 fps" = "10 fps";
+"15 fps" = "15 fps";
+"24 fps" = "24 fps";
+"30 fps" = "30 fps";
+"60 fps" = "60 fps";
+"120 fps" = "120 fps";
+"MP4 (H.264)" = "MP4 (H.264)";
+"GIF" = "GIF";
+
+/* Preferences - Upload */
+"Upload Service" = "Yükleme Servisi";
+"Upload Provider" = "Yükleme Sağlayıcısı";
+"Provider:" = "Sağlayıcı:";
+"Google Drive" = "Google Drive";
+"Google Drive (images + videos)" = "Google Drive (görseller + videolar)";
+"imgbb (images only)" = "imgbb (yalnızca görseller)";
+"S3-Compatible (images + videos)" = "S3 Uyumlu (görseller + videolar)";
+"S3-Compatible Storage" = "S3 Uyumlu Depolama";
+"Sign In with Google" = "Google ile Giriş Yap";
+"Sign Out" = "Çıkış Yap";
+"Signed in" = "Giriş yapıldı";
+"Not signed in" = "Giriş yapılmadı";
+"Account:" = "Hesap:";
+"Test Connection" = "Bağlantıyı Test Et";
+"Fill in endpoint, bucket, and credentials first" = "Önce uç nokta, kova ve kimlik bilgilerini doldurun";
+"Testing..." = "Test ediliyor...";
+"Connection successful!" = "Bağlantı başarılı!";
+"Leave empty to use default" = "Varsayılanı kullanmak için boş bırakın";
+"Endpoint:" = "Uç Nokta:";
+"Region:" = "Bölge:";
+"Bucket:" = "Kova:";
+"Access Key:" = "Erişim Anahtarı:";
+"Secret Key:" = "Gizli Anahtar:";
+"Public URL:" = "Genel URL:";
+"Path Prefix:" = "Yol Ön Eki:";
+"API key:" = "API anahtarı:";
+"Upload History" = "Yükleme Geçmişi";
+"No uploads yet." = "Henüz yükleme yok.";
+"Base URL for public access. If empty, the S3 endpoint URL is used (may not be publicly accessible)." = "Genel erişim için temel URL. Boşsa S3 uç nokta URL'si kullanılır (herkese açık olmayabilir).";
+"A shared key is included — get your own free key at imgbb.com/api if you hit rate limits. Images only (no video support)." = "Paylaşımlı bir anahtar dahildir — hız sınırına ulaşırsanız imgbb.com/api adresinden kendi ücretsiz anahtarınızı alın. Yalnızca görseller (video desteği yok).";
+"Works with AWS S3, Cloudflare R2, MinIO, DigitalOcean Spaces, Backblaze B2, and other S3-compatible services. Supports images and videos." = "AWS S3, Cloudflare R2, MinIO, DigitalOcean Spaces, Backblaze B2 ve diğer S3 uyumlu servislerle çalışır. Görselleri ve videoları destekler.";
+"Configure S3 in Preferences" = "Tercihlerde S3'ü yapılandırın";
+"Sign in to Google Drive in Preferences" = "Tercihlerde Google Drive'a giriş yapın";
+"Video upload requires Google Drive or S3" = "Video yüklemek için Google Drive veya S3 gereklidir";
+
+/* Preferences - About */
+"Pinlume" = "Pinlume";
+"Version %@ (%@)" = "Sürüm %@ (%@)";
+"Made by" = "Yapımcı";
+"Licensed under the GPLv3" = "GPLv3 lisansı altında";
+"A free, open-source screenshot & screen recording tool for macOS.\nFully native — built with Swift and AppKit." = "macOS için ücretsiz, açık kaynaklı ekran görüntüsü ve ekran kaydı aracı.\nTamamen yerel — Swift ve AppKit ile geliştirilmiştir.";
+
+/* Alerts */
+"No Image on Clipboard" = "Panoda Görsel Yok";
+"No Image or Text on Clipboard" = "Panoda Görsel veya Metin Yok";
+"Copy an image to the clipboard first, then try again." = "Önce panoya bir görsel kopyalayın, ardından tekrar deneyin.";
+"Copy an image or text to the clipboard first, then try again." = "Önce panoya bir görsel veya metin kopyalayın, ardından tekrar deneyin.";
+"OK" = "Tamam";
+"Accessibility Access Required" = "Erişilebilirlik İzni Gerekli";
+"Pinlume needs Accessibility permission to auto-scroll other apps. Please grant access in System Settings, then try again." = "Pinlume, diğer uygulamaları otomatik kaydırmak için Erişilebilirlik iznine ihtiyaç duyar. Lütfen Sistem Ayarları'ndan izin verin ve tekrar deneyin.";
+"Pinlume needs Accessibility permission for scroll capture. Please grant access in System Settings, then try again." = "Pinlume, kaydırmalı yakalama için Erişilebilirlik iznine ihtiyaç duyuyor. Lütfen Sistem Ayarları'ndan erişim verin ve tekrar deneyin.";
+"Open Settings" = "Ayarları Aç";
+"Cancel" = "İptal";
+"Microphone Access Required" = "Mikrofon Erişimi Gerekli";
+"Pinlume needs microphone permission to record voice audio. Open System Settings to grant access." = "Pinlume, ses kaydetmek için mikrofon iznine ihtiyaç duyar. İzin vermek için Sistem Ayarları'nı açın.";
+"Upload to Google Drive?" = "Google Drive'a yüklensin mi?";
+"Upload to S3?" = "S3'e yüklensin mi?";
+"Upload to imgbb.com?" = "imgbb.com'a yüklensin mi?";
+"Your screenshot will be uploaded." = "Ekran görüntünüz yüklenecek.";
+
+/* Permission Onboarding */
+"Welcome to Pinlume" = "Pinlume'a Hoş Geldiniz";
+"Pinlume needs one permission" = "Pinlume bir izne ihtiyaç duyar";
+"Screen Recording not yet granted" = "Ekran Kaydı izni henüz verilmedi";
+"Screen Recording granted!" = "Ekran Kaydı izni verildi!";
+"Enable Pinlume, then try taking a screenshot" = "Pinlume'u etkinleştirin, ardından ekran görüntüsü almayı deneyin";
+"Open Screen Recording Settings" = "Ekran Kaydı Ayarlarını Aç";
+"Continue" = "Devam";
+
+/* OCR Window */
+"Text Recognition" = "Metin Tanıma";
+"Translate to:" = "Çeviri dili:";
+"%d chars · %d words" = "%d karakter · %d kelime";
+"Copy  ⌘↩" = "Kopyala  ⌘↩";
+"AI Search" = "Yapay Zeka Araması";
+"Show Original" = "Orijinali Göster";
+"Translation Failed" = "Çeviri Başarısız";
+"Translation" = "Çeviri";
+"(No text detected in the selected area)" = "(Seçili alanda metin algılanamadı)";
+
+/* Upload Toast */
+"URL copied to the clipboard" = "URL panoya kopyalandı";
+"Uploading... %d%%" = "Yükleniyor... %%%d";
+"Upload failed: %@" = "Yükleme başarısız: %@";
+"Uploaded! Link copied." = "Yüklendi! Bağlantı kopyalandı.";
+"Uploading to %@... %d%%" = "%@ hizmetine yükleniyor... %%%d";
+"Open" = "Aç";
+
+/* Recording Toast */
+"Recording saved" = "Kayıt kaydedildi";
+"%@ • Recording saved" = "%@ • Kayıt kaydedildi";
+"Copy Path" = "Yolu Kopyala";
+"Path copied!" = "Yol kopyalandı!";
+
+/* Video Editor */
+"Pinlume Video Editor" = "Pinlume Video Düzenleyici";
+"%@ selected" = "%@ seçili";
+"Exporting..." = "Dışa aktarılıyor...";
+"Export failed" = "Dışa aktarma başarısız";
+"Saved to %@" = "%@ konumuna kaydedildi";
+"Save failed" = "Kaydetme başarısız";
+
+/* Barcode Detector */
+/* "Open" and "Copy" are shared with other sections */
+
+/* Save Panel */
+"Save As..." = "Farklı Kaydet...";
+"Choose a folder" = "Bir klasör seçin";
+"Save All to Folder…" = "Tümünü Klasöre Kaydet…";
+
+/* Scroll Capture HUD */
+"Auto Scroll" = "Otomatik Kaydır";
+"Stop" = "Durdur";
+"Scrolling..." = "Kaydırılıyor...";
+
+/* Effects Picker (Adjust popover) */
+"Presets" = "Hazır Ayarlar";
+"Adjustments" = "Ayarlamalar";
+"Brightness" = "Parlaklık";
+"Contrast" = "Kontrast";
+"Saturation" = "Doygunluk";
+"Sharpness" = "Keskinlik";
+
+/* Time Ago */
+"just now" = "az önce";
+"%ds ago" = "%d sn önce";
+"%dm ago" = "%d dk önce";
+"%dh ago" = "%d sa önce";
+
+/* Hotkey Labels */
+"History" = "Geçmiş";
+
+/* Preferences - Shortcuts note */
+"Click \"Record\" and press a key combination with at least one modifier (⌘, ⌥, ⌃, ⇧) to set a shortcut." = "Bir kısayol ayarlamak için \"Kayıt\" düğmesine tıklayın ve en az bir değiştirici tuş (⌘, ⌥, ⌃, ⇧) içeren bir tuş kombinasyonuna basın.";
+
+/* Recording — GIF Processing */
+"Processing GIF…" = "GIF işleniyor…";
+
+/* Recording — Input Monitoring Permission */
+"Input Monitoring Required" = "Giriş İzleme Gerekli";
+"Pinlume needs Input Monitoring permission to show keystrokes during recording. Please grant access in System Settings, then try again." = "Pinlume, kayıt sırasında tuş vuruşlarını göstermek için Giriş İzleme iznine ihtiyaç duyar. Lütfen System Settings'ten izin verin ve tekrar deneyin.";
+"Pinlume needs Accessibility permission to show keystrokes during recording. Please grant access in System Settings, then try again." = "Pinlume, kayıt sırasında tuş vuruşlarını göstermek için Erişilebilirlik iznine ihtiyaç duyar. Lütfen System Settings'ten izin verin ve tekrar deneyin.";
+
+/* Recording — Keystroke Overlay */
+"Show Keystrokes" = "Tuş Vuruşlarını Göster";
+"Shortcuts Only" = "Yalnızca Kısayollar";
+"All Keystrokes" = "Tüm Tuş Vuruşları";
+
+/* Recording — Settings Popover */
+"Delay:" = "Gecikme:";
+
+/* Video Editor */
+"Copied to clipboard!" = "Panoya kopyalandı!";
+
+/* Webcam Overlay */
+"Webcam Overlay" = "Web Kamerası Katmanı";
+"Camera Access Required" = "Kamera Erişimi Gerekli";
+"Pinlume needs camera permission for the webcam overlay. Open System Settings to grant access." = "Pinlume, web kamerası katmanı için kamera iznine ihtiyaç duyar. İzin vermek için Sistem Ayarları'nı açın.";
+"Webcam" = "Web Kamerası";
+"Bottom Right" = "Sağ Alt";
+"Bottom Left" = "Sol Alt";
+"Top Right" = "Sağ Üst";
+"Top Left" = "Sol Üst";
+"Small" = "Küçük";
+"Large" = "Büyük";
+"Webcam Size Small" = "Küçük";
+"Webcam Size Medium" = "Orta";
+"Webcam Size Large" = "Büyük";
+"Webcam Size Extra Large" = "Çok Büyük";
+"Circle" = "Daire";
+"Rounded Rectangle" = "Yuvarlatılmış Dikdörtgen";
+"Cam pos:" = "Kam. konum:";
+"Cam size:" = "Kam. boyut:";
+"Cam shape:" = "Kam. şekil:";
+
+/* New Strings */
+"Settings" = "Ayarlar";
+"Settings..." = "Ayarlar...";
+"Pinlume Settings" = "Pinlume Ayarları";
+"Also open in Editor" = "Düzenleyicide de aç";
+"Hide controls" = "Kontrolleri gizle";
+"Hide recording controls" = "Kayıt kontrollerini gizle";
+"Stop recording from the menu bar icon instead." = "Bunun yerine menü çubuğu simgesinden kaydı durdurun.";
+"Pixelate" = "Pikselleştir";
+"Blur" = "Bulanıklaştır";
+"Solid" = "Düz";
+"Erase" = "Sil";
+"Done" = "Bitti";
+"Do nothing" = "Hiçbir şey yapma";
+"Overlay / Editor Shortcuts" = "Kaplama / Düzenleyici Kısayolları";
+"Set" = "Ayarla";
+"Press..." = "Basın...";
+"Reset to default" = "Varsayılana sıfırla";
+"Press a single key to assign it as the shortcut for that tool. These work when the overlay or editor is active." = "Bir tuşa basarak o aracın kısayolunu atayın. Kaplama veya düzenleyici etkinken çalışırlar.";
+"Keep Separate" = "Ayrı Tut";
+"Merge Audio" = "Sesi Birleştir";
+"Audio Tracks" = "Ses İzleri";
+"Adjust volume for each audio track:" = "Her ses izi için ses seviyesini ayarlayın:";
+"Microphone:" = "Mikrofon:";
+"System audio:" = "Sistem sesi:";
+"Loupe" = "Büyüteç";
+"Stamp" = "Damga";
+"Unlimited" = "Sınırsız";
+
+/* Save Confirmation / Recording / Translation / Upload / Inspector */
+"Save changes?" = "Değişiklikler kaydedilsin mi?";
+"Your annotations will be lost if you close without saving." = "Kaydetmeden kapatırsanız açıklamalarınız kaybolacak.";
+"Save & Close" = "Kaydet ve Kapat";
+"Discard" = "Vazgeç";
+"Stop Recording" = "Kaydı Durdur";
+"Pause" = "Duraklat";
+"Resume" = "Devam Et";
+"Engine:" = "Motor:";
+"Google Translate" = "Google Translate";
+"Apple (on-device)" = "Apple (cihaz üzerinde)";
+"Apple translation is faster and works offline. Google Translate supports more languages." = "Apple çevirisi daha hızlıdır ve çevrimdışı çalışır. Google Translate daha fazla dili destekler.";
+"Download language packs in System Settings…" = "Sistem Ayarları'ndan dil paketlerini indirin…";
+"Configure S3 in Settings" = "Ayarlar'da S3'ü yapılandırın";
+"Sign in to Google Drive in Settings" = "Ayarlar'da Google Drive'a giriş yapın";
+"Offline build: upload and cloud storage integrations are removed. Update checks may still connect to Pinlume's update server. Screenshots and recordings stay local unless you share or save them yourself." = "Çevrimdışı sürüm: yükleme ve bulut depolama entegrasyonları kaldırıldı. Güncelleme denetimleri yine de Pinlume'ın güncelleme sunucusuna bağlanabilir. Ekran görüntüleri ve kayıtlar, siz kendiniz paylaşmadıkça veya kaydetmedikçe yerel kalır.";
+"Position:" = "Konum:";
+"Size:" = "Boyut:";
+"Shape:" = "Şekil:";
+
+"Same as screenshots" = "Ekran görüntüleriyle aynı";
+"  Preview size:" = "  Önizleme boyutu:";
+"(0 = off)" = "(0 = kapalı)";
+"Clear All" = "Tümünü Temizle";
+"Clear History?" = "Geçmiş Temizlensin mi?";
+"This will permanently delete all screenshots from history." = "Bu işlem, geçmişteki tüm ekran görüntülerini kalıcı olarak siler.";
+"Click \"Set\" and press a key combination with at least one modifier (⌘, ⌥, ⌃, ⇧) to set a shortcut." = "\"Ayarla\"ya tıklayın ve kısayol atamak için en az bir değiştirici tuş (⌘, ⌥, ⌃, ⇧) içeren bir tuş kombinasyonuna basın.";
+"Files are uploaded to a \"Pinlume\" folder in your Google Drive. Everything stays private — nothing is shared publicly." = "Dosyalar, Google Drive'ınızdaki \"Pinlume\" klasörüne yüklenir. Her şey gizli kalır — hiçbir şey herkesle paylaşılmaz.";
+
+"Pressure" = "Basınç";
+
+/* Aspect ratio & resolution presets */
+"Aspect ratio & resolution presets" = "En boy oranı ve çözünürlük hazır ayarları";
+"Aspect ratio" = "En boy oranı";
+"Resolution" = "Çözünürlük";
+"Freeform" = "Serbest biçim";
+"Units" = "Birimler";
+"Keep ratio for next captures" = "Sonraki yakalamalar için oranı koru";
+
+/* Added for v4.1.0-beta.3 — video editor, effects, open-video, shortcuts help */
+"Open Video..." = "Video Aç...";
+"Choose a video to open in Pinlume editor" = "Pinlume düzenleyicisinde açmak için bir video seçin";
+"Click to add effects" = "Efekt eklemek için tıklayın";
+"Add Zoom" = "Yakınlaştırma Ekle";
+"Add Censor" = "Sansür Ekle";
+"Add Cut" = "Kesim Ekle";
+"Add Speed" = "Hız Ekle";
+"Add Freeze" = "Dondurma Ekle";
+"Add Text" = "Metin Ekle";
+"Delete Zoom" = "Yakınlaştırmayı Sil";
+"Delete Censor" = "Sansürü Sil";
+"Delete Cut" = "Kesimi Sil";
+"Delete Speed" = "Hızı Sil";
+"Delete Freeze" = "Dondurmayı Sil";
+"Delete Text" = "Metni Sil";
+"Edit Text…" = "Metni Düzenle…";
+"Huge" = "Çok Büyük";
+"Bold" = "Kalın";
+"Italic" = "İtalik";
+"Alignment" = "Hizalama";
+"Left" = "Sol";
+"Center" = "Orta";
+"Right" = "Sağ";
+"Text Color" = "Metin Rengi";
+"Background Color" = "Arka Plan Rengi";
+"Rounded" = "Yuvarlak";
+"Custom…" = "Özel…";
+"Transparent" = "Saydam";
+"Black" = "Siyah";
+"White" = "Beyaz";
+"Yellow" = "Sarı";
+"Red" = "Kırmızı";
+"Green" = "Yeşil";
+"Blue" = "Mavi";
+"Untitled" = "Adsız";
+"Add effect" = "Efekt ekle";
+"Fade" = "Solma";
+"High" = "Yüksek";
+"Low" = "Düşük";
+"Not enough room here" = "Burada yeterli alan yok";
+"Copied!" = "Kopyalandı!";
+"Converting to GIF…" = "GIF'e dönüştürülüyor…";
+"GIF conversion failed" = "GIF dönüştürme başarısız";
+"No video track found" = "Video izi bulunamadı";
+"Preview:" = "Önizleme:";
+"Copy Screen Info" = "Ekran Bilgilerini Kopyala";
+"Copies display and capture diagnostics to clipboard" = "Ekran ve yakalama tanılama bilgilerini panoya kopyalar";
+"Accent" = "Vurgu";
+"Icon" = "Simge";
+"Background" = "Arka Plan";
+"Custom" = "Özel";
+"Theme:" = "Tema:";
+"Application" = "Uygulama";
+"Capture area and extract text" = "Alan yakala ve metin çıkar";
+"Capture the full screen" = "Tam ekranı yakala";
+"Counter for multi-screen captures" = "Çok ekranlı yakalamalar için sayaç";
+"8-character random string (e.g. k3j7x9q2)" = "8 karakterlik rastgele dize (örn. k3j7x9q2)";
+"Filename Template Tokens" = "Dosya Adı Şablon Belirteçleri";
+"Filename tokens" = "Dosya adı belirteçleri";
+"Filename:" = "Dosya adı:";
+"Open an image file in the editor" = "Düzenleyicide bir görsel dosyası aç";
+"Open the recent captures overlay" = "Son yakalamalar kaplamasını aç";
+"Open this settings window" = "Bu ayarlar penceresini aç";
+"Quick capture (uses your Enter action)" = "Hızlı yakalama (Enter eyleminizi kullanır)";
+"Re-capture the last selected area" = "Son seçilen alanı yeniden yakala";
+"Screenshots only — captured window title (blank otherwise)" = "Yalnızca ekran görüntüleri — yakalanan pencere başlığı (aksi halde boş)";
+"Show available filename tokens" = "Kullanılabilir dosya adı belirteçlerini göster";
+"Enable pinlume:// URL scheme" = "pinlume:// URL şemasını etkinleştir";
+"Show supported URL scheme commands" = "Desteklenen URL şeması komutlarını göster";
+"Start area capture" = "Alan yakalamayı başlat";
+"Start area recording" = "Alan kaydını başlat";
+"Start full-screen recording" = "Tam ekran kaydını başlat";
+"Start scroll capture" = "Kaydırmalı yakalamayı başlat";
+"Stop the current recording" = "Geçerli kaydı durdur";
+"Supported URL Scheme Commands" = "Desteklenen URL Şeması Komutları";
+"The file extension is appended automatically. Slashes and colons in {window} become dashes." = "Dosya uzantısı otomatik olarak eklenir. {window} içindeki eğik çizgiler ve iki nokta tire olur.";
+"Trigger Pinlume from Raycast, Alfred, Shortcuts, or any tool that opens URLs." = "Pinlume'u Raycast, Alfred, Shortcuts veya URL açan herhangi bir araçtan tetikleyin.";
+"URL scheme info" = "URL şeması bilgisi";
+"sec (0 = never)" = "sn (0 = asla)";
+
+/* Localized current UI keys. Existing translations above are preserved. */
+"Plus build: personal build with update checks disabled. Preferences, history, and permissions are separate from the original Pinlume app." = "Artı yapı: güncelleme kontrolleri devre dışı bırakılmış kişisel yapı. Tercihler, geçmiş ve izinler orijinal Pinlume uygulamasından ayrıdır.";
+"Light" = "Işık";
+"Press Option to hide magnifier" = "Büyüteci gizlemek için Seçenek tuşuna basın";
+"Changes to the selected profile are saved automatically." = "Seçilen profilde yapılan değişiklikler otomatik olarak kaydedilir.";
+"Show Pin Shadow" = "Pin Gölgesini Göster";
+"Arrow Keys" = "Ok Tuşları";
+"Source Language" = "Kaynak Dil";
+"Translation Pin" = "Çeviri Pini";
+"Color Scheme:" = "Renk Şeması:";
+"Text Recognition / QR" = "Metin Tanıma / QR";
+"Basic" = "Temel";
+"Full" = "Tam";
+"Menu Bar Menu" = "Menü Çubuğu Menüsü";
+"Screenshot history and editable annotations" = "Ekran görüntüsü geçmişi ve düzenlenebilir ek açıklamalar";
+"Press Shift to switch RGB/HEX" = "RGB/HEX'i değiştirmek için Shift'e basın";
+"Clipboard image backups" = "Pano görüntüsü yedeklemeleri";
+"Double-click to Toggle Thumbnail" = "Küçük Resmi Değiştirmek için Çift Tıklayın";
+"Compare" = "Karşılaştır";
+"Apple translation does not support %@ → %@." = "Apple çevirisi %@ → %@'i desteklemiyor.";
+"Profile:" = "Profil:";
+"Move to Applications" = "Uygulamalara Taşı";
+"Filled Rectangle" = "Dolu Dikdörtgen";
+"Google translation is unavailable because sending text is disabled." = "Metin gönderme devre dışı olduğundan Google çevirisi kullanılamıyor.";
+"Adjust Area and Edit" = "Alanı Ayarla ve Düzenle";
+"Clear Local Data…" = "Yerel Verileri Temizle…";
+"Swap Languages" = "Dilleri Değiştir";
+"Ignore window occlusion" = "Pencere kapanmasını yoksay";
+"Graphite Blue" = "Grafit Mavisi";
+"Copy Original" = "Orijinali Kopyala";
+"Pin Shadow" = "Gölgeyi Sabitle";
+"Translation Window" = "Çeviri Penceresi";
+"Show Translation" = "Çeviriyi Göster";
+"Enable %@:// URL scheme" = "%@:// URL şemasını etkinleştirin";
+"Disabled by default. Keeps up to 7 days or 2 MB; never writes screenshots, OCR text, clipboard contents, or keys." = "Varsayılan olarak devre dışıdır. 7 güne veya 2 MB'a kadar tutar; asla ekran görüntüsü, OCR metni, pano içeriği veya anahtar yazmaz.";
+"Strength" = "Güç";
+"Auto-Redact Sensitive Information" = "Hassas Bilgileri Otomatik Olarak Redakte Et";
+"More Tools" = "Daha Fazla Araç";
+"Move Magnifier Sample Point 1 Pixel" = "Büyüteç Örnek Noktasını 1 Piksel Taşı";
+"Translating…" = "Çeviriliyor…";
+"Pin Scroll Zoom" = "Sabitle Kaydırma Yakınlaştırma";
+"Copy Text (shown for text pins only)" = "Metni Kopyala (yalnızca metin raptiyeleri için gösterilir)";
+"Copy Pinned Text" = "Sabitlenmiş Metni Kopyala";
+"Forest" = "Orman";
+"Show floating window after Quick Capture" = "Hızlı Yakalama sonrasında kayan pencereyi göster";
+"Brush" = "Fırça";
+"Allow Scroll Zoom on Pins" = "Pinlerde Kaydırarak Yakınlaştırmaya İzin Ver";
+"Could not copy configuration." = "Yapılandırma kopyalanamadı.";
+"Allow sending text to Google Translate" = "Google Çeviri'ye metin gönderilmesine izin ver";
+"Export…" = "İhracat…";
+"Choose local data to clear" = "Temizlenecek yerel verileri seçin";
+"Delete Configuration?" = "Yapılandırma Silinsin mi?";
+"Non-Drawing Actions" = "Çizim Dışı Eylemler";
+"Restored pins (closes current pins immediately)" = "Geri yüklenen pinler (mevcut pinleri hemen kapatır)";
+"Professional" = "Profesyonel";
+"Move to More Tools" = "Diğer Araçlara Taşı";
+"Translation failed; original text shown." = "Çeviri başarısız oldu; orijinal metin gösterilmiştir.";
+"Target Language" = "Hedef Dil";
+"About Pinlume" = "Pinlume Hakkında";
+"No text found" = "Metin bulunamadı";
+"Automatic" = "Otomatik";
+"Select Text" = "Metin Seç";
+"Move Down" = "Aşağı Taşı";
+"Don't ask again" = "Bir daha sorma";
+"Space to move. Release to annotate and edit" = "Hareket edecek alan. Açıklama eklemek ve düzenlemek için bırakın";
+"Transparent Annotation" = "Şeffaf Açıklama";
+"Speak Source" = "Kaynağı Konuş";
+"Press %@ to move selection 1 pixel" = "Seçimi 1 piksel taşımak için %@ tuşuna basın";
+"Pin Scroll Opacity" = "Sabitleme Kaydırma Opaklığı";
+"OCR Pin" = "OCR Pini";
+"Double-click" = "Çift tıklama";
+"Rename Configuration" = "Yapılandırmayı Yeniden Adlandır";
+"When shortcuts conflict, the settings list is matched from top to bottom and the first entry takes priority." = "Kısayollar çakıştığında, ayarlar listesi yukarıdan aşağıya doğru eşleştirilir ve ilk giriş öncelikli olur.";
+"Original / Translation" = "Orijinal / Çeviri";
+"Move Toolbar" = "Araç Çubuğunu Taşı";
+"Beautify Screenshot" = "Ekran Görüntüsünü Güzelleştir";
+"Opacity %d%%" = "Opaklık %d%%";
+"Configuration" = "Yapılandırma";
+"Press %@ to show/hide magnifier" = "Büyüteci göstermek/gizlemek için %@ tuşuna basın";
+"Anchor to Mouse Position" = "Fare Konumuna Sabitleme";
+"Press C to copy color" = "Renkli kopyalamak için C tuşuna basın";
+"Import…" = "İçe aktar…";
+"Apple translation language availability is unknown." = "Apple çeviri dilinin kullanılabilirliği bilinmiyor.";
+"Unable to capture selection" = "Seçim yakalanamıyor";
+"Translated Text" = "Çevrilmiş Metin";
+"Show partial image in compact Pin" = "Kısmi görüntüyü kompakt Pin'de göster";
+"Translation complete" = "Çeviri tamamlandı";
+"Show Original / Translation" = "Orijinali / Çeviriyi Göster";
+"Languages swapped; edited translation was preserved" = "Diller değiştirildi; düzenlenmiş çeviri korundu";
+"Image Adjustments" = "Görüntü Ayarlamaları";
+"Hide All Pins" = "Tüm Pinleri Gizle";
+"Make Common" = "Ortak Yap";
+"Storage & Diagnostics" = "Depolama ve Tanılama";
+"Size %d%%" = "Boyut %d%%";
+"Enter a new name for this custom configuration." = "Bu özel yapılandırma için yeni bir ad girin.";
+"Preparing full window…" = "Tam pencere hazırlanıyor…";
+"This affects both the capture selection toolbar and pin toolbar. Common tools appear in the first row; additional tools move into the More menu." = "Bu, hem yakalama seçimi araç çubuğunu hem de sabitleme araç çubuğunu etkiler. Ortak araçlar ilk satırda görünür; ek araçlar Diğer menüsüne taşınır.";
+"Pinlume needs Accessibility permission to translate selected text. Open System Settings to grant access. If Pinlume is not listed, click the + button and choose the running Pinlume app." = "Pinlume'un seçilen metni çevirmek için Erişilebilirlik iznine ihtiyacı var. Erişim vermek için Sistem Ayarlarını açın. Pinlume listelenmiyorsa + düğmesine tıklayın ve çalışan Pinlume uygulamasını seçin.";
+"These shortcuts work only in a capture selection or selected pin; on-screen hints follow the current settings." = "Bu kısayollar yalnızca yakalama seçiminde veya seçili raptiyede çalışır; ekrandaki ipuçları geçerli ayarları takip eder.";
+"Copy Configuration" = "Kopyala";
+"Deep Teal" = "Derin Deniz Mavisi";
+"Could not apply configuration profile." = "Yapılandırma profili uygulanamadı.";
+"Switch Magnifier RGB/HEX" = "Anahtar Büyüteci RGB/HEX";
+"Anchor to Top Left" = "Sol Üste Sabitle";
+"Amber" = "kehribar";
+"Configuration:" = "Yapılandırma:";
+"Selectable Text Capture" = "Seçilebilir Metin Yakalama";
+"Hide/Show All Pins" = "Tüm Pinleri Gizle/Göster";
+"Unable to capture full window" = "Tam pencere yakalanamıyor";
+"Toolbar Layout" = "Araç Çubuğu Düzeni";
+"Move Up" = "Yukarı Taşı";
+"Enable Hotkeys" = "Kısayol Tuşlarını Etkinleştir";
+"Choose an image to pin to screen" = "Ekrana sabitlenecek bir resim seçin";
+"OCR Selection" = "OCR Seçimi";
+"%@ is running from a disk image. Move it to your Applications folder for stable permissions and the best experience." = "%@ bir disk görüntüsünden çalışıyor. Kararlı izinler ve en iyi deneyim için bunu Uygulamalar klasörünüze taşıyın.";
+"System Default" = "Sistem Varsayılanı";
+"Midnight Indigo" = "Gece Yarısı İndigo";
+"Shortcut unavailable (error %d)" = "Kısayol kullanılamıyor (hata %d)";
+"Auto Detect" = "Otomatik Algıla";
+"Copy of %@" = "%@ kopyası";
+"Choose which actions appear in the status bar menu and arrange the order of common and additional tools. Settings, version, and quit remain fixed." = "Durum çubuğu menüsünde hangi eylemlerin görüneceğini seçin ve ortak ve ek araçların sırasını düzenleyin. Ayarlar, sürüm ve çıkış sabit kalır.";
+"Sentence Comparison" = "Cümle Karşılaştırması";
+"Could not rename configuration." = "Yapılandırma yeniden adlandırılamadı.";
+"No items" = "Öğe yok";
+"Diagnostic logs" = "Teşhis günlükleri";
+"Not Now" = "Şimdi Değil";
+"Text copied" = "Metin kopyalandı";
+"Scroll capture copied to clipboard" = "Kaydırma yakalaması panoya kopyalandı";
+"Rename…" = "Yeniden adlandır…";
+"Calculating…" = "Hesaplanıyor…";
+"Disable Hotkeys" = "Kısayol Tuşlarını Devre Dışı Bırak";
+"Enable diagnostic logging (status, timing, coordinates, and errors only)" = "Tanılama günlüğünü etkinleştir (yalnızca durum, zamanlama, koordinatlar ve hatalar)";
+"Hold %@ to show magnifier" = "Büyüteci göstermek için %@ tuşunu basılı tutun";
+"Choose which dedicated OCR and translation tools are visible. Keyboard shortcuts are in Shortcuts." = "Hangi özel OCR ve çeviri araçlarının görünür olacağını seçin. Klavye kısayolları Kısayollar'dadır.";
+"Hold to Show Magnifier" = "Büyüteci Göstermek için Basılı Tutun";
+"Show All Pins" = "Tüm Pinleri Göster";
+"The configuration “%@” will be deleted and Basic will be applied." = "“%@” konfigürasyonu silinecek ve Basic uygulanacaktır.";
+"These are actions rather than drawing tools. They appear in More Tools; disabling one hides it from both selections and pins." = "Bunlar çizim araçlarından ziyade eylemlerdir. Diğer Araçlar'da görünürler; birini devre dışı bırakmak onu hem seçimlerden hem de pinlerden gizler.";
+"Images saved to a folder you choose will not be deleted." = "Seçtiğiniz bir klasöre kaydedilen resimler silinmeyecektir.";
+"Press %@ to switch RGB/HEX" = "RGB/HEX'e geçmek için %@'e basın";
+"Space to move. Release to finish" = "Hareket edecek alan. Bitirmek için bırakın";
+"Show/Hide Magnifier" = "Büyüteci Göster/Gizle";
+"Speak" = "Konuş";
+"Eraser" = "Silgi";
+"Current Configuration" = "Mevcut Yapılandırma";
+"Screen Translation Capture" = "Ekran Çevirisi Yakalama";
+"Copy Translation" = "Çeviriyi Kopyala";
+"Move to Applications folder?" = "Uygulamalar klasörüne taşınsın mı?";
+"Double-click to Close Pin" = "Pini Kapatmak için Çift Tıklayın";
+"Slim" = "İnce";
+"Could not move to Applications" = "Uygulamalar'a taşınamadı";
+"Please drag Pinlume to your Applications folder manually.\n\n%@" = "Lütfen Pinlume'u Uygulamalar klasörünüze manuel olarak sürükleyin.\n\n%@";
+"Could not import configuration." = "Yapılandırma içe aktarılamadı.";
+"These are actions rather than drawing tools. Disabling one hides it from ordinary selections and pins." = "Bunlar çizim araçlarından ziyade eylemlerdir. Birini devre dışı bırakmak onu sıradan seçimlerden ve pinlerden gizler.";
+"Turn this off to keep translation text on this Mac. Google translation will be unavailable." = "Çeviri metnini bu Mac'te tutmak için bunu kapatın. Google çevirisi kullanılamayacak.";
+"Could not delete configuration." = "Yapılandırma silinemedi.";
+"Screen translation must stay on one display" = "Ekran çevirisi tek ekranda kalmalı";
+"Hide Pin Shadow" = "Pin Gölgesini Gizle";
+"Translation Status" = "Çeviri Durumu";
+"Monochrome" = "Tek renkli";
+"Translate before swapping languages" = "Dilleri değiştirmeden önce çevirin";
+"Export" = "İhracat";
+"Dark" = "Karanlık";
+"Apple translation needs the %@ → %@ language pack. Download it in System Settings." = "Apple çevirisinin %@ → %@ dil paketine ihtiyacı var. Sistem Ayarları'ndan indirin.";
+"Press %@ to move the sample point 1 pixel" = "Örnek noktayı 1 piksel taşımak için %@ tuşuna basın";
+"Move Selection 1 Pixel" = "Seçimi 1 Piksel Taşı";
+"Screen Translation" = "Ekran Çevirisi";
+"Smooth Pin Zoom" = "Pürüzsüz Pin Yakınlaştırma";
+"The current settings were kept unchanged." = "Mevcut ayarlar değişmeden tutuldu.";
+"Presentation Drawing" = "Sunum Çizimi";
+"Interface Theme:" = "Arayüz Teması:";
+"Quick capture copied to clipboard" = "Hızlı yakalama panoya kopyalandı";
+"Translate selected text" = "Seçili metni çevir";
+"Import" = "İthalat";
+"  Pin Zoom Anchor:" = "Yakınlaştırma Bağlantısını Sabitle:";
+"Source Text" = "Kaynak Metin";
+"Open Translation Window" = "Çeviri Penceresini Aç";
+"Configuration Profiles" = "Yapılandırma Profilleri";
+"Text recognition failed" = "Metin tanıma başarısız oldu";
+"Continue with Clipboard" = "Panoyla devam et";
+"Allow Trackpad Pinch Zoom on Pins" = "Pimlerde Trackpad Kıstırma Yakınlaştırmasına İzin Ver";
+"Actions in More Tools" = "Diğer Araçlardaki Eylemler";
+"Clear Selected Data" = "Seçilen Verileri Temizle";
+"Could not export configuration." = "Yapılandırma dışa aktarılamadı.";
+"Copy Source" = "Kaynağı Kopyala";
+"Common Tools" = "Ortak Araçlar";
+"Swap" = "Takas";
+"Recognize Text" = "Metni Tanı";
+"Speak Translation" = "Çeviriyi Konuş";
+"These are actions rather than drawing tools. Disabling one hides it wherever that action is available." = "Bunlar çizim araçlarından ziyade eylemlerdir. Birini devre dışı bırakmak, bu eylemin mümkün olduğu her yerde onu gizler.";
+"Common tools appear in the first row; additional tools move into the More menu. Actions unavailable for the current context do not appear." = "Ortak araçlar ilk satırda görünür; ek araçlar Diğer menüsüne taşınır. Geçerli bağlam için kullanılamayan eylemler görünmez.";
+"Not enough space for comparison" = "Karşılaştırma için yeterli alan yok";
+"Set the Select Text pin action, translation engine, and privacy policy here. Keyboard shortcuts are in Shortcuts." = "Metni Seç sabitleme eylemini, çeviri motorunu ve gizlilik politikasını burada ayarlayın. Klavye kısayolları Kısayollar'dadır.";
+"Recognizing Text…" = "Metin Tanınıyor…";
+"Release %@ to hide magnifier" = "Büyüteci gizlemek için %@'ü serbest bırakın";
+"Rename" = "Yeniden adlandır";
+"Translate Now" = "Şimdi Çevir";
+"Mouse Wheel" = "Fare Tekerleği";
+"Google translation is disabled in Settings." = "Google çevirisi Ayarlar'da devre dışı bırakıldı.";
+"Could not determine the source language." = "Kaynak dili belirlenemedi.";
+"Copy Text" = "Metni Kopyala";
+"Selection & Pin Interactions" = "Seçim ve Pin Etkileşimleri";
+"Pin zoom anchors to mouse position" = "Yakınlaştırma bağlantılarını fare konumuna sabitle";
+"OCR & Translation" = "OCR ve Çeviri";
+"Rotate Clockwise" = "Saat Yönünde Döndür";

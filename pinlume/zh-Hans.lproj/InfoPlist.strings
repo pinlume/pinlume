@@ -1,0 +1,3 @@
+"Privacy - Screen Capture Usage Description" = "Pinlume 需要屏幕录制权限来截取屏幕。";
+"NSMicrophoneUsageDescription" = "Pinlume 可在录屏时录制麦克风声音。";
+"NSCameraUsageDescription" = "Pinlume 可在录屏时显示摄像头画面。";

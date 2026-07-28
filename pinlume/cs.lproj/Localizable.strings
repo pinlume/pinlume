@@ -1,0 +1,844 @@
+/* Čeština — Pinlume localization
+ *
+ * To add a new language:
+ * 1. Create a new folder: pinlume/<lang-code>.lproj/
+ * 2. Copy this file into that folder
+ * 3. Translate all values (right side of = sign)
+ * 4. Add the language to LanguageManager.availableLanguages in Services/LanguageManager.swift
+ * 5. Add the language code to knownRegions in pinlume.xcodeproj/project.pbxproj
+ * 6. Submit a pull request!
+ *
+ * Keys use the English text. Values should be the translation.
+ * Format strings use %@ for strings, %d for integers.
+ * Keep keyboard shortcuts (like ⌘C) untranslated.
+ * Keep brand names (Pinlume, Google Drive, imgbb, S3) untranslated.
+ */
+
+/* Menu Bar */
+"Capture Area" = "Zachytit oblast";
+"Capture Screen" = "Zachytit obrazovku";
+"Capture OCR" = "Zachytit OCR";
+"Capture OCR & QR" = "Zachytit OCR a QR";
+"Capture area and read text/QR codes" = "Zachytit oblast a načíst text/QR kódy";
+"Quick Capture" = "Rychle zachytit";
+"Scroll Capture" = "Zachytit posunem";
+"Capture Last Area" = "Zachytit poslední oblast";
+"Capture Delay" = "Zachytit se zpozděním";
+"None" = "Žádné";
+"%d seconds" = "%d sekund";
+"Record Area" = "Nahrát oblast";
+"Record Screen" = "Nahrát obrazovku";
+"Recent Captures" = "Nedávné snímky";
+"Show History Panel" = "Zobrazit panel historie";
+"Open Image..." = "Otevřít obrázek...";
+"Open from Clipboard" = "Otevřít ze schránky";
+"Pin from Clipboard" = "Připnout ze schránky";
+"Preferences..." = "Předvolby...";
+"Check for Updates..." = "Zkontrolovat aktualizace...";
+"Quit Pinlume" = "Ukončit Pinlume";
+"No recent captures" = "Žádné nedávné snímky";
+"Clear History" = "Vymazat historii";
+
+/* History Panel */
+"Copy" = "Kopírovat";
+"Save As..." = "Uložit jako...";
+"Open in Editor" = "Otevřít v editoru";
+"Pin to Screen" = "Připnout na obrazovku";
+"Quick Look" = "Rychlý náhled";
+"Delete" = "Smazat";
+"All" = "Vše";
+"Screenshots" = "Snímky obrazovky";
+"GIFs" = "GIFs";
+"Click to copy · Drag to app" = "Kliknutím kopírovat · Přetáhnout do aplikace";
+"No captures yet" = "Zatím žádné snímky";
+
+/* Floating Thumbnail */
+"Close All" = "Zavřít vše";
+"Save All to Folder…" = "Uložit vše do složky…";
+"Save" = "Uložit";
+
+/* Editor Top Bar */
+"Zoom In" = "Přiblížit";
+"Zoom Out" = "Oddálit";
+"Fit Canvas" = "Přizpůsobit plátnu";
+"Crop" = "Oříznout";
+"Flip Horizontal" = "Převrátit vodorovně";
+"Flip Vertical" = "Převrátit svisle";
+"Rotate Left" = "Otočit doleva";
+"Rotate Right" = "Otočit doprava";
+"Zoom" = "Přiblížení";
+"Add Capture" = "Přidat snímek";
+
+/* Toolbar - Tools */
+"Arrow" = "Šipka";
+"Line" = "Čára";
+"Rectangle" = "Obdélník";
+"Ellipse" = "Elipsa";
+"Pencil" = "Tužka";
+"Pencil (Draw)" = "Tužka (Kreslit)";
+"Marker" = "Zvýrazňovač";
+"Text" = "Text";
+"Number" = "Číslo";
+"Number / Counter" = "Číslo / Počítadlo";
+"Stamp / Emoji" = "Razítko / Emoji";
+"Censor" = "Cenzura";
+"Censor (Pixelate / Blur / Solid)" = "Cenzura (Pixelizace / Rozostření / Plná)";
+"Measure" = "Měření";
+"Measure (px)" = "Měření (px)";
+"Magnify (Loupe)" = "Lupa";
+"Highlight" = "Zvýraznění";
+"Highlight (Spotlight)" = "Zvýraznění (Reflektor)";
+"Dim" = "Ztmavení";
+"Color Sampler" = "Kapátko";
+"Color Picker" = "Výběr barvy";
+"Select & Edit" = "Vybrat a upravit";
+"Color" = "Barva";
+
+/* Aspect ratio & resolution presets */
+"Aspect ratio & resolution presets" = "Předvolby poměru stran a rozlišení";
+"Aspect ratio" = "Poměr stran";
+"Resolution" = "Rozlišení";
+"Freeform" = "Volný tvar";
+"Units" = "Jednotky";
+"Keep ratio for next captures" = "Zachovat poměr pro další snímky";
+"Custom · %@" = "Vlastní · %@";
+
+/* Toolbar - Actions */
+"Copy to Clipboard" = "Kopírovat do schránky";
+"Save to File" = "Uložit do souboru";
+"Save to" = "Uložit do";
+"Open in Editor Window" = "Otevřít v okně editoru";
+"Pin on Screen" = "Připnout na obrazovku";
+"Pin" = "Připnout";
+"Pin (floating window)" = "Připnout (plovoucí okno)";
+"OCR" = "OCR";
+"OCR Text" = "OCR text";
+"OCR (extract text)" = "OCR (extrahovat text)";
+"OCR & QR" = "OCR a QR";
+"Run OCR & QR" = "Spustit OCR a QR";
+"Text & QR Recognition" = "Rozpoznávání textu a QR";
+"QR Code" = "QR kód";
+"QR Codes" = "QR kódy";
+"Open Link" = "Otevřít odkaz";
+"Open With" = "Otevřít v";
+"No Apps Available" = "Žádné dostupné aplikace";
+"No Share Services" = "Žádné služby sdílení";
+"Upload" = "Nahrát";
+"Share" = "Sdílet";
+"Undo" = "Zpět";
+"Redo" = "Znovu";
+"Close" = "Zavřít";
+"Remove Background" = "Odstranit pozadí";
+"Beautify" = "Zkrášlit";
+"Adjust" = "Upravit";
+"Adjust (Image Effects)" = "Upravit (Efekty obrázku)";
+"Invert Colors" = "Invertovat barvy";
+"Record" = "Nahrávat";
+"Record screen" = "Nahrávat obrazovku";
+"Translate" = "Přeložit";
+"Auto-Redact sensitive data" = "Automaticky začernit citlivá data";
+"Move Selection" = "Přesunout výběr";
+"Move up" = "Přesunout nahoru";
+"Move down" = "Přesunout dolů";
+"Menu Bar Order" = "Pořadí v liště nabídek";
+"Choose the order of capture actions in the Pinlume menu bar menu." = "Zvolte pořadí akcí snímání v nabídce Pinlume v liště nabídek.";
+
+/* Toolbar - Recording */
+"Start Recording" = "Spustit nahrávání";
+"Cancel Recording" = "Zrušit nahrávání";
+"Highlight Mouse Clicks" = "Zvýraznit kliknutí myší";
+"Record System Audio" = "Nahrávat systémový zvuk";
+"Record Microphone" = "Nahrávat mikrofon";
+"Recording Settings" = "Nastavení nahrávání";
+
+/* Tool Options */
+"Size" = "Velikost";
+"Stroke" = "Tah";
+"Radius" = "Poloměr";
+"Start:" = "Začátek:";
+"Draw:" = "Kreslit:";
+"Auto:" = "Auto:";
+"Fill" = "Výplň";
+"Outline" = "Obrys";
+"More Emojis" = "Více emoji";
+"Load Image" = "Načíst obrázek";
+"Gradient Style" = "Styl přechodu";
+"On" = "Zap";
+"Text Only" = "Pouze text";
+"All Text" = "Veškerý text";
+"PII" = "PII";
+"Faces" = "Obličeje";
+"People" = "Osoby";
+"Confirm before upload" = "Potvrdit před nahráním";
+"Flip" = "Převrátit";
+"Smooth" = "Vyhlazení";
+"Refined" = "Vyhlazené";
+"Smart" = "Chytrý";
+"Padding" = "Odsazení";
+"Shadow" = "Stín";
+"Right-click to add points" = "Pravým tlačítkem přidat body";
+"Hold 1 auto-vertical  ·  Hold 2 auto-horizontal" = "Držte 1 auto-vertikálně  ·  Držte 2 auto-horizontálně";
+
+/* Overlay / Canvas */
+"Click a window  ·  Drag for custom area  ·  F for full screen" = "Klikněte na okno  ·  Tažením vyberte oblast  ·  F pro celou obrazovku";
+"Drag to select  ·  Click for full screen" = "Tažením vyberte  ·  Kliknutím celá obrazovka";
+"Release to annotate and edit" = "Uvolněte pro anotaci a úpravy";
+"Release to finish" = "Uvolněte pro dokončení";
+"Hold Space to move. Release to annotate and edit" = "Podržte Mezerník pro přesun. Uvolněte pro anotaci a úpravy";
+"Hold Space to move. Release to finish" = "Podržte Mezerník pro přesun. Uvolněte pro dokončení";
+"Window snap: " = "Přichycení k oknu: ";
+"ON" = "ZAP";
+"OFF" = "VYP";
+"  (Tab to toggle)" = "  (Tab pro přepnutí)";
+"Space" = "Mezerník";
+"Right-click to copy" = "Pravým tlačítkem kopírovat";
+"Copied %@" = "Zkopírováno %@";
+"Set color %@" = "Nastavit barvu %@";
+"Draw something first to use the move tool." = "Nejprve něco nakreslete pro použití nástroje přesunu.";
+"Drag to reposition" = "Tažením přemístit";
+
+/* Overlay - Popovers */
+"Format:" = "Formát:";
+"FPS:" = "FPS:";
+"When done:" = "Po dokončení:";
+"Open editor" = "Otevřít editor";
+"Show in Finder" = "Zobrazit ve Finder";
+"Copy to clipboard" = "Kopírovat do schránky";
+
+/* Preferences - General */
+"Pinlume Preferences" = "Předvolby Pinlume";
+"General" = "Obecné";
+"Tools" = "Nástroje";
+"Recording" = "Nahrávání";
+"About" = "O aplikaci";
+"Shortcuts" = "Zkratky";
+"Uploads" = "Nahrávání souborů";
+"Language" = "Jazyk";
+"Language:" = "Jazyk:";
+"Restart the app to fully apply the new language." = "Restartujte aplikaci pro úplné použití nového jazyka.";
+"Capture" = "Snímání";
+"Play sound on capture" = "Přehrát zvuk při snímání";
+"Play sound on copy" = "Přehrát zvuk při kopírování";
+"Remember last selected tool" = "Zapamatovat poslední vybraný nástroj";
+"Show floating thumbnail after capture" = "Zobrazit plovoucí náhled po zachycení";
+"Launch at login" = "Spustit při přihlášení";
+"Show snap alignment guides" = "Zobrazit vodítka zarovnání";
+"Snap selection edges to image boundaries" = "Přichytit okraje výběru k hranicím obrázku";
+"Capture mouse cursor in screenshot" = "Zachytit kurzor myši na snímku";
+"Double-click selection to copy" = "Kopírovat dvojklikem na výběr";
+"Hide capture instructions" = "Skrýt pokyny při snímání";
+"Use window title in saved filename" = "Použít název okna v uloženém souboru";
+"Hide menu bar icon" = "Skrýt ikonu v liště";
+"Hotkeys still work. To show the icon again, re-launch Pinlume." = "Klávesové zkratky stále fungují. Pro opětovné zobrazení ikony znovu spusťte Pinlume.";
+"Check for updates automatically" = "Automaticky kontrolovat aktualizace";
+"Check for beta updates" = "Kontrolovat beta aktualizace";
+"Thumbnail" = "Náhled";
+"  Dismiss after:" = "  Zavřít po:";
+"seconds before auto-dismiss (0 = never)" = "sekund před automatickým zavřením (0 = nikdy)";
+"  Multiple previews:" = "  Více náhledů:";
+"Stack (keep all)" = "Skládat (ponechat vše)";
+"Replace (show only latest)" = "Nahradit (zobrazit pouze poslední)";
+"Output" = "Výstup";
+"Image format:" = "Formát obrázku:";
+"Quality:" = "Kvalita:";
+"%d%%" = "%d%%";
+"Save at standard resolution (1x)" = "Uložit ve standardním rozlišení (1x)";
+"Halves dimensions on Retina displays, ~4x smaller files" = "Poloviční rozměry na Retina displejích, ~4x menší soubory";
+"Embed sRGB color profile" = "Vložit barevný profil sRGB";
+"Ensures consistent colors across different displays" = "Zajistí konzistentní barvy na různých displejích";
+"Screenshot History" = "Historie snímků";
+"History size:" = "Velikost historie:";
+"screenshots kept on disk (0 = off)" = "snímků uchovávaných na disku (0 = vypnuto)";
+"Order history by last edit" = "Řadit historii podle poslední úpravy";
+"Edited screenshots move to the top. Off keeps them in capture order." = "Upravené snímky se přesunou nahoru. Vypnuto ponechá pořadí pořízení.";
+"Save Directory" = "Složka pro ukládání";
+"Save folder:" = "Složka pro uložení:";
+"Browse…" = "Procházet…";
+"Appearance" = "Vzhled";
+"Accent color:" = "Barva zvýraznění:";
+"Icon color:" = "Barva ikony:";
+"Background color:" = "Barva pozadí:";
+"Reset" = "Obnovit";
+"OCR Capture:" = "OCR snímek:";
+"OCR & QR Capture:" = "OCR a QR snímek:";
+"Show window + copy to clipboard" = "Zobrazit okno + kopírovat do schránky";
+"Show window only" = "Pouze zobrazit okno";
+"Copy to clipboard only" = "Pouze kopírovat do schránky";
+"Enter / Quick Capture:" = "Enter / Rychlé zachycení:";
+"Save to file" = "Uložit do souboru";
+"Save + copy to clipboard" = "Uložit + kopírovat do schránky";
+"OCR Action" = "Akce OCR";
+"Save action:" = "Akce uložení:";
+"Save to default folder" = "Uložit do výchozí složky";
+"Ask where to save" = "Zeptat se, kam uložit";
+"Show shortcuts in tooltips" = "Zobrazit zkratky v nápovědách";
+"Disable shadow outside selection" = "Vypnout stín mimo výběr";
+"Menu bar icon:" = "Ikona v liště:";
+"Default" = "Výchozí";
+"Custom symbol" = "Vlastní symbol";
+"Enter any SF Symbol name (e.g. camera.fill) or pick a preset. Browse names in Apple's SF Symbols app. Invalid names fall back to the default icon." = "Zadejte libovolný název SF Symbol (např. camera.fill) nebo vyberte předvolbu. Procházejte názvy v aplikaci Apple SF Symbols. Neplatné názvy se vrátí k výchozí ikoně.";
+
+/* Preferences - Shortcuts */
+"Keyboard Shortcuts" = "Klávesové zkratky";
+"Hotkeys" = "Klávesové zkratky";
+"Clear shortcut" = "Vymazat zkratku";
+"Press keys..." = "Stiskněte klávesy...";
+"Waiting..." = "Čekání...";
+
+/* Preferences - Tools */
+"Annotation Tools" = "Nástroje anotace";
+"Hidden tools are removed from the bottom toolbar." = "Skryté nástroje jsou odstraněny ze spodní lišty.";
+"Capture Actions" = "Akce snímání";
+"Bottom Toolbar Actions" = "Akce spodní lišty";
+"Hidden actions are removed from the bottom toolbar." = "Skryté akce jsou odstraněny ze spodní lišty.";
+"Editor Actions" = "Akce editoru";
+"Right Toolbar Actions" = "Akce pravé lišty";
+"Hidden actions are removed from the right toolbar." = "Skryté akce jsou odstraněny z pravé lišty.";
+
+/* Preferences - Recording */
+"Frame rate:" = "Snímková frekvence:";
+"After recording:" = "Po nahrávání:";
+"Save recording to:" = "Uložit nahrávku do:";
+"Save Recording" = "Uložit nahrávku";
+"Clear" = "Vymazat";
+"Max height:" = "Maximální výška:";
+"px (0 = unlimited)" = "px (0 = bez omezení)";
+"Behavior" = "Chování";
+"Auto-scroll (sends synthetic scroll events)" = "Automatické posouvání (odesílá syntetické události posouvání)";
+"Detect fixed/sticky headers" = "Detekovat fixní/přilepené záhlaví";
+"Scroll speed:" = "Rychlost posouvání:";
+"Slow" = "Pomalá";
+"Medium" = "Střední";
+"Fast" = "Rychlá";
+"Very fast" = "Velmi rychlá";
+"5 fps" = "5 fps";
+"10 fps" = "10 fps";
+"15 fps" = "15 fps";
+"24 fps" = "24 fps";
+"30 fps" = "30 fps";
+"60 fps" = "60 fps";
+"120 fps" = "120 fps";
+"MP4 (H.264)" = "MP4 (H.264)";
+"GIF" = "GIF";
+
+/* Preferences - Upload */
+"Upload Service" = "Služba nahrávání";
+"Upload Provider" = "Poskytovatel nahrávání";
+"Provider:" = "Poskytovatel:";
+"Google Drive" = "Google Drive";
+"Google Drive (images + videos)" = "Google Drive (obrázky + videa)";
+"imgbb (images only)" = "imgbb (pouze obrázky)";
+"S3-Compatible (images + videos)" = "S3-kompatibilní (obrázky + videa)";
+"S3-Compatible Storage" = "S3-kompatibilní úložiště";
+"Sign In with Google" = "Přihlásit se přes Google";
+"Sign Out" = "Odhlásit se";
+"Signed in" = "Přihlášen";
+"Not signed in" = "Nepřihlášen";
+"Account:" = "Účet:";
+"Test Connection" = "Test připojení";
+"Fill in endpoint, bucket, and credentials first" = "Nejprve vyplňte endpoint, bucket a přihlašovací údaje";
+"Testing..." = "Testování...";
+"Connection successful!" = "Připojení úspěšné!";
+"Leave empty to use default" = "Ponechte prázdné pro výchozí hodnotu";
+"Endpoint:" = "Endpoint:";
+"Region:" = "Region:";
+"Bucket:" = "Bucket:";
+"Access Key:" = "Přístupový klíč:";
+"Secret Key:" = "Tajný klíč:";
+"Public URL:" = "Veřejná URL:";
+"Path Prefix:" = "Předpona cesty:";
+"API key:" = "API klíč:";
+"Upload History" = "Historie nahrávání";
+"No uploads yet." = "Zatím žádná nahrávání.";
+"Base URL for public access. If empty, the S3 endpoint URL is used (may not be publicly accessible)." = "Základní URL pro veřejný přístup. Pokud je prázdná, použije se URL S3 endpointu (nemusí být veřejně přístupná).";
+"A shared key is included — get your own free key at imgbb.com/api if you hit rate limits. Images only (no video support)." = "Sdílený klíč je součástí — získejte vlastní bezplatný klíč na imgbb.com/api, pokud narazíte na limity. Pouze obrázky (bez podpory videa).";
+"Works with AWS S3, Cloudflare R2, MinIO, DigitalOcean Spaces, Backblaze B2, and other S3-compatible services. Supports images and videos." = "Funguje s AWS S3, Cloudflare R2, MinIO, DigitalOcean Spaces, Backblaze B2 a dalšími S3-kompatibilními službami. Podporuje obrázky a videa.";
+"Configure S3 in Preferences" = "Nastavit S3 v Předvolbách";
+"Sign in to Google Drive in Preferences" = "Přihlásit se ke Google Drive v Předvolbách";
+"Video upload requires Google Drive or S3" = "Nahrávání videa vyžaduje Google Drive nebo S3";
+
+/* Preferences - About */
+"Pinlume" = "Pinlume";
+"Version %@ (%@)" = "Verze %@ (%@)";
+"Made by" = "Vytvořil";
+"Licensed under the GPLv3" = "Licencováno pod GPLv3";
+"A free, open-source screenshot & screen recording tool for macOS.\nFully native — built with Swift and AppKit." = "Bezplatný open-source nástroj pro snímky obrazovky a nahrávání pro macOS.\nPlně nativní — vytvořený ve Swift a AppKit.";
+
+/* Alerts */
+"No Image on Clipboard" = "Žádný obrázek ve schránce";
+"No Image or Text on Clipboard" = "Žádný obrázek ani text ve schránce";
+"Copy an image to the clipboard first, then try again." = "Nejprve zkopírujte obrázek do schránky a zkuste to znovu.";
+"Copy an image or text to the clipboard first, then try again." = "Nejprve zkopírujte obrázek nebo text do schránky a zkuste to znovu.";
+"OK" = "OK";
+"Accessibility Access Required" = "Vyžadován přístup k usnadnění";
+"Pinlume needs Accessibility permission to auto-scroll other apps. Please grant access in System Settings, then try again." = "Pinlume potřebuje oprávnění Usnadnění pro automatické posouvání jiných aplikací. Udělte přístup v Nastavení systému a zkuste to znovu.";
+"Pinlume needs Accessibility permission for scroll capture. Please grant access in System Settings, then try again." = "Pinlume potřebuje oprávnění Zpřístupnění pro snímání posouváním. Povolte přístup v Nastavení systému a zkuste to znovu.";
+"Open Settings" = "Otevřít nastavení";
+"Cancel" = "Zrušit";
+"Microphone Access Required" = "Vyžadován přístup k mikrofonu";
+"Pinlume needs microphone permission to record voice audio. Open System Settings to grant access." = "Pinlume potřebuje oprávnění k mikrofonu pro nahrávání hlasu. Otevřete Nastavení systému pro udělení přístupu.";
+"Upload to Google Drive?" = "Nahrát na Google Drive?";
+"Upload to S3?" = "Nahrát na S3?";
+"Upload to imgbb.com?" = "Nahrát na imgbb.com?";
+"Your screenshot will be uploaded." = "Váš snímek bude nahrán.";
+
+/* Permission Onboarding */
+"Welcome to Pinlume" = "Vítejte v Pinlume";
+"Pinlume needs one permission" = "Pinlume potřebuje jedno oprávnění";
+"Screen Recording not yet granted" = "Nahrávání obrazovky zatím nebylo povoleno";
+"Screen Recording granted!" = "Nahrávání obrazovky povoleno!";
+"Enable Pinlume, then try taking a screenshot" = "Povolte Pinlume a zkuste pořídit snímek";
+"Open Screen Recording Settings" = "Otevřít nastavení nahrávání obrazovky";
+"Continue" = "Pokračovat";
+
+/* OCR Window */
+"Text Recognition" = "Rozpoznávání textu";
+"Translate to:" = "Přeložit do:";
+"%d chars · %d words" = "%d znaků · %d slov";
+"Copy  ⌘↩" = "Kopírovat  ⌘↩";
+"AI Search" = "AI vyhledávání";
+"Show Original" = "Zobrazit originál";
+"Translation Failed" = "Překlad selhal";
+"Translation" = "Překlad";
+"(No text detected in the selected area)" = "(V vybrané oblasti nebyl rozpoznán žádný text)";
+
+/* Upload Toast */
+"URL copied to the clipboard" = "URL zkopírována do schránky";
+"Uploading... %d%%" = "Nahrávání... %d%%";
+"Upload failed: %@" = "Nahrávání selhalo: %@";
+"Uploaded! Link copied." = "Nahráno! Odkaz zkopírován.";
+"Uploading to %@... %d%%" = "Nahrávání na %@... %d%%";
+"Open" = "Otevřít";
+
+/* Recording Toast */
+"Recording saved" = "Nahrávka uložena";
+"%@ • Recording saved" = "%@ • Nahrávka uložena";
+"Copy Path" = "Kopírovat cestu";
+"Path copied!" = "Cesta zkopírována!";
+
+/* Video Editor */
+"Pinlume Video Editor" = "Pinlume Video Editor";
+"%@ selected" = "%@ vybráno";
+"Exporting..." = "Exportování...";
+"Export failed" = "Export selhal";
+"Saved to %@" = "Uloženo do %@";
+"Save failed" = "Uložení selhalo";
+
+/* Barcode Detector */
+/* "Open" and "Copy" are shared with other sections */
+
+/* Save Panel */
+"Save As..." = "Uložit jako...";
+"Choose a folder" = "Vyberte složku";
+"Save All to Folder…" = "Uložit vše do složky…";
+
+/* Scroll Capture HUD */
+"Auto Scroll" = "Automatické posouvání";
+"Stop" = "Zastavit";
+"Scrolling..." = "Posouvání...";
+
+/* Effects Picker (Adjust popover) */
+"Presets" = "Předvolby";
+"Adjustments" = "Úpravy";
+"Brightness" = "Jas";
+"Contrast" = "Kontrast";
+"Saturation" = "Sytost";
+"Sharpness" = "Ostrost";
+
+/* Time Ago */
+"just now" = "právě teď";
+"%ds ago" = "před %ds";
+"%dm ago" = "před %dm";
+"%dh ago" = "před %dh";
+
+/* Hotkey Labels */
+"History" = "Historie";
+
+/* Preferences - Shortcuts note */
+"Click \"Record\" and press a key combination with at least one modifier (⌘, ⌥, ⌃, ⇧) to set a shortcut." = "Klikněte na \"Nahrávat\" a stiskněte kombinaci kláves s alespoň jedním modifikátorem (⌘, ⌥, ⌃, ⇧) pro nastavení zkratky.";
+
+/* Recording — GIF Processing */
+"Processing GIF…" = "Zpracování GIF…";
+
+/* Recording — Input Monitoring Permission */
+"Input Monitoring Required" = "Vyžadováno monitorování vstupu";
+"Pinlume needs Input Monitoring permission to show keystrokes during recording. Please grant access in System Settings, then try again." = "Pinlume potřebuje oprávnění Monitorování vstupu pro zobrazení stisknutých kláves během nahrávání. Udělte přístup v System Settings a zkuste to znovu.";
+"Pinlume needs Accessibility permission to show keystrokes during recording. Please grant access in System Settings, then try again." = "Pinlume potřebuje oprávnění Usnadnění pro zobrazení stisknutých kláves během nahrávání. Udělte přístup v System Settings a zkuste to znovu.";
+
+/* Recording — Keystroke Overlay */
+"Show Keystrokes" = "Zobrazit stisknuté klávesy";
+"Shortcuts Only" = "Pouze zkratky";
+"All Keystrokes" = "Všechny klávesy";
+
+/* Recording — Settings Popover */
+"Delay:" = "Zpoždění:";
+
+/* Video Editor */
+"Copied to clipboard!" = "Zkopírováno do schránky!";
+
+/* Webcam Overlay */
+"Webcam Overlay" = "Překryv webkamery";
+"Camera Access Required" = "Vyžadován přístup ke kameře";
+"Pinlume needs camera permission for the webcam overlay. Open System Settings to grant access." = "Pinlume potřebuje oprávnění ke kameře pro překryv webkamery. Otevřete Nastavení systému pro udělení přístupu.";
+"Webcam" = "Webkamera";
+"Bottom Right" = "Vpravo dole";
+"Bottom Left" = "Vlevo dole";
+"Top Right" = "Vpravo nahoře";
+"Top Left" = "Vlevo nahoře";
+"Small" = "Malý";
+"Large" = "Velký";
+"Webcam Size Small" = "Malý";
+"Webcam Size Medium" = "Střední";
+"Webcam Size Large" = "Velký";
+"Webcam Size Extra Large" = "Extra velký";
+"Circle" = "Kruh";
+"Rounded Rectangle" = "Zaoblený obdélník";
+"Cam pos:" = "Poz. kam.:";
+"Cam size:" = "Vel. kam.:";
+"Cam shape:" = "Tvar kam.:";
+
+/* New Strings */
+"Settings" = "Nastavení";
+"Settings..." = "Nastavení...";
+"Pinlume Settings" = "Nastavení Pinlume";
+"Also open in Editor" = "Otevřít také v editoru";
+"Hide controls" = "Skrýt ovládací prvky";
+"Hide recording controls" = "Skrýt ovládací prvky nahrávání";
+"Stop recording from the menu bar icon instead." = "Zastavte nahrávání pomocí ikony v liště.";
+"Pixelate" = "Pixelizace";
+"Blur" = "Rozostření";
+"Solid" = "Plná";
+"Erase" = "Smazat";
+"Done" = "Hotovo";
+"Do nothing" = "Nedělat nic";
+"Overlay / Editor Shortcuts" = "Zkratky překryvu / editoru";
+"Set" = "Nastavit";
+"Press..." = "Stiskněte...";
+"Reset to default" = "Obnovit výchozí";
+"Press a single key to assign it as the shortcut for that tool. These work when the overlay or editor is active." = "Stiskněte jednu klávesu pro přiřazení jako zkratku daného nástroje. Fungují, když je aktivní překryv nebo editor.";
+"Keep Separate" = "Ponechat odděleně";
+"Merge Audio" = "Sloučit zvuk";
+"Audio Tracks" = "Zvukové stopy";
+"Adjust volume for each audio track:" = "Upravte hlasitost pro každou zvukovou stopu:";
+"Microphone:" = "Mikrofon:";
+"System audio:" = "Systémový zvuk:";
+"Loupe" = "Lupa";
+"Stamp" = "Razítko";
+"Unlimited" = "Bez omezení";
+"Save changes?" = "Uložit změny?";
+"Your annotations will be lost if you close without saving." = "Vaše anotace budou ztraceny, pokud zavřete bez uložení.";
+"Save & Close" = "Uložit a zavřít";
+"Discard" = "Zahodit";
+"Stop Recording" = "Zastavit nahrávání";
+"Pause" = "Pozastavit";
+"Resume" = "Pokračovat";
+"Engine:" = "Engine:";
+"Google Translate" = "Google Translate";
+"Apple (on-device)" = "Apple (na zařízení)";
+"Apple translation is faster and works offline. Google Translate supports more languages." = "Překlad Apple je rychlejší a funguje offline. Google Translate podporuje více jazyků.";
+"Download language packs in System Settings…" = "Stáhněte jazykové balíčky v Nastavení systému…";
+"Configure S3 in Settings" = "Nastavte S3 v Nastavení";
+"Sign in to Google Drive in Settings" = "Přihlaste se ke Google Drive v Nastavení";
+"Offline build: upload and cloud storage integrations are removed. Update checks may still connect to Pinlume's update server. Screenshots and recordings stay local unless you share or save them yourself." = "Offline sestavení: integrace pro nahrávání a cloudové úložiště jsou odstraněny. Kontrola aktualizací se stále může připojovat k aktualizačnímu serveru Pinlumeu. Snímky obrazovky a nahrávky zůstávají lokální, dokud je sami nesdílíte nebo neuložíte.";
+"Position:" = "Pozice:";
+"  Position:" = "  Pozice:";
+"Size:" = "Velikost:";
+"Shape:" = "Tvar:";
+
+"Same as screenshots" = "Stejné jako snímky obrazovky";
+"  Preview size:" = "  Velikost náhledu:";
+"(0 = off)" = "(0 = vypnuto)";
+"Clear All" = "Vymazat vše";
+"Clear History?" = "Vymazat historii?";
+"This will permanently delete all screenshots from history." = "Tím se trvale odstraní všechny snímky obrazovky z historie.";
+"Click \"Set\" and press a key combination with at least one modifier (⌘, ⌥, ⌃, ⇧) to set a shortcut." = "Klikněte na \"Nastavit\" a stiskněte kombinaci kláves s alespoň jedním modifikátorem (⌘, ⌥, ⌃, ⇧) pro nastavení zkratky.";
+"Files are uploaded to a \"Pinlume\" folder in your Google Drive. Everything stays private — nothing is shared publicly." = "Soubory jsou nahrávány do složky \"Pinlume\" na vašem Disku Google. Vše zůstává soukromé — nic není veřejně sdíleno.";
+
+"Pressure" = "Přítlak";
+
+/* Added for v4.1.0-beta.3 — video editor, effects, open-video, shortcuts help */
+"Open Video..." = "Otevřít video...";
+"Choose a video to open in Pinlume editor" = "Vyberte video k otevření v editoru Pinlume";
+"Click to add effects" = "Kliknutím přidejte efekty";
+"Add Zoom" = "Přidat přiblížení";
+"Add Censor" = "Přidat cenzuru";
+"Add Cut" = "Přidat střih";
+"Add Speed" = "Přidat rychlost";
+"Add Freeze" = "Přidat zastavený snímek";
+"Add Text" = "Přidat text";
+"Delete Zoom" = "Odstranit přiblížení";
+"Delete Censor" = "Odstranit cenzuru";
+"Delete Cut" = "Odstranit střih";
+"Delete Speed" = "Odstranit rychlost";
+"Delete Freeze" = "Odstranit zastavený snímek";
+"Delete Text" = "Odstranit text";
+"Edit Text…" = "Upravit text…";
+"Huge" = "Obrovský";
+"Bold" = "Tučné";
+"Italic" = "Kurzíva";
+"Alignment" = "Zarovnání";
+"Left" = "Vlevo";
+"Center" = "Na střed";
+"Right" = "Vpravo";
+"Text Color" = "Barva textu";
+"Background Color" = "Barva pozadí";
+"Rounded" = "Zaoblené";
+"Custom…" = "Vlastní…";
+"Transparent" = "Průhledná";
+"Black" = "Černá";
+"White" = "Bílá";
+"Yellow" = "Žlutá";
+"Red" = "Červená";
+"Green" = "Zelená";
+"Blue" = "Modrá";
+"Untitled" = "Bez názvu";
+"Add effect" = "Přidat efekt";
+"Fade" = "Prolínání";
+"High" = "Vysoká";
+"Low" = "Nízká";
+"Not enough room here" = "Zde není dost místa";
+"Copied!" = "Zkopírováno!";
+"Converting to GIF…" = "Převádí se na GIF…";
+"GIF conversion failed" = "Převod na GIF selhal";
+"No video track found" = "Nebyla nalezena žádná videostopa";
+"Preview:" = "Náhled:";
+"Copy Screen Info" = "Kopírovat informace o obrazovce";
+"Copies display and capture diagnostics to clipboard" = "Zkopíruje diagnostiku displeje a snímání do schránky";
+"Accent" = "Akcent";
+"Icon" = "Ikona";
+"Background" = "Pozadí";
+"Custom" = "Vlastní";
+"Theme:" = "Motiv:";
+"Application" = "Aplikace";
+"Capture area and extract text" = "Zachytit oblast a extrahovat text";
+"Capture the full screen" = "Zachytit celou obrazovku";
+"Counter for multi-screen captures" = "Počítadlo pro snímky z více obrazovek";
+"8-character random string (e.g. k3j7x9q2)" = "8znakový náhodný řetězec (např. k3j7x9q2)";
+"Filename Template Tokens" = "Tokeny šablony názvu souboru";
+"Filename tokens" = "Tokeny názvu souboru";
+"Filename:" = "Název souboru:";
+"Open an image file in the editor" = "Otevřít soubor obrázku v editoru";
+"Open the recent captures overlay" = "Otevřít překryv nedávných snímků";
+"Open this settings window" = "Otevřít toto okno nastavení";
+"Quick capture (uses your Enter action)" = "Rychlé zachycení (použije vaši akci Enter)";
+"Re-capture the last selected area" = "Znovu zachytit poslední vybranou oblast";
+"Screenshots only — captured window title (blank otherwise)" = "Pouze snímky obrazovky — název zachyceného okna (jinak prázdné)";
+"Show available filename tokens" = "Zobrazit dostupné tokeny názvu souboru";
+"Show supported URL scheme commands" = "Zobrazit podporované příkazy URL schématu";
+"Start area capture" = "Spustit snímání oblasti";
+"Start area recording" = "Spustit nahrávání oblasti";
+"Start full-screen recording" = "Spustit nahrávání celé obrazovky";
+"Start scroll capture" = "Spustit snímání posunem";
+"Stop the current recording" = "Zastavit aktuální nahrávání";
+"Supported URL Scheme Commands" = "Podporované příkazy URL schématu";
+"The file extension is appended automatically. Slashes and colons in {window} become dashes." = "Přípona souboru se přidá automaticky. Lomítka a dvojtečky v {window} se změní na pomlčky.";
+"Trigger Pinlume from Raycast, Alfred, Shortcuts, or any tool that opens URLs." = "Spusťte Pinlume z Raycast, Alfred, Shortcuts nebo jakéhokoli nástroje, který otevírá URL.";
+"Enable pinlume:// URL scheme" = "Povolit URL schéma pinlume://";
+"URL scheme info" = "Informace o URL schématu";
+"sec (0 = never)" = "s (0 = nikdy)";
+
+/* Localized current UI keys. Existing translations above are preserved. */
+"Plus build: personal build with update checks disabled. Preferences, history, and permissions are separate from the original Pinlume app." = "Plus sestavení: osobní sestavení s vypnutou kontrolou aktualizací. Předvolby, historie a oprávnění jsou oddělené od původní aplikace Pinlume.";
+"Light" = "Světlo";
+"Press Option to hide magnifier" = "Stisknutím tlačítka Option skryjete lupu";
+"Changes to the selected profile are saved automatically." = "Změny vybraného profilu se ukládají automaticky.";
+"Show Pin Shadow" = "Zobrazit stín špendlíku";
+"Arrow Keys" = "Šipky";
+"Source Language" = "Zdrojový jazyk";
+"Translation Pin" = "Překlad Pin";
+"Color Scheme:" = "Barevné schéma:";
+"Text Recognition / QR" = "Rozpoznávání textu / QR";
+"Basic" = "Základní";
+"Full" = "Plný";
+"Menu Bar Menu" = "Menu Bar Menu";
+"Screenshot history and editable annotations" = "Historie snímků obrazovky a upravitelné poznámky";
+"Press Shift to switch RGB/HEX" = "Stisknutím Shift přepnete RGB/HEX";
+"Clipboard image backups" = "Zálohy obrázků do schránky";
+"Double-click to Toggle Thumbnail" = "Dvojitým kliknutím přepnete miniaturu";
+"Compare" = "Porovnejte";
+"Apple translation does not support %@ → %@." = "Překlad Apple nepodporuje %@ → %@.";
+"Profile:" = "Profil:";
+"Move to Applications" = "Přesunout do Aplikace";
+"Filled Rectangle" = "Vyplněný obdélník";
+"Google translation is unavailable because sending text is disabled." = "Překlad Google není k dispozici, protože je zakázáno odesílání textu.";
+"Adjust Area and Edit" = "Upravit oblast a upravit";
+"Clear Local Data…" = "Vymazat místní data…";
+"Swap Languages" = "Vyměnit jazyky";
+"Ignore window occlusion" = "Ignorujte okluzi okna";
+"Graphite Blue" = "Grafitově modrá";
+"Copy Original" = "Kopírovat originál";
+"Pin Shadow" = "Pin stín";
+"Translation Window" = "Překladové okno";
+"Show Translation" = "Zobrazit překlad";
+"Enable %@:// URL scheme" = "Povolit schéma adresy URL %@://";
+"Disabled by default. Keeps up to 7 days or 2 MB; never writes screenshots, OCR text, clipboard contents, or keys." = "Ve výchozím nastavení zakázáno. Udrží až 7 dní nebo 2 MB; nikdy nezapisuje snímky obrazovky, text OCR, obsah schránky ani klávesy.";
+"Strength" = "Síla";
+"Auto-Redact Sensitive Information" = "Automaticky upravovat citlivé informace";
+"More Tools" = "Další nástroje";
+"Move Magnifier Sample Point 1 Pixel" = "Posunout ukázkový bod lupy 1 pixel";
+"Translating…" = "Překlad…";
+"Pin Scroll Zoom" = "Pin Scroll Zoom";
+"Copy Text (shown for text pins only)" = "Kopírovat text (zobrazeno pouze pro textové piny)";
+"Copy Pinned Text" = "Kopírovat připnutý text";
+"Forest" = "Les";
+"Show floating window after Quick Capture" = "Zobrazit plovoucí okno po rychlém zachycení";
+"Brush" = "Kartáč";
+"Allow Scroll Zoom on Pins" = "Povolit přiblížení posouváním pinů";
+"Could not copy configuration." = "Konfigurace se nepodařilo zkopírovat.";
+"Allow sending text to Google Translate" = "Povolit odesílání textu do Překladače Google";
+"Export…" = "Exportovat…";
+"Choose local data to clear" = "Vyberte místní data, která chcete vymazat";
+"Delete Configuration?" = "Smazat konfiguraci?";
+"Non-Drawing Actions" = "Akce bez kreslení";
+"Restored pins (closes current pins immediately)" = "Obnovené piny (okamžitě zavře aktuální piny)";
+"Professional" = "Profesionální";
+"Move to More Tools" = "Přejděte na Další nástroje";
+"Translation failed; original text shown." = "Překlad se nezdařil; zobrazen původní text.";
+"Target Language" = "Cílový jazyk";
+"About Pinlume" = "O Pinlume";
+"No text found" = "Nebyl nalezen žádný text";
+"Automatic" = "Automaticky";
+"Select Text" = "Vyberte Text";
+"Move Down" = "Přesunout dolů";
+"Don't ask again" = "Už se neptej";
+"Space to move. Release to annotate and edit" = "Prostor k pohybu. Uvolněte, chcete-li anotovat a upravit";
+"Transparent Annotation" = "Transparentní anotace";
+"Speak Source" = "Mluvit Zdroj";
+"Press %@ to move selection 1 pixel" = "Stisknutím %@ přesunete výběr o 1 pixel";
+"Pin Scroll Opacity" = "Pin Scroll Opacity";
+"OCR Pin" = "OCR pin";
+"Double-click" = "Poklepejte";
+"Rename Configuration" = "Přejmenovat konfiguraci";
+"When shortcuts conflict, the settings list is matched from top to bottom and the first entry takes priority." = "Při konfliktu zkratek se seznam nastavení shoduje shora dolů a prioritu má první položka.";
+"Original / Translation" = "Originál / Překlad";
+"Move Toolbar" = "Přesunout lištu nástrojů";
+"Beautify Screenshot" = "Zkrášlit snímek obrazovky";
+"Opacity %d%%" = "Neprůhlednost %d %%";
+"Configuration" = "Konfigurace";
+"Press %@ to show/hide magnifier" = "Stiskněte %@ pro zobrazení/skrytí lupy";
+"Anchor to Mouse Position" = "Ukotvení do polohy myši";
+"Press C to copy color" = "Stiskněte C pro kopírování barev";
+"Import…" = "Importovat…";
+"Apple translation language availability is unknown." = "Dostupnost jazyka překladu Apple není známa.";
+"Unable to capture selection" = "Nelze zachytit výběr";
+"Translated Text" = "Přeložený text";
+"Show partial image in compact Pin" = "Zobrazit částečný obrázek v kompaktním pinu";
+"Translation complete" = "Překlad dokončen";
+"Show Original / Translation" = "Zobrazit originál / překlad";
+"Languages swapped; edited translation was preserved" = "Jazyky vyměněny; upravený překlad byl zachován";
+"Image Adjustments" = "Úpravy obrazu";
+"Hide All Pins" = "Skrýt všechny piny";
+"Make Common" = "Make Common";
+"Storage & Diagnostics" = "Skladování a diagnostika";
+"Size %d%%" = "Velikost %d%%";
+"Enter a new name for this custom configuration." = "Zadejte nový název pro tuto vlastní konfiguraci.";
+"Preparing full window…" = "Příprava celého okna…";
+"This affects both the capture selection toolbar and pin toolbar. Common tools appear in the first row; additional tools move into the More menu." = "To ovlivní jak panel nástrojů pro výběr zachycení, tak panel nástrojů špendlíku. Běžné nástroje se objeví v prvním řádku; další nástroje se přesunou do nabídky Více.";
+"Pinlume needs Accessibility permission to translate selected text. Open System Settings to grant access. If Pinlume is not listed, click the + button and choose the running Pinlume app." = "Pinlume potřebuje k překladu vybraného textu oprávnění pro usnadnění. Chcete-li udělit přístup, otevřete Nastavení systému. Pokud Pinlume není v seznamu, klikněte na tlačítko + a vyberte spuštěnou aplikaci Pinlume.";
+"These shortcuts work only in a capture selection or selected pin; on-screen hints follow the current settings." = "Tyto zkratky fungují pouze ve výběru zachycení nebo vybraném pinu; rady na obrazovce se řídí aktuálním nastavením.";
+"Copy Configuration" = "Kopírovat";
+"Deep Teal" = "Deep Teal";
+"Could not apply configuration profile." = "Nelze použít konfigurační profil.";
+"Switch Magnifier RGB/HEX" = "Přepnout Lupa RGB/HEX";
+"Anchor to Top Left" = "Ukotvení vlevo nahoře";
+"Amber" = "Amber";
+"Configuration:" = "Konfigurace:";
+"Selectable Text Capture" = "Volitelné zachycení textu";
+"Hide/Show All Pins" = "Skrýt/Zobrazit všechny piny";
+"Unable to capture full window" = "Nelze zachytit celé okno";
+"Toolbar Layout" = "Rozložení panelu nástrojů";
+"Move Up" = "Posunout nahoru";
+"Enable Hotkeys" = "Povolit klávesové zkratky";
+"Choose an image to pin to screen" = "Vyberte obrázek, který chcete připnout na obrazovku";
+"OCR Selection" = "Výběr OCR";
+"%@ is running from a disk image. Move it to your Applications folder for stable permissions and the best experience." = "%@ běží z obrazu disku. Přesuňte jej do složky Aplikace pro stabilní oprávnění a nejlepší zážitek.";
+"System Default" = "Výchozí nastavení systému";
+"Midnight Indigo" = "Půlnoční Indigo";
+"Shortcut unavailable (error %d)" = "Zástupce není k dispozici (chyba %d)";
+"Auto Detect" = "Automatická detekce";
+"Copy of %@" = "Kopie %@";
+"Choose which actions appear in the status bar menu and arrange the order of common and additional tools. Settings, version, and quit remain fixed." = "Zvolte, které akce se zobrazí v nabídce stavového řádku, a uspořádejte pořadí běžných a doplňkových nástrojů. Nastavení, verze a ukončení zůstávají pevné.";
+"Sentence Comparison" = "Srovnání vět";
+"Could not rename configuration." = "Konfigurace se nepodařilo přejmenovat.";
+"No items" = "Žádné položky";
+"Diagnostic logs" = "Diagnostické protokoly";
+"Not Now" = "Teď ne";
+"Text copied" = "Text zkopírován";
+"Scroll capture copied to clipboard" = "Snímek posouvání zkopírován do schránky";
+"Rename…" = "Přejmenovat…";
+"Calculating…" = "Počítání…";
+"Disable Hotkeys" = "Zakázat klávesové zkratky";
+"Enable diagnostic logging (status, timing, coordinates, and errors only)" = "Povolit diagnostické protokolování (pouze stav, načasování, souřadnice a chyby)";
+"Hold %@ to show magnifier" = "Podržením %@ zobrazíte lupu";
+"Choose which dedicated OCR and translation tools are visible. Keyboard shortcuts are in Shortcuts." = "Vyberte, které vyhrazené nástroje OCR a překlady budou viditelné. Klávesové zkratky jsou v části Zkratky.";
+"Hold to Show Magnifier" = "Podržením zobrazíte lupu";
+"Show All Pins" = "Zobrazit všechny piny";
+"The configuration “%@” will be deleted and Basic will be applied." = "Konfigurace „%@“ bude smazána a použije se Základní.";
+"These are actions rather than drawing tools. They appear in More Tools; disabling one hides it from both selections and pins." = "Jsou to spíše akce než nástroje kreslení. Zobrazí se v části Další nástroje; deaktivací jednoho skryjete jej jak před výběry, tak před piny.";
+"Images saved to a folder you choose will not be deleted." = "Snímky uložené do zvolené složky nebudou smazány.";
+"Press %@ to switch RGB/HEX" = "Stisknutím %@ přepnete RGB/HEX";
+"Space to move. Release to finish" = "Prostor k pohybu. Uvolněním dokončíte";
+"Show/Hide Magnifier" = "Zobrazit/skrýt lupu";
+"Speak" = "Mluvte";
+"Eraser" = "Guma";
+"Current Configuration" = "Aktuální konfigurace";
+"Screen Translation Capture" = "Screen Translation Capture";
+"Copy Translation" = "Kopírovat překlad";
+"Move to Applications folder?" = "Přesunout do složky Aplikace?";
+"Double-click to Close Pin" = "Dvojitým kliknutím zavřít špendlík";
+"Slim" = "Štíhlý";
+"Could not move to Applications" = "Nelze přesunout do aplikací";
+"Please drag Pinlume to your Applications folder manually.\n\n%@" = "Přetáhněte Pinlume do složky Aplikace ručně.\n\n%@";
+"Could not import configuration." = "Konfiguraci nelze importovat.";
+"These are actions rather than drawing tools. Disabling one hides it from ordinary selections and pins." = "Jsou to spíše akce než nástroje kreslení. Zakázáním jednoho ho skryjete před běžnými výběry a špendlíky.";
+"Turn this off to keep translation text on this Mac. Google translation will be unavailable." = "Chcete-li na tomto Macu zachovat text překladu, vypněte toto. Překlad Google nebude k dispozici.";
+"Could not delete configuration." = "Konfigurace se nepodařilo smazat.";
+"Screen translation must stay on one display" = "Překlad obrazovky musí zůstat na jednom displeji";
+"Hide Pin Shadow" = "Skrýt stín špendlíku";
+"Translation Status" = "Stav překladu";
+"Monochrome" = "Monochromatický";
+"Translate before swapping languages" = "Před výměnou jazyků přeložte";
+"Export" = "Exportovat";
+"Dark" = "Tmavý";
+"Apple translation needs the %@ → %@ language pack. Download it in System Settings." = "Překlad Apple potřebuje jazykový balíček %@ → %@. Stáhněte si jej v Nastavení systému.";
+"Press %@ to move the sample point 1 pixel" = "Stisknutím %@ posunete bod vzorku o 1 pixel";
+"Move Selection 1 Pixel" = "Přesunout výběr 1 pixel";
+"Screen Translation" = "Překlad obrazovky";
+"Smooth Pin Zoom" = "Hladký pin zoom";
+"The current settings were kept unchanged." = "Aktuální nastavení zůstalo nezměněno.";
+"Presentation Drawing" = "Prezentační kresba";
+"Interface Theme:" = "Téma rozhraní:";
+"Quick capture copied to clipboard" = "Rychlé zachycení zkopírováno do schránky";
+"Translate selected text" = "Přeložte vybraný text";
+"Import" = "Importovat";
+"  Pin Zoom Anchor:" = "Připnout kotva přiblížení:";
+"Source Text" = "Zdrojový text";
+"Open Translation Window" = "Otevřete okno překladu";
+"Configuration Profiles" = "Konfigurační profily";
+"Text recognition failed" = "Rozpoznání textu se nezdařilo";
+"Continue with Clipboard" = "Pokračujte ve schránce";
+"Allow Trackpad Pinch Zoom on Pins" = "Povolit přiblížení špendlíkem na špendlíku";
+"Actions in More Tools" = "Akce v dalších nástrojích";
+"Clear Selected Data" = "Vymazat vybraná data";
+"Could not export configuration." = "Konfiguraci nelze exportovat.";
+"Copy Source" = "Kopírovat zdroj";
+"Common Tools" = "Běžné nástroje";
+"Swap" = "Vyměňte";
+"Recognize Text" = "Rozpoznat text";
+"Speak Translation" = "Mluvte Překlad";
+"These are actions rather than drawing tools. Disabling one hides it wherever that action is available." = "Jsou to spíše akce než nástroje kreslení. Zakázáním se skryje všude tam, kde je tato akce dostupná.";
+"Common tools appear in the first row; additional tools move into the More menu. Actions unavailable for the current context do not appear." = "Běžné nástroje se objeví v prvním řádku; další nástroje se přesunou do nabídky Více. Akce nedostupné pro aktuální kontext se nezobrazí.";
+"Not enough space for comparison" = "Nedostatek prostoru pro srovnání";
+"Set the Select Text pin action, translation engine, and privacy policy here. Keyboard shortcuts are in Shortcuts." = "Zde nastavte akci špendlíku Vybrat text, překladový modul a zásady ochrany osobních údajů. Klávesové zkratky jsou v části Zkratky.";
+"Recognizing Text…" = "Rozpoznávání textu…";
+"Release %@ to hide magnifier" = "Chcete-li skrýt lupu, uvolněte %@";
+"Rename" = "Přejmenovat";
+"Translate Now" = "Přeložit nyní";
+"Mouse Wheel" = "Kolečko myši";
+"Google translation is disabled in Settings." = "Překlad Google je zakázán v Nastavení.";
+"Could not determine the source language." = "Nepodařilo se určit zdrojový jazyk.";
+"Copy Text" = "Kopírovat text";
+"Selection & Pin Interactions" = "Interakce výběru a připnutí";
+"Pin zoom anchors to mouse position" = "Připněte kotvy zoomu do pozice myši";
+"OCR & Translation" = "OCR a překlady";
+"Rotate Clockwise" = "Otočit ve směru hodinových ručiček";

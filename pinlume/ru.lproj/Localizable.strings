@@ -1,0 +1,844 @@
+/* Русский — Pinlume localization
+ *
+ * To add a new language:
+ * 1. Create a new folder: pinlume/<lang-code>.lproj/
+ * 2. Copy this file into that folder
+ * 3. Translate all values (right side of = sign)
+ * 4. Add the language to LanguageManager.availableLanguages in Services/LanguageManager.swift
+ * 5. Add the language code to knownRegions in pinlume.xcodeproj/project.pbxproj
+ * 6. Submit a pull request!
+ *
+ * Keys use the English text. Values should be the translation.
+ * Format strings use %@ for strings, %d for integers.
+ * Keep keyboard shortcuts (like ⌘C) untranslated.
+ * Keep brand names (Pinlume, Google Drive, imgbb, S3) untranslated.
+ */
+
+/* Menu Bar */
+"Capture Area" = "Захват области";
+"Capture Screen" = "Захват экрана";
+"Capture OCR" = "Захват OCR";
+"Capture OCR & QR" = "Захват OCR и QR";
+"Capture area and read text/QR codes" = "Захват области и распознавание текста/QR-кодов";
+"Quick Capture" = "Быстрый захват";
+"Scroll Capture" = "Захват прокрутки";
+"Capture Last Area" = "Захват последней области";
+"Capture Delay" = "Захват с задержкой";
+"None" = "Нет";
+"%d seconds" = "%d сек.";
+"Record Area" = "Запись области";
+"Record Screen" = "Запись экрана";
+"Recent Captures" = "Недавние снимки";
+"Show History Panel" = "Показать панель истории";
+"Open Image..." = "Открыть изображение...";
+"Open from Clipboard" = "Открыть из буфера обмена";
+"Pin from Clipboard" = "Закрепить из буфера обмена";
+"Preferences..." = "Настройки...";
+"Check for Updates..." = "Проверить обновления...";
+"Quit Pinlume" = "Завершить Pinlume";
+"No recent captures" = "Нет недавних снимков";
+"Clear History" = "Очистить историю";
+
+/* History Panel */
+"Copy" = "Копировать";
+"Save As..." = "Сохранить как...";
+"Open in Editor" = "Открыть в редакторе";
+"Pin to Screen" = "Закрепить на экране";
+"Quick Look" = "Быстрый просмотр";
+"Delete" = "Удалить";
+"All" = "Все";
+"Screenshots" = "Снимки экрана";
+"GIFs" = "GIF-файлы";
+"Click to copy · Drag to app" = "Нажмите, чтобы скопировать · Перетащите в приложение";
+"No captures yet" = "Снимков пока нет";
+
+/* Floating Thumbnail */
+"Close All" = "Закрыть все";
+"Save All to Folder…" = "Сохранить все в папку…";
+"Save" = "Сохранить";
+
+/* Editor Top Bar */
+"Zoom In" = "Увеличить";
+"Zoom Out" = "Уменьшить";
+"Fit Canvas" = "Вписать в окно";
+"Crop" = "Обрезать";
+"Flip Horizontal" = "Отразить по горизонтали";
+"Flip Vertical" = "Отразить по вертикали";
+"Rotate Left" = "Повернуть влево";
+"Rotate Right" = "Повернуть вправо";
+"Zoom" = "Масштаб";
+"Add Capture" = "Добавить снимок";
+
+/* Toolbar - Tools */
+"Arrow" = "Стрелка";
+"Line" = "Линия";
+"Rectangle" = "Прямоугольник";
+"Ellipse" = "Эллипс";
+"Pencil" = "Карандаш";
+"Pencil (Draw)" = "Карандаш (Рисование)";
+"Marker" = "Маркер";
+"Text" = "Текст";
+"Number" = "Номер";
+"Number / Counter" = "Номер / Счётчик";
+"Stamp / Emoji" = "Штамп / Эмодзи";
+"Censor" = "Цензура";
+"Censor (Pixelate / Blur / Solid)" = "Цензура (Пикселизация / Размытие / Заливка)";
+"Measure" = "Линейка";
+"Measure (px)" = "Линейка (px)";
+"Magnify (Loupe)" = "Лупа";
+"Highlight" = "Подсветка";
+"Highlight (Spotlight)" = "Подсветка (Прожектор)";
+"Dim" = "Затемнение";
+"Color Sampler" = "Пипетка";
+"Color Picker" = "Палитра";
+"Select & Edit" = "Выбрать и изменить";
+"Color" = "Цвет";
+
+/* Aspect ratio & resolution presets */
+"Aspect ratio & resolution presets" = "Пресеты соотношения сторон и разрешения";
+"Aspect ratio" = "Соотношение сторон";
+"Resolution" = "Разрешение";
+"Freeform" = "Свободная форма";
+"Units" = "Единицы";
+"Keep ratio for next captures" = "Сохранить соотношение для следующих снимков";
+"Custom · %@" = "Произвольно · %@";
+
+/* Toolbar - Actions */
+"Copy to Clipboard" = "Копировать в буфер обмена";
+"Save to File" = "Сохранить в файл";
+"Save to" = "Сохранить в";
+"Open in Editor Window" = "Открыть в окне редактора";
+"Pin on Screen" = "Закрепить на экране";
+"Pin" = "Закрепить";
+"Pin (floating window)" = "Закрепить (плавающее окно)";
+"OCR" = "OCR";
+"OCR Text" = "OCR-текст";
+"OCR (extract text)" = "OCR (распознать текст)";
+"OCR & QR" = "OCR и QR";
+"Run OCR & QR" = "Запустить OCR и QR";
+"Text & QR Recognition" = "Распознавание текста и QR";
+"QR Code" = "QR-код";
+"QR Codes" = "QR-коды";
+"Open Link" = "Открыть ссылку";
+"Open With" = "Открыть в программе";
+"No Apps Available" = "Нет доступных приложений";
+"No Share Services" = "Нет служб для общего доступа";
+"Upload" = "Загрузить";
+"Share" = "Поделиться";
+"Undo" = "Отменить";
+"Redo" = "Повторить";
+"Close" = "Закрыть";
+"Remove Background" = "Удалить фон";
+"Beautify" = "Оформление";
+"Adjust" = "Коррекция";
+"Adjust (Image Effects)" = "Коррекция (Эффекты)";
+"Invert Colors" = "Инвертировать цвета";
+"Record" = "Запись";
+"Record screen" = "Запись экрана";
+"Translate" = "Перевести";
+"Auto-Redact sensitive data" = "Авто-скрытие конфиденциальных данных";
+"Move Selection" = "Переместить выделение";
+"Move up" = "Переместить вверх";
+"Move down" = "Переместить вниз";
+"Menu Bar Order" = "Порядок в строке меню";
+"Choose the order of capture actions in the Pinlume menu bar menu." = "Выберите порядок действий захвата в меню Pinlume в строке меню.";
+
+/* Toolbar - Recording */
+"Start Recording" = "Начать запись";
+"Cancel Recording" = "Отменить запись";
+"Highlight Mouse Clicks" = "Подсвечивать щелчки мыши";
+"Record System Audio" = "Записывать системный звук";
+"Record Microphone" = "Записывать микрофон";
+"Recording Settings" = "Настройки записи";
+
+/* Tool Options */
+"Size" = "Размер";
+"Stroke" = "Обводка";
+"Radius" = "Радиус";
+"Start:" = "Начало:";
+"Draw:" = "Рисовать:";
+"Auto:" = "Авто:";
+"Fill" = "Заливка";
+"Outline" = "Контур";
+"More Emojis" = "Ещё эмодзи";
+"Load Image" = "Загрузить изображение";
+"Gradient Style" = "Стиль градиента";
+"On" = "Вкл.";
+"Text Only" = "Только текст";
+"All Text" = "Весь текст";
+"PII" = "PII";
+"Faces" = "Лица";
+"People" = "Люди";
+"Confirm before upload" = "Подтверждать перед загрузкой";
+"Flip" = "Отразить";
+"Smooth" = "Сглаживание";
+"Refined" = "Точный";
+"Smart" = "Умное";
+"Padding" = "Отступ";
+"Shadow" = "Тень";
+"Right-click to add points" = "Нажмите правую кнопку, чтобы добавить точки";
+"Hold 1 auto-vertical  ·  Hold 2 auto-horizontal" = "Удерживайте 1 — авто-вертикаль  ·  Удерживайте 2 — авто-горизонталь";
+
+/* Overlay / Canvas */
+"Click a window  ·  Drag for custom area  ·  F for full screen" = "Нажмите на окно  ·  Выделите область  ·  F для полного экрана";
+"Drag to select  ·  Click for full screen" = "Выделите область  ·  Нажмите для полного экрана";
+"Release to annotate and edit" = "Отпустите для аннотации и редактирования";
+"Release to finish" = "Отпустите для завершения";
+"Hold Space to move. Release to annotate and edit" = "Удерживайте Пробел для перемещения. Отпустите для аннотации и редактирования";
+"Hold Space to move. Release to finish" = "Удерживайте Пробел для перемещения. Отпустите для завершения";
+"Window snap: " = "Привязка к окнам: ";
+"ON" = "ВКЛ";
+"OFF" = "ВЫКЛ";
+"  (Tab to toggle)" = "  (Tab для переключения)";
+"Space" = "Пробел";
+"Right-click to copy" = "Нажмите правой кнопкой, чтобы скопировать";
+"Copied %@" = "Скопировано: %@";
+"Set color %@" = "Установлен цвет %@";
+"Draw something first to use the move tool." = "Сначала нарисуйте что-нибудь, чтобы использовать инструмент перемещения.";
+"Drag to reposition" = "Перетащите для перемещения";
+
+/* Overlay - Popovers */
+"Format:" = "Формат:";
+"FPS:" = "FPS:";
+"When done:" = "После завершения:";
+"Open editor" = "Открыть редактор";
+"Show in Finder" = "Показать в Finder";
+"Copy to clipboard" = "Копировать в буфер обмена";
+
+/* Preferences - General */
+"Pinlume Preferences" = "Настройки Pinlume";
+"General" = "Основные";
+"Tools" = "Инструменты";
+"Recording" = "Запись";
+"About" = "О программе";
+"Shortcuts" = "Быстрые клавиши";
+"Uploads" = "Загрузки";
+"Language" = "Язык";
+"Language:" = "Язык:";
+"Restart the app to fully apply the new language." = "Перезапустите приложение для полного применения нового языка.";
+"Capture" = "Захват";
+"Play sound on capture" = "Воспроизводить звук при захвате";
+"Play sound on copy" = "Воспроизводить звук при копировании";
+"Remember last selected tool" = "Запоминать последний выбранный инструмент";
+"Show floating thumbnail after capture" = "Показывать миниатюру после захвата";
+"Launch at login" = "Запускать при входе в систему";
+"Show snap alignment guides" = "Показывать направляющие привязки";
+"Snap selection edges to image boundaries" = "Привязывать края выделения к границам изображения";
+"Capture mouse cursor in screenshot" = "Захватывать курсор мыши на снимке экрана";
+"Double-click selection to copy" = "Копировать двойным щелчком по выделению";
+"Hide capture instructions" = "Скрывать подсказки при захвате";
+"Use window title in saved filename" = "Использовать заголовок окна в имени файла";
+"Hide menu bar icon" = "Скрыть значок в строке меню";
+"Hotkeys still work. To show the icon again, re-launch Pinlume." = "Горячие клавиши по-прежнему работают. Чтобы вернуть значок, перезапустите Pinlume.";
+"Check for updates automatically" = "Автоматически проверять обновления";
+"Check for beta updates" = "Проверять бета-обновления";
+"Thumbnail" = "Миниатюра";
+"  Dismiss after:" = "  Скрывать через:";
+"seconds before auto-dismiss (0 = never)" = "секунд до автоскрытия (0 = никогда)";
+"  Multiple previews:" = "  Несколько превью:";
+"Stack (keep all)" = "Стопка (сохранять все)";
+"Replace (show only latest)" = "Заменять (только последнее)";
+"Output" = "Вывод";
+"Image format:" = "Формат изображения:";
+"Quality:" = "Качество:";
+"%d%%" = "%d%%";
+"Save at standard resolution (1x)" = "Сохранять в стандартном разрешении (1x)";
+"Halves dimensions on Retina displays, ~4x smaller files" = "Уменьшает размеры вдвое на Retina-дисплеях, файлы ~4x меньше";
+"Embed sRGB color profile" = "Встраивать цветовой профиль sRGB";
+"Ensures consistent colors across different displays" = "Обеспечивает одинаковые цвета на разных дисплеях";
+"Screenshot History" = "История снимков экрана";
+"History size:" = "Размер истории:";
+"screenshots kept on disk (0 = off)" = "снимков хранится на диске (0 = выкл.)";
+"Order history by last edit" = "Сортировать историю по последнему изменению";
+"Edited screenshots move to the top. Off keeps them in capture order." = "Изменённые снимки перемещаются вверх. Если выключено, сохраняется порядок захвата.";
+"Save Directory" = "Папка сохранения";
+"Save folder:" = "Папка сохранения:";
+"Browse…" = "Обзор…";
+"Appearance" = "Оформление";
+"Accent color:" = "Цвет акцента:";
+"Icon color:" = "Цвет значка:";
+"Background color:" = "Цвет фона:";
+"Reset" = "Сбросить";
+"OCR Capture:" = "Захват OCR:";
+"OCR & QR Capture:" = "Захват OCR и QR:";
+"Show window + copy to clipboard" = "Показать окно и скопировать";
+"Show window only" = "Только показать окно";
+"Copy to clipboard only" = "Только скопировать";
+"Enter / Quick Capture:" = "Enter / Быстрый захват:";
+"Save to file" = "Сохранить в файл";
+"Save + copy to clipboard" = "Сохранить и скопировать";
+"OCR Action" = "Действие OCR";
+"Save action:" = "Действие сохранения:";
+"Save to default folder" = "Сохранять в папку по умолчанию";
+"Ask where to save" = "Спрашивать, куда сохранять";
+"Show shortcuts in tooltips" = "Показывать сочетания в подсказках";
+"Disable shadow outside selection" = "Отключить затемнение вне выделения";
+"Menu bar icon:" = "Значок в строке меню:";
+"Default" = "По умолчанию";
+"Custom symbol" = "Пользовательский символ";
+"Enter any SF Symbol name (e.g. camera.fill) or pick a preset. Browse names in Apple's SF Symbols app. Invalid names fall back to the default icon." = "Введите любое имя SF Symbol (например, camera.fill) или выберите пресет. Просматривайте имена в приложении Apple SF Symbols. При недопустимом имени используется значок по умолчанию.";
+
+/* Preferences - Shortcuts */
+"Keyboard Shortcuts" = "Сочетания клавиш";
+"Hotkeys" = "Горячие клавиши";
+"Clear shortcut" = "Очистить сочетание";
+"Press keys..." = "Нажмите клавиши...";
+"Waiting..." = "Ожидание...";
+
+/* Preferences - Tools */
+"Annotation Tools" = "Инструменты аннотации";
+"Hidden tools are removed from the bottom toolbar." = "Скрытые инструменты удаляются из нижней панели.";
+"Capture Actions" = "Действия захвата";
+"Bottom Toolbar Actions" = "Действия нижней панели";
+"Hidden actions are removed from the bottom toolbar." = "Скрытые действия удаляются из нижней панели.";
+"Editor Actions" = "Действия редактора";
+"Right Toolbar Actions" = "Действия правой панели";
+"Hidden actions are removed from the right toolbar." = "Скрытые действия удаляются из правой панели.";
+
+/* Preferences - Recording */
+"Frame rate:" = "Частота кадров:";
+"After recording:" = "После записи:";
+"Save recording to:" = "Сохранять запись в:";
+"Save Recording" = "Сохранить запись";
+"Clear" = "Очистить";
+"Max height:" = "Макс. высота:";
+"px (0 = unlimited)" = "px (0 = без ограничений)";
+"Behavior" = "Поведение";
+"Auto-scroll (sends synthetic scroll events)" = "Авто-прокрутка (отправляет синтетические события прокрутки)";
+"Detect fixed/sticky headers" = "Обнаруживать фиксированные заголовки";
+"Scroll speed:" = "Скорость прокрутки:";
+"Slow" = "Медленно";
+"Medium" = "Средне";
+"Fast" = "Быстро";
+"Very fast" = "Очень быстро";
+"5 fps" = "5 fps";
+"10 fps" = "10 fps";
+"15 fps" = "15 fps";
+"24 fps" = "24 fps";
+"30 fps" = "30 fps";
+"60 fps" = "60 fps";
+"120 fps" = "120 fps";
+"MP4 (H.264)" = "MP4 (H.264)";
+"GIF" = "GIF";
+
+/* Preferences - Upload */
+"Upload Service" = "Сервис загрузки";
+"Upload Provider" = "Провайдер загрузки";
+"Provider:" = "Провайдер:";
+"Google Drive" = "Google Drive";
+"Google Drive (images + videos)" = "Google Drive (изображения и видео)";
+"imgbb (images only)" = "imgbb (только изображения)";
+"S3-Compatible (images + videos)" = "S3-совместимый (изображения и видео)";
+"S3-Compatible Storage" = "S3-совместимое хранилище";
+"Sign In with Google" = "Войти через Google";
+"Sign Out" = "Выйти";
+"Signed in" = "Вход выполнен";
+"Not signed in" = "Вход не выполнен";
+"Account:" = "Аккаунт:";
+"Test Connection" = "Проверить подключение";
+"Fill in endpoint, bucket, and credentials first" = "Сначала заполните адрес, бакет и учётные данные";
+"Testing..." = "Проверка...";
+"Connection successful!" = "Подключение успешно!";
+"Leave empty to use default" = "Оставьте пустым для значения по умолчанию";
+"Endpoint:" = "Адрес:";
+"Region:" = "Регион:";
+"Bucket:" = "Бакет:";
+"Access Key:" = "Ключ доступа:";
+"Secret Key:" = "Секретный ключ:";
+"Public URL:" = "Публичный URL:";
+"Path Prefix:" = "Префикс пути:";
+"API key:" = "API-ключ:";
+"Upload History" = "История загрузок";
+"No uploads yet." = "Загрузок пока нет.";
+"Base URL for public access. If empty, the S3 endpoint URL is used (may not be publicly accessible)." = "Базовый URL для публичного доступа. Если пуст, используется URL S3 (может быть недоступен публично).";
+"A shared key is included — get your own free key at imgbb.com/api if you hit rate limits. Images only (no video support)." = "Используется общий ключ — получите свой бесплатный ключ на imgbb.com/api при превышении лимитов. Только изображения (видео не поддерживается).";
+"Works with AWS S3, Cloudflare R2, MinIO, DigitalOcean Spaces, Backblaze B2, and other S3-compatible services. Supports images and videos." = "Работает с AWS S3, Cloudflare R2, MinIO, DigitalOcean Spaces, Backblaze B2 и другими S3-совместимыми сервисами. Поддерживает изображения и видео.";
+"Configure S3 in Preferences" = "Настройте S3 в Настройках";
+"Sign in to Google Drive in Preferences" = "Войдите в Google Drive в Настройках";
+"Video upload requires Google Drive or S3" = "Загрузка видео требует Google Drive или S3";
+
+/* Preferences - About */
+"Pinlume" = "Pinlume";
+"Version %@ (%@)" = "Версия %@ (%@)";
+"Made by" = "Разработал";
+"Licensed under the GPLv3" = "Лицензия GPLv3";
+"A free, open-source screenshot & screen recording tool for macOS.\nFully native — built with Swift and AppKit." = "Бесплатный инструмент для снимков экрана и записи видео с открытым исходным кодом для macOS.\nПолностью нативный — создан на Swift и AppKit.";
+
+/* Alerts */
+"No Image on Clipboard" = "Нет изображения в буфере обмена";
+"No Image or Text on Clipboard" = "Нет изображения или текста в буфере обмена";
+"Copy an image to the clipboard first, then try again." = "Сначала скопируйте изображение в буфер обмена, затем попробуйте снова.";
+"Copy an image or text to the clipboard first, then try again." = "Сначала скопируйте изображение или текст в буфер обмена, затем попробуйте снова.";
+"OK" = "ОК";
+"Accessibility Access Required" = "Требуется доступ к Универсальному доступу";
+"Pinlume needs Accessibility permission to auto-scroll other apps. Please grant access in System Settings, then try again." = "Pinlume требуется разрешение Универсального доступа для авто-прокрутки других приложений. Предоставьте доступ в Системных настройках и попробуйте снова.";
+"Pinlume needs Accessibility permission for scroll capture. Please grant access in System Settings, then try again." = "Pinlume требуется разрешение Универсального доступа для захвата с прокруткой. Предоставьте доступ в Системных настройках и повторите попытку.";
+"Open Settings" = "Открыть Настройки";
+"Cancel" = "Отменить";
+"Microphone Access Required" = "Требуется доступ к микрофону";
+"Pinlume needs microphone permission to record voice audio. Open System Settings to grant access." = "Pinlume требуется разрешение на использование микрофона для записи голоса. Откройте Системные настройки для предоставления доступа.";
+"Upload to Google Drive?" = "Загрузить на Google Drive?";
+"Upload to S3?" = "Загрузить на S3?";
+"Upload to imgbb.com?" = "Загрузить на imgbb.com?";
+"Your screenshot will be uploaded." = "Ваш снимок экрана будет загружен.";
+
+/* Permission Onboarding */
+"Welcome to Pinlume" = "Добро пожаловать в Pinlume";
+"Pinlume needs one permission" = "Pinlume требуется одно разрешение";
+"Screen Recording not yet granted" = "Разрешение на запись экрана не предоставлено";
+"Screen Recording granted!" = "Разрешение на запись экрана получено!";
+"Enable Pinlume, then try taking a screenshot" = "Включите Pinlume, затем попробуйте сделать снимок экрана";
+"Open Screen Recording Settings" = "Открыть настройки записи экрана";
+"Continue" = "Продолжить";
+
+/* OCR Window */
+"Text Recognition" = "Распознавание текста";
+"Translate to:" = "Перевести на:";
+"%d chars · %d words" = "%d символов · %d слов";
+"Copy  ⌘↩" = "Копировать  ⌘↩";
+"AI Search" = "AI-поиск";
+"Show Original" = "Показать оригинал";
+"Translation Failed" = "Ошибка перевода";
+"Translation" = "Перевод";
+"(No text detected in the selected area)" = "(Текст в выбранной области не обнаружен)";
+
+/* Upload Toast */
+"URL copied to the clipboard" = "URL скопирован в буфер обмена";
+"Uploading... %d%%" = "Загрузка... %d%%";
+"Upload failed: %@" = "Ошибка загрузки: %@";
+"Uploaded! Link copied." = "Загружено! Ссылка скопирована.";
+"Uploading to %@... %d%%" = "Загрузка на %@... %d%%";
+"Open" = "Открыть";
+
+/* Recording Toast */
+"Recording saved" = "Запись сохранена";
+"%@ • Recording saved" = "%@ • Запись сохранена";
+"Copy Path" = "Копировать путь";
+"Path copied!" = "Путь скопирован!";
+
+/* Video Editor */
+"Pinlume Video Editor" = "Видеоредактор Pinlume";
+"%@ selected" = "%@ выбрано";
+"Exporting..." = "Экспорт...";
+"Export failed" = "Ошибка экспорта";
+"Saved to %@" = "Сохранено в %@";
+"Save failed" = "Ошибка сохранения";
+
+/* Barcode Detector */
+/* "Open" and "Copy" are shared with other sections */
+
+/* Save Panel */
+"Save As..." = "Сохранить как...";
+"Choose a folder" = "Выберите папку";
+"Save All to Folder…" = "Сохранить все в папку…";
+
+/* Scroll Capture HUD */
+"Auto Scroll" = "Авто-прокрутка";
+"Stop" = "Стоп";
+"Scrolling..." = "Прокрутка...";
+
+/* Effects Picker (Adjust popover) */
+"Presets" = "Пресеты";
+"Adjustments" = "Коррекция";
+"Brightness" = "Яркость";
+"Contrast" = "Контрастность";
+"Saturation" = "Насыщенность";
+"Sharpness" = "Резкость";
+
+/* Time Ago */
+"just now" = "только что";
+"%ds ago" = "%d сек. назад";
+"%dm ago" = "%d мин. назад";
+"%dh ago" = "%d ч. назад";
+
+/* Hotkey Labels */
+"History" = "История";
+
+/* Preferences - Shortcuts note */
+"Click \"Record\" and press a key combination with at least one modifier (⌘, ⌥, ⌃, ⇧) to set a shortcut." = "Нажмите \"Запись\" и введите сочетание клавиш с хотя бы одним модификатором (⌘, ⌥, ⌃, ⇧), чтобы задать быструю клавишу.";
+
+/* Recording — GIF Processing */
+"Processing GIF…" = "Обработка GIF…";
+
+/* Recording — Input Monitoring Permission */
+"Input Monitoring Required" = "Требуется мониторинг ввода";
+"Pinlume needs Input Monitoring permission to show keystrokes during recording. Please grant access in System Settings, then try again." = "Pinlume требуется разрешение на мониторинг ввода для отображения нажатий клавиш во время записи. Предоставьте доступ в System Settings и попробуйте снова.";
+"Pinlume needs Accessibility permission to show keystrokes during recording. Please grant access in System Settings, then try again." = "Pinlume требуется разрешение Универсального доступа для отображения нажатий клавиш во время записи. Предоставьте доступ в System Settings и попробуйте снова.";
+
+/* Recording — Keystroke Overlay */
+"Show Keystrokes" = "Показывать нажатия клавиш";
+"Shortcuts Only" = "Только сочетания";
+"All Keystrokes" = "Все нажатия клавиш";
+
+/* Recording — Settings Popover */
+"Delay:" = "Задержка:";
+
+/* Video Editor */
+"Copied to clipboard!" = "Скопировано в буфер обмена!";
+
+/* Webcam Overlay */
+"Webcam Overlay" = "Наложение веб-камеры";
+"Camera Access Required" = "Требуется доступ к камере";
+"Pinlume needs camera permission for the webcam overlay. Open System Settings to grant access." = "Pinlume требуется разрешение на использование камеры для наложения веб-камеры. Откройте Системные настройки для предоставления доступа.";
+"Webcam" = "Веб-камера";
+"Bottom Right" = "Внизу справа";
+"Bottom Left" = "Внизу слева";
+"Top Right" = "Вверху справа";
+"Top Left" = "Вверху слева";
+"Small" = "Маленький";
+"Large" = "Большой";
+"Webcam Size Small" = "Маленький";
+"Webcam Size Medium" = "Средний";
+"Webcam Size Large" = "Большой";
+"Webcam Size Extra Large" = "Очень большой";
+"Circle" = "Круг";
+"Rounded Rectangle" = "Скруглённый прямоугольник";
+"Cam pos:" = "Поз. камеры:";
+"Cam size:" = "Разм. камеры:";
+"Cam shape:" = "Форма камеры:";
+
+/* New strings */
+"Settings..." = "Настройки...";
+"Settings" = "Настройки";
+"Pinlume Settings" = "Настройки Pinlume";
+"Also open in Editor" = "Также открыть в редакторе";
+"Hide controls" = "Скрыть элементы управления";
+"Hide recording controls" = "Скрыть элементы управления записью";
+"Stop recording from the menu bar icon instead." = "Остановите запись через значок в строке меню.";
+"Pixelate" = "Пикселизация";
+"Blur" = "Размытие";
+"Solid" = "Заливка";
+"Erase" = "Стереть";
+"Done" = "Готово";
+"Do nothing" = "Ничего не делать";
+"Overlay / Editor Shortcuts" = "Быстрые клавиши оверлея / редактора";
+"Set" = "Назначить";
+"Press..." = "Нажмите...";
+"Reset to default" = "Сбросить по умолчанию";
+"Press a single key to assign it as the shortcut for that tool. These work when the overlay or editor is active." = "Нажмите клавишу, чтобы назначить её быстрой клавишей для этого инструмента. Работает при активном оверлее или редакторе.";
+"Keep Separate" = "Оставить раздельно";
+"Merge Audio" = "Объединить аудио";
+"Audio Tracks" = "Аудиодорожки";
+"Adjust volume for each audio track:" = "Настройте громкость каждой аудиодорожки:";
+"Microphone:" = "Микрофон:";
+"System audio:" = "Системный звук:";
+"Loupe" = "Лупа";
+"Stamp" = "Штамп";
+"Unlimited" = "Без ограничений";
+"Save changes?" = "Сохранить изменения?";
+"Your annotations will be lost if you close without saving." = "Ваши аннотации будут потеряны, если вы закроете без сохранения.";
+"Save & Close" = "Сохранить и закрыть";
+"Discard" = "Отклонить";
+"Stop Recording" = "Остановить запись";
+"Pause" = "Пауза";
+"Resume" = "Продолжить";
+"Engine:" = "Движок:";
+"Google Translate" = "Google Translate";
+"Apple (on-device)" = "Apple (на устройстве)";
+"Apple translation is faster and works offline. Google Translate supports more languages." = "Перевод Apple быстрее и работает офлайн. Google Translate поддерживает больше языков.";
+"Download language packs in System Settings…" = "Загрузите языковые пакеты в Системных настройках…";
+"Configure S3 in Settings" = "Настройте S3 в Настройках";
+"Sign in to Google Drive in Settings" = "Войдите в Google Drive в Настройках";
+"Offline build: upload and cloud storage integrations are removed. Update checks may still connect to Pinlume's update server. Screenshots and recordings stay local unless you share or save them yourself." = "Офлайн-сборка: интеграции загрузки и облачного хранилища удалены. Проверка обновлений всё ещё может подключаться к серверу обновлений Pinlume. Снимки экрана и записи остаются локальными, пока вы сами не поделитесь ими или не сохраните их.";
+"Position:" = "Позиция:";
+"  Position:" = "  Позиция:";
+"Size:" = "Размер:";
+"Shape:" = "Форма:";
+
+"Same as screenshots" = "Как у скриншотов";
+"  Preview size:" = "  Размер превью:";
+"(0 = off)" = "(0 = выкл)";
+"Clear All" = "Очистить всё";
+"Clear History?" = "Очистить историю?";
+"This will permanently delete all screenshots from history." = "Это безвозвратно удалит все скриншоты из истории.";
+"Click \"Set\" and press a key combination with at least one modifier (⌘, ⌥, ⌃, ⇧) to set a shortcut." = "Нажмите \"Задать\" и введите комбинацию клавиш с хотя бы одним модификатором (⌘, ⌥, ⌃, ⇧), чтобы установить сочетание.";
+"Files are uploaded to a \"Pinlume\" folder in your Google Drive. Everything stays private — nothing is shared publicly." = "Файлы загружаются в папку \"Pinlume\" на вашем Google Drive. Всё остаётся приватным — ничего не публикуется в открытый доступ.";
+
+"Pressure" = "Нажим";
+
+/* Added for v4.1.0-beta.3 — video editor, effects, open-video, shortcuts help */
+"Open Video..." = "Открыть видео...";
+"Choose a video to open in Pinlume editor" = "Выберите видео, чтобы открыть в редакторе Pinlume";
+"Click to add effects" = "Нажмите, чтобы добавить эффекты";
+"Add Zoom" = "Добавить зум";
+"Add Censor" = "Добавить цензуру";
+"Add Cut" = "Добавить вырезку";
+"Add Speed" = "Добавить скорость";
+"Add Freeze" = "Добавить стоп-кадр";
+"Add Text" = "Добавить текст";
+"Delete Zoom" = "Удалить зум";
+"Delete Censor" = "Удалить цензуру";
+"Delete Cut" = "Удалить вырезку";
+"Delete Speed" = "Удалить скорость";
+"Delete Freeze" = "Удалить стоп-кадр";
+"Delete Text" = "Удалить текст";
+"Edit Text…" = "Редактировать текст…";
+"Huge" = "Огромный";
+"Bold" = "Жирный";
+"Italic" = "Курсив";
+"Alignment" = "Выравнивание";
+"Left" = "По левому краю";
+"Center" = "По центру";
+"Right" = "По правому краю";
+"Text Color" = "Цвет текста";
+"Background Color" = "Цвет фона";
+"Rounded" = "Скруглённый";
+"Custom…" = "Пользовательский…";
+"Transparent" = "Прозрачный";
+"Black" = "Чёрный";
+"White" = "Белый";
+"Yellow" = "Жёлтый";
+"Red" = "Красный";
+"Green" = "Зелёный";
+"Blue" = "Синий";
+"Untitled" = "Без названия";
+"Add effect" = "Добавить эффект";
+"Fade" = "Затухание";
+"High" = "Высокое";
+"Low" = "Низкое";
+"Not enough room here" = "Здесь недостаточно места";
+"Copied!" = "Скопировано!";
+"Converting to GIF…" = "Преобразование в GIF…";
+"GIF conversion failed" = "Ошибка преобразования в GIF";
+"No video track found" = "Видеодорожка не найдена";
+"Preview:" = "Превью:";
+"Copy Screen Info" = "Копировать информацию об экране";
+"Copies display and capture diagnostics to clipboard" = "Копирует диагностику дисплея и захвата в буфер обмена";
+"Accent" = "Акцент";
+"Icon" = "Значок";
+"Background" = "Фон";
+"Custom" = "Пользовательский";
+"Theme:" = "Тема:";
+"Application" = "Приложение";
+"Capture area and extract text" = "Захват области и извлечение текста";
+"Capture the full screen" = "Захватить весь экран";
+"Counter for multi-screen captures" = "Счётчик для захвата нескольких экранов";
+"8-character random string (e.g. k3j7x9q2)" = "8-символьная случайная строка (например, k3j7x9q2)";
+"Filename Template Tokens" = "Токены шаблона имени файла";
+"Filename tokens" = "Токены имени файла";
+"Filename:" = "Имя файла:";
+"Open an image file in the editor" = "Открыть файл изображения в редакторе";
+"Open the recent captures overlay" = "Открыть панель недавних снимков";
+"Open this settings window" = "Открыть это окно настроек";
+"Quick capture (uses your Enter action)" = "Быстрый захват (использует действие Enter)";
+"Re-capture the last selected area" = "Повторный захват последней выбранной области";
+"Screenshots only — captured window title (blank otherwise)" = "Только для скриншотов — заголовок захваченного окна (иначе пусто)";
+"Show available filename tokens" = "Показать доступные токены имени файла";
+"Show supported URL scheme commands" = "Показать поддерживаемые команды URL-схемы";
+"Start area capture" = "Начать захват области";
+"Start area recording" = "Начать запись области";
+"Start full-screen recording" = "Начать запись всего экрана";
+"Start scroll capture" = "Начать захват с прокруткой";
+"Stop the current recording" = "Остановить текущую запись";
+"Supported URL Scheme Commands" = "Поддерживаемые команды URL-схемы";
+"The file extension is appended automatically. Slashes and colons in {window} become dashes." = "Расширение файла добавляется автоматически. Слэши и двоеточия в {window} заменяются дефисами.";
+"Trigger Pinlume from Raycast, Alfred, Shortcuts, or any tool that opens URLs." = "Запускайте Pinlume из Raycast, Alfred, Shortcuts или любого инструмента, открывающего URL.";
+"Enable pinlume:// URL scheme" = "Включить URL-схему pinlume://";
+"URL scheme info" = "Информация об URL-схеме";
+"sec (0 = never)" = "сек. (0 = никогда)";
+
+/* Localized current UI keys. Existing translations above are preserved. */
+"Plus build: personal build with update checks disabled. Preferences, history, and permissions are separate from the original Pinlume app." = "Плюс сборка: персональная сборка с отключенной проверкой обновлений. Настройки, история и разрешения отделены от исходного приложения Pinlume.";
+"Light" = "Свет";
+"Press Option to hide magnifier" = "Нажмите «Option», чтобы скрыть лупу";
+"Changes to the selected profile are saved automatically." = "Изменения выбранного профиля сохраняются автоматически.";
+"Show Pin Shadow" = "Показать тень булавки";
+"Arrow Keys" = "Клавиши со стрелками";
+"Source Language" = "Исходный язык";
+"Translation Pin" = "Пин-перевод";
+"Color Scheme:" = "Цветовая схема:";
+"Text Recognition / QR" = "Распознавание текста / QR";
+"Basic" = "Базовый";
+"Full" = "Полный";
+"Menu Bar Menu" = "Меню панели меню";
+"Screenshot history and editable annotations" = "История снимков экрана и редактируемые аннотации";
+"Press Shift to switch RGB/HEX" = "Нажмите Shift, чтобы переключить RGB/HEX";
+"Clipboard image backups" = "Резервные копии изображений в буфере обмена";
+"Double-click to Toggle Thumbnail" = "Дважды щелкните, чтобы переключить миниатюру";
+"Compare" = "Сравнить";
+"Apple translation does not support %@ → %@." = "Перевод Apple не поддерживает %@ → %@.";
+"Profile:" = "Профиль:";
+"Move to Applications" = "Перейти в Приложения";
+"Filled Rectangle" = "Заполненный прямоугольник";
+"Google translation is unavailable because sending text is disabled." = "Перевод Google недоступен, поскольку отправка текста отключена.";
+"Adjust Area and Edit" = "Отрегулировать область и изменить";
+"Clear Local Data…" = "Очистить локальные данные…";
+"Swap Languages" = "Обмен языками";
+"Ignore window occlusion" = "Игнорировать перекрытие окна";
+"Graphite Blue" = "Графитовый синий";
+"Copy Original" = "Копировать оригинал";
+"Pin Shadow" = "Пин-тень";
+"Translation Window" = "Окно перевода";
+"Show Translation" = "Показать перевод";
+"Enable %@:// URL scheme" = "Включить схему URL %@://";
+"Disabled by default. Keeps up to 7 days or 2 MB; never writes screenshots, OCR text, clipboard contents, or keys." = "По умолчанию отключено. Хранится до 7 дней или 2 МБ; никогда не записывает снимки экрана, текст OCR, содержимое буфера обмена или ключи.";
+"Strength" = "Сила";
+"Auto-Redact Sensitive Information" = "Автоматическое удаление конфиденциальной информации";
+"More Tools" = "Дополнительные инструменты";
+"Move Magnifier Sample Point 1 Pixel" = "Переместить точку выборки лупы на 1 пиксель";
+"Translating…" = "Перевод…";
+"Pin Scroll Zoom" = "Закрепить прокрутку масштабирования";
+"Copy Text (shown for text pins only)" = "Копировать текст (показано только для текстовых булавок)";
+"Copy Pinned Text" = "Копировать закрепленный текст";
+"Forest" = "Лес";
+"Show floating window after Quick Capture" = "Показывать плавающее окно после быстрого захвата";
+"Brush" = "Кисть";
+"Allow Scroll Zoom on Pins" = "Разрешить прокрутку масштабирования на булавках";
+"Could not copy configuration." = "Не удалось скопировать конфигурацию.";
+"Allow sending text to Google Translate" = "Разрешить отправку текста в Google Translate";
+"Export…" = "Экспортировать…";
+"Choose local data to clear" = "Выберите локальные данные для очистки";
+"Delete Configuration?" = "Удалить конфигурацию?";
+"Non-Drawing Actions" = "Действия, не связанные с рисованием";
+"Restored pins (closes current pins immediately)" = "Восстановленные контакты (немедленно закрывает текущие контакты)";
+"Professional" = "Профессиональный";
+"Move to More Tools" = "Перейти к дополнительным инструментам";
+"Translation failed; original text shown." = "Перевод не выполнен; показан оригинальный текст.";
+"Target Language" = "Целевой язык";
+"About Pinlume" = "О Пинлуме";
+"No text found" = "Текст не найден";
+"Automatic" = "Автоматический";
+"Select Text" = "Выбрать текст";
+"Move Down" = "Вниз";
+"Don't ask again" = "Не спрашивай больше";
+"Space to move. Release to annotate and edit" = "Пространство для перемещения. Отпустите, чтобы комментировать и редактировать";
+"Transparent Annotation" = "Прозрачная аннотация";
+"Speak Source" = "Говорить источник";
+"Press %@ to move selection 1 pixel" = "Нажмите %@, чтобы переместить выделение на 1 пиксель.";
+"Pin Scroll Opacity" = "Непрозрачность прокрутки контактов";
+"OCR Pin" = "Пин-код оптического распознавания символов";
+"Double-click" = "Дважды щелкните";
+"Rename Configuration" = "Переименование конфигурации";
+"When shortcuts conflict, the settings list is matched from top to bottom and the first entry takes priority." = "При конфликте ярлыков список настроек сопоставляется сверху вниз, и первая запись имеет приоритет.";
+"Original / Translation" = "Оригинал / Перевод";
+"Move Toolbar" = "Переместить панель инструментов";
+"Beautify Screenshot" = "Украсить скриншот";
+"Opacity %d%%" = "Непрозрачность %d%%";
+"Configuration" = "Конфигурация";
+"Press %@ to show/hide magnifier" = "Нажмите %@, чтобы показать/скрыть лупу.";
+"Anchor to Mouse Position" = "Привязка к положению мыши";
+"Press C to copy color" = "Нажмите C, чтобы скопировать цвет";
+"Import…" = "Импортировать…";
+"Apple translation language availability is unknown." = "Доступность языка перевода Apple неизвестна.";
+"Unable to capture selection" = "Не удалось захватить выделение";
+"Translated Text" = "Переведенный текст";
+"Show partial image in compact Pin" = "Показать часть изображения в компактном пине";
+"Translation complete" = "Перевод завершен";
+"Show Original / Translation" = "Показать оригинал/перевод";
+"Languages swapped; edited translation was preserved" = "Языки поменяны местами; отредактированный перевод сохранен";
+"Image Adjustments" = "Регулировка изображения";
+"Hide All Pins" = "Скрыть все пины";
+"Make Common" = "Сделать общим";
+"Storage & Diagnostics" = "Хранение и диагностика";
+"Size %d%%" = "Размер %d%%";
+"Enter a new name for this custom configuration." = "Введите новое имя для этой пользовательской конфигурации.";
+"Preparing full window…" = "Подготовка полного окна…";
+"This affects both the capture selection toolbar and pin toolbar. Common tools appear in the first row; additional tools move into the More menu." = "Это влияет как на панель инструментов выбора захвата, так и на панель инструментов закрепления. Общие инструменты отображаются в первом ряду; дополнительные инструменты перемещаются в меню «Дополнительно».";
+"Pinlume needs Accessibility permission to translate selected text. Open System Settings to grant access. If Pinlume is not listed, click the + button and choose the running Pinlume app." = "Pinlume требуется разрешение на доступность для перевода выделенного текста. Откройте «Системные настройки», чтобы предоставить доступ. Если Pinlume нет в списке, нажмите кнопку + и выберите работающее приложение Pinlume.";
+"These shortcuts work only in a capture selection or selected pin; on-screen hints follow the current settings." = "Эти сочетания клавиш работают только при выделении фрагмента или выбранной закрепке; подсказки на экране соответствуют текущим настройкам.";
+"Copy Configuration" = "Копировать";
+"Deep Teal" = "Темно-бирюзовый";
+"Could not apply configuration profile." = "Не удалось применить профиль конфигурации.";
+"Switch Magnifier RGB/HEX" = "Переключатель лупы RGB/HEX";
+"Anchor to Top Left" = "Привязка к левому верхнему углу";
+"Amber" = "Янтарь";
+"Configuration:" = "Конфигурация:";
+"Selectable Text Capture" = "Выборочный захват текста";
+"Hide/Show All Pins" = "Скрыть/показать все пины";
+"Unable to capture full window" = "Невозможно захватить полное окно";
+"Toolbar Layout" = "Макет панели инструментов";
+"Move Up" = "Двигаться вверх";
+"Enable Hotkeys" = "Включить горячие клавиши";
+"Choose an image to pin to screen" = "Выберите изображение для закрепления на экране";
+"OCR Selection" = "Выбор оптического распознавания символов";
+"%@ is running from a disk image. Move it to your Applications folder for stable permissions and the best experience." = "%@ запускается из образа диска. Переместите его в папку «Приложения», чтобы получить стабильные разрешения и удобство использования.";
+"System Default" = "Системные настройки по умолчанию";
+"Midnight Indigo" = "Полуночный Индиго";
+"Shortcut unavailable (error %d)" = "Ярлык недоступен (ошибка %d)";
+"Auto Detect" = "Автоопределение";
+"Copy of %@" = "Копия %@";
+"Choose which actions appear in the status bar menu and arrange the order of common and additional tools. Settings, version, and quit remain fixed." = "Выберите, какие действия будут отображаться в меню строки состояния, и настройте порядок общих и дополнительных инструментов. Настройки, версия и выход остаются неизменными.";
+"Sentence Comparison" = "Сравнение предложений";
+"Could not rename configuration." = "Не удалось переименовать конфигурацию.";
+"No items" = "Нет товаров";
+"Diagnostic logs" = "Журналы диагностики";
+"Not Now" = "Не сейчас";
+"Text copied" = "Текст скопирован";
+"Scroll capture copied to clipboard" = "Захват прокрутки скопирован в буфер обмена";
+"Rename…" = "Переименовать…";
+"Calculating…" = "Расчет…";
+"Disable Hotkeys" = "Отключить горячие клавиши";
+"Enable diagnostic logging (status, timing, coordinates, and errors only)" = "Включить ведение журнала диагностики (только состояние, время, координаты и ошибки)";
+"Hold %@ to show magnifier" = "Удерживайте %@, чтобы открыть лупу.";
+"Choose which dedicated OCR and translation tools are visible. Keyboard shortcuts are in Shortcuts." = "Выберите, какие специальные инструменты оптического распознавания символов и перевода будут видны. Сочетания клавиш находятся в разделе «Ярлыки».";
+"Hold to Show Magnifier" = "Удерживайте, чтобы показать лупу";
+"Show All Pins" = "Показать все пины";
+"The configuration “%@” will be deleted and Basic will be applied." = "Конфигурация «%@» будет удалена и будет применена базовая конфигурация.";
+"These are actions rather than drawing tools. They appear in More Tools; disabling one hides it from both selections and pins." = "Это действия, а не инструменты рисования. Они появляются в разделе «Дополнительные инструменты»; отключение одного из них скрывает его как от выделений, так и от контактов.";
+"Images saved to a folder you choose will not be deleted." = "Изображения, сохраненные в выбранной вами папке, не будут удалены.";
+"Press %@ to switch RGB/HEX" = "Нажмите %@, чтобы переключить RGB/HEX.";
+"Space to move. Release to finish" = "Пространство для перемещения. Отпустите, чтобы закончить";
+"Show/Hide Magnifier" = "Показать/скрыть лупу";
+"Speak" = "Говори";
+"Eraser" = "Ластик";
+"Current Configuration" = "Текущая конфигурация";
+"Screen Translation Capture" = "Захват перевода экрана";
+"Copy Translation" = "Копировать перевод";
+"Move to Applications folder?" = "Переместить в папку «Приложения»?";
+"Double-click to Close Pin" = "Дважды щелкните, чтобы закрыть булавку";
+"Slim" = "Тонкий";
+"Could not move to Applications" = "Не удалось перейти в Приложения";
+"Please drag Pinlume to your Applications folder manually.\n\n%@" = "Пожалуйста, перетащите Pinlume в папку «Приложения» вручную.\n\n%@";
+"Could not import configuration." = "Не удалось импортировать конфигурацию.";
+"These are actions rather than drawing tools. Disabling one hides it from ordinary selections and pins." = "Это действия, а не инструменты рисования. Отключение скрывает его от обычных выделений и булавок.";
+"Turn this off to keep translation text on this Mac. Google translation will be unavailable." = "Отключите эту функцию, чтобы сохранить текст перевода на этом Mac. Google-перевод будет недоступен.";
+"Could not delete configuration." = "Не удалось удалить конфигурацию.";
+"Screen translation must stay on one display" = "Трансляция экрана должна оставаться на одном дисплее";
+"Hide Pin Shadow" = "Скрыть тень булавки";
+"Translation Status" = "Статус перевода";
+"Monochrome" = "Монохромный";
+"Translate before swapping languages" = "Переведите, прежде чем менять языки";
+"Export" = "Экспорт";
+"Dark" = "Темный";
+"Apple translation needs the %@ → %@ language pack. Download it in System Settings." = "Для перевода Apple требуется языковой пакет %@ → %@. Загрузите его в настройках системы.";
+"Press %@ to move the sample point 1 pixel" = "Нажмите %@, чтобы переместить точку выборки на 1 пиксель.";
+"Move Selection 1 Pixel" = "Переместить выделение на 1 пиксель";
+"Screen Translation" = "Перевод экрана";
+"Smooth Pin Zoom" = "Плавный зум";
+"The current settings were kept unchanged." = "Текущие настройки остались без изменений.";
+"Presentation Drawing" = "Презентационный рисунок";
+"Interface Theme:" = "Тема интерфейса:";
+"Quick capture copied to clipboard" = "Быстрый снимок скопирован в буфер обмена";
+"Translate selected text" = "Перевести выделенный текст";
+"Import" = "Импорт";
+"  Pin Zoom Anchor:" = "Привязка масштабирования:";
+"Source Text" = "Исходный текст";
+"Open Translation Window" = "Открыть окно перевода";
+"Configuration Profiles" = "Профили конфигурации";
+"Text recognition failed" = "Распознавание текста не удалось";
+"Continue with Clipboard" = "Продолжить работу с буфером обмена";
+"Allow Trackpad Pinch Zoom on Pins" = "Разрешить масштабирование с помощью трекпада на булавках";
+"Actions in More Tools" = "Действия в дополнительных инструментах";
+"Clear Selected Data" = "Очистить выбранные данные";
+"Could not export configuration." = "Не удалось экспортировать конфигурацию.";
+"Copy Source" = "Копировать источник";
+"Common Tools" = "Общие инструменты";
+"Swap" = "Обмен";
+"Recognize Text" = "Распознать текст";
+"Speak Translation" = "Говорить Перевод";
+"These are actions rather than drawing tools. Disabling one hides it wherever that action is available." = "Это действия, а не инструменты рисования. Отключение его скрывает везде, где это действие доступно.";
+"Common tools appear in the first row; additional tools move into the More menu. Actions unavailable for the current context do not appear." = "Общие инструменты отображаются в первом ряду; дополнительные инструменты перемещаются в меню «Дополнительно». Действия, недоступные для текущего контекста, не отображаются.";
+"Not enough space for comparison" = "Недостаточно места для сравнения";
+"Set the Select Text pin action, translation engine, and privacy policy here. Keyboard shortcuts are in Shortcuts." = "Здесь задайте действие закрепления «Выбрать текст», механизм перевода и политику конфиденциальности. Сочетания клавиш находятся в разделе «Ярлыки».";
+"Recognizing Text…" = "Распознавание текста…";
+"Release %@ to hide magnifier" = "Отпустите %@, чтобы скрыть лупу.";
+"Rename" = "Переименовать";
+"Translate Now" = "Перевести сейчас";
+"Mouse Wheel" = "Колесо мыши";
+"Google translation is disabled in Settings." = "Google-перевод отключен в настройках.";
+"Could not determine the source language." = "Не удалось определить исходный язык.";
+"Copy Text" = "Копировать текст";
+"Selection & Pin Interactions" = "Выбор и взаимодействие контактов";
+"Pin zoom anchors to mouse position" = "Прикрепите привязки масштабирования к положению мыши";
+"OCR & Translation" = "OCR и перевод";
+"Rotate Clockwise" = "Повернуть по часовой стрелке";

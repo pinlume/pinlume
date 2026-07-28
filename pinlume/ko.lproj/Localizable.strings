@@ -1,0 +1,846 @@
+/* 한국어 — Pinlume localization
+ *
+ * To add a new language:
+ * 1. Create a new folder: pinlume/<lang-code>.lproj/
+ * 2. Copy this file into that folder
+ * 3. Translate all values (right side of = sign)
+ * 4. Add the language to LanguageManager.availableLanguages in Services/LanguageManager.swift
+ * 5. Add the language code to knownRegions in pinlume.xcodeproj/project.pbxproj
+ * 6. Submit a pull request!
+ *
+ * Keys use the English text. Values should be the translation.
+ * Format strings use %@ for strings, %d for integers.
+ * Keep keyboard shortcuts (like ⌘C) untranslated.
+ * Keep brand names (Pinlume, Google Drive, imgbb, S3) untranslated.
+ */
+
+/* Menu Bar */
+"Capture Area" = "영역 캡처";
+"Capture Screen" = "화면 캡처";
+"Capture OCR" = "OCR 캡처";
+"Capture OCR & QR" = "OCR & QR 캡처";
+"Capture area and read text/QR codes" = "영역을 캡처하여 텍스트/QR 코드 읽기";
+"Quick Capture" = "빠른 캡처";
+"Scroll Capture" = "스크롤 캡처";
+"Capture Last Area" = "마지막 영역 캡처";
+"Capture Delay" = "지연 캡처";
+"None" = "없음";
+"%d seconds" = "%d초";
+"Record Area" = "영역 녹화";
+"Record Screen" = "화면 녹화";
+"Recent Captures" = "최근 캡처";
+"Show History Panel" = "기록 패널 보기";
+"Open Image..." = "이미지 열기...";
+"Open from Clipboard" = "클립보드에서 열기";
+"Pin from Clipboard" = "클립보드에서 고정";
+"Preferences..." = "환경설정...";
+"Check for Updates..." = "업데이트 확인...";
+"Quit Pinlume" = "Pinlume 종료";
+"No recent captures" = "최근 캡처 없음";
+"Clear History" = "기록 지우기";
+
+/* History Panel */
+"Copy" = "복사";
+"Save As..." = "다른 이름으로 저장...";
+"Open in Editor" = "편집기에서 열기";
+"Pin to Screen" = "화면에 고정";
+"Quick Look" = "훑어보기";
+"Delete" = "삭제";
+"All" = "전체";
+"Screenshots" = "스크린샷";
+"GIFs" = "GIFs";
+"Click to copy · Drag to app" = "클릭하여 복사 · 앱으로 드래그";
+"No captures yet" = "아직 캡처가 없습니다";
+
+/* Floating Thumbnail */
+"Close All" = "모두 닫기";
+"Save All to Folder…" = "모두 폴더에 저장…";
+"Save" = "저장";
+
+/* Editor Top Bar */
+"Zoom In" = "확대";
+"Zoom Out" = "축소";
+"Fit Canvas" = "캔버스에 맞추기";
+"Crop" = "자르기";
+"Flip Horizontal" = "좌우 뒤집기";
+"Flip Vertical" = "상하 뒤집기";
+"Rotate Left" = "왼쪽으로 회전";
+"Rotate Right" = "오른쪽으로 회전";
+"Zoom" = "확대/축소";
+"Add Capture" = "캡처 추가";
+
+/* Toolbar - Tools */
+"Arrow" = "화살표";
+"Line" = "직선";
+"Rectangle" = "사각형";
+"Ellipse" = "타원";
+"Pencil" = "연필";
+"Pencil (Draw)" = "연필 (그리기)";
+"Marker" = "형광펜";
+"Text" = "텍스트";
+"Number" = "번호";
+"Number / Counter" = "번호 / 카운터";
+"Stamp / Emoji" = "스탬프 / 이모지";
+"Censor" = "검열";
+"Censor (Pixelate / Blur / Solid)" = "검열 (모자이크 / 흐리게 / 단색)";
+"Measure" = "측정";
+"Measure (px)" = "측정 (px)";
+"Magnify (Loupe)" = "확대경 (돋보기)";
+"Highlight" = "강조";
+"Highlight (Spotlight)" = "강조 (스포트라이트)";
+"Dim" = "어둡게";
+"Color Sampler" = "색상 추출";
+"Color Picker" = "색상 선택기";
+"Select & Edit" = "선택 및 편집";
+"Color" = "색상";
+
+/* Toolbar - Actions */
+"Copy to Clipboard" = "클립보드에 복사";
+"Save to File" = "파일로 저장";
+"Save to" = "저장 위치";
+"Open in Editor Window" = "편집기 윈도우에서 열기";
+"Pin on Screen" = "화면에 고정";
+"Pin" = "고정";
+"Pin (floating window)" = "고정 (플로팅 윈도우)";
+"OCR" = "OCR";
+"OCR Text" = "OCR 텍스트";
+"OCR (extract text)" = "OCR (텍스트 추출)";
+"OCR & QR" = "OCR & QR";
+"Run OCR & QR" = "OCR & QR 실행";
+"Upload" = "업로드";
+"Share" = "공유";
+"Undo" = "실행 취소";
+"Redo" = "다시 실행";
+"Close" = "닫기";
+"Remove Background" = "배경 제거";
+"Beautify" = "꾸미기";
+"Adjust" = "조정";
+"Adjust (Image Effects)" = "조정 (이미지 효과)";
+"Invert Colors" = "색상 반전";
+"Record" = "녹화";
+"Record screen" = "화면 녹화";
+"Translate" = "번역";
+"Auto-Redact sensitive data" = "민감 정보 자동 가리기";
+"Move Selection" = "선택 영역 이동";
+
+/* Toolbar - Recording */
+"Start Recording" = "녹화 시작";
+"Cancel Recording" = "녹화 취소";
+"Highlight Mouse Clicks" = "마우스 클릭 강조";
+"Record System Audio" = "시스템 오디오 녹음";
+"Record Microphone" = "마이크 녹음";
+"Recording Settings" = "녹화 설정";
+
+/* Tool Options */
+"Size" = "크기";
+"Stroke" = "선";
+"Radius" = "반경";
+"Start:" = "시작:";
+"Draw:" = "그리기:";
+"Auto:" = "자동:";
+"Fill" = "채우기";
+"Outline" = "외곽선";
+"More Emojis" = "더 많은 이모지";
+"Load Image" = "이미지 불러오기";
+"Gradient Style" = "그라데이션 스타일";
+"On" = "켜기";
+"Text Only" = "텍스트만";
+"All Text" = "전체 텍스트";
+"PII" = "개인정보";
+"Faces" = "얼굴";
+"People" = "사람";
+"Confirm before upload" = "업로드 전 확인";
+"Flip" = "뒤집기";
+"Smooth" = "부드럽게";
+"Refined" = "정밀";
+"Smart" = "스마트";
+"Padding" = "여백";
+"Shadow" = "그림자";
+"Right-click to add points" = "우클릭으로 포인트 추가";
+"Hold 1 auto-vertical  ·  Hold 2 auto-horizontal" = "1 유지 자동 세로  ·  2 유지 자동 가로";
+
+/* Overlay / Canvas */
+"Click a window  ·  Drag for custom area  ·  F for full screen" = "윈도우 클릭  ·  드래그하여 영역 선택  ·  F 전체 화면";
+"Drag to select  ·  Click for full screen" = "드래그하여 선택  ·  클릭하여 전체 화면";
+"Release to annotate and edit" = "놓으면 주석 및 편집";
+"Release to finish" = "놓으면 완료";
+"Hold Space to move. Release to annotate and edit" = "스페이스바를 누른 채로 이동. 놓으면 주석 및 편집";
+"Hold Space to move. Release to finish" = "스페이스바를 누른 채로 이동. 놓으면 완료";
+"Space" = "스페이스";
+"Window snap: " = "윈도우 스냅: ";
+"ON" = "켜짐";
+"OFF" = "꺼짐";
+"  (Tab to toggle)" = "  (Tab으로 전환)";
+"Right-click to copy" = "우클릭하여 복사";
+"Copied %@" = "%@ 복사됨";
+"Set color %@" = "색상 %@ 설정됨";
+"Draw something first to use the move tool." = "이동 도구를 사용하려면 먼저 무언가를 그리세요.";
+"Drag to reposition" = "드래그하여 위치 이동";
+
+/* Overlay - Popovers */
+"Format:" = "포맷:";
+"FPS:" = "FPS:";
+"When done:" = "완료 시:";
+"Open editor" = "편집기 열기";
+"Show in Finder" = "Finder에서 보기";
+"Copy to clipboard" = "클립보드에 복사";
+
+/* Preferences - General */
+"Pinlume Preferences" = "Pinlume 환경설정";
+"General" = "일반";
+"Tools" = "도구";
+"Recording" = "녹화";
+"About" = "정보";
+"Shortcuts" = "단축키";
+"Uploads" = "업로드";
+"Language" = "언어";
+"Language:" = "언어:";
+"Restart the app to fully apply the new language." = "새 언어를 완전히 적용하려면 앱을 재시작하세요.";
+"Capture" = "캡처";
+"Play sound on capture" = "캡처 시 소리 재생";
+"Play sound on copy" = "복사 시 소리 재생";
+"Remember last selected tool" = "마지막 선택 도구 기억";
+"Show floating thumbnail after capture" = "캡처 후 플로팅 썸네일 표시";
+"Launch at login" = "로그인 시 실행";
+"Show snap alignment guides" = "스냅 정렬 가이드 표시";
+"Snap selection edges to image boundaries" = "선택 영역 가장자리를 이미지 경계에 스냅";
+"Capture mouse cursor in screenshot" = "스크린샷에 마우스 커서 포함";
+"Double-click selection to copy" = "선택 영역 더블 클릭으로 복사";
+"Hide capture instructions" = "캡처 안내 숨기기";
+"Use window title in saved filename" = "저장 파일명에 윈도우 제목 사용";
+"Hide menu bar icon" = "메뉴 막대 아이콘 숨기기";
+"Hotkeys still work. To show the icon again, re-launch Pinlume." = "단축키는 계속 작동합니다. 아이콘을 다시 표시하려면 Pinlume을 재실행하세요.";
+"Menu Bar Order" = "메뉴 막대 순서";
+"Choose the order of capture actions in the Pinlume menu bar menu." = "Pinlume 메뉴 막대 메뉴에서 캡처 작업의 순서를 선택하세요.";
+"Move up" = "위로 이동";
+"Move down" = "아래로 이동";
+"Check for updates automatically" = "자동으로 업데이트 확인";
+"Check for beta updates" = "베타 업데이트 확인";
+"Thumbnail" = "썸네일";
+"  Dismiss after:" = "  자동 닫기:";
+"seconds before auto-dismiss (0 = never)" = "초 후 자동 닫기 (0 = 사용 안 함)";
+"  Multiple previews:" = "  여러 미리보기:";
+"Stack (keep all)" = "쌓기 (모두 유지)";
+"Replace (show only latest)" = "교체 (최신만 표시)";
+"Output" = "출력";
+"Image format:" = "이미지 포맷:";
+"Quality:" = "품질:";
+"%d%%" = "%d%%";
+"Save at standard resolution (1x)" = "표준 해상도(1x)로 저장";
+"Halves dimensions on Retina displays, ~4x smaller files" = "Retina 디스플레이에서 크기를 절반으로 줄여 파일 약 4배 축소";
+"Embed sRGB color profile" = "sRGB 색상 프로파일 포함";
+"Ensures consistent colors across different displays" = "다른 디스플레이에서도 일관된 색상 보장";
+"Screenshot History" = "스크린샷 기록";
+"History size:" = "기록 크기:";
+"screenshots kept on disk (0 = off)" = "디스크에 보관할 스크린샷 수 (0 = 사용 안 함)";
+"Save Directory" = "저장 폴더";
+"Save folder:" = "저장 폴더:";
+"Browse…" = "찾아보기…";
+"Appearance" = "모양새";
+"Accent color:" = "강조 색상:";
+"Icon color:" = "아이콘 색상:";
+"Background color:" = "배경색:";
+"Reset" = "재설정";
+"Menu bar icon:" = "메뉴 막대 아이콘:";
+"Custom symbol" = "사용자 지정 기호";
+"Default" = "기본값";
+"Enter any SF Symbol name (e.g. camera.fill) or pick a preset. Browse names in Apple's SF Symbols app. Invalid names fall back to the default icon." = "원하는 SF Symbol 이름 (예: camera.fill) 을 입력하거나 프리셋을 선택하세요. 이름은 Apple의 SF Symbols 앱에서 찾아볼 수 있습니다. 잘못된 이름은 기본 아이콘으로 대체됩니다.";
+"Save action:" = "저장 동작:";
+"Save to default folder" = "기본 폴더에 저장";
+"Ask where to save" = "저장 위치 묻기";
+"Disable shadow outside selection" = "선택 영역 바깥 그림자 비활성화";
+"Show shortcuts in tooltips" = "툴팁에 단축키 표시";
+"OCR Capture:" = "OCR 캡처:";
+"OCR & QR Capture:" = "OCR & QR 캡처:";
+"Show window + copy to clipboard" = "윈도우 표시 + 클립보드에 복사";
+"Show window only" = "윈도우만 표시";
+"Copy to clipboard only" = "클립보드에만 복사";
+"Enter / Quick Capture:" = "Enter / 빠른 캡처:";
+"Save to file" = "파일로 저장";
+"Save + copy to clipboard" = "저장 + 클립보드에 복사";
+"OCR Action" = "OCR 동작";
+
+/* Preferences - Shortcuts */
+"Keyboard Shortcuts" = "키보드 단축키";
+"Hotkeys" = "단축키";
+"Clear shortcut" = "단축키 지우기";
+"Press keys..." = "키를 누르세요...";
+"Waiting..." = "대기 중...";
+
+/* Preferences - Tools */
+"Annotation Tools" = "주석 도구";
+"Hidden tools are removed from the bottom toolbar." = "숨긴 도구는 하단 도구 막대에서 제거됩니다.";
+"Capture Actions" = "캡처 동작";
+"Bottom Toolbar Actions" = "하단 도구 막대 동작";
+"Hidden actions are removed from the bottom toolbar." = "숨긴 동작은 하단 도구 막대에서 제거됩니다.";
+"Editor Actions" = "편집기 동작";
+"Right Toolbar Actions" = "우측 도구 막대 동작";
+"Hidden actions are removed from the right toolbar." = "숨긴 동작은 우측 도구 막대에서 제거됩니다.";
+
+/* Preferences - Recording */
+"Frame rate:" = "프레임 레이트:";
+"After recording:" = "녹화 후:";
+"Save recording to:" = "녹화 저장 위치:";
+"Save Recording" = "녹화 저장";
+"Clear" = "지우기";
+"Max height:" = "최대 높이:";
+"px (0 = unlimited)" = "px (0 = 무제한)";
+"Behavior" = "동작";
+"Auto-scroll (sends synthetic scroll events)" = "자동 스크롤 (가상 스크롤 이벤트 전송)";
+"Detect fixed/sticky headers" = "고정/스티키 헤더 감지";
+"Scroll speed:" = "스크롤 속도:";
+"Slow" = "느리게";
+"Medium" = "보통";
+"Fast" = "빠르게";
+"Very fast" = "매우 빠르게";
+"5 fps" = "5 fps";
+"10 fps" = "10 fps";
+"15 fps" = "15 fps";
+"24 fps" = "24 fps";
+"30 fps" = "30 fps";
+"60 fps" = "60 fps";
+"120 fps" = "120 fps";
+"MP4 (H.264)" = "MP4 (H.264)";
+"GIF" = "GIF";
+
+/* Preferences - Upload */
+"Upload Service" = "업로드 서비스";
+"Upload Provider" = "업로드 제공자";
+"Provider:" = "제공자:";
+"Google Drive" = "Google Drive";
+"Google Drive (images + videos)" = "Google Drive (이미지 + 동영상)";
+"imgbb (images only)" = "imgbb (이미지만)";
+"S3-Compatible (images + videos)" = "S3 호환 (이미지 + 동영상)";
+"S3-Compatible Storage" = "S3 호환 저장소";
+"Sign In with Google" = "Google로 로그인";
+"Sign Out" = "로그아웃";
+"Signed in" = "로그인됨";
+"Not signed in" = "로그인되지 않음";
+"Account:" = "계정:";
+"Test Connection" = "연결 테스트";
+"Fill in endpoint, bucket, and credentials first" = "먼저 엔드포인트, 버킷, 자격 증명을 입력하세요";
+"Testing..." = "테스트 중...";
+"Connection successful!" = "연결 성공!";
+"Leave empty to use default" = "기본값을 사용하려면 비워두세요";
+"Endpoint:" = "엔드포인트:";
+"Region:" = "리전:";
+"Bucket:" = "버킷:";
+"Access Key:" = "액세스 키:";
+"Secret Key:" = "시크릿 키:";
+"Public URL:" = "공개 URL:";
+"Path Prefix:" = "경로 접두사:";
+"API key:" = "API 키:";
+"Upload History" = "업로드 기록";
+"No uploads yet." = "아직 업로드가 없습니다.";
+"Base URL for public access. If empty, the S3 endpoint URL is used (may not be publicly accessible)." = "공개 접근용 기본 URL입니다. 비어 있으면 S3 엔드포인트 URL이 사용됩니다 (공개 접근이 불가능할 수 있음).";
+"A shared key is included — get your own free key at imgbb.com/api if you hit rate limits. Images only (no video support)." = "공유 키가 포함되어 있습니다. 요청 제한에 도달하면 imgbb.com/api에서 무료 키를 받으세요. 이미지만 지원됩니다 (동영상 미지원).";
+"Works with AWS S3, Cloudflare R2, MinIO, DigitalOcean Spaces, Backblaze B2, and other S3-compatible services. Supports images and videos." = "AWS S3, Cloudflare R2, MinIO, DigitalOcean Spaces, Backblaze B2 및 기타 S3 호환 서비스와 사용할 수 있습니다. 이미지와 동영상을 지원합니다.";
+"Configure S3 in Preferences" = "환경설정에서 S3 구성";
+"Sign in to Google Drive in Preferences" = "환경설정에서 Google Drive에 로그인";
+"Video upload requires Google Drive or S3" = "동영상 업로드에는 Google Drive 또는 S3가 필요합니다";
+
+/* Preferences - About */
+"Pinlume" = "Pinlume";
+"Version %@ (%@)" = "버전 %@ (%@)";
+"Made by" = "제작자";
+"Licensed under the GPLv3" = "GPLv3 라이선스";
+"A free, open-source screenshot & screen recording tool for macOS.\nFully native — built with Swift and AppKit." = "macOS용 무료 오픈소스 스크린샷 및 화면 녹화 도구입니다.\nSwift와 AppKit으로 제작된 완전한 네이티브 앱입니다.";
+
+/* Alerts */
+"No Image on Clipboard" = "클립보드에 이미지 없음";
+"No Image or Text on Clipboard" = "클립보드에 이미지 또는 텍스트 없음";
+"Copy an image to the clipboard first, then try again." = "먼저 이미지를 클립보드에 복사한 후 다시 시도하세요.";
+"Copy an image or text to the clipboard first, then try again." = "먼저 이미지 또는 텍스트를 클립보드에 복사한 후 다시 시도하세요.";
+"OK" = "확인";
+"Accessibility Access Required" = "손쉬운 사용 권한 필요";
+"Pinlume needs Accessibility permission to auto-scroll other apps. Please grant access in System Settings, then try again." = "Pinlume이 다른 앱을 자동 스크롤하려면 손쉬운 사용 권한이 필요합니다. 시스템 설정에서 권한을 허용한 후 다시 시도하세요.";
+"Pinlume needs Accessibility permission for scroll capture. Please grant access in System Settings, then try again." = "스크롤 캡처를 위해 Pinlume에 손쉬운 사용 권한이 필요합니다. 시스템 설정에서 접근 권한을 부여한 후 다시 시도해 주세요.";
+"Open Settings" = "설정 열기";
+"Cancel" = "취소";
+"Microphone Access Required" = "마이크 접근 권한 필요";
+"Pinlume needs microphone permission to record voice audio. Open System Settings to grant access." = "Pinlume이 음성을 녹음하려면 마이크 권한이 필요합니다. 시스템 설정을 열어 권한을 허용하세요.";
+"Upload to Google Drive?" = "Google Drive에 업로드하시겠습니까?";
+"Upload to S3?" = "S3에 업로드하시겠습니까?";
+"Upload to imgbb.com?" = "imgbb.com에 업로드하시겠습니까?";
+"Your screenshot will be uploaded." = "스크린샷이 업로드됩니다.";
+
+/* Permission Onboarding */
+"Welcome to Pinlume" = "Pinlume에 오신 것을 환영합니다";
+"Pinlume needs one permission" = "Pinlume에 권한 하나가 필요합니다";
+"Screen Recording not yet granted" = "화면 기록 권한이 아직 허용되지 않았습니다";
+"Screen Recording granted!" = "화면 기록 권한이 허용되었습니다!";
+"Enable Pinlume, then try taking a screenshot" = "Pinlume을 활성화한 후 스크린샷을 찍어보세요";
+"Open Screen Recording Settings" = "화면 기록 설정 열기";
+"Continue" = "계속";
+
+/* OCR Window */
+"Text Recognition" = "텍스트 인식";
+"Text & QR Recognition" = "텍스트 & QR 인식";
+"QR Code" = "QR 코드";
+"QR Codes" = "QR 코드";
+"Translate to:" = "번역 대상:";
+"%d chars · %d words" = "%d자 · %d단어";
+"Copy  ⌘↩" = "복사  ⌘↩";
+"AI Search" = "AI 검색";
+"Show Original" = "원본 보기";
+"Translation Failed" = "번역 실패";
+"Translation" = "번역";
+"(No text detected in the selected area)" = "(선택한 영역에서 텍스트가 감지되지 않았습니다)";
+
+/* Upload Toast */
+"URL copied to the clipboard" = "URL이 클립보드에 복사되었습니다";
+"Uploading... %d%%" = "업로드 중... %d%%";
+"Upload failed: %@" = "업로드 실패: %@";
+"Uploaded! Link copied." = "업로드 완료! 링크가 복사되었습니다.";
+"Uploading to %@... %d%%" = "%@에 업로드 중... %d%%";
+"Open" = "열기";
+"Open Link" = "링크 열기";
+"Open With" = "다음으로 열기";
+"No Apps Available" = "사용 가능한 앱 없음";
+"No Share Services" = "공유 서비스 없음";
+
+/* Recording Toast */
+"Recording saved" = "녹화 저장됨";
+"%@ • Recording saved" = "%@ · 녹화 저장됨";
+"Copy Path" = "경로 복사";
+"Path copied!" = "경로가 복사되었습니다!";
+
+/* Video Editor */
+"Pinlume Video Editor" = "Pinlume 비디오 편집기";
+"%@ selected" = "%@ 선택됨";
+"Exporting..." = "내보내는 중...";
+"Export failed" = "내보내기 실패";
+"Saved to %@" = "%@에 저장됨";
+"Save failed" = "저장 실패";
+
+/* Barcode Detector */
+/* "Open" and "Copy" are shared with other sections */
+
+/* Save Panel */
+"Save As..." = "다른 이름으로 저장...";
+"Choose a folder" = "폴더 선택";
+"Save All to Folder…" = "모두 폴더에 저장…";
+
+/* Scroll Capture HUD */
+"Auto Scroll" = "자동 스크롤";
+"Stop" = "중지";
+"Scrolling..." = "스크롤 중...";
+
+/* Effects Picker (Adjust popover) */
+"Presets" = "프리셋";
+"Adjustments" = "조정";
+"Brightness" = "밝기";
+"Contrast" = "대비";
+"Saturation" = "채도";
+"Sharpness" = "선명도";
+
+/* Time Ago */
+"just now" = "방금 전";
+"%ds ago" = "%d초 전";
+"%dm ago" = "%d분 전";
+"%dh ago" = "%d시간 전";
+
+/* Hotkey Labels */
+"History" = "기록";
+
+/* Preferences - Shortcuts note */
+"Click \"Record\" and press a key combination with at least one modifier (⌘, ⌥, ⌃, ⇧) to set a shortcut." = "\"녹화\"를 클릭하고 하나 이상의 보조 키(⌘, ⌥, ⌃, ⇧)가 포함된 키 조합을 눌러 단축키를 설정하세요.";
+
+/* Recording — GIF Processing */
+"Processing GIF…" = "GIF 처리 중…";
+
+/* Recording — Input Monitoring Permission */
+"Input Monitoring Required" = "입력 모니터링 권한 필요";
+"Pinlume needs Input Monitoring permission to show keystrokes during recording. Please grant access in System Settings, then try again." = "Pinlume이 녹화 중 키 입력을 표시하려면 입력 모니터링 권한이 필요합니다. 시스템 설정에서 접근 권한을 부여한 후 다시 시도하세요.";
+"Pinlume needs Accessibility permission to show keystrokes during recording. Please grant access in System Settings, then try again." = "Pinlume이 녹화 중 키 입력을 표시하려면 손쉬운 사용 권한이 필요합니다. 시스템 설정에서 접근 권한을 부여한 후 다시 시도하세요.";
+
+/* Recording — Keystroke Overlay */
+"Show Keystrokes" = "키 입력 표시";
+"Shortcuts Only" = "단축키만";
+"All Keystrokes" = "모든 키 입력";
+
+/* Recording — Settings Popover */
+"Delay:" = "지연:";
+
+/* Video Editor */
+"Copied to clipboard!" = "클립보드에 복사되었습니다!";
+
+/* Webcam Overlay */
+"Webcam Overlay" = "웹캠 오버레이";
+"Camera Access Required" = "카메라 접근 권한 필요";
+"Pinlume needs camera permission for the webcam overlay. Open System Settings to grant access." = "Pinlume이 웹캠 오버레이를 사용하려면 카메라 권한이 필요합니다. 시스템 설정을 열어 권한을 허용하세요.";
+"Webcam" = "웹캠";
+"Bottom Right" = "오른쪽 하단";
+"Bottom Left" = "왼쪽 하단";
+"Top Right" = "오른쪽 상단";
+"Top Left" = "왼쪽 상단";
+"Small" = "작게";
+"Large" = "크게";
+"Webcam Size Small" = "작게";
+"Webcam Size Medium" = "보통";
+"Webcam Size Large" = "크게";
+"Webcam Size Extra Large" = "아주 크게";
+"Circle" = "원형";
+"Rounded Rectangle" = "둥근 사각형";
+"Cam pos:" = "캠 위치:";
+"Cam size:" = "캠 크기:";
+"Cam shape:" = "캠 모양:";
+
+/* New Strings */
+"Settings" = "설정";
+"Offline build: upload and cloud storage integrations are removed. Update checks may still connect to Pinlume's update server. Screenshots and recordings stay local unless you share or save them yourself." = "오프라인 빌드: 업로드 및 클라우드 저장소 연동이 제거되었습니다. 업데이트 확인은 여전히 Pinlume의 업데이트 서버에 연결할 수 있습니다. 스크린샷과 녹화는 직접 공유하거나 저장하지 않는 한 로컬에 유지됩니다.";
+"Settings..." = "설정...";
+"Pinlume Settings" = "Pinlume 설정";
+"Also open in Editor" = "편집기에서도 열기";
+"Hide controls" = "컨트롤 숨기기";
+"Hide recording controls" = "녹화 컨트롤 숨기기";
+"Stop recording from the menu bar icon instead." = "대신 메뉴 막대 아이콘에서 녹화를 중지하세요.";
+"Pixelate" = "모자이크";
+"Blur" = "흐리게";
+"Solid" = "단색";
+"Erase" = "지우기";
+"Done" = "완료";
+"Do nothing" = "아무 동작 안 함";
+"Overlay / Editor Shortcuts" = "오버레이 / 편집기 단축키";
+"Set" = "설정";
+"Press..." = "누르세요...";
+"Reset to default" = "기본값으로 재설정";
+"Press a single key to assign it as the shortcut for that tool. These work when the overlay or editor is active." = "키 하나를 눌러 해당 도구의 단축키로 지정하세요. 오버레이 또는 편집기가 활성화된 상태에서 작동합니다.";
+"Keep Separate" = "별도 유지";
+"Merge Audio" = "오디오 병합";
+"Audio Tracks" = "오디오 트랙";
+"Adjust volume for each audio track:" = "각 오디오 트랙의 볼륨 조정:";
+"Microphone:" = "마이크:";
+"System audio:" = "시스템 오디오:";
+"Loupe" = "돋보기";
+"Stamp" = "스탬프";
+"Unlimited" = "무제한";
+
+/* Save Confirmation / Recording / Translation / Upload / Inspector */
+"Save changes?" = "변경 사항을 저장하시겠습니까?";
+"Your annotations will be lost if you close without saving." = "저장하지 않고 닫으면 주석이 사라집니다.";
+"Save & Close" = "저장 후 닫기";
+"Discard" = "버리기";
+"Stop Recording" = "녹화 중지";
+"Pause" = "일시정지";
+"Resume" = "재개";
+"Engine:" = "엔진:";
+"Google Translate" = "Google Translate";
+"Apple (on-device)" = "Apple (기기 내)";
+"Apple translation is faster and works offline. Google Translate supports more languages." = "Apple 번역은 더 빠르고 오프라인에서 작동합니다. Google Translate는 더 많은 언어를 지원합니다.";
+"Download language packs in System Settings…" = "시스템 설정에서 언어 팩 다운로드…";
+"Configure S3 in Settings" = "설정에서 S3 구성";
+"Sign in to Google Drive in Settings" = "설정에서 Google Drive에 로그인";
+"Position:" = "위치:";
+"  Position:" = "  위치:";
+"Size:" = "크기:";
+"Shape:" = "모양:";
+
+"Same as screenshots" = "스크린샷과 동일";
+"  Preview size:" = "  미리보기 크기:";
+"(0 = off)" = "(0 = 끄기)";
+"Clear All" = "모두 지우기";
+"Clear History?" = "기록을 지우시겠습니까?";
+"This will permanently delete all screenshots from history." = "기록에서 모든 스크린샷이 영구적으로 삭제됩니다.";
+"Click \"Set\" and press a key combination with at least one modifier (⌘, ⌥, ⌃, ⇧) to set a shortcut." = "\"설정\" 을 클릭하고 적어도 하나의 수정 키 (⌘, ⌥, ⌃, ⇧) 가 포함된 키 조합을 눌러 단축키를 설정하세요.";
+"Files are uploaded to a \"Pinlume\" folder in your Google Drive. Everything stays private — nothing is shared publicly." = "파일은 Google Drive의 \"Pinlume\" 폴더에 업로드됩니다. 모든 것은 비공개로 유지되며 공개적으로 공유되지 않습니다.";
+
+"Pressure" = "필압";
+
+/* Added for v4.1.0-beta.3 — video editor, effects, open-video, shortcuts help */
+"Open Video..." = "비디오 열기...";
+"Choose a video to open in Pinlume editor" = "Pinlume 편집기에서 열 비디오 선택";
+"Click to add effects" = "클릭하여 효과 추가";
+"Add Zoom" = "줌 추가";
+"Add Censor" = "검열 추가";
+"Add Cut" = "컷 추가";
+"Add Speed" = "속도 추가";
+"Add Freeze" = "정지 추가";
+"Add Text" = "텍스트 추가";
+"Delete Zoom" = "줌 삭제";
+"Delete Censor" = "검열 삭제";
+"Delete Cut" = "컷 삭제";
+"Delete Speed" = "속도 삭제";
+"Delete Freeze" = "정지 삭제";
+"Delete Text" = "텍스트 삭제";
+"Edit Text…" = "텍스트 편집…";
+"Huge" = "아주 크게";
+"Bold" = "굵게";
+"Italic" = "기울임";
+"Alignment" = "정렬";
+"Left" = "왼쪽";
+"Center" = "가운데";
+"Right" = "오른쪽";
+"Text Color" = "텍스트 색상";
+"Background Color" = "배경색";
+"Rounded" = "둥근 모서리";
+"Custom…" = "사용자 지정…";
+"Transparent" = "투명";
+"Black" = "검정";
+"White" = "흰색";
+"Yellow" = "노랑";
+"Red" = "빨강";
+"Green" = "초록";
+"Blue" = "파랑";
+"Untitled" = "제목 없음";
+"Add effect" = "효과 추가";
+"Fade" = "페이드";
+"High" = "높음";
+"Low" = "낮음";
+"Not enough room here" = "공간이 부족합니다";
+"Copied!" = "복사됨!";
+"Converting to GIF…" = "GIF로 변환 중…";
+"GIF conversion failed" = "GIF 변환 실패";
+"No video track found" = "비디오 트랙을 찾을 수 없음";
+"Preview:" = "미리보기:";
+"Copy Screen Info" = "화면 정보 복사";
+"Copies display and capture diagnostics to clipboard" = "디스플레이 및 캡처 진단 정보를 클립보드로 복사합니다";
+"Accent" = "강조";
+"Icon" = "아이콘";
+"Background" = "배경";
+"Custom" = "사용자 지정";
+"Theme:" = "테마:";
+"Application" = "애플리케이션";
+"Capture area and extract text" = "영역 캡처 및 텍스트 추출";
+"Capture the full screen" = "전체 화면 캡처";
+"Counter for multi-screen captures" = "다중 화면 캡처용 카운터";
+"8-character random string (e.g. k3j7x9q2)" = "8자리 무작위 문자열 (예: k3j7x9q2)";
+"Filename Template Tokens" = "파일명 템플릿 토큰";
+"Filename tokens" = "파일명 토큰";
+"Filename:" = "파일명:";
+"Open an image file in the editor" = "편집기에서 이미지 파일 열기";
+"Open the recent captures overlay" = "최근 캡처 오버레이 열기";
+"Open this settings window" = "이 설정 윈도우 열기";
+"Quick capture (uses your Enter action)" = "빠른 캡처 (Enter 동작 사용)";
+"Re-capture the last selected area" = "마지막 선택 영역 다시 캡처";
+"Screenshots only — captured window title (blank otherwise)" = "스크린샷 전용 — 캡처된 윈도우 제목 (그 외에는 비어 있음)";
+"Show available filename tokens" = "사용 가능한 파일명 토큰 표시";
+"Show supported URL scheme commands" = "지원되는 URL 스킴 명령 표시";
+"Start area capture" = "영역 캡처 시작";
+"Start area recording" = "영역 녹화 시작";
+"Start full-screen recording" = "전체 화면 녹화 시작";
+"Start scroll capture" = "스크롤 캡처 시작";
+"Stop the current recording" = "현재 녹화 중지";
+"Supported URL Scheme Commands" = "지원되는 URL 스킴 명령";
+"The file extension is appended automatically. Slashes and colons in {window} become dashes." = "파일 확장자는 자동으로 추가됩니다. {window}의 슬래시와 콜론은 대시로 변환됩니다.";
+"Trigger Pinlume from Raycast, Alfred, Shortcuts, or any tool that opens URLs." = "Raycast, Alfred, Shortcuts 또는 URL을 여는 모든 도구에서 Pinlume을 실행하세요.";
+"URL scheme info" = "URL 스킴 정보";
+"Enable pinlume:// URL scheme" = "pinlume:// URL 스킴 사용";
+"sec (0 = never)" = "초 (0 = 사용 안 함)";
+
+/* Resolution / Aspect Ratio Presets */
+"Aspect ratio & resolution presets" = "종횡비 및 해상도 프리셋";
+"Aspect ratio" = "종횡비";
+"Resolution" = "해상도";
+"Freeform" = "자유 형식";
+"Units" = "단위";
+"Keep ratio for next captures" = "다음 캡처에도 비율 유지";
+"Custom · %@" = "사용자 지정 · %@";
+"Order history by last edit" = "마지막 편집순으로 기록 정렬";
+"Edited screenshots move to the top. Off keeps them in capture order." = "편집한 스크린샷이 맨 위로 이동합니다. 끄면 캡처 순서를 유지합니다.";
+
+/* Localized current UI keys. Existing translations above are preserved. */
+"Plus build: personal build with update checks disabled. Preferences, history, and permissions are separate from the original Pinlume app." = "플러스 빌드: 업데이트 확인이 비활성화된 개인 빌드입니다. 기본 설정, 기록 및 권한은 원래 Pinlume 앱과 별개입니다.";
+"Light" = "빛";
+"Press Option to hide magnifier" = "돋보기를 숨기려면 옵션을 누르세요.";
+"Changes to the selected profile are saved automatically." = "선택한 프로필에 대한 변경 사항은 자동으로 저장됩니다.";
+"Show Pin Shadow" = "핀 그림자 표시";
+"Arrow Keys" = "화살표 키";
+"Source Language" = "소스 언어";
+"Translation Pin" = "번역 핀";
+"Color Scheme:" = "색 구성표:";
+"Text Recognition / QR" = "문자인식/QR";
+"Basic" = "기본";
+"Full" = "전체";
+"Menu Bar Menu" = "메뉴 바 메뉴";
+"Screenshot history and editable annotations" = "스크린샷 기록 및 편집 가능한 주석";
+"Press Shift to switch RGB/HEX" = "RGB/HEX를 전환하려면 Shift를 누르세요.";
+"Clipboard image backups" = "클립보드 이미지 백업";
+"Double-click to Toggle Thumbnail" = "썸네일을 전환하려면 두 번 클릭하세요.";
+"Compare" = "비교";
+"Apple translation does not support %@ → %@." = "Apple 번역은 %@ → %@을 지원하지 않습니다.";
+"Profile:" = "프로필:";
+"Move to Applications" = "애플리케이션으로 이동";
+"Filled Rectangle" = "채워진 직사각형";
+"Google translation is unavailable because sending text is disabled." = "문자 전송이 비활성화되어 Google 번역을 사용할 수 없습니다.";
+"Adjust Area and Edit" = "영역 조정 및 편집";
+"Clear Local Data…" = "로컬 데이터 지우기…";
+"Swap Languages" = "언어 교환";
+"Ignore window occlusion" = "창 폐색 무시";
+"Graphite Blue" = "그래파이트 블루";
+"Copy Original" = "원본 복사";
+"Pin Shadow" = "핀 섀도우";
+"Translation Window" = "번역 창";
+"Show Translation" = "번역 표시";
+"Enable %@:// URL scheme" = "%@:// URL 구성표 활성화";
+"Disabled by default. Keeps up to 7 days or 2 MB; never writes screenshots, OCR text, clipboard contents, or keys." = "기본적으로 비활성화되어 있습니다. 최대 7일 또는 2MB까지 보관됩니다. 스크린샷, OCR 텍스트, 클립보드 내용 또는 키를 절대 쓰지 않습니다.";
+"Strength" = "힘";
+"Auto-Redact Sensitive Information" = "민감한 정보 자동 수정";
+"More Tools" = "더 많은 도구";
+"Move Magnifier Sample Point 1 Pixel" = "돋보기 샘플 포인트 1픽셀 이동";
+"Translating…" = "번역 중…";
+"Pin Scroll Zoom" = "핀 스크롤 줌";
+"Copy Text (shown for text pins only)" = "텍스트 복사(텍스트 핀에만 표시됨)";
+"Copy Pinned Text" = "고정된 텍스트 복사";
+"Forest" = "숲";
+"Show floating window after Quick Capture" = "빠른 캡처 후 부동 창 표시";
+"Brush" = "브러쉬";
+"Allow Scroll Zoom on Pins" = "핀에 스크롤 확대/축소 허용";
+"Could not copy configuration." = "구성을 복사할 수 없습니다.";
+"Allow sending text to Google Translate" = "Google 번역으로 텍스트 전송을 허용합니다.";
+"Export…" = "내보내기…";
+"Choose local data to clear" = "지울 로컬 데이터를 선택하세요";
+"Delete Configuration?" = "구성을 삭제하시겠습니까?";
+"Non-Drawing Actions" = "그리기 이외의 작업";
+"Restored pins (closes current pins immediately)" = "복원된 핀(현재 핀을 즉시 닫음)";
+"Professional" = "전문가";
+"Move to More Tools" = "추가 도구로 이동";
+"Translation failed; original text shown." = "번역에 실패했습니다. 원본 텍스트가 표시됩니다.";
+"Target Language" = "대상 언어";
+"About Pinlume" = "핀루메 소개";
+"No text found" = "텍스트를 찾을 수 없습니다.";
+"Automatic" = "자동";
+"Select Text" = "텍스트 선택";
+"Move Down" = "아래로 이동";
+"Don't ask again" = "다시 묻지 마세요";
+"Space to move. Release to annotate and edit" = "움직일 수 있는 공간. 주석을 달고 편집하려면 손을 떼세요";
+"Transparent Annotation" = "투명한 주석";
+"Speak Source" = "소스 말하기";
+"Press %@ to move selection 1 pixel" = "선택 항목을 1픽셀 이동하려면 %@을 누르세요.";
+"Pin Scroll Opacity" = "핀 스크롤 불투명도";
+"OCR Pin" = "OCR 핀";
+"Double-click" = "두 번 클릭";
+"Rename Configuration" = "구성 이름 바꾸기";
+"When shortcuts conflict, the settings list is matched from top to bottom and the first entry takes priority." = "바로가기가 충돌하는 경우 설정 목록이 위에서 아래로 일치되며 첫 번째 항목이 우선순위를 갖습니다.";
+"Original / Translation" = "원문/번역";
+"Move Toolbar" = "툴바 이동";
+"Beautify Screenshot" = "스크린샷을 아름답게 꾸미세요";
+"Opacity %d%%" = "불투명도 %d%%";
+"Configuration" = "구성";
+"Press %@ to show/hide magnifier" = "돋보기를 표시하거나 숨기려면 %@을 누르세요.";
+"Anchor to Mouse Position" = "마우스 위치에 고정";
+"Press C to copy color" = "색상을 복사하려면 C를 누르세요.";
+"Import…" = "가져오기…";
+"Apple translation language availability is unknown." = "Apple 번역 언어의 사용 가능 여부는 알 수 없습니다.";
+"Unable to capture selection" = "선택 항목을 캡처할 수 없습니다.";
+"Translated Text" = "번역된 텍스트";
+"Show partial image in compact Pin" = "컴팩트 핀에 부분 이미지 표시";
+"Translation complete" = "번역 완료";
+"Show Original / Translation" = "원본/번역 보기";
+"Languages swapped; edited translation was preserved" = "언어가 바뀌었습니다. 편집된 번역이 보존되었습니다";
+"Image Adjustments" = "이미지 조정";
+"Hide All Pins" = "모든 핀 숨기기";
+"Make Common" = "공통화";
+"Storage & Diagnostics" = "보관 및 진단";
+"Size %d%%" = "크기 %d%%";
+"Enter a new name for this custom configuration." = "이 사용자 정의 구성의 새 이름을 입력하십시오.";
+"Preparing full window…" = "전체 창 준비 중…";
+"This affects both the capture selection toolbar and pin toolbar. Common tools appear in the first row; additional tools move into the More menu." = "이는 캡처 선택 도구 모음과 핀 도구 모음 모두에 영향을 미칩니다. 일반적인 도구는 첫 번째 행에 나타납니다. 추가 도구는 더보기 메뉴로 이동합니다.";
+"Pinlume needs Accessibility permission to translate selected text. Open System Settings to grant access. If Pinlume is not listed, click the + button and choose the running Pinlume app." = "Pinlume은 선택한 텍스트를 번역하려면 접근성 권한이 필요합니다. 시스템 설정을 열어 액세스 권한을 부여하세요. Pinlume이 목록에 없으면 + 버튼을 클릭하고 실행 중인 Pinlume 앱을 선택하세요.";
+"These shortcuts work only in a capture selection or selected pin; on-screen hints follow the current settings." = "이러한 단축키는 캡처 선택 또는 선택한 핀에서만 작동합니다. 화면 힌트는 현재 설정을 따릅니다.";
+"Copy Configuration" = "복사";
+"Deep Teal" = "깊은 청록색";
+"Could not apply configuration profile." = "구성 프로필을 적용할 수 없습니다.";
+"Switch Magnifier RGB/HEX" = "돋보기 RGB/HEX 전환";
+"Anchor to Top Left" = "왼쪽 상단에 앵커";
+"Amber" = "호박색";
+"Configuration:" = "구성:";
+"Selectable Text Capture" = "선택 가능한 텍스트 캡처";
+"Hide/Show All Pins" = "모든 핀 숨기기/표시";
+"Unable to capture full window" = "전체 창을 캡처할 수 없습니다.";
+"Toolbar Layout" = "툴바 레이아웃";
+"Move Up" = "위로 이동";
+"Enable Hotkeys" = "단축키 활성화";
+"Choose an image to pin to screen" = "화면에 고정할 이미지를 선택하세요";
+"OCR Selection" = "OCR 선택";
+"%@ is running from a disk image. Move it to your Applications folder for stable permissions and the best experience." = "%@이 디스크 이미지에서 실행 중입니다. 안정적인 권한과 최상의 경험을 위해 응용 프로그램 폴더로 이동하세요.";
+"System Default" = "시스템 기본값";
+"Midnight Indigo" = "미드나잇 인디고";
+"Shortcut unavailable (error %d)" = "바로가기를 사용할 수 없음(오류 %d)";
+"Auto Detect" = "자동 감지";
+"Copy of %@" = "%@의 사본";
+"Choose which actions appear in the status bar menu and arrange the order of common and additional tools. Settings, version, and quit remain fixed." = "상태 표시줄 메뉴에 표시할 작업을 선택하고 일반 도구와 추가 도구의 순서를 정렬합니다. 설정, 버전 및 종료는 고정된 상태로 유지됩니다.";
+"Sentence Comparison" = "문장 비교";
+"Could not rename configuration." = "구성 이름을 바꿀 수 없습니다.";
+"No items" = "항목 없음";
+"Diagnostic logs" = "진단 로그";
+"Not Now" = "지금은 아님";
+"Text copied" = "텍스트가 복사되었습니다.";
+"Scroll capture copied to clipboard" = "스크롤 캡처가 클립보드에 복사되었습니다.";
+"Rename…" = "이름 바꾸기…";
+"Calculating…" = "계산 중…";
+"Disable Hotkeys" = "단축키 비활성화";
+"Enable diagnostic logging (status, timing, coordinates, and errors only)" = "진단 로깅 활성화(상태, 타이밍, 좌표 및 오류만)";
+"Hold %@ to show magnifier" = "돋보기를 표시하려면 %@을 누르세요.";
+"Choose which dedicated OCR and translation tools are visible. Keyboard shortcuts are in Shortcuts." = "표시할 전용 OCR 및 번역 도구를 선택하세요. 키보드 단축키는 단축키에 있습니다.";
+"Hold to Show Magnifier" = "돋보기를 표시하려면 길게 누르세요.";
+"Show All Pins" = "모든 핀 표시";
+"The configuration “%@” will be deleted and Basic will be applied." = "'%@' 구성이 삭제되고 기본이 적용됩니다.";
+"These are actions rather than drawing tools. They appear in More Tools; disabling one hides it from both selections and pins." = "이는 그리기 도구라기보다는 동작입니다. 추가 도구에 나타납니다. 하나를 비활성화하면 선택 항목과 핀 모두에서 숨겨집니다.";
+"Images saved to a folder you choose will not be deleted." = "선택한 폴더에 저장된 이미지는 삭제되지 않습니다.";
+"Press %@ to switch RGB/HEX" = "RGB/HEX를 전환하려면 %@을 누르세요.";
+"Space to move. Release to finish" = "움직일 수 있는 공간. 종료하려면 놓아주세요.";
+"Show/Hide Magnifier" = "돋보기 표시/숨기기";
+"Speak" = "말하기";
+"Eraser" = "지우개";
+"Current Configuration" = "현재 구성";
+"Screen Translation Capture" = "화면 번역 캡처";
+"Copy Translation" = "번역 복사";
+"Move to Applications folder?" = "응용 프로그램 폴더로 이동하시겠습니까?";
+"Double-click to Close Pin" = "핀을 닫으려면 두 번 클릭하세요.";
+"Slim" = "슬림";
+"Could not move to Applications" = "애플리케이션으로 이동할 수 없습니다.";
+"Please drag Pinlume to your Applications folder manually.\n\n%@" = "수동으로 Pinlume을 응용 프로그램 폴더로 드래그하세요.\n\n%@";
+"Could not import configuration." = "구성을 가져올 수 없습니다.";
+"These are actions rather than drawing tools. Disabling one hides it from ordinary selections and pins." = "이는 그리기 도구라기보다는 동작입니다. 하나를 비활성화하면 일반 선택 항목과 핀에서 숨겨집니다.";
+"Turn this off to keep translation text on this Mac. Google translation will be unavailable." = "이 Mac에 번역 텍스트를 유지하려면 이 기능을 끄세요. Google 번역을 사용할 수 없습니다.";
+"Could not delete configuration." = "구성을 삭제할 수 없습니다.";
+"Screen translation must stay on one display" = "화면 번역은 하나의 디스플레이에 유지되어야 합니다";
+"Hide Pin Shadow" = "핀 그림자 숨기기";
+"Translation Status" = "번역현황";
+"Monochrome" = "흑백";
+"Translate before swapping languages" = "언어를 바꾸기 전에 번역하세요";
+"Export" = "수출";
+"Dark" = "어둠";
+"Apple translation needs the %@ → %@ language pack. Download it in System Settings." = "Apple 번역에는 %@ → %@ 언어 팩이 필요합니다. 시스템 설정에서 다운로드하세요.";
+"Press %@ to move the sample point 1 pixel" = "%@을 눌러 샘플 포인트를 1픽셀 이동하세요.";
+"Move Selection 1 Pixel" = "선택 항목을 1픽셀 이동";
+"Screen Translation" = "화면 번역";
+"Smooth Pin Zoom" = "부드러운 핀 줌";
+"The current settings were kept unchanged." = "현재 설정은 변경되지 않고 유지되었습니다.";
+"Presentation Drawing" = "프리젠테이션 도면";
+"Interface Theme:" = "인터페이스 테마:";
+"Quick capture copied to clipboard" = "빠른 캡처가 클립보드에 복사되었습니다.";
+"Translate selected text" = "선택한 텍스트 번역";
+"Import" = "가져오기";
+"  Pin Zoom Anchor:" = "핀 줌 앵커:";
+"Source Text" = "소스 텍스트";
+"Open Translation Window" = "번역 창 열기";
+"Configuration Profiles" = "구성 프로필";
+"Text recognition failed" = "텍스트 인식 실패";
+"Continue with Clipboard" = "클립보드로 계속하기";
+"Allow Trackpad Pinch Zoom on Pins" = "핀에 대한 트랙패드 핀치 확대/축소 허용";
+"Actions in More Tools" = "추가 도구의 작업";
+"Clear Selected Data" = "선택한 데이터 지우기";
+"Could not export configuration." = "구성을 내보낼 수 없습니다.";
+"Copy Source" = "소스 복사";
+"Common Tools" = "공통 도구";
+"Swap" = "스왑";
+"Recognize Text" = "텍스트 인식";
+"Speak Translation" = "번역 말하기";
+"These are actions rather than drawing tools. Disabling one hides it wherever that action is available." = "이는 그리기 도구라기보다는 동작입니다. 하나를 비활성화하면 해당 작업이 가능한 모든 위치에서 숨겨집니다.";
+"Common tools appear in the first row; additional tools move into the More menu. Actions unavailable for the current context do not appear." = "일반적인 도구는 첫 번째 행에 나타납니다. 추가 도구는 더보기 메뉴로 이동합니다. 현재 컨텍스트에 사용할 수 없는 작업은 표시되지 않습니다.";
+"Not enough space for comparison" = "비교할 공간이 부족함";
+"Set the Select Text pin action, translation engine, and privacy policy here. Keyboard shortcuts are in Shortcuts." = "여기에서 텍스트 선택 핀 동작, 번역 엔진 및 개인 정보 보호 정책을 설정하세요. 키보드 단축키는 단축키에 있습니다.";
+"Recognizing Text…" = "텍스트 인식 중…";
+"Release %@ to hide magnifier" = "돋보기를 숨기려면 %@을 릴리스하세요.";
+"Rename" = "이름 바꾸기";
+"Translate Now" = "지금 번역하기";
+"Mouse Wheel" = "마우스 휠";
+"Google translation is disabled in Settings." = "설정에서 Google 번역이 비활성화되어 있습니다.";
+"Could not determine the source language." = "소스 언어를 확인할 수 없습니다.";
+"Copy Text" = "텍스트 복사";
+"Selection & Pin Interactions" = "선택 및 핀 상호 작용";
+"Pin zoom anchors to mouse position" = "확대/축소 앵커를 마우스 위치에 고정";
+"OCR & Translation" = "OCR 및 번역";
+"Rotate Clockwise" = "시계방향으로 회전";

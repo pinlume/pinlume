@@ -1,0 +1,846 @@
+/* Filipino — Pinlume localization
+ *
+ * To add a new language:
+ * 1. Create a new folder: pinlume/<lang-code>.lproj/
+ * 2. Copy this file into that folder
+ * 3. Translate all values (right side of = sign)
+ * 4. Add the language to LanguageManager.availableLanguages in Services/LanguageManager.swift
+ * 5. Add the language code to knownRegions in pinlume.xcodeproj/project.pbxproj
+ * 6. Submit a pull request!
+ *
+ * Keys use the English text. Values should be the translation.
+ * Format strings use %@ for strings, %d for integers.
+ * Keep keyboard shortcuts (like ⌘C) untranslated.
+ * Keep brand names (Pinlume, Google Drive, imgbb, S3) untranslated.
+ */
+
+/* Menu Bar */
+"Capture Area" = "Kunan ang Lugar";
+"Capture Screen" = "Kunan ang Screen";
+"Capture OCR" = "Kunan ang OCR";
+"Capture OCR & QR" = "Kunan ang OCR & QR";
+"Capture area and read text/QR codes" = "Kumuha ng lugar at basahin ang teksto/QR code";
+"Quick Capture" = "Mabilisang Pagkuha";
+"Scroll Capture" = "Scroll Capture";
+"Capture Last Area" = "Kunin ang Huling Lugar";
+"Capture Delay" = "Pagkaantala ng Pagkuha";
+"None" = "Wala";
+"%d seconds" = "%d segundo";
+"Record Area" = "I-record ang Lugar";
+"Record Screen" = "I-record ang Screen";
+"Recent Captures" = "Mga Kamakailang Pagkuha";
+"Show History Panel" = "Ipakita ang Panel ng Kasaysayan";
+"Open Image..." = "Buksan ang Larawan...";
+"Open from Clipboard" = "Buksan mula sa Clipboard";
+"Pin from Clipboard" = "I-pin mula sa Clipboard";
+"Preferences..." = "Mga Kagustuhan...";
+"Check for Updates..." = "Tingnan ang mga Update...";
+"Quit Pinlume" = "Isara ang Pinlume";
+"No recent captures" = "Walang kamakailang pagkuha";
+"Clear History" = "Burahin ang Kasaysayan";
+
+/* History Panel */
+"Copy" = "Kopyahin";
+"Save As..." = "I-save Bilang...";
+"Open in Editor" = "Buksan sa Editor";
+"Pin to Screen" = "I-pin sa Screen";
+"Quick Look" = "Mabilisang Tingin";
+"Delete" = "Tanggalin";
+"All" = "Lahat";
+"Screenshots" = "Mga Screenshot";
+"GIFs" = "Mga GIF";
+"Click to copy · Drag to app" = "I-click upang kopyahin · I-drag sa app";
+"No captures yet" = "Wala pang mga pagkuha";
+
+/* Floating Thumbnail */
+"Close All" = "Isara Lahat";
+"Save All to Folder…" = "I-save Lahat sa Folder…";
+"Save" = "I-save";
+
+/* Editor Top Bar */
+"Zoom In" = "Palakihin";
+"Zoom Out" = "Paliitin";
+"Zoom" = "Zoom";
+"Fit Canvas" = "Iayon sa Canvas";
+"Crop" = "I-crop";
+"Flip Horizontal" = "I-flip Pahalang";
+"Flip Vertical" = "I-flip Patayo";
+"Rotate Left" = "Iikot Pakaliwa";
+"Rotate Right" = "Iikot Pakanan";
+"Add Capture" = "Magdagdag ng Pagkuha";
+
+/* Toolbar - Tools */
+"Arrow" = "Palaso";
+"Line" = "Linya";
+"Rectangle" = "Parihaba";
+"Ellipse" = "Elipse";
+"Pencil" = "Lapis";
+"Pencil (Draw)" = "Lapis (Gumuhit)";
+"Marker" = "Marker";
+"Text" = "Teksto";
+"Number" = "Numero";
+"Number / Counter" = "Numero / Bilang";
+"Stamp / Emoji" = "Stamp / Emoji";
+"Censor" = "Sensura";
+"Censor (Pixelate / Blur / Solid)" = "Sensura (Pixelate / Blur / Solid)";
+"Measure" = "Sukat";
+"Measure (px)" = "Sukat (px)";
+"Magnify (Loupe)" = "Palakihin (Loupe)";
+"Highlight" = "Tutok";
+"Highlight (Spotlight)" = "Tutok (Spotlight)";
+"Dim" = "Padilimin";
+"Color Sampler" = "Tagakuha ng Kulay";
+"Color Picker" = "Tagapili ng Kulay";
+"Select & Edit" = "Pumili at I-edit";
+"Color" = "Kulay";
+
+/* Toolbar - Actions */
+"Copy to Clipboard" = "Kopyahin sa Clipboard";
+"Save to File" = "I-save sa File";
+"Save to" = "I-save sa";
+"Open in Editor Window" = "Buksan sa Editor Window";
+"Pin on Screen" = "I-pin sa Screen";
+"Pin" = "I-pin";
+"Pin (floating window)" = "I-pin (lumulutang na window)";
+"OCR" = "OCR";
+"OCR Text" = "OCR Teksto";
+"OCR (extract text)" = "OCR (kunin ang teksto)";
+"OCR & QR" = "OCR & QR";
+"Run OCR & QR" = "Patakbuhin ang OCR & QR";
+"Text & QR Recognition" = "Pagkilala ng Teksto & QR";
+"QR Code" = "QR Code";
+"QR Codes" = "Mga QR Code";
+"Open Link" = "Buksan ang Link";
+"Upload" = "I-upload";
+"Share" = "Ibahagi";
+"Open With" = "Buksan Gamit ang";
+"No Apps Available" = "Walang Available na App";
+"No Share Services" = "Walang Share Service";
+"Undo" = "I-undo";
+"Redo" = "I-redo";
+"Close" = "Isara";
+"Remove Background" = "Alisin ang Background";
+"Beautify" = "Pagandahin";
+"Adjust" = "Ayusin";
+"Adjust (Image Effects)" = "Ayusin (Mga Effect ng Larawan)";
+"Invert Colors" = "Baligtarin ang mga Kulay";
+"Record" = "I-record";
+"Record screen" = "I-record ang screen";
+"Translate" = "Isalin";
+"Auto-Redact sensitive data" = "Auto-Redact ng sensitibong datos";
+"Move Selection" = "Ilipat ang Pinili";
+
+/* Toolbar - Recording */
+"Start Recording" = "Simulan ang Pag-record";
+"Cancel Recording" = "Kanselahin ang Pag-record";
+"Highlight Mouse Clicks" = "I-highlight ang mga Pag-click ng Mouse";
+"Record System Audio" = "I-record ang Audio ng Sistema";
+"Record Microphone" = "I-record ang Mikropono";
+"Recording Settings" = "Mga Setting ng Pag-record";
+
+/* Tool Options */
+"Size" = "Laki";
+"Stroke" = "Guhit";
+"Radius" = "Radius";
+"Start:" = "Simula:";
+"Draw:" = "Guhit:";
+"Auto:" = "Auto:";
+"Fill" = "Punan";
+"Outline" = "Balangkas";
+"More Emojis" = "Higit Pang mga Emoji";
+"Load Image" = "Mag-load ng Larawan";
+"Gradient Style" = "Estilo ng Gradient";
+"On" = "Bukas";
+"Text Only" = "Teksto Lamang";
+"All Text" = "Lahat ng Teksto";
+"PII" = "PII";
+"Faces" = "Mga Mukha";
+"People" = "Mga Tao";
+"Confirm before upload" = "Kumpirmahin bago i-upload";
+"Flip" = "I-flip";
+"Smooth" = "Makinis";
+"Refined" = "Pinong-pino";
+"Smart" = "Matalino";
+"Padding" = "Padding";
+"Shadow" = "Anino";
+"Right-click to add points" = "I-right-click upang magdagdag ng mga punto";
+"Hold 1 auto-vertical  ·  Hold 2 auto-horizontal" = "Pindutin 1 auto-patayo  ·  Pindutin 2 auto-pahalang";
+
+/* Overlay / Canvas */
+"Click a window  ·  Drag for custom area  ·  F for full screen" = "I-click ang window  ·  I-drag para sa custom na lugar  ·  F para sa buong screen";
+"Drag to select  ·  Click for full screen" = "I-drag upang pumili  ·  I-click para sa buong screen";
+"Release to annotate and edit" = "Bitawan upang mag-annotate at mag-edit";
+"Release to finish" = "Bitawan upang tapusin";
+"Hold Space to move. Release to annotate and edit" = "Pindutin ang Space upang ilipat. Bitawan upang mag-annotate at mag-edit";
+"Hold Space to move. Release to finish" = "Pindutin ang Space upang ilipat. Bitawan upang tapusin";
+"Space" = "Space";
+"Window snap: " = "Window snap: ";
+"ON" = "ON";
+"OFF" = "OFF";
+"  (Tab to toggle)" = "  (Tab upang i-toggle)";
+"Right-click to copy" = "I-right-click upang kopyahin";
+"Copied %@" = "Nakopya ang %@";
+"Set color %@" = "Itakda ang kulay %@";
+"Draw something first to use the move tool." = "Gumuhit muna bago gamitin ang move tool.";
+"Drag to reposition" = "I-drag upang ilipat";
+
+/* Aspect ratio & resolution presets */
+"Aspect ratio & resolution presets" = "Mga preset ng aspect ratio at resolution";
+"Aspect ratio" = "Aspect ratio";
+"Resolution" = "Resolution";
+"Freeform" = "Malayang anyo";
+"Units" = "Mga Unit";
+"Keep ratio for next captures" = "Panatilihin ang ratio para sa susunod na mga pagkuha";
+"Custom · %@" = "Custom · %@";
+"Order history by last edit" = "Ayusin ang kasaysayan ayon sa huling pag-edit";
+"Edited screenshots move to the top. Off keeps them in capture order." = "Ang mga na-edit na screenshot ay lilipat sa itaas. I-off upang panatilihin ang pagkakasunod-sunod ng pagkuha.";
+
+/* Overlay - Popovers */
+"Format:" = "Format:";
+"FPS:" = "FPS:";
+"When done:" = "Kapag tapos na:";
+"Open editor" = "Buksan ang editor";
+"Show in Finder" = "Ipakita sa Finder";
+"Copy to clipboard" = "Kopyahin sa clipboard";
+
+/* Preferences - General */
+"Pinlume Preferences" = "Mga Kagustuhan ng Pinlume";
+"General" = "Pangkalahatan";
+"Tools" = "Mga Kasangkapan";
+"Recording" = "Pag-record";
+"About" = "Tungkol sa";
+"Shortcuts" = "Mga Shortcut";
+"Uploads" = "Mga Upload";
+"Language" = "Wika";
+"Language:" = "Wika:";
+"Restart the app to fully apply the new language." = "I-restart ang app upang ganap na mailapat ang bagong wika.";
+"Capture" = "Pagkuha";
+"Play sound on capture" = "Mag-play ng tunog sa pagkuha";
+"Play sound on copy" = "Magpatugtog ng tunog kapag kinopya";
+"Remember last selected tool" = "Tandaan ang huling napiling kasangkapan";
+"Show floating thumbnail after capture" = "Ipakita ang lumulutang na thumbnail pagkatapos kumuha";
+"Launch at login" = "Buksan kapag nag-login";
+"Show snap alignment guides" = "Ipakita ang mga gabay sa pagkakahanay";
+"Snap selection edges to image boundaries" = "I-snap ang mga gilid ng seleksiyon sa hangganan ng imahe";
+"Capture mouse cursor in screenshot" = "Isama ang cursor ng mouse sa screenshot";
+"Double-click selection to copy" = "I-double-click ang pinili upang kopyahin";
+"Hide capture instructions" = "Itago ang mga tagubilin sa pagkuha ng screenshot";
+"Disable shadow outside selection" = "I-disable ang anino sa labas ng pinili";
+"Show shortcuts in tooltips" = "Ipakita ang mga shortcut sa mga tooltip";
+"Use window title in saved filename" = "Gamitin ang pamagat ng window sa na-save na filename";
+"Hide menu bar icon" = "Itago ang icon sa menu bar";
+"Hotkeys still work. To show the icon again, re-launch Pinlume." = "Gumagana pa rin ang mga hotkey. Upang ipakita muli ang icon, i-restart ang Pinlume.";
+"Menu Bar Order" = "Pagkakasunod-sunod ng Menu Bar";
+"Choose the order of capture actions in the Pinlume menu bar menu." = "Piliin ang pagkakasunod-sunod ng mga aksyon sa pagkuha sa menu ng menu bar ng Pinlume.";
+"Move up" = "Ilipat pataas";
+"Move down" = "Ilipat pababa";
+"Check for updates automatically" = "Awtomatikong tingnan ang mga update";
+"Check for beta updates" = "Tingnan ang mga beta update";
+"Thumbnail" = "Thumbnail";
+"  Dismiss after:" = "  I-dismiss pagkatapos ng:";
+"seconds before auto-dismiss (0 = never)" = "segundo bago mag-auto-dismiss (0 = hindi kailanman)";
+"  Multiple previews:" = "  Maramihang preview:";
+"Stack (keep all)" = "Patong-patungin (panatilihin lahat)";
+"Replace (show only latest)" = "Palitan (ipakita lang ang pinakabago)";
+"Output" = "Output";
+"Image format:" = "Format ng larawan:";
+"Quality:" = "Kalidad:";
+"%d%%" = "%d%%";
+"Save at standard resolution (1x)" = "I-save sa standard na resolusyon (1x)";
+"Halves dimensions on Retina displays, ~4x smaller files" = "Hinahati ang dimensyon sa Retina display, ~4x na mas maliliit na file";
+"Embed sRGB color profile" = "I-embed ang sRGB color profile";
+"Ensures consistent colors across different displays" = "Tinitiyak ang pare-parehong kulay sa iba't ibang display";
+"Screenshot History" = "Kasaysayan ng Screenshot";
+"History size:" = "Laki ng kasaysayan:";
+"screenshots kept on disk (0 = off)" = "mga screenshot na nakatago sa disk (0 = naka-off)";
+"Save Directory" = "Direktoryo ng Pag-save";
+"Save folder:" = "Folder na pag-save-an:";
+"Browse…" = "Mag-browse…";
+"Appearance" = "Hitsura";
+"Accent color:" = "Kulay ng accent:";
+"Icon color:" = "Kulay ng icon:";
+"Background color:" = "Kulay ng background:";
+"Reset" = "I-reset";
+"Menu bar icon:" = "Icon ng menu bar:";
+"Custom symbol" = "Custom na simbolo";
+"Default" = "Default";
+"Enter any SF Symbol name (e.g. camera.fill) or pick a preset. Browse names in Apple's SF Symbols app. Invalid names fall back to the default icon." = "Maglagay ng anumang pangalan ng SF Symbol (hal. camera.fill) o pumili ng preset. I-browse ang mga pangalan sa SF Symbols app ng Apple. Ang mga hindi wastong pangalan ay babalik sa default na icon.";
+"OCR Capture:" = "OCR Capture:";
+"OCR & QR Capture:" = "OCR & QR Capture:";
+"Save action:" = "Aksyon sa pag-save:";
+"Ask where to save" = "Itanong kung saan ise-save";
+"Save to default folder" = "I-save sa default na folder";
+"Show window + copy to clipboard" = "Ipakita ang window + kopyahin sa clipboard";
+"Show window only" = "Ipakita ang window lamang";
+"Copy to clipboard only" = "Kopyahin sa clipboard lamang";
+"Enter / Quick Capture:" = "Enter / Mabilisang Pagkuha:";
+"Save to file" = "I-save sa file";
+"Save + copy to clipboard" = "I-save + kopyahin sa clipboard";
+"OCR Action" = "Aksyon ng OCR";
+
+/* Preferences - Shortcuts */
+"Keyboard Shortcuts" = "Mga Keyboard Shortcut";
+"Hotkeys" = "Mga Hotkey";
+"Clear shortcut" = "Burahin ang shortcut";
+"Press keys..." = "Pindutin ang mga key...";
+"Waiting..." = "Naghihintay...";
+
+/* Preferences - Tools */
+"Annotation Tools" = "Mga Kasangkapan sa Pag-annotate";
+"Hidden tools are removed from the bottom toolbar." = "Ang mga nakatagong kasangkapan ay tinanggal mula sa ibabang toolbar.";
+"Capture Actions" = "Mga Aksyon sa Pagkuha";
+"Bottom Toolbar Actions" = "Mga Aksyon sa Ibabang Toolbar";
+"Hidden actions are removed from the bottom toolbar." = "Ang mga nakatagong aksyon ay tinanggal mula sa ibabang toolbar.";
+"Editor Actions" = "Mga Aksyon sa Editor";
+"Right Toolbar Actions" = "Mga Aksyon sa Kanang Toolbar";
+"Hidden actions are removed from the right toolbar." = "Ang mga nakatagong aksyon ay tinanggal mula sa kanang toolbar.";
+
+/* Preferences - Recording */
+"Frame rate:" = "Frame rate:";
+"After recording:" = "Pagkatapos mag-record:";
+"Save recording to:" = "I-save ang recording sa:";
+"Save Recording" = "I-save ang Recording";
+"Clear" = "Burahin";
+"Max height:" = "Pinakamataas na taas:";
+"px (0 = unlimited)" = "px (0 = walang limitasyon)";
+"Behavior" = "Gawi";
+"Auto-scroll (sends synthetic scroll events)" = "Auto-scroll (nagpapadala ng synthetic scroll event)";
+"Detect fixed/sticky headers" = "Tukuyin ang fixed/sticky header";
+"Scroll speed:" = "Bilis ng scroll:";
+"Slow" = "Mabagal";
+"Medium" = "Katamtaman";
+"Fast" = "Mabilis";
+"Very fast" = "Napakabilis";
+"5 fps" = "5 fps";
+"10 fps" = "10 fps";
+"15 fps" = "15 fps";
+"24 fps" = "24 fps";
+"30 fps" = "30 fps";
+"60 fps" = "60 fps";
+"120 fps" = "120 fps";
+"MP4 (H.264)" = "MP4 (H.264)";
+"GIF" = "GIF";
+
+/* Preferences - Upload */
+"Upload Service" = "Serbisyo ng Pag-upload";
+"Upload Provider" = "Tagapagbigay ng Upload";
+"Provider:" = "Tagapagbigay:";
+"Google Drive" = "Google Drive";
+"Google Drive (images + videos)" = "Google Drive (mga larawan + video)";
+"imgbb (images only)" = "imgbb (mga larawan lamang)";
+"S3-Compatible (images + videos)" = "S3-Compatible (mga larawan + video)";
+"S3-Compatible Storage" = "S3-Compatible Storage";
+"Sign In with Google" = "Mag-sign In gamit ang Google";
+"Sign Out" = "Mag-sign Out";
+"Signed in" = "Naka-sign in";
+"Not signed in" = "Hindi naka-sign in";
+"Account:" = "Account:";
+"Test Connection" = "Subukan ang Koneksyon";
+"Fill in endpoint, bucket, and credentials first" = "Punan muna ang endpoint, bucket, at mga kredensyal";
+"Testing..." = "Sinusubukan...";
+"Connection successful!" = "Matagumpay ang koneksyon!";
+"Leave empty to use default" = "Iwanang walang laman upang gamitin ang default";
+"Endpoint:" = "Endpoint:";
+"Region:" = "Rehiyon:";
+"Bucket:" = "Bucket:";
+"Access Key:" = "Access Key:";
+"Secret Key:" = "Secret Key:";
+"Public URL:" = "Public URL:";
+"Path Prefix:" = "Path Prefix:";
+"API key:" = "API key:";
+"Upload History" = "Kasaysayan ng Pag-upload";
+"No uploads yet." = "Wala pang mga upload.";
+"Base URL for public access. If empty, the S3 endpoint URL is used (may not be publicly accessible)." = "Base URL para sa pampublikong access. Kung walang laman, ang S3 endpoint URL ang gagamitin (maaaring hindi pampublikong ma-access).";
+"A shared key is included — get your own free key at imgbb.com/api if you hit rate limits. Images only (no video support)." = "May kasamang shared key — kumuha ng sariling libreng key sa imgbb.com/api kung naabot ang rate limit. Mga larawan lamang (walang suporta sa video).";
+"Works with AWS S3, Cloudflare R2, MinIO, DigitalOcean Spaces, Backblaze B2, and other S3-compatible services. Supports images and videos." = "Gumagana sa AWS S3, Cloudflare R2, MinIO, DigitalOcean Spaces, Backblaze B2, at iba pang S3-compatible na serbisyo. Sumusuporta sa mga larawan at video.";
+"Configure S3 in Preferences" = "I-configure ang S3 sa Mga Kagustuhan";
+"Sign in to Google Drive in Preferences" = "Mag-sign in sa Google Drive sa Mga Kagustuhan";
+"Video upload requires Google Drive or S3" = "Ang pag-upload ng video ay nangangailangan ng Google Drive o S3";
+
+/* Preferences - About */
+"Pinlume" = "Pinlume";
+"Version %@ (%@)" = "Bersyon %@ (%@)";
+"Made by" = "Ginawa ni";
+"Licensed under the GPLv3" = "Lisensiyado sa ilalim ng GPLv3";
+"A free, open-source screenshot & screen recording tool for macOS.\nFully native — built with Swift and AppKit." = "Isang libre at open-source na kasangkapan sa screenshot at pag-record ng screen para sa macOS.\nGanap na native — binuo gamit ang Swift at AppKit.";
+
+/* Alerts */
+"No Image on Clipboard" = "Walang Larawan sa Clipboard";
+"No Image or Text on Clipboard" = "Walang Larawan o Teksto sa Clipboard";
+"Copy an image to the clipboard first, then try again." = "Kopyahin muna ang isang larawan sa clipboard, pagkatapos ay subukang muli.";
+"Copy an image or text to the clipboard first, then try again." = "Kopyahin muna ang isang larawan o teksto sa clipboard, pagkatapos ay subukang muli.";
+"OK" = "OK";
+"Accessibility Access Required" = "Kinakailangan ang Accessibility Access";
+"Pinlume needs Accessibility permission to auto-scroll other apps. Please grant access in System Settings, then try again." = "Kailangan ng Pinlume ang Accessibility permission upang mag-auto-scroll sa ibang app. Pakibigyan ng access sa System Settings, pagkatapos ay subukang muli.";
+"Pinlume needs Accessibility permission for scroll capture. Please grant access in System Settings, then try again." = "Kailangan ng Pinlume ang Accessibility permission para sa scroll capture. Mangyaring bigyan ng access sa System Settings, pagkatapos subukan muli.";
+"Open Settings" = "Buksan ang Settings";
+"Cancel" = "Kanselahin";
+"Microphone Access Required" = "Kinakailangan ang Access sa Mikropono";
+"Pinlume needs microphone permission to record voice audio. Open System Settings to grant access." = "Kailangan ng Pinlume ang microphone permission upang mag-record ng boses. Buksan ang System Settings upang bigyan ng access.";
+"Upload to Google Drive?" = "I-upload sa Google Drive?";
+"Upload to S3?" = "I-upload sa S3?";
+"Upload to imgbb.com?" = "I-upload sa imgbb.com?";
+"Your screenshot will be uploaded." = "Ia-upload ang iyong screenshot.";
+
+/* Permission Onboarding */
+"Welcome to Pinlume" = "Maligayang pagdating sa Pinlume";
+"Pinlume needs one permission" = "Kailangan ng Pinlume ang isang permission";
+"Screen Recording not yet granted" = "Hindi pa naibibigay ang Screen Recording";
+"Screen Recording granted!" = "Naibigay na ang Screen Recording!";
+"Enable Pinlume, then try taking a screenshot" = "I-enable ang Pinlume, pagkatapos ay subukang kumuha ng screenshot";
+"Open Screen Recording Settings" = "Buksan ang Screen Recording Settings";
+"Continue" = "Magpatuloy";
+
+/* OCR Window */
+"Text Recognition" = "Pagkilala ng Teksto";
+"Translate to:" = "Isalin sa:";
+"%d chars · %d words" = "%d karakter · %d salita";
+"Copy  ⌘↩" = "Kopyahin  ⌘↩";
+"AI Search" = "AI Search";
+"Show Original" = "Ipakita ang Orihinal";
+"Translation Failed" = "Nabigo ang Pagsasalin";
+"Translation" = "Pagsasalin";
+"(No text detected in the selected area)" = "(Walang tekstong nakita sa napiling lugar)";
+
+/* Upload Toast */
+"URL copied to the clipboard" = "Nakopya ang URL sa clipboard";
+"Uploading... %d%%" = "Ina-upload... %d%%";
+"Upload failed: %@" = "Nabigo ang pag-upload: %@";
+"Uploaded! Link copied." = "Na-upload na! Nakopya ang link.";
+"Uploading to %@... %d%%" = "Ina-upload sa %@... %d%%";
+"Open" = "Buksan";
+
+/* Recording Toast */
+"Recording saved" = "Na-save ang recording";
+"%@ • Recording saved" = "%@ • Na-save ang recording";
+"Copy Path" = "Kopyahin ang Path";
+"Path copied!" = "Nakopya ang path!";
+
+/* Video Editor */
+"Pinlume Video Editor" = "Pinlume Video Editor";
+"%@ selected" = "%@ ang napili";
+"Exporting..." = "Ini-export...";
+"Export failed" = "Nabigo ang pag-export";
+"Saved to %@" = "Na-save sa %@";
+"Save failed" = "Nabigo ang pag-save";
+
+/* Barcode Detector */
+/* "Open" and "Copy" are shared with other sections */
+
+/* Save Panel */
+"Save As..." = "I-save Bilang...";
+"Choose a folder" = "Pumili ng folder";
+"Save All to Folder…" = "I-save Lahat sa Folder…";
+
+/* Scroll Capture HUD */
+"Auto Scroll" = "Auto Scroll";
+"Stop" = "Itigil";
+"Scrolling..." = "Ini-scroll...";
+
+/* Effects Picker (Adjust popover) */
+"Presets" = "Mga Preset";
+"Adjustments" = "Mga Pagsasaayos";
+"Brightness" = "Liwanag";
+"Contrast" = "Contrast";
+"Saturation" = "Saturation";
+"Sharpness" = "Talas";
+
+/* Time Ago */
+"just now" = "ngayon lang";
+"%ds ago" = "%ds ang nakalipas";
+"%dm ago" = "%dm ang nakalipas";
+"%dh ago" = "%dh ang nakalipas";
+
+/* Hotkey Labels */
+"History" = "Kasaysayan";
+
+/* Preferences - Shortcuts note */
+"Click \"Record\" and press a key combination with at least one modifier (⌘, ⌥, ⌃, ⇧) to set a shortcut." = "I-click ang \"Record\" at pindutin ang isang kombinasyon ng key na may kahit isang modifier (⌘, ⌥, ⌃, ⇧) upang magtakda ng shortcut.";
+
+/* Recording — GIF Processing */
+"Processing GIF…" = "Pinoproseso ang GIF…";
+
+/* Recording — Input Monitoring Permission */
+"Input Monitoring Required" = "Kinakailangan ang Input Monitoring";
+"Pinlume needs Input Monitoring permission to show keystrokes during recording. Please grant access in System Settings, then try again." = "Kailangan ng Pinlume ang Input Monitoring permission upang ipakita ang mga keystroke habang nagre-record. Pakibigyan ng access sa System Settings, pagkatapos ay subukang muli.";
+"Pinlume needs Accessibility permission to show keystrokes during recording. Please grant access in System Settings, then try again." = "Kailangan ng Pinlume ang Accessibility permission upang ipakita ang mga keystroke habang nagre-record. Pakibigyan ng access sa System Settings, pagkatapos ay subukang muli.";
+
+/* Recording — Keystroke Overlay */
+"Show Keystrokes" = "Ipakita ang mga Keystroke";
+"Shortcuts Only" = "Mga Shortcut Lamang";
+"All Keystrokes" = "Lahat ng Keystroke";
+
+/* Recording — Settings Popover */
+"Delay:" = "Pagkaantala:";
+
+/* Video Editor */
+"Copied to clipboard!" = "Nakopya sa clipboard!";
+
+/* Webcam Overlay */
+"Webcam Overlay" = "Webcam Overlay";
+"Camera Access Required" = "Kinakailangan ang Access sa Camera";
+"Pinlume needs camera permission for the webcam overlay. Open System Settings to grant access." = "Kailangan ng Pinlume ang camera permission para sa webcam overlay. Buksan ang System Settings upang bigyan ng access.";
+"Webcam" = "Webcam";
+"Bottom Right" = "Ibaba Kanan";
+"Bottom Left" = "Ibaba Kaliwa";
+"Top Right" = "Itaas Kanan";
+"Top Left" = "Itaas Kaliwa";
+"Small" = "Maliit";
+"Large" = "Malaki";
+"Webcam Size Small" = "Maliit";
+"Webcam Size Medium" = "Katamtaman";
+"Webcam Size Large" = "Malaki";
+"Webcam Size Extra Large" = "Napakalaki";
+"Circle" = "Bilog";
+"Rounded Rectangle" = "Bilugang Parihaba";
+"Cam pos:" = "Pos. ng cam:";
+"Cam size:" = "Laki ng cam:";
+"Cam shape:" = "Hugis ng cam:";
+
+/* Settings */
+"Settings..." = "Mga Setting...";
+"Pinlume Settings" = "Mga Setting ng Pinlume";
+"Also open in Editor" = "Buksan din sa Editor";
+"Hide controls" = "Itago ang mga kontrol";
+"Hide recording controls" = "Itago ang mga kontrol sa pag-record";
+"Stop recording from the menu bar icon instead." = "Ihinto ang pag-record mula sa icon sa menu bar.";
+"Pixelate" = "Pixelate";
+"Blur" = "Blur";
+"Solid" = "Solid";
+"Erase" = "Burahin";
+"Done" = "Tapos na";
+"Do nothing" = "Walang gawin";
+"Overlay / Editor Shortcuts" = "Mga Shortcut ng Overlay / Editor";
+"Set" = "Itakda";
+"Press..." = "Pindutin...";
+"Reset to default" = "Ibalik sa dating setting";
+"Press a single key to assign it as the shortcut for that tool. These work when the overlay or editor is active." = "Pindutin ang isang key upang italaga ito bilang shortcut para sa tool na iyon. Gumagana ang mga ito kapag aktibo ang overlay o editor.";
+"Keep Separate" = "Panatilihing Hiwalay";
+"Merge Audio" = "Pagsamahin ang Audio";
+"Audio Tracks" = "Mga Audio Track";
+"Adjust volume for each audio track:" = "Ayusin ang volume para sa bawat audio track:";
+"Microphone:" = "Mikropono:";
+"System audio:" = "Audio ng sistema:";
+"Loupe" = "Loupe";
+"Stamp" = "Stamp";
+"Unlimited" = "Walang limitasyon";
+
+/* Save/Discard, Recording, Translation Engine, Upload, Inspector */
+"Save changes?" = "I-save ang mga pagbabago?";
+"Your annotations will be lost if you close without saving." = "Mawawala ang iyong mga anotasyon kung isasara mo nang hindi nagse-save.";
+"Save & Close" = "I-save at Isara";
+"Discard" = "Itapon";
+"Stop Recording" = "Ihinto ang Pag-record";
+"Pause" = "I-pause";
+"Resume" = "Ipagpatuloy";
+"Engine:" = "Engine:";
+"Google Translate" = "Google Translate";
+"Apple (on-device)" = "Apple (sa device)";
+"Apple translation is faster and works offline. Google Translate supports more languages." = "Mas mabilis ang pagsasalin ng Apple at gumagana offline. Mas maraming wika ang sinusuportahan ng Google Translate.";
+"Download language packs in System Settings…" = "Mag-download ng mga language pack sa System Settings…";
+"Configure S3 in Settings" = "I-configure ang S3 sa Mga Setting";
+"Sign in to Google Drive in Settings" = "Mag-sign in sa Google Drive sa Mga Setting";
+"Position:" = "Posisyon:";
+"  Position:" = "  Posisyon:";
+"Size:" = "Laki:";
+"Shape:" = "Hugis:";
+
+"Same as screenshots" = "Kapareho ng mga screenshot";
+"  Preview size:" = "  Laki ng preview:";
+"(0 = off)" = "(0 = off)";
+"Clear All" = "I-clear Lahat";
+"Clear History?" = "I-clear ang History?";
+"This will permanently delete all screenshots from history." = "Permanenteng mabubura ang lahat ng screenshot mula sa history.";
+"Click \"Set\" and press a key combination with at least one modifier (⌘, ⌥, ⌃, ⇧) to set a shortcut." = "I-click ang \"Set\" at pindutin ang kombinasyon ng key na may kahit isang modifier (⌘, ⌥, ⌃, ⇧) upang magtakda ng shortcut.";
+"Files are uploaded to a \"Pinlume\" folder in your Google Drive. Everything stays private — nothing is shared publicly." = "Ina-upload ang mga file sa isang \"Pinlume\" na folder sa iyong Google Drive. Nananatiling pribado ang lahat — walang ibinabahagi nang publiko.";
+
+"Pressure" = "Pressure";
+
+/* Added for v4.1.0-beta.3 — video editor, effects, open-video, shortcuts help */
+"Open Video..." = "Buksan ang Video...";
+"Choose a video to open in Pinlume editor" = "Pumili ng video na bubuksan sa Pinlume editor";
+"Click to add effects" = "I-click upang magdagdag ng mga effect";
+"Add Zoom" = "Magdagdag ng Zoom";
+"Add Censor" = "Magdagdag ng Sensura";
+"Add Cut" = "Magdagdag ng Putol";
+"Add Speed" = "Magdagdag ng Bilis";
+"Add Freeze" = "Magdagdag ng Freeze";
+"Add Text" = "Magdagdag ng Teksto";
+"Delete Zoom" = "Tanggalin ang Zoom";
+"Delete Censor" = "Tanggalin ang Sensura";
+"Delete Cut" = "Tanggalin ang Putol";
+"Delete Speed" = "Tanggalin ang Bilis";
+"Delete Freeze" = "Tanggalin ang Freeze";
+"Delete Text" = "Tanggalin ang Teksto";
+"Edit Text…" = "I-edit ang Teksto…";
+"Huge" = "Napakalaki";
+"Bold" = "Bold";
+"Italic" = "Italic";
+"Alignment" = "Pagkakahanay";
+"Left" = "Kaliwa";
+"Center" = "Gitna";
+"Right" = "Kanan";
+"Text Color" = "Kulay ng Teksto";
+"Background Color" = "Kulay ng Background";
+"Rounded" = "Pabilog";
+"Custom…" = "Custom…";
+"Transparent" = "Transparent";
+"Black" = "Itim";
+"White" = "Puti";
+"Yellow" = "Dilaw";
+"Red" = "Pula";
+"Green" = "Berde";
+"Blue" = "Asul";
+"Untitled" = "Walang Pamagat";
+"Add effect" = "Magdagdag ng effect";
+"Fade" = "Fade";
+"High" = "Mataas";
+"Low" = "Mababa";
+"Not enough room here" = "Kulang ang espasyo dito";
+"Copied!" = "Nakopya!";
+"Converting to GIF…" = "Kinokonverte sa GIF…";
+"GIF conversion failed" = "Nabigo ang pag-convert sa GIF";
+"No video track found" = "Walang nakitang video track";
+"Preview:" = "Preview:";
+"Copy Screen Info" = "Kopyahin ang Impormasyon ng Screen";
+"Copies display and capture diagnostics to clipboard" = "Kinokopya ang mga diagnostic ng display at capture sa clipboard";
+"Accent" = "Accent";
+"Icon" = "Icon";
+"Background" = "Background";
+"Custom" = "Custom";
+"Theme:" = "Tema:";
+"Application" = "Application";
+"Capture area and extract text" = "Kumuha ng lugar at kunin ang teksto";
+"Capture the full screen" = "Kunan ang buong screen";
+"Counter for multi-screen captures" = "Counter para sa mga pagkuha ng maraming screen";
+"8-character random string (e.g. k3j7x9q2)" = "8-karakter na random na string (hal. k3j7x9q2)";
+"Filename Template Tokens" = "Mga Token ng Filename Template";
+"Filename tokens" = "Mga token ng filename";
+"Filename:" = "Filename:";
+"Open an image file in the editor" = "Magbukas ng image file sa editor";
+"Open the recent captures overlay" = "Buksan ang overlay ng mga kamakailang pagkuha";
+"Open this settings window" = "Buksan ang settings window na ito";
+"Quick capture (uses your Enter action)" = "Mabilisang pagkuha (ginagamit ang iyong Enter action)";
+"Re-capture the last selected area" = "Kunang muli ang huling napiling lugar";
+"Screenshots only — captured window title (blank otherwise)" = "Mga screenshot lamang — pamagat ng nakunang window (blangko kung hindi)";
+"Show available filename tokens" = "Ipakita ang mga available na filename token";
+"Show supported URL scheme commands" = "Ipakita ang mga suportadong URL scheme command";
+"Start area capture" = "Simulan ang pagkuha ng lugar";
+"Start area recording" = "Simulan ang pag-record ng lugar";
+"Start full-screen recording" = "Simulan ang pag-record ng buong screen";
+"Start scroll capture" = "Simulan ang scroll capture";
+"Stop the current recording" = "Ihinto ang kasalukuyang pag-record";
+"Supported URL Scheme Commands" = "Mga Suportadong URL Scheme Command";
+"The file extension is appended automatically. Slashes and colons in {window} become dashes." = "Awtomatikong idinaragdag ang extension ng file. Ang mga slash at colon sa {window} ay nagiging mga gitling.";
+"Trigger Pinlume from Raycast, Alfred, Shortcuts, or any tool that opens URLs." = "I-trigger ang Pinlume mula sa Raycast, Alfred, Shortcuts, o anumang tool na nagbubukas ng URL.";
+"URL scheme info" = "Impormasyon ng URL scheme";
+"Enable pinlume:// URL scheme" = "I-enable ang pinlume:// URL scheme";
+"sec (0 = never)" = "seg (0 = hindi kailanman)";
+"Settings" = "Settings";
+"Offline build: upload and cloud storage integrations are removed. Update checks may still connect to Pinlume's update server. Screenshots and recordings stay local unless you share or save them yourself." = "Offline build: inalis ang mga integrasyon para sa pag-upload at cloud storage. Maaaring kumonekta pa rin ang mga pagsusuri sa update sa update server ng Pinlume. Nananatiling lokal ang mga screenshot at recording maliban kung ibabahagi o ise-save mo mismo ang mga ito.";
+
+/* Localized current UI keys. Existing translations above are preserved. */
+"Plus build: personal build with update checks disabled. Preferences, history, and permissions are separate from the original Pinlume app." = "Plus build: personal na build na may naka-disable na mga pagsusuri sa update. Ang mga kagustuhan, kasaysayan, at mga pahintulot ay hiwalay sa orihinal na Pinlume app.";
+"Light" = "Liwanag";
+"Press Option to hide magnifier" = "Pindutin ang Opsyon upang itago ang magnifier";
+"Changes to the selected profile are saved automatically." = "Ang mga pagbabago sa napiling profile ay awtomatikong nai-save.";
+"Show Pin Shadow" = "Ipakita ang Pin Shadow";
+"Arrow Keys" = "Mga Arrow Key";
+"Source Language" = "Pinagmulang Wika";
+"Translation Pin" = "Pin ng Pagsasalin";
+"Color Scheme:" = "Kulay Scheme:";
+"Text Recognition / QR" = "Pagkilala sa Teksto / QR";
+"Basic" = "Basic";
+"Full" = "Puno";
+"Menu Bar Menu" = "Menu Bar Menu";
+"Screenshot history and editable annotations" = "Kasaysayan ng screenshot at mga nae-edit na anotasyon";
+"Press Shift to switch RGB/HEX" = "Pindutin ang Shift para lumipat ng RGB/HEX";
+"Clipboard image backups" = "Mga backup ng larawan sa clipboard";
+"Double-click to Toggle Thumbnail" = "I-double click upang I-toggle ang Thumbnail";
+"Compare" = "Ikumpara";
+"Apple translation does not support %@ → %@." = "Hindi sinusuportahan ng pagsasalin ng Apple ang %@ → %@.";
+"Profile:" = "Profile:";
+"Move to Applications" = "Ilipat sa Mga Application";
+"Filled Rectangle" = "Puno ng Parihaba";
+"Google translation is unavailable because sending text is disabled." = "Hindi available ang pagsasalin ng Google dahil hindi pinagana ang pagpapadala ng text.";
+"Adjust Area and Edit" = "Ayusin ang Lugar at I-edit";
+"Clear Local Data…" = "I-clear ang Lokal na Data...";
+"Swap Languages" = "Magpalit ng mga Wika";
+"Ignore window occlusion" = "Huwag pansinin ang window occlusion";
+"Graphite Blue" = "Graphite Blue";
+"Copy Original" = "Kopyahin ang Orihinal";
+"Pin Shadow" = "Pin Shadow";
+"Translation Window" = "Window ng Pagsasalin";
+"Show Translation" = "Ipakita ang Pagsasalin";
+"Enable %@:// URL scheme" = "I-enable ang %@:// URL scheme";
+"Disabled by default. Keeps up to 7 days or 2 MB; never writes screenshots, OCR text, clipboard contents, or keys." = "Hindi pinagana bilang default. Nagpapanatili ng hanggang 7 araw o 2 MB; hindi kailanman nagsusulat ng mga screenshot, OCR text, clipboard content, o key.";
+"Strength" = "Lakas";
+"Auto-Redact Sensitive Information" = "Auto-Redact Sensitive na Impormasyon";
+"More Tools" = "Higit pang Mga Tool";
+"Move Magnifier Sample Point 1 Pixel" = "Ilipat ang Sample Point 1 Pixel ng Magnifier";
+"Translating…" = "Nagsasalin...";
+"Pin Scroll Zoom" = "I-pin ang Scroll Zoom";
+"Copy Text (shown for text pins only)" = "Kopyahin ang Teksto (ipinapakita para sa mga pin ng teksto lamang)";
+"Copy Pinned Text" = "Kopyahin ang Naka-pin na Teksto";
+"Forest" = "kagubatan";
+"Show floating window after Quick Capture" = "Ipakita ang lumulutang na window pagkatapos ng Quick Capture";
+"Brush" = "Magsipilyo";
+"Allow Scroll Zoom on Pins" = "Payagan ang Mag-scroll Zoom sa Mga Pin";
+"Could not copy configuration." = "Hindi makopya ang configuration.";
+"Allow sending text to Google Translate" = "Payagan ang pagpapadala ng text sa Google Translate";
+"Export…" = "I-export...";
+"Choose local data to clear" = "Pumili ng lokal na data na i-clear";
+"Delete Configuration?" = "Tanggalin ang Configuration?";
+"Non-Drawing Actions" = "Mga Aksyon na Hindi Pagguhit";
+"Restored pins (closes current pins immediately)" = "Mga naibalik na pin (agad na isinasara ang mga kasalukuyang pin)";
+"Professional" = "Propesyonal";
+"Move to More Tools" = "Ilipat sa Higit pang Mga Tool";
+"Translation failed; original text shown." = "Nabigo ang pagsasalin; orihinal na teksto na ipinakita.";
+"Target Language" = "Target na Wika";
+"About Pinlume" = "Tungkol kay Pinlume";
+"No text found" = "Walang nakitang text";
+"Automatic" = "Awtomatiko";
+"Select Text" = "Piliin ang Teksto";
+"Move Down" = "Ilipat Pababa";
+"Don't ask again" = "Wag ka nang magtanong ulit";
+"Space to move. Release to annotate and edit" = "Space para gumalaw. I-release para i-annotate at i-edit";
+"Transparent Annotation" = "Transparent na Anotasyon";
+"Speak Source" = "Magsalita ng Pinagmulan";
+"Press %@ to move selection 1 pixel" = "Pindutin ang %@ para ilipat ang seleksyon ng 1 pixel";
+"Pin Scroll Opacity" = "I-pin ang Opacity ng Scroll";
+"OCR Pin" = "OCR Pin";
+"Double-click" = "I-double click";
+"Rename Configuration" = "Palitan ang pangalan ng Configuration";
+"When shortcuts conflict, the settings list is matched from top to bottom and the first entry takes priority." = "Kapag magkasalungat ang mga shortcut, ang listahan ng mga setting ay itinutugma mula sa itaas hanggang sa ibaba at ang unang entry ang uunahin.";
+"Original / Translation" = "Orihinal / Pagsasalin";
+"Move Toolbar" = "Ilipat ang Toolbar";
+"Beautify Screenshot" = "Pagandahin ang Screenshot";
+"Opacity %d%%" = "Opacity %d%%";
+"Configuration" = "Configuration";
+"Press %@ to show/hide magnifier" = "Pindutin ang %@ para ipakita/itago ang magnifier";
+"Anchor to Mouse Position" = "Anchor sa Posisyon ng Mouse";
+"Press C to copy color" = "Pindutin ang C upang kopyahin ang kulay";
+"Import…" = "Mag-import…";
+"Apple translation language availability is unknown." = "Hindi alam ang availability ng wika ng pagsasalin ng Apple.";
+"Unable to capture selection" = "Hindi makuha ang pagpili";
+"Translated Text" = "Na-translate na Teksto";
+"Show partial image in compact Pin" = "Ipakita ang bahagyang larawan sa compact Pin";
+"Translation complete" = "Tapos na ang pagsasalin";
+"Show Original / Translation" = "Ipakita ang Orihinal / Pagsasalin";
+"Languages swapped; edited translation was preserved" = "Pinagpalit ang mga wika; napanatili ang na-edit na pagsasalin";
+"Image Adjustments" = "Mga Pagsasaayos ng Larawan";
+"Hide All Pins" = "Itago ang Lahat ng Pin";
+"Make Common" = "Gawing Common";
+"Storage & Diagnostics" = "Storage at Diagnostics";
+"Size %d%%" = "Sukat %d%%";
+"Enter a new name for this custom configuration." = "Maglagay ng bagong pangalan para sa custom na configuration na ito.";
+"Preparing full window…" = "Inihahanda ang buong window…";
+"This affects both the capture selection toolbar and pin toolbar. Common tools appear in the first row; additional tools move into the More menu." = "Naaapektuhan nito ang parehong toolbar ng pagpili ng pagkuha at toolbar ng pin. Ang mga karaniwang tool ay lilitaw sa unang hilera; lumipat ang mga karagdagang tool sa More menu.";
+"Pinlume needs Accessibility permission to translate selected text. Open System Settings to grant access. If Pinlume is not listed, click the + button and choose the running Pinlume app." = "Kailangan ng Pinlume ng pahintulot sa Accessibility para isalin ang napiling text. Buksan ang Mga Setting ng System para magbigay ng access. Kung hindi nakalista ang Pinlume, i-click ang + button at piliin ang tumatakbong Pinlume app.";
+"These shortcuts work only in a capture selection or selected pin; on-screen hints follow the current settings." = "Gumagana lang ang mga shortcut na ito sa isang capture selection o piniling pin; ang mga pahiwatig sa screen ay sumusunod sa kasalukuyang mga setting.";
+"Copy Configuration" = "Kopyahin";
+"Deep Teal" = "Deep Teal";
+"Could not apply configuration profile." = "Hindi mailapat ang profile ng configuration.";
+"Switch Magnifier RGB/HEX" = "Lumipat ng Magnifier RGB/HEX";
+"Anchor to Top Left" = "Anchor sa Itaas na Kaliwa";
+"Amber" = "Amber";
+"Configuration:" = "Configuration:";
+"Selectable Text Capture" = "Mapipiling Text Capture";
+"Hide/Show All Pins" = "Itago/Ipakita ang Lahat ng Pin";
+"Unable to capture full window" = "Hindi makuha ang buong window";
+"Toolbar Layout" = "Layout ng Toolbar";
+"Move Up" = "Move Up";
+"Enable Hotkeys" = "Paganahin ang Mga Hotkey";
+"Choose an image to pin to screen" = "Pumili ng larawang ipi-pin sa screen";
+"OCR Selection" = "Pagpili ng OCR";
+"%@ is running from a disk image. Move it to your Applications folder for stable permissions and the best experience." = "Ang %@ ay tumatakbo mula sa isang disk image. Ilipat ito sa iyong folder ng Applications para sa mga matatag na pahintulot at ang pinakamagandang karanasan.";
+"System Default" = "Default ng System";
+"Midnight Indigo" = "Hatinggabi Indigo";
+"Shortcut unavailable (error %d)" = "Hindi available ang shortcut (error %d)";
+"Auto Detect" = "Auto Detect";
+"Copy of %@" = "Kopya ng %@";
+"Choose which actions appear in the status bar menu and arrange the order of common and additional tools. Settings, version, and quit remain fixed." = "Piliin kung aling mga pagkilos ang lalabas sa menu ng status bar at ayusin ang pagkakasunud-sunod ng mga karaniwan at karagdagang tool. Ang mga setting, bersyon, at paghinto ay nananatiling maayos.";
+"Sentence Comparison" = "Paghahambing ng Pangungusap";
+"Could not rename configuration." = "Hindi mapalitan ang pangalan ng configuration.";
+"No items" = "Walang item";
+"Diagnostic logs" = "Mga log ng diagnostic";
+"Not Now" = "Hindi Ngayon";
+"Text copied" = "Kinopya ang text";
+"Scroll capture copied to clipboard" = "Kinopya ang scroll capture sa clipboard";
+"Rename…" = "Palitan ang pangalan...";
+"Calculating…" = "Kinakalkula…";
+"Disable Hotkeys" = "Huwag paganahin ang mga Hotkey";
+"Enable diagnostic logging (status, timing, coordinates, and errors only)" = "Paganahin ang diagnostic logging (status, timing, coordinate, at mga error lang)";
+"Hold %@ to show magnifier" = "Pindutin ang %@ upang ipakita ang magnifier";
+"Choose which dedicated OCR and translation tools are visible. Keyboard shortcuts are in Shortcuts." = "Piliin kung aling nakalaang OCR at mga tool sa pagsasalin ang makikita. Ang mga keyboard shortcut ay nasa Mga Shortcut.";
+"Hold to Show Magnifier" = "I-hold upang Ipakita ang Magnifier";
+"Show All Pins" = "Ipakita ang Lahat ng Pin";
+"The configuration “%@” will be deleted and Basic will be applied." = "Ide-delete ang configuration na “%@” at ilalapat ang Basic.";
+"These are actions rather than drawing tools. They appear in More Tools; disabling one hides it from both selections and pins." = "Ito ay mga aksyon sa halip na mga tool sa pagguhit. Lumilitaw ang mga ito sa Higit pang Mga Tool; Itinatago ito ng hindi pagpapagana ng isa mula sa parehong mga seleksyon at pin.";
+"Images saved to a folder you choose will not be deleted." = "Ang mga larawang na-save sa isang folder na iyong pinili ay hindi tatanggalin.";
+"Press %@ to switch RGB/HEX" = "Pindutin ang %@ para lumipat ng RGB/HEX";
+"Space to move. Release to finish" = "Space para gumalaw. Ilabas para matapos";
+"Show/Hide Magnifier" = "Ipakita/Itago ang Magnifier";
+"Speak" = "Magsalita";
+"Eraser" = "Pambura";
+"Current Configuration" = "Kasalukuyang Configuration";
+"Screen Translation Capture" = "Screen Translation Capture";
+"Copy Translation" = "Kopyahin ang Pagsasalin";
+"Move to Applications folder?" = "Ilipat sa folder ng Applications?";
+"Double-click to Close Pin" = "I-double click para Isara ang Pin";
+"Slim" = "slim";
+"Could not move to Applications" = "Hindi makalipat sa Applications";
+"Please drag Pinlume to your Applications folder manually.\n\n%@" = "Mangyaring i-drag nang manu-mano ang Pinlume sa iyong folder ng Applications.\n\n%@";
+"Could not import configuration." = "Hindi ma-import ang configuration.";
+"These are actions rather than drawing tools. Disabling one hides it from ordinary selections and pins." = "Ito ay mga aksyon sa halip na mga tool sa pagguhit. Itinatago ito ng hindi pagpapagana ng isa sa mga ordinaryong seleksyon at pin.";
+"Turn this off to keep translation text on this Mac. Google translation will be unavailable." = "I-off ito para panatilihin ang translation text sa Mac na ito. Hindi magagamit ang pagsasalin ng Google.";
+"Could not delete configuration." = "Hindi matanggal ang configuration.";
+"Screen translation must stay on one display" = "Dapat manatili sa isang display ang pagsasalin ng screen";
+"Hide Pin Shadow" = "Itago ang Pin Shadow";
+"Translation Status" = "Katayuan ng Pagsasalin";
+"Monochrome" = "Monochrome";
+"Translate before swapping languages" = "Isalin bago magpalit ng mga wika";
+"Export" = "I-export";
+"Dark" = "Madilim";
+"Apple translation needs the %@ → %@ language pack. Download it in System Settings." = "Kailangan ng pagsasalin ng Apple ang %@ → %@ language pack. I-download ito sa Mga Setting ng System.";
+"Press %@ to move the sample point 1 pixel" = "Pindutin ang %@ para ilipat ang sample point 1 pixel";
+"Move Selection 1 Pixel" = "Ilipat ang Pinili 1 Pixel";
+"Screen Translation" = "Pagsasalin ng Screen";
+"Smooth Pin Zoom" = "Smooth Pin Zoom";
+"The current settings were kept unchanged." = "Ang mga kasalukuyang setting ay pinananatiling hindi nabago.";
+"Presentation Drawing" = "Pagguhit ng Pagtatanghal";
+"Interface Theme:" = "Tema ng Interface:";
+"Quick capture copied to clipboard" = "Ang mabilis na pagkuha ay nakopya sa clipboard";
+"Translate selected text" = "Isalin ang napiling teksto";
+"Import" = "Mag-import";
+"  Pin Zoom Anchor:" = "Pin Zoom Anchor:";
+"Source Text" = "Pinagmulan ng Teksto";
+"Open Translation Window" = "Buksan ang Translation Window";
+"Configuration Profiles" = "Mga Profile ng Configuration";
+"Text recognition failed" = "Nabigo ang pagkilala sa teksto";
+"Continue with Clipboard" = "Magpatuloy sa Clipboard";
+"Allow Trackpad Pinch Zoom on Pins" = "Payagan ang Trackpad Pinch Zoom sa Mga Pin";
+"Actions in More Tools" = "Mga Pagkilos sa Higit pang Mga Tool";
+"Clear Selected Data" = "I-clear ang Napiling Data";
+"Could not export configuration." = "Hindi ma-export ang configuration.";
+"Copy Source" = "Kopyahin ang Pinagmulan";
+"Common Tools" = "Mga Karaniwang Tool";
+"Swap" = "Magpalit";
+"Recognize Text" = "Kilalanin ang Teksto";
+"Speak Translation" = "Magsalita ng Pagsasalin";
+"These are actions rather than drawing tools. Disabling one hides it wherever that action is available." = "Ito ay mga aksyon sa halip na mga tool sa pagguhit. Itinatago ito ng hindi pagpapagana ng isa saanman available ang pagkilos na iyon.";
+"Common tools appear in the first row; additional tools move into the More menu. Actions unavailable for the current context do not appear." = "Ang mga karaniwang tool ay lilitaw sa unang hilera; lumipat ang mga karagdagang tool sa More menu. Hindi lilitaw ang mga pagkilos na hindi magagamit para sa kasalukuyang konteksto.";
+"Not enough space for comparison" = "Walang sapat na espasyo para sa paghahambing";
+"Set the Select Text pin action, translation engine, and privacy policy here. Keyboard shortcuts are in Shortcuts." = "Itakda ang Select Text pin action, translation engine, at patakaran sa privacy dito. Ang mga keyboard shortcut ay nasa Mga Shortcut.";
+"Recognizing Text…" = "Kinikilala ang Teksto...";
+"Release %@ to hide magnifier" = "Ilabas ang %@ para itago ang magnifier";
+"Rename" = "Palitan ang pangalan";
+"Translate Now" = "Isalin Ngayon";
+"Mouse Wheel" = "Gulong ng Mouse";
+"Google translation is disabled in Settings." = "Ang pagsasalin ng Google ay hindi pinagana sa Mga Setting.";
+"Could not determine the source language." = "Hindi matukoy ang pinagmulang wika.";
+"Copy Text" = "Kopyahin ang Teksto";
+"Selection & Pin Interactions" = "Mga Interaksyon sa Pagpili at Pin";
+"Pin zoom anchors to mouse position" = "I-pin ang mga anchor ng zoom sa posisyon ng mouse";
+"OCR & Translation" = "OCR at Pagsasalin";
+"Rotate Clockwise" = "I-rotate Clockwise";
