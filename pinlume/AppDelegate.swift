@@ -469,7 +469,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 from: .standard,
                 currentPayload: bridge.snapshotCurrentPreferences().payload
             )
-            guard result.createdNewDocument else { return }
+            guard result.createdNewDocument || (result.migratedExistingDocument && result.document.activeProfile.kind != .custom) else { return }
             let profile = result.document.activeProfile
             try settingsProfileRuntimeCoordinator.preflightHotkeys(profile.payload)
             try SettingsProfileApplyCoordinator().apply(profile)

@@ -114,6 +114,10 @@ class HotkeyManager {
         var defaultModifiers: UInt32 {
             UInt32(SettingsProfileHotkeyDefinition.definition(for: rawValue)?.defaultModifiers ?? 0)
         }
+
+        var defaultDisabled: Bool {
+            SettingsProfileHotkeyDefinition.definition(for: rawValue)?.defaultDisabled ?? false
+        }
     }
 
     private var hotKeyRefs: [HotkeySlot: EventHotKeyRef] = [:]
@@ -271,6 +275,9 @@ class HotkeyManager {
     static func resetAllToDefaults() {
         for slot in HotkeySlot.allCases {
             saveHotkey(for: slot, keyCode: slot.defaultKeyCode, modifiers: slot.defaultModifiers)
+            if slot.defaultDisabled {
+                disableHotkey(for: slot)
+            }
         }
     }
 

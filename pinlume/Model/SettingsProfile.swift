@@ -132,22 +132,39 @@ struct SettingsProfileHotkeyDefinition: Equatable {
     let modifiersKey: String
     let defaultKeyCode: Int
     let defaultModifiers: Int
+    let defaultDisabled: Bool
+
+    init(
+        slot: Int,
+        keyCodeKey: String,
+        modifiersKey: String,
+        defaultKeyCode: Int,
+        defaultModifiers: Int,
+        defaultDisabled: Bool = false
+    ) {
+        self.slot = slot
+        self.keyCodeKey = keyCodeKey
+        self.modifiersKey = modifiersKey
+        self.defaultKeyCode = defaultKeyCode
+        self.defaultModifiers = defaultModifiers
+        self.defaultDisabled = defaultDisabled
+    }
 
     static let all: [SettingsProfileHotkeyDefinition] = [
         .init(slot: 1, keyCodeKey: "hotkeyKeyCode", modifiersKey: "hotkeyModifiers", defaultKeyCode: 122, defaultModifiers: 256),
         .init(slot: 2, keyCodeKey: "hotkeyFullScreenKeyCode", modifiersKey: "hotkeyFullScreenModifiers", defaultKeyCode: 0, defaultModifiers: 0),
-        .init(slot: 3, keyCodeKey: "hotkeyRecordKeyCode", modifiersKey: "hotkeyRecordModifiers", defaultKeyCode: 15, defaultModifiers: 768),
+        .init(slot: 3, keyCodeKey: "hotkeyRecordKeyCode", modifiersKey: "hotkeyRecordModifiers", defaultKeyCode: 15, defaultModifiers: 768, defaultDisabled: true),
         .init(slot: 4, keyCodeKey: "hotkeyRecordFullScreenKeyCode", modifiersKey: "hotkeyRecordFullScreenModifiers", defaultKeyCode: 0, defaultModifiers: 0),
         .init(slot: 5, keyCodeKey: "hotkeyHistoryKeyCode", modifiersKey: "hotkeyHistoryModifiers", defaultKeyCode: 4, defaultModifiers: 768),
-        .init(slot: 6, keyCodeKey: "hotkeyOCRKeyCode", modifiersKey: "hotkeyOCRModifiers", defaultKeyCode: 17, defaultModifiers: 768),
+        .init(slot: 6, keyCodeKey: "hotkeyOCRKeyCode", modifiersKey: "hotkeyOCRModifiers", defaultKeyCode: 17, defaultModifiers: 768, defaultDisabled: true),
         .init(slot: 7, keyCodeKey: "hotkeyQuickCaptureKeyCode", modifiersKey: "hotkeyQuickCaptureModifiers", defaultKeyCode: 1, defaultModifiers: 768),
         .init(slot: 8, keyCodeKey: "hotkeyScrollCaptureKeyCode", modifiersKey: "hotkeyScrollCaptureModifiers", defaultKeyCode: 0, defaultModifiers: 0),
         .init(slot: 9, keyCodeKey: "hotkeyOpenClipboardKeyCode", modifiersKey: "hotkeyOpenClipboardModifiers", defaultKeyCode: 0, defaultModifiers: 0),
         .init(slot: 10, keyCodeKey: "hotkeyCaptureLastAreaKeyCode", modifiersKey: "hotkeyCaptureLastAreaModifiers", defaultKeyCode: 0, defaultModifiers: 0),
         .init(slot: 11, keyCodeKey: "hotkeyPinClipboardKeyCode", modifiersKey: "hotkeyPinClipboardModifiers", defaultKeyCode: 99, defaultModifiers: 0),
         .init(slot: 12, keyCodeKey: "hotkeyClearHistoryKeyCode", modifiersKey: "hotkeyClearHistoryModifiers", defaultKeyCode: 0, defaultModifiers: 0),
-        .init(slot: 13, keyCodeKey: "hotkeyToggleAllPinsKeyCode", modifiersKey: "hotkeyToggleAllPinsModifiers", defaultKeyCode: 99, defaultModifiers: 2_560),
-        .init(slot: 14, keyCodeKey: "hotkeySelectableOCRKeyCode", modifiersKey: "hotkeySelectableOCRModifiers", defaultKeyCode: 120, defaultModifiers: 2_560),
+        .init(slot: 13, keyCodeKey: "hotkeyToggleAllPinsKeyCode", modifiersKey: "hotkeyToggleAllPinsModifiers", defaultKeyCode: 99, defaultModifiers: 512),
+        .init(slot: 14, keyCodeKey: "hotkeySelectableOCRKeyCode", modifiersKey: "hotkeySelectableOCRModifiers", defaultKeyCode: 3, defaultModifiers: 2_560),
         .init(slot: 15, keyCodeKey: "hotkeyTranslationWindowKeyCode", modifiersKey: "hotkeyTranslationWindowModifiers", defaultKeyCode: 19, defaultModifiers: 2_048),
         .init(slot: 16, keyCodeKey: "hotkeyScreenTranslationKeyCode", modifiersKey: "hotkeyScreenTranslationModifiers", defaultKeyCode: 3, defaultModifiers: 2_048),
         .init(slot: 17, keyCodeKey: "hotkeyTransparentAnnotationKeyCode", modifiersKey: "hotkeyTransparentAnnotationModifiers", defaultKeyCode: 47, defaultModifiers: 2_304),
@@ -241,7 +258,7 @@ struct SettingsProfile: Codable, Equatable, Identifiable {
 }
 
 struct SettingsProfileDocument: Codable, Equatable {
-    static let currentSchemaVersion = 12
+    static let currentSchemaVersion = 16
 
     var schemaVersion: Int
     var profiles: [SettingsProfile]
@@ -355,9 +372,31 @@ enum SettingsProfileSchema {
     }
 
     private static func normalized(_ payload: SettingsProfilePayload) -> SettingsProfilePayload {
+        func normalizedColor(_ color: SettingsProfileRGBA) -> SettingsProfileRGBA {
+            func rounded(_ value: Double) -> Double {
+                (value * 1_000_000).rounded() / 1_000_000
+            }
+            return SettingsProfileRGBA(
+                red: rounded(color.red),
+                green: rounded(color.green),
+                blue: rounded(color.blue),
+                alpha: rounded(color.alpha)
+            )
+        }
+
         var values = payload.values
         for (key, definition) in fields where values[key] == nil {
             values[key] = definition.defaultValue
+        }
+        for (key, value) in values {
+            switch value {
+            case .color(let color):
+                values[key] = .color(normalizedColor(color))
+            case .colors(let colors):
+                values[key] = .colors(colors.map(normalizedColor))
+            default:
+                break
+            }
         }
         return SettingsProfilePayload(values: values)
     }
@@ -569,16 +608,16 @@ enum SettingsProfileSchema {
         // Annotation and effects defaults.
         double("currentStrokeWidth", default: 3, range: 0.5...100)
         double("numberStrokeWidth", default: 3, range: 0.5...100)
-        double("markerStrokeWidth", default: 20, range: 1...200)
+        double("markerStrokeWidth", default: 3, range: 1...200)
         integer("currentLineStyle", range: 0...2)
         integer("currentArrowStyle", range: 0...5)
         integer("currentRectFillStyle", range: 0...2)
         double("currentRectCornerRadius", range: 0...1_000)
         bool("arrowReversed")
         bool("pencilPressureEnabled")
-        string("pencilSmoothMode", default: "standard", maximumLength: 32)
+        integer("pencilSmoothMode", default: 1, range: 0...2)
         bool("pencilSmoothEnabled", default: true)
-        bool("smartMarkerEnabled", default: true)
+        bool("smartMarkerEnabled", default: false)
         double("highlightDimOpacity", default: 0.5, range: 0...1)
         bool("highlightBorderDashed")
         integer("censorMode", range: 0...3)

@@ -95,6 +95,7 @@ final class SettingsProfileStore {
     struct LoadResult {
         let document: SettingsProfileDocument
         let createdNewDocument: Bool
+        let migratedExistingDocument: Bool
     }
 
     func loadOrCreate(
@@ -116,7 +117,11 @@ final class SettingsProfileStore {
             if document != storedDocument {
                 try save(document, to: defaults)
             }
-            return LoadResult(document: document, createdNewDocument: false)
+            return LoadResult(
+                document: document,
+                createdNewDocument: false,
+                migratedExistingDocument: document != storedDocument
+            )
         }
 
         try SettingsProfileSchema.validate(currentPayload)
@@ -140,10 +145,16 @@ final class SettingsProfileStore {
         Self.applyBuiltinStatusBarIcon(to: &full)
         Self.applyBuiltinStatusMenuDefaults(to: &basic)
         Self.applyBuiltinStatusMenuDefaults(to: &full)
+        Self.applyBuiltinMarkerDefaults(to: &basic)
+        Self.applyBuiltinMarkerDefaults(to: &full)
         Self.applySlimColorScheme(to: &basic)
         let document = SettingsProfileDocument(profiles: [basic, full], activeProfileID: basic.id)
         try save(document, to: defaults)
-        return LoadResult(document: document, createdNewDocument: true)
+        return LoadResult(
+            document: document,
+            createdNewDocument: true,
+            migratedExistingDocument: false
+        )
     }
 
     func decodeDocument(from data: Data) throws -> SettingsProfileDocument {
@@ -331,6 +342,18 @@ final class SettingsProfileStore {
         _ document: SettingsProfileDocument,
         currentPayload: SettingsProfilePayload
     ) throws -> SettingsProfileDocument {
+        if document.schemaVersion < SettingsProfileDocument.currentSchemaVersion,
+           document.profiles.contains(where: {
+               if case .string? = $0.payload.values["pencilSmoothMode"] { return true }
+               return false
+           })
+        {
+            var normalized = document
+            for index in normalized.profiles.indices {
+                Self.migratePencilSmoothMode(to: &normalized.profiles[index])
+            }
+            return try migrateStoredDocumentIfNeeded(normalized, currentPayload: currentPayload)
+        }
         switch document.schemaVersion {
         case SettingsProfileDocument.currentSchemaVersion:
             try validate(document)
@@ -443,6 +466,42 @@ final class SettingsProfileStore {
             for index in migrated.profiles.indices where migrated.profiles[index].kind != .custom {
                 Self.applyBuiltinShortcutDefaults(to: &migrated.profiles[index])
             }
+            try validate(migrated, schemaVersion: 12, systemProfilesAreEditable: false)
+            return try migrateStoredDocumentIfNeeded(migrated, currentPayload: currentPayload)
+        case 12:
+            try validate(document, schemaVersion: 12, systemProfilesAreEditable: false)
+            var migrated = document
+            migrated.schemaVersion = 13
+            for index in migrated.profiles.indices where migrated.profiles[index].kind != .custom {
+                Self.applyBuiltinShortcutDefaults(to: &migrated.profiles[index])
+            }
+            try validate(migrated, schemaVersion: 13, systemProfilesAreEditable: false)
+            return try migrateStoredDocumentIfNeeded(migrated, currentPayload: currentPayload)
+        case 13:
+            try validate(document, schemaVersion: 13, systemProfilesAreEditable: false)
+            var migrated = document
+            migrated.schemaVersion = 14
+            for index in migrated.profiles.indices {
+                Self.migratePencilSmoothMode(to: &migrated.profiles[index])
+                if migrated.profiles[index].kind != .custom {
+                    Self.applyBuiltinShortcutDefaults(to: &migrated.profiles[index])
+                }
+            }
+            try validate(migrated, schemaVersion: 14, systemProfilesAreEditable: false)
+            return try migrateStoredDocumentIfNeeded(migrated, currentPayload: currentPayload)
+        case 14:
+            try validate(document, schemaVersion: 14, systemProfilesAreEditable: false)
+            var migrated = document
+            migrated.schemaVersion = 15
+            for index in migrated.profiles.indices where migrated.profiles[index].kind != .custom {
+                Self.applyBuiltinMarkerDefaults(to: &migrated.profiles[index])
+            }
+            try validate(migrated, schemaVersion: 15, systemProfilesAreEditable: false)
+            return try migrateStoredDocumentIfNeeded(migrated, currentPayload: currentPayload)
+        case 15:
+            try validate(document, schemaVersion: 15, systemProfilesAreEditable: false)
+            var migrated = document
+            migrated.schemaVersion = 16
             try validate(migrated)
             return migrated
         default:
@@ -531,7 +590,7 @@ final class SettingsProfileStore {
             let prefix = "hotkey.\(definition.slot)"
             profile.payload.values["\(prefix).keyCode"] = .integer(definition.defaultKeyCode)
             profile.payload.values["\(prefix).modifiers"] = .integer(definition.defaultModifiers)
-            profile.payload.values["\(prefix).disabled"] = .bool(false)
+            profile.payload.values["\(prefix).disabled"] = .bool(definition.defaultDisabled)
         }
 
         var toolShortcuts: [String: String] = [:]
@@ -540,6 +599,17 @@ final class SettingsProfileStore {
         }
         toolShortcuts["undo"] = "z"
         profile.payload.values["overlayToolShortcuts"] = .stringMap(toolShortcuts)
+    }
+
+    private static func migratePencilSmoothMode(to profile: inout SettingsProfile) {
+        guard case .string(let legacyValue)? = profile.payload.values["pencilSmoothMode"] else { return }
+        let mode: Int
+        switch legacyValue.lowercased() {
+        case "none", "0": mode = 0
+        case "refined", "extra", "2": mode = 2
+        default: mode = 1
+        }
+        profile.payload.values["pencilSmoothMode"] = .integer(mode)
     }
 
     /// Slim owns the shared built-in shortcut baseline. Professional keeps its
@@ -572,6 +642,11 @@ final class SettingsProfileStore {
     private static func applyBuiltinStatusBarIcon(to profile: inout SettingsProfile) {
         profile.payload.values["statusBarIconMode"] = .string("default")
         profile.payload.values["statusBarIconSymbolName"] = .string("")
+    }
+
+    private static func applyBuiltinMarkerDefaults(to profile: inout SettingsProfile) {
+        profile.payload.values["markerStrokeWidth"] = .double(3)
+        profile.payload.values["smartMarkerEnabled"] = .bool(false)
     }
 
     /// System profile payloads must match the status-menu model exactly.
