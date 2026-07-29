@@ -172,7 +172,7 @@ macOS 12.3（Monterey）或更高版本。部分 OCR、翻译或视觉能力取�
 
 ## 参与贡献
 
-欢迎通过 Issue 或 Pull Request 参与。构建方式、测试要求和贡献约定见 [CONTRIBUTING.md](CONTRIBUTING.md)。
+欢迎通过 Issue 反馈问题、提出功能建议或参与讨论；目前暂不接收 Pull Request。如希望贡献代码，请先联系维护者沟通，详见 [CONTRIBUTING.md](CONTRIBUTING.md)。
 
 ## 许可证与来源
 

@@ -169,7 +169,7 @@ macOS 12.3 (Monterey) or later. Some OCR, translation, and visual features depen
 
 ## Contributing
 
-Issues and pull requests are welcome. See [CONTRIBUTING.md](CONTRIBUTING.md) for build, test, and contribution expectations.
+Issues are welcome for bug reports, feature requests, and discussion. Pull requests are not accepted at this time; please contact the maintainer before proposing a code contribution. See [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## License and attribution
 
