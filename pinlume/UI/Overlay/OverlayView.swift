@@ -1159,11 +1159,20 @@ class OverlayView: NSView {
         case ratio(CGFloat)
         case resolution(w: Int, h: Int)
     }
-    private enum PreSelectionPresetStorageKind: Int {
-        case inherited = 0
-        case freeform = 1
-        case ratio = 2
-        case resolution = 3
+    private enum PreSelectionPresetStorageKind: String {
+        case inherited
+        case freeform
+        case ratio
+        case resolution
+
+        init(legacyRawValue: Int) {
+            switch legacyRawValue {
+            case 1: self = .freeform
+            case 2: self = .ratio
+            case 3: self = .resolution
+            default: self = .inherited
+            }
+        }
     }
     private static let preSelectionPresetKindKey = "preSelectionResolutionPresetKind"
     private static let preSelectionPresetAspectKey = "preSelectionResolutionPresetAspect"
@@ -3291,9 +3300,13 @@ class OverlayView: NSView {
 
     private var preSelectionPresetStorageKind: PreSelectionPresetStorageKind {
         get {
-            PreSelectionPresetStorageKind(
-                rawValue: UserDefaults.standard.integer(forKey: Self.preSelectionPresetKindKey))
-                ?? .inherited
+            if let value = UserDefaults.standard.string(forKey: Self.preSelectionPresetKindKey) {
+                return PreSelectionPresetStorageKind(rawValue: value) ?? .inherited
+            }
+            if let legacyValue = UserDefaults.standard.object(forKey: Self.preSelectionPresetKindKey) as? NSNumber {
+                return PreSelectionPresetStorageKind(legacyRawValue: legacyValue.intValue)
+            }
+            return .inherited
         }
         set { UserDefaults.standard.set(newValue.rawValue, forKey: Self.preSelectionPresetKindKey) }
     }

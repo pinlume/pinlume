@@ -92,26 +92,34 @@ final class SettingsProfileStore {
     static let maximumDocumentBytes = 512 * 1_024
     private static let professionalSourceName = "满血版副本"
 
+    struct LoadResult {
+        let document: SettingsProfileDocument
+        let createdNewDocument: Bool
+    }
+
     func loadOrCreate(
         from defaults: UserDefaults,
         currentPayload: SettingsProfilePayload
     ) throws -> SettingsProfileDocument {
+        try loadOrCreateResult(from: defaults, currentPayload: currentPayload).document
+    }
+
+    /// Keeps migration callers compatible while allowing app launch to apply a
+    /// built-in preset exactly once for a genuinely new installation.
+    func loadOrCreateResult(
+        from defaults: UserDefaults,
+        currentPayload: SettingsProfilePayload
+    ) throws -> LoadResult {
         if let data = defaults.data(forKey: Self.storageKey) {
             let storedDocument = try decodeStoredDocument(from: data)
             let document = try migrateStoredDocumentIfNeeded(storedDocument, currentPayload: currentPayload)
             if document != storedDocument {
                 try save(document, to: defaults)
             }
-            return document
+            return LoadResult(document: document, createdNewDocument: false)
         }
 
         try SettingsProfileSchema.validate(currentPayload)
-        let current = SettingsProfile(
-            name: SettingsProfile.currentConfigurationName,
-            kind: .custom,
-            isEditable: true,
-            payload: currentPayload
-        )
         var basic = SettingsProfile(
             name: SettingsProfile.basicSystemStorageName,
             kind: .systemBasic,
@@ -130,10 +138,12 @@ final class SettingsProfileStore {
         Self.applyBuiltinQuickCaptureOutput(to: &full)
         Self.applyBuiltinStatusBarIcon(to: &basic)
         Self.applyBuiltinStatusBarIcon(to: &full)
+        Self.applyBuiltinStatusMenuDefaults(to: &basic)
+        Self.applyBuiltinStatusMenuDefaults(to: &full)
         Self.applySlimColorScheme(to: &basic)
-        let document = SettingsProfileDocument(profiles: [basic, full, current], activeProfileID: basic.id)
+        let document = SettingsProfileDocument(profiles: [basic, full], activeProfileID: basic.id)
         try save(document, to: defaults)
-        return document
+        return LoadResult(document: document, createdNewDocument: true)
     }
 
     func decodeDocument(from data: Data) throws -> SettingsProfileDocument {
@@ -413,8 +423,17 @@ final class SettingsProfileStore {
                 throw SettingsProfileStoreError.missingSystemProfile(.systemBasic)
             }
             var migrated = document
-            migrated.schemaVersion = SettingsProfileDocument.currentSchemaVersion
+            migrated.schemaVersion = 10
             Self.copyShortcutPreferences(from: migrated.profiles[basicIndex], to: &migrated.profiles[fullIndex])
+            try validate(migrated, schemaVersion: 10, systemProfilesAreEditable: false)
+            return try migrateStoredDocumentIfNeeded(migrated, currentPayload: currentPayload)
+        case 10:
+            try validate(document, schemaVersion: 10, systemProfilesAreEditable: false)
+            var migrated = document
+            migrated.schemaVersion = 11
+            for index in migrated.profiles.indices where migrated.profiles[index].kind != .custom {
+                Self.applyBuiltinStatusMenuDefaults(to: &migrated.profiles[index])
+            }
             try validate(migrated)
             return migrated
         default:
@@ -545,6 +564,15 @@ final class SettingsProfileStore {
     private static func applyBuiltinStatusBarIcon(to profile: inout SettingsProfile) {
         profile.payload.values["statusBarIconMode"] = .string("default")
         profile.payload.values["statusBarIconSymbolName"] = .string("")
+    }
+
+    /// System profile payloads must match the status-menu model exactly.
+    /// Otherwise its own startup migration adds newly introduced items after a
+    /// profile is applied and Settings mistakes that system write for a user edit.
+    private static func applyBuiltinStatusMenuDefaults(to profile: inout SettingsProfile) {
+        profile.payload.values["layout.statusMenu.enabledItemIDs"] = .strings(CaptureMenuItemID.configurableItems.map(\.rawValue))
+        profile.payload.values["layout.statusMenu.primaryItemIDs"] = .strings(CaptureMenuItemID.defaultPrimaryOrder.map(\.rawValue))
+        profile.payload.values["layout.statusMenu.secondaryItemIDs"] = .strings(CaptureMenuItemID.defaultMoreOrder.map(\.rawValue))
     }
 
     private static func applySlimColorScheme(to profile: inout SettingsProfile) {

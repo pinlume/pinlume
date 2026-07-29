@@ -28,15 +28,9 @@ final class SettingsProfilePreferenceBridge {
     private static let defaultToolbarPrimaryTools = [0, 3, 8, 6, 7, 9]
     private static let defaultToolbarSecondaryTools = [1, 2, 5, 18, 12, 17, 16, 11, 19]
     private static let defaultToolbarActions = Array(1_001...1_023)
-    private static let defaultStatusPrimaryItems = [
-        "captureArea", "captureScreen", "captureOCR", "quickCapture", "pinFromClipboard", "toggleAllPins",
-    ]
-    private static let defaultStatusMoreItems = [
-        "scrollCapture", "captureLastArea", "captureDelay", "selectableOCRCapture", "screenTranslationCapture",
-        "translationWindow", "recordArea", "recordScreen", "recentCaptures", "historyOverlay", "openImage",
-        "openVideo", "openFromClipboard",
-    ]
-    private static let defaultStatusItems = defaultStatusPrimaryItems + defaultStatusMoreItems
+    private static let defaultStatusPrimaryItems = CaptureMenuItemID.defaultPrimaryOrder.map(\.rawValue)
+    private static let defaultStatusMoreItems = CaptureMenuItemID.defaultMoreOrder.map(\.rawValue)
+    private static let defaultStatusItems = CaptureMenuItemID.configurableItems.map(\.rawValue)
     private static let defaultPinPrimaryItems = defaultToolbarPrimaryTools.map { "tool:\($0)" }
         + ["selectText", "screenTranslation", "pinShadow"]
     private static let defaultPinSecondaryItems = defaultToolbarSecondaryTools.map { "tool:\($0)" }

@@ -346,6 +346,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             return
         }
 
+        bootstrapSettingsProfileIfNeeded()
         ApplicationAppearancePreference.applyCurrent()
         ToolbarColorScheme.bootstrapIfNeeded(appearance: NSApp.effectiveAppearance)
         effectiveAppearanceObservation = NSApp.observe(\.effectiveAppearance, options: [.new]) { _, _ in
@@ -455,6 +456,26 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             } else {
                 self.showOnboarding()
             }
+        }
+    }
+
+    /// New installs have no saved runtime preferences yet. Create the two
+    /// protected profiles and apply Slim before menus or hotkeys read any
+    /// defaults, so the visible selected profile and live shortcuts agree.
+    private func bootstrapSettingsProfileIfNeeded() {
+        do {
+            let bridge = SettingsProfilePreferenceBridge()
+            let result = try SettingsProfileStore().loadOrCreateResult(
+                from: .standard,
+                currentPayload: bridge.snapshotCurrentPreferences().payload
+            )
+            guard result.createdNewDocument else { return }
+            let profile = result.document.activeProfile
+            try settingsProfileRuntimeCoordinator.preflightHotkeys(profile.payload)
+            try SettingsProfileApplyCoordinator().apply(profile)
+        } catch {
+            // Leave the app's ordinary defaults intact if a future schema
+            // migration cannot be completed; Settings can surface recovery.
         }
     }
 
