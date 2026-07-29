@@ -134,7 +134,7 @@ struct SettingsProfileHotkeyDefinition: Equatable {
     let defaultModifiers: Int
 
     static let all: [SettingsProfileHotkeyDefinition] = [
-        .init(slot: 1, keyCodeKey: "hotkeyKeyCode", modifiersKey: "hotkeyModifiers", defaultKeyCode: 122, defaultModifiers: 2_048),
+        .init(slot: 1, keyCodeKey: "hotkeyKeyCode", modifiersKey: "hotkeyModifiers", defaultKeyCode: 122, defaultModifiers: 256),
         .init(slot: 2, keyCodeKey: "hotkeyFullScreenKeyCode", modifiersKey: "hotkeyFullScreenModifiers", defaultKeyCode: 0, defaultModifiers: 0),
         .init(slot: 3, keyCodeKey: "hotkeyRecordKeyCode", modifiersKey: "hotkeyRecordModifiers", defaultKeyCode: 15, defaultModifiers: 768),
         .init(slot: 4, keyCodeKey: "hotkeyRecordFullScreenKeyCode", modifiersKey: "hotkeyRecordFullScreenModifiers", defaultKeyCode: 0, defaultModifiers: 0),
@@ -150,8 +150,8 @@ struct SettingsProfileHotkeyDefinition: Equatable {
         .init(slot: 14, keyCodeKey: "hotkeySelectableOCRKeyCode", modifiersKey: "hotkeySelectableOCRModifiers", defaultKeyCode: 120, defaultModifiers: 2_560),
         .init(slot: 15, keyCodeKey: "hotkeyTranslationWindowKeyCode", modifiersKey: "hotkeyTranslationWindowModifiers", defaultKeyCode: 19, defaultModifiers: 2_048),
         .init(slot: 16, keyCodeKey: "hotkeyScreenTranslationKeyCode", modifiersKey: "hotkeyScreenTranslationModifiers", defaultKeyCode: 3, defaultModifiers: 2_048),
-        .init(slot: 17, keyCodeKey: "hotkeyTransparentAnnotationKeyCode", modifiersKey: "hotkeyTransparentAnnotationModifiers", defaultKeyCode: 0, defaultModifiers: 0),
-        .init(slot: 18, keyCodeKey: "hotkeyPresentationDrawingKeyCode", modifiersKey: "hotkeyPresentationDrawingModifiers", defaultKeyCode: 0, defaultModifiers: 0),
+        .init(slot: 17, keyCodeKey: "hotkeyTransparentAnnotationKeyCode", modifiersKey: "hotkeyTransparentAnnotationModifiers", defaultKeyCode: 47, defaultModifiers: 2_304),
+        .init(slot: 18, keyCodeKey: "hotkeyPresentationDrawingKeyCode", modifiersKey: "hotkeyPresentationDrawingModifiers", defaultKeyCode: 43, defaultModifiers: 2_304),
     ]
 
     static let functionKeyCodes: Set<Int> = [
@@ -241,7 +241,7 @@ struct SettingsProfile: Codable, Equatable, Identifiable {
 }
 
 struct SettingsProfileDocument: Codable, Equatable {
-    static let currentSchemaVersion = 11
+    static let currentSchemaVersion = 12
 
     var schemaVersion: Int
     var profiles: [SettingsProfile]

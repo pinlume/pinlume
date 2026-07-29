@@ -434,6 +434,15 @@ final class SettingsProfileStore {
             for index in migrated.profiles.indices where migrated.profiles[index].kind != .custom {
                 Self.applyBuiltinStatusMenuDefaults(to: &migrated.profiles[index])
             }
+            try validate(migrated, schemaVersion: 11, systemProfilesAreEditable: false)
+            return try migrateStoredDocumentIfNeeded(migrated, currentPayload: currentPayload)
+        case 11:
+            try validate(document, schemaVersion: 11, systemProfilesAreEditable: false)
+            var migrated = document
+            migrated.schemaVersion = 12
+            for index in migrated.profiles.indices where migrated.profiles[index].kind != .custom {
+                Self.applyBuiltinShortcutDefaults(to: &migrated.profiles[index])
+            }
             try validate(migrated)
             return migrated
         default:
@@ -518,13 +527,12 @@ final class SettingsProfileStore {
     }
 
     private static func applyBuiltinShortcutDefaults(to profile: inout SettingsProfile) {
-        applyBuiltinCaptureHotkey(to: &profile)
-        profile.payload.values["hotkey.2.keyCode"] = .integer(0)
-        profile.payload.values["hotkey.2.modifiers"] = .integer(0)
-        profile.payload.values["hotkey.2.disabled"] = .bool(false)
-        profile.payload.values["hotkey.11.keyCode"] = .integer(99)
-        profile.payload.values["hotkey.11.modifiers"] = .integer(0)
-        profile.payload.values["hotkey.11.disabled"] = .bool(false)
+        for definition in SettingsProfileHotkeyDefinition.all {
+            let prefix = "hotkey.\(definition.slot)"
+            profile.payload.values["\(prefix).keyCode"] = .integer(definition.defaultKeyCode)
+            profile.payload.values["\(prefix).modifiers"] = .integer(definition.defaultModifiers)
+            profile.payload.values["\(prefix).disabled"] = .bool(false)
+        }
 
         var toolShortcuts: [String: String] = [:]
         if case .stringMap(let existing)? = profile.payload.values["overlayToolShortcuts"] {
