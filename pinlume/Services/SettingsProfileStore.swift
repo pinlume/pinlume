@@ -148,6 +148,7 @@ final class SettingsProfileStore {
         Self.applyBuiltinMarkerDefaults(to: &basic)
         Self.applyBuiltinMarkerDefaults(to: &full)
         Self.applySlimColorScheme(to: &basic)
+        Self.applyBuiltinToolbarColorScheme(to: &full)
         let document = SettingsProfileDocument(profiles: [basic, full], activeProfileID: basic.id)
         try save(document, to: defaults)
         return LoadResult(
@@ -502,6 +503,15 @@ final class SettingsProfileStore {
             try validate(document, schemaVersion: 15, systemProfilesAreEditable: false)
             var migrated = document
             migrated.schemaVersion = 16
+            try validate(migrated, schemaVersion: 16, systemProfilesAreEditable: false)
+            return try migrateStoredDocumentIfNeeded(migrated, currentPayload: currentPayload)
+        case 16:
+            try validate(document, schemaVersion: 16, systemProfilesAreEditable: false)
+            var migrated = document
+            migrated.schemaVersion = 17
+            for index in migrated.profiles.indices where migrated.profiles[index].kind != .custom {
+                Self.applyBuiltinToolbarColorScheme(to: &migrated.profiles[index])
+            }
             try validate(migrated)
             return migrated
         default:
@@ -659,6 +669,10 @@ final class SettingsProfileStore {
     }
 
     private static func applySlimColorScheme(to profile: inout SettingsProfile) {
+        profile.payload.values["toolbarColorSchemeID"] = .string("graphiteBlue")
+    }
+
+    private static func applyBuiltinToolbarColorScheme(to profile: inout SettingsProfile) {
         profile.payload.values["toolbarColorSchemeID"] = .string("graphiteBlue")
     }
 

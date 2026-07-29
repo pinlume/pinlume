@@ -4,6 +4,11 @@
 
 - No unreleased changes.
 
+## 1.0.3
+
+- Give both built-in profiles the Graphite Blue toolbar palette instead of leaving Professional as Custom.
+- Migrate existing built-in Professional profiles to that palette without changing user-created Custom profiles.
+
 ## 1.0.2
 
 - Fix built-in profile migration so opening or using a preset does not create a duplicate profile without an actual user edit.
