@@ -17,8 +17,7 @@ class ToolbarStripView: NSView {
         didSet {
             guard oldValue != showsNativeTooltips else { return }
             buttonViews.forEach { button in
-                button.toolTip = showsNativeTooltips && !button.tooltipText.isEmpty
-                    ? button.tooltipText : nil
+                button.toolTip = nativeTooltip(for: button)
             }
         }
     }
@@ -72,14 +71,19 @@ class ToolbarStripView: NSView {
         buttonViews.removeAll()
 
         for data in buttons {
-            let bv = ToolbarButtonView(action: data.action, sfSymbol: data.sfSymbol, tooltip: data.tooltip)
+            let bv = ToolbarButtonView(
+                action: data.action,
+                sfSymbol: data.sfSymbol,
+                tooltip: data.tooltip,
+                shortcutAction: data.shortcutAction
+            )
             bv.isOn = data.isSelected
             bv.isEnabled = data.isEnabled
             bv.tintColor = data.tintColor
             bv.swatchColor = data.bgColor
             bv.hasContextMenu = data.hasContextMenu
             bv.isSeparator = data.isSeparator
-            if !showsNativeTooltips { bv.toolTip = nil }
+            bv.toolTip = nativeTooltip(for: bv)
             bv.onClick = { [weak self] action in self?.onClick?(action) }
             bv.onRightClick = { [weak self] action, view in self?.onRightClick?(action, view) }
             bv.onHover = { [weak self] action, hovered in self?.onHover?(action, hovered) }
@@ -112,8 +116,18 @@ class ToolbarStripView: NSView {
     func updateState(from buttons: [ToolbarButton]) {
         for (i, data) in buttons.enumerated() where i < buttonViews.count {
             buttonViews[i].configure(with: data)
-            if !showsNativeTooltips { buttonViews[i].toolTip = nil }
+            buttonViews[i].toolTip = nativeTooltip(for: buttonViews[i])
         }
+    }
+
+    private func nativeTooltip(for button: ToolbarButtonView) -> String? {
+        guard showsNativeTooltips, !button.tooltipText.isEmpty else { return nil }
+        return ToolShortcutManager.tooltipText(
+            base: button.tooltipText,
+            toolbarAction: button.action,
+            shortcutOwner: button.shortcutAction,
+            showConfiguredShortcut: UserDefaults.standard.bool(forKey: "showToolShortcutsInTooltips")
+        )
     }
 
     private func layoutButtons() {

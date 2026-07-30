@@ -223,6 +223,9 @@ class OverlayWindowController {
         let view = OverlayView()
         view.frame = NSRect(origin: .zero, size: screen.frame.size)
         view.autoresizingMask = [.width, .height]
+        window.onDedicatedToolbarShortcut = { [weak view] event in
+            view?.handleDedicatedToolbarShortcut(event) ?? false
+        }
         view.overlayDelegate = self
         view.timingMark = timingMark
 
@@ -1426,8 +1429,19 @@ extension OverlayWindowController: OverlayViewDelegate {
 // MARK: - Custom Window subclass
 
 class OverlayWindow: NSPanel {
+    /// Dedicated OCR/translation shortcuts must still work while a selectable
+    /// text layer owns first responder. Returning true consumes the event.
+    var onDedicatedToolbarShortcut: ((NSEvent) -> Bool)?
+
     override var canBecomeKey: Bool { true }
     override var canBecomeMain: Bool { true }
+
+    override func sendEvent(_ event: NSEvent) {
+        if event.type == .keyDown, onDedicatedToolbarShortcut?(event) == true {
+            return
+        }
+        super.sendEvent(event)
+    }
 }
 
 /// Retained delegate for NSSharingServicePicker — dismisses overlay only when user picks a service.

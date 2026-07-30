@@ -22,6 +22,7 @@ class ToolbarButtonView: NSView {
     var swatchColor: NSColor? { didSet { needsDisplay = true } }
     var hasContextMenu: Bool = false
     var isSeparator: Bool = false
+    var shortcutAction: ToolShortcutManager.Action?
     /// Mic input level (0–1). When > 0, draws a green fill from the bottom of the button.
     var micLevel: Float = 0 { didSet { if abs(oldValue - micLevel) > 0.005 { needsDisplay = true } } }
 
@@ -74,10 +75,16 @@ class ToolbarButtonView: NSView {
 
     var tooltipText: String = ""
 
-    init(action: ToolbarButtonAction, sfSymbol: String?, tooltip: String) {
+    init(
+        action: ToolbarButtonAction,
+        sfSymbol: String?,
+        tooltip: String,
+        shortcutAction: ToolShortcutManager.Action? = nil
+    ) {
         self.action = action
         self.sfSymbol = sfSymbol
         self.tooltipText = tooltip
+        self.shortcutAction = shortcutAction
         super.init(frame: NSRect(x: 0, y: 0, width: Self.size, height: Self.size))
         self.toolTip = tooltip
     }
@@ -92,6 +99,7 @@ class ToolbarButtonView: NSView {
         swatchColor = data.bgColor
         sfSymbol = data.sfSymbol
         tooltipText = data.tooltip
+        shortcutAction = data.shortcutAction
         toolTip = data.tooltip.isEmpty ? nil : data.tooltip
         hasContextMenu = data.hasContextMenu
         isSeparator = data.isSeparator

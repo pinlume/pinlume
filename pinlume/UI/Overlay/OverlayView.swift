@@ -899,9 +899,6 @@ class OverlayView: NSView {
     private var hoveredTooltip: String?
     private var hoveredTooltipButtonView: ToolbarButtonView?
     private var isToolbarMoveDragActive = false
-    private var isKeyboardMoveSelectionActive = false
-    private var keyboardMoveSelectionOffset: NSPoint = .zero
-    private var keyboardMoveSelectionShortcut: String = ""
     private var selectionUndoHistory: [NSRect] = []
 
     private var currentCanvasMousePoint: NSPoint? {
@@ -1480,12 +1477,6 @@ class OverlayView: NSView {
         // the snap fallback in mouseUp still apply when the user commits.
         if isAnchoredSelecting {
             updateAnchoredSelection(to: point, event: event)
-            updateCursorForPoint(point)
-            return
-        }
-
-        if isKeyboardMoveSelectionActive {
-            updateKeyboardMoveSelection(to: point, modifiers: event.modifierFlags)
             updateCursorForPoint(point)
             return
         }
@@ -7616,7 +7607,7 @@ class OverlayView: NSView {
                 // For non-tool actions, compare string representation
                 return "\(bv.action)" == "\(action)"
             }
-            hoveredTooltip = toolbarTooltipText(for: action, base: btn?.tooltipText)
+            hoveredTooltip = btn.map(toolbarTooltipText)
             hoveredTooltipButtonView = btn
         } else {
             hoveredTooltip = nil
@@ -7625,12 +7616,13 @@ class OverlayView: NSView {
         updateToolbarTooltipView()
     }
 
-    private func toolbarTooltipText(for action: ToolbarButtonAction, base: String?) -> String? {
-        guard let base, !base.isEmpty else { return base }
-        guard tooltipShortcutDisplayEnabled,
-              let shortcut = ToolShortcutManager.tooltipShortcut(for: action)
-        else { return base }
-        return "\(base) (\(shortcut))"
+    private func toolbarTooltipText(for button: ToolbarButtonView) -> String {
+        ToolShortcutManager.tooltipText(
+            base: button.tooltipText,
+            toolbarAction: button.action,
+            shortcutOwner: button.shortcutAction,
+            showConfiguredShortcut: tooltipShortcutDisplayEnabled
+        )
     }
 
     private func clearToolbarHoverState(
@@ -7666,106 +7658,6 @@ class OverlayView: NSView {
         rightStripView?.buttonViews.first {
             if case .moveSelection = $0.action { return true }
             return false
-        }
-    }
-
-    private func eventMatchesToolShortcut(_ event: NSEvent, action: ToolShortcutManager.Action) -> Bool {
-        guard !event.modifierFlags.contains(.command),
-              !event.modifierFlags.contains(.option),
-              !event.modifierFlags.contains(.control),
-              let char = event.charactersIgnoringModifiers?.lowercased()
-        else { return false }
-        let shortcut = ToolShortcutManager.key(for: action).lowercased()
-        return !shortcut.isEmpty && char == shortcut
-    }
-
-    private func eventEndsKeyboardMoveSelection(_ event: NSEvent) -> Bool {
-        if keyboardMoveSelectionShortcut == " " {
-            return event.keyCode == 49
-        }
-        guard let char = event.charactersIgnoringModifiers?.lowercased() else { return false }
-        return !keyboardMoveSelectionShortcut.isEmpty && char == keyboardMoveSelectionShortcut
-    }
-
-    private func canStartKeyboardMoveSelection() -> Bool {
-        state == .selected
-            && !isEditorMode
-            && textEditView == nil
-            && !isRecording
-            && !isScrollCapturing
-            && !isAnchoredSelecting
-            && !isResizingSelection
-            && !isDraggingSelection
-            && currentAnnotation == nil
-            && !isDraggingAnnotation
-            && !isResizingAnnotation
-            && !isCropDragging
-            && !PopoverHelper.isVisible
-    }
-
-    @discardableResult
-    private func startKeyboardMoveSelection() -> Bool {
-        guard canStartKeyboardMoveSelection(), let win = window else { return false }
-        var moveButton = moveSelectionButtonView()
-
-        isKeyboardMoveSelectionActive = true
-        isToolbarMoveDragActive = true
-        keyboardMoveSelectionShortcut = ToolShortcutManager.key(for: .moveSelection).lowercased()
-        setToolbarHoverSuppressed(true)
-        clearToolbarHoverState(suppressUntilMouseMoved: true, clearPressed: false)
-
-        if selectionIsWindowSnap {
-            selectionIsWindowSnap = false
-            snappedWindowID = nil
-            snappedWindowImage = nil
-            rebuildToolbarLayout()
-            setToolbarHoverSuppressed(true)
-            moveButton = moveSelectionButtonView()
-        }
-
-        let point = convert(win.mouseLocationOutsideOfEventStream, from: nil)
-        keyboardMoveSelectionOffset = NSPoint(
-            x: point.x - selectionRect.origin.x,
-            y: point.y - selectionRect.origin.y)
-
-        moveButton?.isPressed = true
-        moveButton?.needsDisplay = true
-        moveButton?.displayIfNeeded()
-        showMoveDragTooltip(anchor: moveButton)
-        needsDisplay = true
-        return true
-    }
-
-    private func updateKeyboardMoveSelection(to point: NSPoint, modifiers: NSEvent.ModifierFlags) {
-        guard isKeyboardMoveSelectionActive else { return }
-        var moved = selectionRect
-        moved.origin = NSPoint(
-            x: point.x - keyboardMoveSelectionOffset.x,
-            y: point.y - keyboardMoveSelectionOffset.y)
-        selectionRect = clampedMovedSelectionRect(boundarySnappedMovedRect(moved, modifiers: modifiers))
-        if webcamSetupPreview != nil { repositionWebcamSetupPreview() }
-        updateResolutionBox()
-        repositionToolbars()
-        showMoveDragTooltip(anchor: moveSelectionButtonView())
-        needsDisplay = true
-    }
-
-    private func endKeyboardMoveSelection() {
-        guard isKeyboardMoveSelectionActive else { return }
-        isKeyboardMoveSelectionActive = false
-        keyboardMoveSelectionShortcut = ""
-        boundarySnapGuideX = nil
-        boundarySnapGuideY = nil
-        let moveButton = moveSelectionButtonView()
-        moveButton?.isPressed = false
-        moveButton?.needsDisplay = true
-        moveButton?.displayIfNeeded()
-        clearToolbarHoverState(suppressUntilMouseMoved: true)
-        DispatchQueue.main.async { [weak self] in
-            guard let self else { return }
-            self.clearToolbarHoverState(suppressUntilMouseMoved: true)
-            self.setToolbarHoverSuppressed(false)
-            self.isToolbarMoveDragActive = false
         }
     }
 
@@ -9341,6 +9233,7 @@ class OverlayView: NSView {
 
     @discardableResult
     private func handleScreenTranslationKey(_ event: NSEvent) -> Bool {
+        if handleScreenTranslationToolbarShortcut(event) { return true }
         switch ScreenTranslationInputGate.route(
             keyCode: event.keyCode,
             isReady: screenTranslationOverlayState.phase == .ready) {
@@ -9356,7 +9249,36 @@ class OverlayView: NSView {
         return true
     }
 
+    @discardableResult
+    private func handleScreenTranslationToolbarShortcut(_ event: NSEvent) -> Bool {
+        guard let shortcutAction = ToolShortcutManager.action(for: event) else { return false }
+        guard let toolbarAction = ToolShortcutManager.screenTranslationToolbarAction(for: shortcutAction) else {
+            return true
+        }
+        guard screenTranslationOverlayState.phase == .ready,
+              visibleToolbarContains(toolbarAction) else { return true }
+        handleScreenTranslationToolbarAction(toolbarAction)
+        return true
+    }
+
+    /// The OCR text-selection view can become first responder, so the owning
+    /// overlay window forwards dedicated workflow shortcuts here before the
+    /// responder chain. The same entry point keeps screen translation on that
+    /// exact route regardless of which toolbar view was clicked most recently.
+    @discardableResult
+    func handleDedicatedToolbarShortcut(_ event: NSEvent) -> Bool {
+        switch captureWorkflowMode {
+        case .selectableOCR:
+            return handleSelectableOCRToolbarShortcut(event)
+        case .screenTranslation:
+            return handleScreenTranslationToolbarShortcut(event)
+        case .standard:
+            return false
+        }
+    }
+
     private func handleSelectableOCRKeyEquivalent(_ event: NSEvent) -> Bool {
+        if handleSelectableOCRToolbarShortcut(event) { return true }
         let modifiers = event.modifierFlags.intersection(.deviceIndependentFlagsMask)
         return handleSelectableOCRKeyRoute(
             SelectableOCRInputGate.route(
@@ -9366,12 +9288,41 @@ class OverlayView: NSView {
     }
 
     private func handleSelectableOCRKeyDown(_ event: NSEvent) {
+        if handleSelectableOCRToolbarShortcut(event) { return }
         let modifiers = event.modifierFlags.intersection(.deviceIndependentFlagsMask)
         _ = handleSelectableOCRKeyRoute(
             SelectableOCRInputGate.route(
                 keyCode: event.keyCode,
                 commandOnly: modifiers == .command,
                 textSelectionActive: selectableOCRSession.phase == .active))
+    }
+
+    @discardableResult
+    private func handleSelectableOCRToolbarShortcut(_ event: NSEvent) -> Bool {
+        guard let shortcutAction = ToolShortcutManager.action(for: event) else { return false }
+        guard let toolbarAction = ToolShortcutManager.selectableOCRToolbarAction(for: shortcutAction) else {
+            return true
+        }
+        guard visibleToolbarContains(toolbarAction) else { return true }
+        switch toolbarAction {
+        case .recognizeSelectableText:
+            break
+        default:
+            guard selectableOCRSession.phase == .active else { return true }
+        }
+        handleSelectableOCRToolbarAction(toolbarAction)
+        return true
+    }
+
+    /// Dedicated workflows may hide individual actions from their compact
+    /// toolbar. A configured key is only allowed to invoke a button that is
+    /// actually present and enabled in the current workflow.
+    private func visibleToolbarContains(_ action: ToolbarButtonAction) -> Bool {
+        [bottomStripView, rightStripView, moreStripView].contains { strip in
+            strip?.isHidden == false && strip?.buttonViews.contains {
+                $0.isEnabled && toolbarActionsMatch($0.action, action)
+            } == true
+        }
     }
 
     @discardableResult
@@ -9564,12 +9515,6 @@ class OverlayView: NSView {
                     return
                 }
             }
-            if eventMatchesToolShortcut(event, action: .moveSelection) {
-                if !isKeyboardMoveSelectionActive {
-                    _ = startKeyboardMoveSelection()
-                }
-                return
-            }
             return
         }
 
@@ -9641,13 +9586,9 @@ class OverlayView: NSView {
             if state == .selected && textEditView == nil && !event.modifierFlags.contains(.command)
                 && !event.modifierFlags.contains(.option) && !event.modifierFlags.contains(.control)
             {
-                if let char = event.charactersIgnoringModifiers?.lowercased(),
-                   let action = ToolShortcutManager.lookupAction(for: char) {
+                if let shortcutAction = ToolShortcutManager.action(for: event) {
+                    guard let action = ToolShortcutManager.toolbarAction(for: shortcutAction) else { return }
                     switch action {
-                    case .moveSelection:
-                        if !isKeyboardMoveSelectionActive {
-                            _ = startKeyboardMoveSelection()
-                        }
                     case .detach:
                         if shouldAllowDetach() { handleToolbarAction(.detach) }
                     case .pin, .scrollCapture:
@@ -9754,10 +9695,6 @@ class OverlayView: NSView {
     }
 
     override func keyUp(with event: NSEvent) {
-        if isKeyboardMoveSelectionActive && eventEndsKeyboardMoveSelection(event) {
-            endKeyboardMoveSelection()
-            return
-        }
         if event.keyCode == 49 && spaceRepositioning {
             spaceRepositioning = false
             return
@@ -10719,9 +10656,7 @@ class OverlayView: NSView {
         autoMeasurePreview = nil
         autoMeasureKeyHeld = false
         autoMeasureBitmapCtx = nil
-        isKeyboardMoveSelectionActive = false
         isToolbarMoveDragActive = false
-        keyboardMoveSelectionShortcut = ""
         selectedAnnotation = nil
         isDraggingAnnotation = false
         hoveredTextAnnotation = nil

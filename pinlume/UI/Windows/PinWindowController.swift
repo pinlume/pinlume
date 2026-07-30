@@ -161,6 +161,9 @@ class PinWindowController {
         panel.collectionBehavior = [.canJoinAllSpaces, .fullScreenAuxiliary, .stationary]
         panel.becomesKeyOnlyIfNeeded = true
         panel.acceptsMouseMovedEvents = true
+        panel.onToolbarShortcut = { [weak self] event in
+            self?.handlePinToolbarShortcut(event) ?? false
+        }
 
         let view = PinView(
             image: image,
@@ -217,6 +220,9 @@ class PinWindowController {
         }
         view.onConfirmAnnotation = { [weak self] in
             self?.confirmPinAnnotationEditing()
+        }
+        view.onToolbarShortcut = { [weak self] action in
+            self?.handlePinToolbarShortcut(action)
         }
         view.onSave = { [weak self] in
             self?.savePin()
@@ -1146,6 +1152,9 @@ class PinWindowController {
         panel.onKeyEquivalent = { [weak self] event in
             self?.pinView?.handleTextSelectionKeyEquivalent(event) ?? false
         }
+        panel.onToolbarShortcut = { [weak self] event in
+            self?.handlePinToolbarShortcut(event) ?? false
+        }
         panel.onExitTextSelection = { [weak self] in
             guard let self, self.textSelectionSession.suspendsPinInteraction else { return false }
             self.exitTextSelectionMode()
@@ -1318,7 +1327,12 @@ class PinWindowController {
             (.selectText, ToolbarButton(
                 action: .selectText, sfSymbol: "text.cursor", tooltip: L("Select Text"),
                 isSelected: textSelectionSession.suspendsPinInteraction)),
-            (.copyText, ToolbarButton(action: .copyText, sfSymbol: "doc.on.doc", tooltip: L("Copy Text"))),
+            (.copyText, ToolbarButton(
+                action: .copyText,
+                sfSymbol: "doc.on.doc",
+                tooltip: L("Copy Text"),
+                shortcutAction: .copyRecognizedText
+            )),
         ]
         return buttons.compactMap { tool, button in
             DedicatedToolPreferences.isVisible(tool, in: .ocrPin) ? button : nil
@@ -1336,14 +1350,26 @@ class PinWindowController {
         let buttons: [(DedicatedToolbarTool, ToolbarButton)] = [
             (.language, ToolbarButton(
                 action: .translationPinLanguage, sfSymbol: "character.book.closed",
-                tooltip: "\(sourceName) → \(targetName)")),
+                tooltip: "\(sourceName) → \(targetName)",
+                shortcutAction: .translationLanguage)),
             (.toggleOriginalTranslation, ToolbarButton(
                 action: .translationPinToggle,
                 sfSymbol: session.displayMode == .translated ? "character.book.closed.fill" : "photo",
                 tooltip: session.displayMode == .translated ? L("Show Original") : L("Show Translation"),
-                isSelected: session.displayMode == .translated)),
-            (.copyOriginal, ToolbarButton(action: .copy, sfSymbol: "doc.on.doc", tooltip: L("Copy Original"))),
-            (.copyTranslation, ToolbarButton(action: .copyText, sfSymbol: "character.book.closed", tooltip: L("Copy Translation"))),
+                isSelected: session.displayMode == .translated,
+                shortcutAction: .translationToggle)),
+            (.copyOriginal, ToolbarButton(
+                action: .copy,
+                sfSymbol: "doc.on.doc",
+                tooltip: L("Copy Original"),
+                shortcutAction: .copyOriginalText
+            )),
+            (.copyTranslation, ToolbarButton(
+                action: .copyText,
+                sfSymbol: "character.book.closed",
+                tooltip: L("Copy Translation"),
+                shortcutAction: .copyTranslatedText
+            )),
             (.selectText, ToolbarButton(
                 action: .selectText, sfSymbol: "text.cursor", tooltip: L("Select Text"),
                 isSelected: textSelectionSession.suspendsPinInteraction)),
@@ -1545,7 +1571,15 @@ class PinWindowController {
            let button = strip?.buttonViews.first(where: { toolbarActionsMatch($0.action, action) }),
            !button.tooltipText.isEmpty,
            isPointerInsidePinToolbarButton(button) {
-            showPinToolbarTooltip(button.tooltipText, anchor: button)
+            showPinToolbarTooltip(
+                ToolShortcutManager.tooltipText(
+                    base: button.tooltipText,
+                    toolbarAction: button.action,
+                    shortcutOwner: button.shortcutAction,
+                    showConfiguredShortcut: UserDefaults.standard.bool(forKey: "showToolShortcutsInTooltips")
+                ),
+                anchor: button
+            )
         } else if !hovered {
             hidePinToolbarTooltip()
         }
@@ -1697,6 +1731,60 @@ class PinWindowController {
             close()
         default:
             break
+        }
+    }
+
+    @discardableResult
+    private func handlePinToolbarShortcut(_ event: NSEvent) -> Bool {
+        guard let action = ToolShortcutManager.action(for: event) else { return false }
+        handlePinToolbarShortcut(action)
+        return true
+    }
+
+    private func handlePinToolbarShortcut(_ shortcutAction: ToolShortcutManager.Action) {
+        let action: ToolbarButtonAction?
+        if translationSession != nil {
+            action = ToolShortcutManager.screenTranslationToolbarAction(for: shortcutAction)
+        } else if isDedicatedOCRPin {
+            action = shortcutAction == .copyRecognizedText ? .copyText : nil
+        } else {
+            action = ToolShortcutManager.toolbarAction(for: shortcutAction)
+        }
+        guard let action, pinToolbarContains(action) else { return }
+        handlePinToolbarAction(action)
+    }
+
+    private func pinToolbarContains(_ action: ToolbarButtonAction) -> Bool {
+        let displayed = [toolbarBottomStrip, toolbarMoreStrip].contains { strip in
+            strip?.buttonViews.contains {
+                $0.isEnabled && toolbarActionsMatch($0.action, action)
+            } == true
+        }
+        if translationSession != nil || isDedicatedOCRPin {
+            return toolbarPanel?.isVisible == true && displayed
+        }
+        guard !displayed, !isTransparentAnnotationPin else { return displayed }
+
+        // Normal Pins keep More Tools collapsed most of the time, but their
+        // configured drawing shortcuts must still work. Dedicated OCR and
+        // translation Pins deliberately stay stricter above: only an actual
+        // button in their current compact toolbar may receive a shortcut.
+        let pinShadowInPrimary = Self.isPinShadowToolInPrimary
+        let secondaryButtons = pinToolbarSecondaryButtons(includePinShadow: !pinShadowInPrimary)
+        var primaryButtons = ToolbarLayout.primaryOverlayButtons(
+            selectedTool: currentToolbarTool,
+            selectedColor: pinView?.currentAnnotationColor ?? Self.lastUsedToolbarColor,
+            moreExpanded: isPinMoreToolsExpanded,
+            hasMoreTools: !secondaryButtons.isEmpty,
+            trailingAction: .confirm,
+            canUndo: pinView?.canUndoHistory ?? false,
+            canRedo: pinView?.canRedoHistory ?? false,
+            isRecording: false
+        )
+        insertPrimaryPinOnlyButtons(into: &primaryButtons)
+        insertPrimaryTextCopyButtonIfNeeded(into: &primaryButtons)
+        return (primaryButtons + secondaryButtons).contains {
+            $0.isEnabled && toolbarActionsMatch($0.action, action)
         }
     }
 
@@ -2407,6 +2495,8 @@ private final class PinEventRouter {
 }
 
 private class PinPanel: NSPanel {
+    var onToolbarShortcut: ((NSEvent) -> Bool)?
+
     override var canBecomeKey: Bool { true }
 
     override func performKeyEquivalent(with event: NSEvent) -> Bool {
@@ -2415,6 +2505,7 @@ private class PinPanel: NSPanel {
            NativeTextCommandRouter.handle(event, in: textView) {
             return true
         }
+        if onToolbarShortcut?(event) == true { return true }
         if event.modifierFlags.contains(.command) {
             switch PinGeometry.commandShortcutAction(keyCode: event.keyCode) {
             case .save:
@@ -2439,6 +2530,11 @@ private class PinPanel: NSPanel {
         }
         return super.performKeyEquivalent(with: event)
     }
+
+    override func keyDown(with event: NSEvent) {
+        if onToolbarShortcut?(event) == true { return }
+        super.keyDown(with: event)
+    }
 }
 
 private class PinToolbarPanel: NSPanel {
@@ -2446,6 +2542,7 @@ private class PinToolbarPanel: NSPanel {
     var onSave: (() -> Void)?
     var onCopy: (() -> Void)?
     var onKeyEquivalent: ((NSEvent) -> Bool)?
+    var onToolbarShortcut: ((NSEvent) -> Bool)?
     var onExitTextSelection: (() -> Bool)?
 
     override var canBecomeKey: Bool { true }
@@ -2455,6 +2552,7 @@ private class PinToolbarPanel: NSPanel {
             return true
         }
         if onKeyEquivalent?(event) == true { return true }
+        if onToolbarShortcut?(event) == true { return true }
         if event.modifierFlags.contains(.command) {
             switch PinGeometry.commandShortcutAction(keyCode: event.keyCode) {
             case .save:
@@ -2481,6 +2579,8 @@ private class PinToolbarPanel: NSPanel {
             return
         } else if event.keyCode == 36 || event.keyCode == 76 {
             onConfirm?()
+        } else if onToolbarShortcut?(event) == true {
+            return
         } else {
             super.keyDown(with: event)
         }
@@ -2523,6 +2623,7 @@ class PinCanvasView: EditorView, AnnotationSourceImageProviding {
     var onShowPinToolbar: ((NSPoint) -> Void)?
     var onPinContentChanged: (() -> Void)?
     var onConfirmPinAnnotation: (() -> Void)?
+    var onToolbarShortcut: ((ToolShortcutManager.Action) -> Void)?
 
     private var baseImage: NSImage
     private var canvasSize: NSSize
@@ -2833,6 +2934,10 @@ class PinCanvasView: EditorView, AnnotationSourceImageProviding {
 
     override func keyDown(with event: NSEvent) {
         guard !isPreviewOnly else { return }
+        if let action = ToolShortcutManager.action(for: event) {
+            onToolbarShortcut?(action)
+            return
+        }
         if event.keyCode == 36 || event.keyCode == 76 {
             onConfirmPinAnnotation?()
             return
@@ -2939,6 +3044,7 @@ private class PinView: NSView {
     var onCanvasChanged: (() -> Void)?
     var onCanvasToolChanged: ((AnnotationTool) -> Void)?
     var onConfirmAnnotation: (() -> Void)?
+    var onToolbarShortcut: ((ToolShortcutManager.Action) -> Void)?
     var onSave: (() -> Void)?
     var onExitTextSelection: (() -> Void)?
 
@@ -3105,6 +3211,9 @@ private class PinView: NSView {
         }
         canvasView.onConfirmPinAnnotation = { [weak self] in
             self?.onConfirmAnnotation?()
+        }
+        canvasView.onToolbarShortcut = { [weak self] action in
+            self?.onToolbarShortcut?(action)
         }
     }
 

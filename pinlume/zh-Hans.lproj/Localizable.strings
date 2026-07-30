@@ -834,6 +834,7 @@
 "OCR Pin" = "OCR 贴图";
 "Translation Pin" = "翻译贴图";
 "Show Original / Translation" = "切换原文 / 译文";
+"Toggle Original / Translation" = "切换原文 / 译文";
 "Could not determine the source language." = "无法确定源语言。";
 "Apple translation needs the %@ → %@ language pack. Download it in System Settings." = "Apple 翻译需要 %@ → %@ 语言包，请在系统设置中下载。";
 "Apple translation does not support %@ → %@." = "Apple 翻译不支持 %@ → %@。";

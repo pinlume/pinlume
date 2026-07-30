@@ -833,6 +833,7 @@
 "OCR Pin" = "OCR Pin";
 "Translation Pin" = "Translation Pin";
 "Show Original / Translation" = "Show Original / Translation";
+"Toggle Original / Translation" = "Toggle Original / Translation";
 "Could not determine the source language." = "Could not determine the source language.";
 "Apple translation needs the %@ → %@ language pack. Download it in System Settings." = "Apple translation needs the %@ → %@ language pack. Download it in System Settings.";
 "Apple translation does not support %@ → %@." = "Apple translation does not support %@ → %@.";

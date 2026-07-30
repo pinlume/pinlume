@@ -189,8 +189,10 @@ enum SettingsProfileToolShortcutDefinitions {
             "pencil": "p", "arrow": "a", "line": "l", "rectangle": "r",
             "ellipse": "o", "marker": "m", "text": "t", "number": "n",
             "censor": "b", "highlight": "h", "colorSampler": "i", "stamp": "g",
-            "measure": "", "loupe": "", "moveSelection": " ", "openInEditor": "e",
-            "pin": "f", "copy": "", "save": "", "ocr": "", "scrollCapture": "",
+            "measure": "", "loupe": "", "pin": "f",
+            "recognizeText": "", "copyRecognizedText": "", "translationLanguage": "",
+            "translationCompare": "", "translationToggle": "", "copyOriginalText": "",
+            "copyTranslatedText": "", "copy": "", "save": "", "ocr": "", "scrollCapture": "",
             "beautify": "", "invertColors": "", "removeBackground": "", "translate": "",
             "undo": "z", "redo": "", "eraser": "",
         ]

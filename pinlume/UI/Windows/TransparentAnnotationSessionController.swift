@@ -78,6 +78,9 @@ final class TransparentAnnotationSessionController {
         canvas.onContentChanged = { [weak self] in
             self?.rebuildToolbar()
         }
+        canvas.onToolbarShortcut = { [weak self] action in
+            self?.handleToolbarShortcut(action)
+        }
 
         toolbar.showsNativeTooltips = false
         toolbar.onClick = { [weak self] action in
@@ -191,6 +194,7 @@ final class TransparentAnnotationSessionController {
             buttons.append(more)
         }
         buttons.append(ToolbarButton(action: .separator, sfSymbol: nil, tooltip: "", isSeparator: true))
+        buttons.append(ToolbarButton(action: .cancel, sfSymbol: "xmark", tooltip: L("Cancel")))
         if mode == .annotation {
             let enabledActions = ToolbarActionPreferences.enabledRawValuesAfterMigration()
             if ToolbarActionPreferences.isEnabled(.save, in: enabledActions) {
@@ -203,9 +207,6 @@ final class TransparentAnnotationSessionController {
         } else {
             buttons.append(ToolbarButton(action: .beautify, sfSymbol: "trash", tooltip: L("Clear")))
         }
-        buttons += [
-            ToolbarButton(action: .cancel, sfSymbol: "xmark", tooltip: L("Cancel")),
-        ]
         toolbar.setButtons(buttons)
         toolbar.isHidden = false
 
@@ -306,7 +307,12 @@ final class TransparentAnnotationSessionController {
             return
         }
         tooltipAnchor = button
-        tooltip.text = button.tooltipText
+        tooltip.text = ToolShortcutManager.tooltipText(
+            base: button.tooltipText,
+            toolbarAction: button.action,
+            shortcutOwner: button.shortcutAction,
+            showConfiguredShortcut: UserDefaults.standard.bool(forKey: "showToolShortcutsInTooltips")
+        )
         tooltip.isHidden = false
         layoutToolbarTooltip()
     }
@@ -386,6 +392,39 @@ final class TransparentAnnotationSessionController {
             cancel()
         default:
             break
+        }
+    }
+
+    private func handleToolbarShortcut(_ shortcutAction: ToolShortcutManager.Action) {
+        guard let action = ToolShortcutManager.toolbarAction(for: shortcutAction),
+              supportsToolbarShortcut(action)
+        else { return }
+        handleToolbarAction(action)
+    }
+
+    private func supportsToolbarShortcut(_ action: ToolbarButtonAction) -> Bool {
+        switch action {
+        case .tool(let tool):
+            return ToolbarToolPreferences.transparentAnnotationTools(inPrimary: true).contains(tool)
+                || ToolbarToolPreferences.transparentAnnotationTools(inPrimary: false).contains(tool)
+        case .undo, .redo:
+            return true
+        case .save:
+            return mode == .annotation
+                && ToolbarActionPreferences.isEnabled(
+                    .save,
+                    in: ToolbarActionPreferences.enabledRawValuesAfterMigration())
+        case .copy:
+            return mode == .annotation
+                && ToolbarActionPreferences.isEnabled(
+                    .copy,
+                    in: ToolbarActionPreferences.enabledRawValuesAfterMigration())
+        case .pin:
+            return mode == .annotation
+        case .beautify:
+            return mode == .presentation
+        default:
+            return false
         }
     }
 

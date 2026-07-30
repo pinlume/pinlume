@@ -21,9 +21,14 @@ enum ToolShortcutManager {
         case stamp
         case measure
         case loupe
-        case moveSelection
-        case openInEditor
         case pin
+        case recognizeText
+        case copyRecognizedText
+        case translationLanguage
+        case translationCompare
+        case translationToggle
+        case copyOriginalText
+        case copyTranslatedText
         #if !OFFLINE
         case upload
         #endif
@@ -55,11 +60,14 @@ enum ToolShortcutManager {
             case .stamp: return L("Stamp")
             case .measure: return L("Measure")
             case .loupe: return L("Loupe")
-            case .moveSelection: return L("Move Selection")
-            // Legacy storage name; this shortcut now follows the unified
-            // static-image output path and pins the selection instead.
-            case .openInEditor: return L("Pin to Screen")
             case .pin: return L("Pin")
+            case .recognizeText: return L("Recognize Text")
+            case .copyRecognizedText: return L("Copy Text")
+            case .translationLanguage: return L("Language")
+            case .translationCompare: return L("Compare")
+            case .translationToggle: return L("Toggle Original / Translation")
+            case .copyOriginalText: return L("Copy Original")
+            case .copyTranslatedText: return L("Copy Translation")
             #if !OFFLINE
             case .upload: return L("Upload")
             #endif
@@ -120,6 +128,18 @@ enum ToolShortcutManager {
         reverseLookup()[character]
     }
 
+    /// User-configured shortcuts are single unmodified keys. Shift keeps the
+    /// normal letter shortcut behavior, while command/option/control continue
+    /// to belong to AppKit and text editing.
+    static func action(for event: NSEvent) -> Action? {
+        guard !event.modifierFlags.contains(.command),
+              !event.modifierFlags.contains(.option),
+              !event.modifierFlags.contains(.control),
+              let character = event.charactersIgnoringModifiers?.lowercased()
+        else { return nil }
+        return action(for: character)
+    }
+
     private static func reverseLookup() -> [String: Action] {
         if let reverseLookupCache { return reverseLookupCache }
         var lookup: [String: Action] = [:]
@@ -132,7 +152,7 @@ enum ToolShortcutManager {
         return lookup
     }
 
-    private static func toolbarAction(for action: Action) -> ToolbarButtonAction? {
+    static func toolbarAction(for action: Action) -> ToolbarButtonAction? {
         switch action {
         case .pencil: return .tool(.pencil)
         case .arrow: return .tool(.arrow)
@@ -148,9 +168,11 @@ enum ToolShortcutManager {
         case .stamp: return .tool(.stamp)
         case .measure: return .tool(.measure)
         case .loupe: return .tool(.loupe)
-        case .moveSelection: return .moveSelection
-        case .openInEditor: return .detach
         case .pin: return .pin
+        case .recognizeText, .copyRecognizedText,
+             .translationLanguage, .translationCompare, .translationToggle,
+             .copyOriginalText, .copyTranslatedText:
+            return nil
         #if !OFFLINE
         case .upload: return .upload
         #endif
@@ -168,6 +190,27 @@ enum ToolShortcutManager {
         }
     }
 
+    static func selectableOCRToolbarAction(for action: Action) -> ToolbarButtonAction? {
+        switch action {
+        case .recognizeText: return .recognizeSelectableText
+        case .copyRecognizedText: return .copyRecognizedText
+        case .pin: return .pinSelectableText
+        default: return nil
+        }
+    }
+
+    static func screenTranslationToolbarAction(for action: Action) -> ToolbarButtonAction? {
+        switch action {
+        case .translationLanguage: return .translationPinLanguage
+        case .translationCompare: return .screenTranslationCompare
+        case .translationToggle: return .translationPinToggle
+        case .copyOriginalText: return .copy
+        case .copyTranslatedText: return .copyText
+        case .pin: return .pin
+        default: return nil
+        }
+    }
+
     /// Display string for a key (for UI).
     static func displayString(for action: Action) -> String {
         let k = key(for: action)
@@ -178,6 +221,38 @@ enum ToolShortcutManager {
     /// Raw configured shortcut text for toolbar tooltip suffixes.
     /// Empty string means no shortcut should be shown.
     static func tooltipShortcut(for toolbarAction: ToolbarButtonAction) -> String? {
+        guard let action = shortcutAction(for: toolbarAction) else { return nil }
+        return tooltipShortcut(for: action)
+    }
+
+    static func tooltipText(
+        base: String,
+        toolbarAction: ToolbarButtonAction,
+        shortcutOwner: Action?,
+        showConfiguredShortcut: Bool
+    ) -> String {
+        guard !base.isEmpty else { return base }
+        switch toolbarAction {
+        case .cancel, .stopRecord:
+            return "\(base) (Esc)"
+        default:
+            break
+        }
+        guard showConfiguredShortcut,
+              let action = shortcutOwner ?? shortcutAction(for: toolbarAction),
+              let shortcut = tooltipShortcut(for: action)
+        else { return base }
+        return "\(base) (\(shortcut))"
+    }
+
+    private static func tooltipShortcut(for action: Action) -> String? {
+        let shortcut = key(for: action)
+        if shortcut == " " { return displayString(for: action) }
+        let trimmed = shortcut.trimmingCharacters(in: .whitespacesAndNewlines)
+        return trimmed.isEmpty ? nil : trimmed
+    }
+
+    private static func shortcutAction(for toolbarAction: ToolbarButtonAction) -> Action? {
         let action: Action?
         switch toolbarAction {
         case .tool(let tool):
@@ -199,7 +274,6 @@ enum ToolShortcutManager {
             case .eraser: action = .eraser
             default: action = nil
             }
-        case .detach: action = .openInEditor
         case .pin: action = .pin
         #if !OFFLINE
         case .upload: action = .upload
@@ -215,14 +289,8 @@ enum ToolShortcutManager {
         case .undo: action = .undo
         case .redo: action = .redo
         case .loupe: action = .loupe
-        case .moveSelection: action = .moveSelection
         default: action = nil
         }
-
-        guard let action else { return nil }
-        let shortcut = key(for: action)
-        if shortcut == " " { return displayString(for: action) }
-        let trimmed = shortcut.trimmingCharacters(in: .whitespacesAndNewlines)
-        return trimmed.isEmpty ? nil : trimmed
+        return action
     }
 }

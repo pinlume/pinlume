@@ -52,6 +52,10 @@ final class TransparentAnnotationCanvasView: OverlayView, AnnotationSourceImageP
     override func shouldClipSelectionImage() -> Bool { false }
     override func shouldShowResolutionBox() -> Bool { false }
 
+    /// The session owns the visible toolbar and must apply keyboard changes
+    /// through that same controller so selection state redraws immediately.
+    var onToolbarShortcut: ((ToolShortcutManager.Action) -> Void)?
+
     func setTransparentTool(_ tool: AnnotationTool) {
         if currentTool == .text, tool != .text, textEditor.isEditing {
             confirmAnnotationEditing()
@@ -62,6 +66,14 @@ final class TransparentAnnotationCanvasView: OverlayView, AnnotationSourceImageP
         currentTool = tool
         showToolbars = false
         needsDisplay = true
+    }
+
+    override func keyDown(with event: NSEvent) {
+        if !textEditor.isEditing, let action = ToolShortcutManager.action(for: event) {
+            onToolbarShortcut?(action)
+            return
+        }
+        super.keyDown(with: event)
     }
 
     func clearTransparentAnnotations() {

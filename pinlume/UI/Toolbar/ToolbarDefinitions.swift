@@ -73,6 +73,9 @@ struct ToolbarButton {
     var bgColor: NSColor? = nil  // for color swatches
     var hasContextMenu: Bool = false  // draw small corner triangle to indicate right-click options
     var isSeparator: Bool = false
+    /// Overrides the shortcut inferred from `action` when one visual action
+    /// has a context-specific meaning (for example Copy Original vs Copy Text).
+    var shortcutAction: ToolShortcutManager.Action? = nil
 }
 
 enum ToolbarCustomAction: Int {
@@ -362,9 +365,9 @@ class ToolbarLayout {
 
     static func selectableOCRButtons() -> [ToolbarButton] {
         let buttons: [(DedicatedToolbarTool, ToolbarButton)] = [
-            (.recognizeText, ToolbarButton(action: .recognizeSelectableText, sfSymbol: "text.viewfinder", tooltip: L("Recognize Text"))),
-            (.copyText, ToolbarButton(action: .copyRecognizedText, sfSymbol: "doc.on.doc", tooltip: L("Copy Text"))),
-            (.pin, ToolbarButton(action: .pinSelectableText, sfSymbol: "pin.fill", tooltip: L("Pin"))),
+            (.recognizeText, ToolbarButton(action: .recognizeSelectableText, sfSymbol: "text.viewfinder", tooltip: L("Recognize Text"), shortcutAction: .recognizeText)),
+            (.copyText, ToolbarButton(action: .copyRecognizedText, sfSymbol: "doc.on.doc", tooltip: L("Copy Text"), shortcutAction: .copyRecognizedText)),
+            (.pin, ToolbarButton(action: .pinSelectableText, sfSymbol: "pin.fill", tooltip: L("Pin"), shortcutAction: .pin)),
         ]
         return buttons.compactMap { tool, button in
             DedicatedToolPreferences.isVisible(tool, in: .ocrSelection) ? button : nil
@@ -388,20 +391,23 @@ class ToolbarLayout {
             (.language, ToolbarButton(
                 action: .translationPinLanguage,
                 sfSymbol: "character.book.closed",
-                tooltip: languagePair.isEmpty ? L("Language") : languagePair)),
+                tooltip: languagePair.isEmpty ? L("Language") : languagePair,
+                shortcutAction: .translationLanguage)),
             (.compare, ToolbarButton(
                 action: .screenTranslationCompare,
                 sfSymbol: "rectangle.on.rectangle",
                 tooltip: L("Compare"),
-                isSelected: comparisonEnabled)),
+                isSelected: comparisonEnabled,
+                shortcutAction: .translationCompare)),
             (.toggleOriginalTranslation, ToolbarButton(
                 action: .translationPinToggle,
                 sfSymbol: displayMode == .translated ? "character.book.closed.fill" : "photo",
                 tooltip: displayMode == .translated ? L("Show Original") : L("Show Translation"),
-                isSelected: displayMode == .translated && !comparisonEnabled)),
-            (.copyOriginal, ToolbarButton(action: .copy, sfSymbol: "doc.on.doc", tooltip: L("Copy Original"))),
-            (.copyTranslation, ToolbarButton(action: .copyText, sfSymbol: "character.book.closed", tooltip: L("Copy Translation"))),
-            (.pin, ToolbarButton(action: .pin, sfSymbol: "pin.fill", tooltip: L("Pin"))),
+                isSelected: displayMode == .translated && !comparisonEnabled,
+                shortcutAction: .translationToggle)),
+            (.copyOriginal, ToolbarButton(action: .copy, sfSymbol: "doc.on.doc", tooltip: L("Copy Original"), shortcutAction: .copyOriginalText)),
+            (.copyTranslation, ToolbarButton(action: .copyText, sfSymbol: "character.book.closed", tooltip: L("Copy Translation"), shortcutAction: .copyTranslatedText)),
+            (.pin, ToolbarButton(action: .pin, sfSymbol: "pin.fill", tooltip: L("Pin"), shortcutAction: .pin)),
             (.cancel, ToolbarButton(action: .cancel, sfSymbol: "xmark", tooltip: L("Cancel"))),
         ]
         return buttons.compactMap { tool, button in
@@ -471,7 +477,7 @@ class ToolbarLayout {
             }(), L("Marker")),
             (.text, "textformat", L("Text")),
             (.number, "1.circle.fill", L("Number")),
-            (.pixelate, "_custom.checkerboard", L("Censor (Pixelate / Blur / Solid)")),
+            (.pixelate, "_custom.checkerboard", L("Censor")),
             (.highlight, "sun.max", L("Highlight (Spotlight)")),
             (.loupe, "magnifyingglass", L("Magnify (Loupe)")),
             (.stamp, "face.smiling", L("Stamp / Emoji")),
@@ -543,7 +549,7 @@ class ToolbarLayout {
         case .text: data = ("t.square", L("Text"))
         case .number: data = ("1.circle.fill", L("Number"))
         case .stamp: data = ("face.smiling", L("Stamp / Emoji"))
-        case .pixelate: data = ("_custom.checkerboard", L("Censor (Pixelate / Blur / Solid)"))
+        case .pixelate: data = ("_custom.checkerboard", L("Censor"))
         case .blur: data = ("drop", L("Blur"))
         case .measure: data = ("ruler", L("Measure (px)"))
         case .loupe: data = ("magnifyingglass", L("Magnify (Loupe)"))
