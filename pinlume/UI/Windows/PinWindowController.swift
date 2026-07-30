@@ -320,11 +320,11 @@ class PinWindowController {
     func applyPersistedState(shadowHidden: Bool, opacity: CGFloat, normalVisualFrame: NSRect?, compactCenter: NSPoint?, compactActualCenter: NSPoint?, isCompact: Bool, persistedVisualFrame: NSRect? = nil) {
         pinView?.setShadowHidden(shadowHidden)
         pinOpacity = min(1, max(0.10, opacity))
-        window?.alphaValue = pinOpacity
         self.normalVisualFrame = normalVisualFrame ?? visualFrame
         pinView?.compactCenter = compactCenter ?? NSPoint(x: 0.5, y: 0.5)
         pinView?.compactActualCenter = compactActualCenter ?? NSPoint(x: 0.5, y: 0.5)
         pinView?.isCompactMode = isCompact
+        applyWindowOpacity()
         if isCompact, let persistedVisualFrame {
             applyVisualFrame(persistedVisualFrame, updateNormal: false)
         }
@@ -412,6 +412,7 @@ class PinWindowController {
                 )
             }
         }
+        applyWindowOpacity()
         select()
     }
 
@@ -505,9 +506,21 @@ class PinWindowController {
     }
 
     private func adjustPinOpacity(by delta: CGFloat) {
-        pinOpacity = min(1, max(0.10, pinOpacity + delta))
-        window?.alphaValue = pinOpacity
+        guard let adjustedOpacity = PinOpacityPolicy.adjustedOpacity(
+            storedOpacity: pinOpacity,
+            by: delta,
+            isCompact: pinView?.isCompactMode == true
+        ) else { return }
+        pinOpacity = adjustedOpacity
+        applyWindowOpacity()
         pinView?.showOpacityPercentage(pinOpacity)
+    }
+
+    private func applyWindowOpacity() {
+        window?.alphaValue = PinOpacityPolicy.displayedOpacity(
+            storedOpacity: pinOpacity,
+            isCompact: pinView?.isCompactMode == true
+        )
     }
 
     private func zoomFromScreenPoint(
