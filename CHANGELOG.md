@@ -1,8 +1,8 @@
 # Changelog
 
-## Unreleased
+## 1.0.5
 
-- No unreleased changes.
+- Keep compact Pins fully opaque, ignore opacity adjustments while compact, and restore each Pin's normal opacity when expanded.
 
 ## 1.0.4
 
