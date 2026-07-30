@@ -8,7 +8,7 @@
 </p>
 
 <p align="center">
-  <a href="./README.zh-CN.md">简体中文</a> · <a href="https://github.com/pinlume">GitHub Organization</a> · <a href="./PRIVACY.md">Privacy</a> · <a href="./NOTICE.md">Attribution</a> · <a href="./LICENSE">GPLv3</a>
+  <a href="./README.zh-CN.md">简体中文</a> · <a href="https://github.com/pinlume/pinlume/releases">Download Beta</a> · <a href="./CHANGELOG.md">Changelog</a> · <a href="https://github.com/pinlume">GitHub Organization</a> · <a href="./PRIVACY.md">Privacy</a>
 </p>
 
 <p align="center">
@@ -31,9 +31,7 @@ Pinlume is a small, fast, native macOS tool for high-frequency desktop work. It 
 
 ## Release status
 
-Pinlume provides macOS beta builds. The maintainer is not currently enrolled in the Apple Developer Program, so beta builds use a local signature, are **not notarized by Apple**, and do not include automatic updates. macOS requires a one-time manual confirmation on first launch. Download only from this repository's [Releases](https://github.com/pinlume/pinlume/releases) and read the [Beta Installation and Permissions Guide](BETA_INSTALL.md).
-
-> This repository retains GPLv3 and the project's provenance. Pinlume is independently maintained from the MacShot codebase; see [NOTICE.md](NOTICE.md) for details.
+Pinlume provides macOS beta builds. Beta builds use a local signature, are **not notarized by Apple**, and do not include automatic updates. macOS requires a one-time manual confirmation on first launch. Download from this repository's [Releases](https://github.com/pinlume/pinlume/releases), see [what changed](CHANGELOG.md), and read the [Beta Installation and Permissions Guide](BETA_INSTALL.md).
 
 ## Quick start
 
@@ -169,8 +167,4 @@ macOS 12.3 (Monterey) or later. Some OCR, translation, and visual features depen
 
 ## Contributing
 
-Issues are welcome for bug reports, feature requests, and discussion. Pull requests are not accepted at this time; please contact the maintainer before proposing a code contribution. See [CONTRIBUTING.md](CONTRIBUTING.md).
-
-## License and attribution
-
-Pinlume is licensed under [GPLv3](LICENSE). Original contributions, historical commits, and third-party attribution retain their actual provenance; see [NOTICE.md](NOTICE.md).
+Issues are welcome for bug reports, feature requests, and discussion. Pull requests are not accepted at this time; please start an Issue discussion before proposing a code contribution. See [CONTRIBUTING.md](CONTRIBUTING.md).

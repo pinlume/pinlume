@@ -11,7 +11,7 @@
 
 
 <p align="center">
-  <a href="./README.md">English</a> · <a href="https://github.com/pinlume">GitHub 组织</a> · <a href="./PRIVACY.md">隐私说明</a> · <a href="./NOTICE.md">来源与署名</a> · <a href="./LICENSE">GPLv3</a>
+  <a href="./README.md">English</a> · <a href="https://github.com/pinlume/pinlume/releases">下载 Beta</a> · <a href="./CHANGELOG.md">更新记录</a> · <a href="https://github.com/pinlume">GitHub 组织</a> · <a href="./PRIVACY.md">隐私说明</a>
 </p>
 
 <p align="center">
@@ -34,9 +34,7 @@ Pinlume 是一款为高频桌面操作而生的原生 macOS 工具：小、快�
 
 ## 发布状态
 
-Pinlume 提供可供体验的 macOS Beta 版本。维护者目前未加入 Apple Developer Program，Beta 包使用本地签名、**未经过 Apple 公证**，且暂不提供自动更新；首次启动需按 macOS 的安全提示手动确认。请只从本仓库的 [Releases](https://github.com/pinlume/pinlume/releases) 下载，并参阅 [Beta 安装与权限说明](BETA_INSTALL.md)。
-
-> 本仓库保留 GPLv3 许可证及历史来源记录。Pinlume 是基于 MacShot 代码独立维护的项目；详细边界见 [NOTICE.md](NOTICE.md)。
+Pinlume 提供可供体验的 macOS Beta 版本。Beta 包使用本地签名、**未经过 Apple 公证**，且暂不提供自动更新；首次启动需按 macOS 的安全提示手动确认。请从本仓库的 [Releases](https://github.com/pinlume/pinlume/releases) 下载，查看 [更新记录](CHANGELOG.md)，并参阅 [Beta 安装与权限说明](BETA_INSTALL.md)。
 
 ## 快速开始
 
@@ -172,8 +170,4 @@ macOS 12.3（Monterey）或更高版本。部分 OCR、翻译或视觉能力取�
 
 ## 参与贡献
 
-欢迎通过 Issue 反馈问题、提出功能建议或参与讨论；目前暂不接收 Pull Request。如希望贡献代码，请先联系维护者沟通，详见 [CONTRIBUTING.md](CONTRIBUTING.md)。
-
-## 许可证与来源
-
-Pinlume 使用 [GPLv3](LICENSE) 许可证。原始贡献、历史提交与第三方作者归属仍保留其真实来源；当前维护不会重写这些事实记录。详见 [NOTICE.md](NOTICE.md)。
+欢迎通过 Issue 反馈问题、提出功能建议或参与讨论；目前暂不接收 Pull Request。如希望贡献代码，请先通过 Issue 沟通，详见 [CONTRIBUTING.md](CONTRIBUTING.md)。
