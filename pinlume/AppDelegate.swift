@@ -1165,6 +1165,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     private func showTranslationWindowFromHotkey(frontmostApp: NSRunningApplication?) {
+        let permissionAction =
+            SelectedTextTranslationPreference.translationWindowPermissionAction()
+        settingsController?.refreshSelectedTextTranslationPermissionState()
+        if permissionAction == .explainClipboardFallback {
+            showSelectedTextTranslationPermissionExplanation()
+        }
         let isExternalApp = frontmostApp?.bundleIdentifier != Bundle.main.bundleIdentifier
         if isExternalApp { previousApp = frontmostApp }
         let canReadSelectedText = isExternalApp && SelectedTextTranslationPreference.isEnabled
@@ -1178,6 +1184,23 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         let controller = translationWindowController ?? TranslationWindowController()
         translationWindowController = controller
         controller.present(sourceText: source, autoTranslate: !source.isEmpty)
+    }
+
+    private func showSelectedTextTranslationPermissionExplanation() {
+        let alert = NSAlert()
+        alert.messageText = L("Translate Selected Text")
+        alert.informativeText = L(
+            "With Accessibility permission, Pinlume can automatically read text selected in other apps. Without it, clipboard text can still be translated normally."
+        )
+        alert.alertStyle = .informational
+        alert.addButton(withTitle: L("Open System Settings"))
+        alert.addButton(withTitle: L("Continue with Clipboard"))
+        guard alert.runModal() == .alertFirstButtonReturn else { return }
+        SelectedTextReader.requestAccessibilityPermission()
+        if let url = URL(
+            string: "x-apple.systempreferences:com.apple.preference.security?Privacy_Accessibility") {
+            NSWorkspace.shared.open(url)
+        }
     }
 
     private func beginScreenTranslationCapture() {
@@ -2380,6 +2403,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             self?.transparentAnnotationSession = nil
             self?.restoreFocusAfterTransparentSessionCancellation()
         }
+        session.onComplete = { [weak self] in
+            self?.transparentAnnotationSession = nil
+            self?.restoreFocusAfterTransparentSessionCancellation()
+        }
         session.onFinish = { [weak self] result in
             guard let self else { return }
             self.transparentAnnotationSession = nil
@@ -2616,12 +2643,24 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     @objc private func pinFromClipboard() {
-        guard activeCaptureWorkflow.allowsGlobalPinShortcut else { return }
-        if let selectedOverlay = overlayControllers.first(where: {
+        let selectedOverlay = overlayControllers.first(where: {
             $0.selectionRect.width > 0 && $0.selectionRect.height > 0
-        }) {
-            selectedOverlay.overlayViewDidRequestPin()
+        })
+        switch GlobalPinShortcutRouting.route(
+            hasTransparentAnnotationSession: transparentAnnotationSession != nil,
+            hasOrdinarySelection: selectedOverlay != nil,
+            workflowAllowsOrdinaryPin: activeCaptureWorkflow.allowsGlobalPinShortcut
+        ) {
+        case .transparentAnnotation:
+            transparentAnnotationSession?.requestPin()
             return
+        case .ordinarySelection:
+            selectedOverlay?.overlayViewDidRequestPin()
+            return
+        case .blocked:
+            return
+        case .clipboard:
+            break
         }
 
         guard let item = NSPasteboard.general.pasteboardItems?.first else {
@@ -2797,6 +2836,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
         settingsController = controller
         return controller
+    }
+
+    func applicationDidBecomeActive(_ notification: Notification) {
+        SelectedTextTranslationPreference.reconcilePermission()
+        settingsController?.refreshSelectedTextTranslationPermissionState()
     }
 
     /// The only profile-application route: validate first, write the existing

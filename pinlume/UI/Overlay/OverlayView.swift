@@ -8366,6 +8366,7 @@ class OverlayView: NSView {
         case .redo:
             redo()
         case .copy:
+            commitTextFieldIfNeeded()
             overlayDelegate?.overlayViewDidConfirm()
         case .copyText:
             break
@@ -9393,10 +9394,18 @@ class OverlayView: NSView {
             if state == .selected {
                 switch key {
                 case 8:  // C
-                    if !selectedAnnotations.isEmpty {
+                    switch OverlaySelectionGeometry.copyShortcutAction(
+                        isSelectionActive: state == .selected,
+                        isDrawingToolActive: currentTool != .select,
+                        hasSelectedAnnotations: !selectedAnnotations.isEmpty
+                    ) {
+                    case .copySelectedAnnotations:
                         copySelectedAnnotations()
-                    } else {
+                    case .copyFullSelection:
+                        commitTextFieldIfNeeded()
                         overlayDelegate?.overlayViewDidConfirm()
+                    case .passThrough:
+                        break
                     }
                     return true
                 case 9:  // V

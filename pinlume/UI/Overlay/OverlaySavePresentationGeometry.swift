@@ -7,6 +7,18 @@ enum OverlaySavePresentationState {
 }
 
 enum OverlaySavePresentationGeometry {
+    struct PanelPlan: Equatable {
+        let keepsOverlayWindowVisible: Bool
+        let usesOverlayWindowAsSheetHost: Bool
+    }
+
+    static func panelPlan() -> PanelPlan {
+        PanelPlan(
+            keepsOverlayWindowVisible: false,
+            usesOverlayWindowAsSheetHost: false
+        )
+    }
+
     static func stateAfterOpeningSavePanel() -> OverlaySavePresentationState {
         .hiddenForSavePanel
     }

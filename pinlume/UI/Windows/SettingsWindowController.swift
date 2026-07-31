@@ -3818,8 +3818,14 @@ class SettingsWindowController: NSWindowController, NSToolbarDelegate, NSWindowD
             return
         }
 
-        SelectedTextTranslationPreference.wantsEnabled = true
-        guard SelectedTextReader.hasAccessibilityPermission else {
+        guard SelectedTextTranslationPreference.settingsEnableAction()
+                == .requestSystemPermission
+        else {
+            sender.state = .on
+            return
+        }
+
+        if !SelectedTextReader.hasAccessibilityPermission {
             sender.state = .off
             SelectedTextReader.requestAccessibilityPermission()
 
@@ -3839,6 +3845,11 @@ class SettingsWindowController: NSWindowController, NSToolbarDelegate, NSWindowD
         }
 
         sender.state = .on
+    }
+
+    func refreshSelectedTextTranslationPermissionState() {
+        translateSelectedTextCheckbox?.state =
+            SelectedTextTranslationPreference.isEnabled ? .on : .off
     }
     @objc private func filenameTemplateCommitted(_ sender: NSTextField) {
         let trimmed = sender.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)

@@ -17,6 +17,7 @@ private let transparentAnnotationLog = Logger(
 final class TransparentAnnotationSessionController {
 
     var onFinish: ((TransparentAnnotationPinPayload) -> Void)?
+    var onComplete: (() -> Void)?
     var onCancel: (() -> Void)?
 
     private let screen: NSScreen
@@ -163,6 +164,10 @@ final class TransparentAnnotationSessionController {
         didFinish = true
         onFinish?(payload)
         dismiss(notifyCancellation: false)
+    }
+
+    func requestPin() {
+        finishForPin()
     }
 
     private func rebuildToolbar() {
@@ -432,6 +437,24 @@ final class TransparentAnnotationSessionController {
         if escapeMonitor == nil {
             escapeMonitor = NSEvent.addLocalMonitorForEvents(matching: .keyDown) { [weak self] event in
                 guard let self else { return event }
+                let modifiers = event.modifierFlags.intersection(.deviceIndependentFlagsMask)
+                switch TransparentSessionCommandRouting.route(
+                    keyCode: event.keyCode,
+                    commandHeld: modifiers.contains(.command),
+                    shiftHeld: modifiers.contains(.shift),
+                    optionHeld: modifiers.contains(.option),
+                    controlHeld: modifiers.contains(.control),
+                    isTextEditing: self.canvas.textEditView != nil
+                ) {
+                case .copy:
+                    self.copyTransparentOutput()
+                    return nil
+                case .save:
+                    self.saveTransparentOutput()
+                    return nil
+                case .passThrough:
+                    break
+                }
                 if event.keyCode == 53 {
                     self.cancel()
                     return nil
@@ -453,15 +476,64 @@ final class TransparentAnnotationSessionController {
     }
 
     private func copyTransparentOutput() {
+        canvas.confirmAnnotationEditing()
         guard let image = canvas.transparentOutputImage() else { return }
         ImageEncoder.copyToClipboard(image)
+        if TransparentOutputLifecycle.shouldFinish(
+            action: .copy,
+            saveSucceeded: false
+        ) {
+            completeOutput()
+        }
     }
 
     private func saveTransparentOutput() {
+        canvas.confirmAnnotationEditing()
         guard canvas.transparentOutputImage() != nil else { return }
+        suspendForSavePanel()
         ImageSaveService.showSavePanel(imageProvider: { [weak canvas] in
             canvas?.transparentOutputImage()
+        }, preferredScreen: screen, completion: { [weak self] success in
+            guard let self else { return }
+            if TransparentOutputLifecycle.shouldFinish(
+                action: .save,
+                saveSucceeded: success
+            ) {
+                self.completeOutput()
+            } else {
+                self.restoreAfterSavePanel()
+            }
         })
+    }
+
+    private func suspendForSavePanel() {
+        if let escapeMonitor {
+            NSEvent.removeMonitor(escapeMonitor)
+            self.escapeMonitor = nil
+        }
+        if let globalEscapeMonitor {
+            NSEvent.removeMonitor(globalEscapeMonitor)
+            self.globalEscapeMonitor = nil
+        }
+        PopoverHelper.dismiss()
+        panel.ignoresMouseEvents = true
+        panel.orderOut(nil)
+    }
+
+    private func restoreAfterSavePanel() {
+        guard !didFinish else { return }
+        panel.ignoresMouseEvents = false
+        panel.makeKeyAndOrderFront(nil)
+        panel.makeFirstResponder(canvas)
+        installEscapeMonitor()
+        canvas.refreshCursorAtPointerIfInside()
+    }
+
+    private func completeOutput() {
+        guard !didFinish else { return }
+        didFinish = true
+        dismiss(notifyCancellation: false)
+        onComplete?()
     }
 
     private func dismiss(notifyCancellation: Bool) {

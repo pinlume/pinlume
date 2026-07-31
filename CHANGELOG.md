@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.0.6
+
+- Keep selected-text translation optional: request Accessibility once, synchronize the setting with the real permission result, and preserve clipboard translation when permission is declined.
+- Allow standard captures to copy the complete annotated selection while a drawing tool is active, and fully finish the capture after a successful save.
+- Make transparent annotation Copy, Save, and Pin use the current transparent content; add working Command-C and Command-S routes while preserving the empty-content no-op.
+- Remove full-screen overlay input before showing save panels, restoring the session only after cancellation or failure.
+
 ## 1.0.5
 
 - Keep compact Pins fully opaque, ignore opacity adjustments while compact, and restore each Pin's normal opacity when expanded.

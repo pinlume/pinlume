@@ -23,6 +23,12 @@ enum OverlaySelectionGeometry {
         case save
     }
 
+    enum CopyShortcutAction {
+        case passThrough
+        case copySelectedAnnotations
+        case copyFullSelection
+    }
+
     nonisolated static let minimumWindowSnapSize = CGSize(width: 80, height: 80)
     nonisolated static let minimumFloatingWindowSnapSize = CGSize(width: 24, height: 24)
 
@@ -180,6 +186,18 @@ enum OverlaySelectionGeometry {
     static func commandShortcutAction(keyCode: UInt16, isSelectionActive: Bool) -> CommandShortcutAction {
         guard isSelectionActive, keyCode == 1 else { return .passThrough }
         return .save
+    }
+
+    static func copyShortcutAction(
+        isSelectionActive: Bool,
+        isDrawingToolActive: Bool,
+        hasSelectedAnnotations: Bool
+    ) -> CopyShortcutAction {
+        guard isSelectionActive else { return .passThrough }
+        if isDrawingToolActive || !hasSelectedAnnotations {
+            return .copyFullSelection
+        }
+        return .copySelectedAnnotations
     }
 
     static func windowSnapOutputSource(

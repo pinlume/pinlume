@@ -852,6 +852,7 @@ extension OverlayWindowController: OverlayViewDelegate {
     }
 
     func overlayViewDidRequestClipboardCopy() {
+        overlayView?.commitTextFieldIfNeeded()
         let hasEffects = overlayView?.effectsActive ?? false
         let effectsCfg = overlayView?.effectsConfig ?? ImageEffectsConfig()
         let hasBeautify = overlayView?.beautifyEnabled ?? false
@@ -1313,12 +1314,13 @@ extension OverlayWindowController: OverlayViewDelegate {
     }
 
     func overlayViewDidRequestSaveAs() {
+        overlayView?.commitTextFieldIfNeeded()
         os_log("overlay save requested", log: overlaySaveLog, type: .info)
         overlayDelegate?.overlayDidBeginModalSave(self)
-        let savePanelHostWindow = overlayWindow
+        let panelPlan = OverlaySavePresentationGeometry.panelPlan()
         applySavePresentationState(
             OverlaySavePresentationGeometry.stateAfterOpeningSavePanel(),
-            keepsSavePanelHostVisible: savePanelHostWindow != nil
+            keepsSavePanelHostVisible: panelPlan.keepsOverlayWindowVisible
         )
         ImageSaveService.showSavePanel(
             imageProvider: { [weak self] in
@@ -1335,7 +1337,7 @@ extension OverlayWindowController: OverlayViewDelegate {
             },
             windowTitle: capturedWindowTitle,
             panelLevel: NSWindow.Level(258),
-            sheetWindow: savePanelHostWindow,
+            sheetWindow: panelPlan.usesOverlayWindowAsSheetHost ? overlayWindow : nil,
             preferredScreen: screen,
             activateApp: true
         ) { [weak self] success in

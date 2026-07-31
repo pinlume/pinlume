@@ -20,23 +20,88 @@ enum TranslationInputResolver {
 enum SelectedTextTranslationPreference {
     static let enabledKey = "selectedTextTranslationEnabled"
     private static let initialPermissionRequestKey = "selectedTextTranslationInitialPermissionRequested"
+    private static let awaitingInitialPermissionResultKey =
+        "selectedTextTranslationAwaitingInitialPermissionResult"
+    private static let explicitUserPreferenceKey =
+        "selectedTextTranslationHasExplicitUserPreference"
+    private static let translationExplanationShownKey =
+        "selectedTextTranslationPermissionExplanationShown"
 
     static var wantsEnabled: Bool {
-        get { UserDefaults.standard.object(forKey: enabledKey) as? Bool ?? true }
-        set { UserDefaults.standard.set(newValue, forKey: enabledKey) }
+        get { loadState().userPreference ?? true }
+        set {
+            var state = loadState()
+            state.setUserPreference(enabled: newValue)
+            saveState(state)
+        }
     }
 
     static var isEnabled: Bool {
-        wantsEnabled && SelectedTextReader.hasAccessibilityPermission
+        loadState().isEffectivelyEnabled(
+            isAuthorized: SelectedTextReader.hasAccessibilityPermission)
     }
 
     static func requestInitialAccessibilityPermissionIfNeeded() {
-        guard wantsEnabled,
-              !UserDefaults.standard.bool(forKey: initialPermissionRequestKey),
-              !SelectedTextReader.hasAccessibilityPermission
-        else { return }
-        UserDefaults.standard.set(true, forKey: initialPermissionRequestKey)
-        SelectedTextReader.requestAccessibilityPermission()
+        var state = loadState()
+        let action = state.beginInitialRequest(
+            isAuthorized: SelectedTextReader.hasAccessibilityPermission)
+        saveState(state)
+        if action == .requestSystemPermission {
+            SelectedTextReader.requestAccessibilityPermission()
+        }
+    }
+
+    static func reconcilePermission() {
+        var state = loadState()
+        state.reconcile(isAuthorized: SelectedTextReader.hasAccessibilityPermission)
+        saveState(state)
+    }
+
+    static func translationWindowPermissionAction() -> SelectedTextPermissionAction {
+        var state = loadState()
+        let action = state.translationWindowAction(
+            isAuthorized: SelectedTextReader.hasAccessibilityPermission)
+        saveState(state)
+        return action
+    }
+
+    static func settingsEnableAction() -> SelectedTextPermissionAction {
+        var state = loadState()
+        let action = state.settingsEnableAction(
+            isAuthorized: SelectedTextReader.hasAccessibilityPermission)
+        saveState(state)
+        return action
+    }
+
+    private static func loadState() -> SelectedTextPermissionState {
+        let defaults = UserDefaults.standard
+        let hasExplicitChoice = defaults.bool(forKey: explicitUserPreferenceKey)
+            || defaults.object(forKey: enabledKey) != nil
+        return SelectedTextPermissionState(
+            initialRequestWasMade: defaults.bool(forKey: initialPermissionRequestKey),
+            isAwaitingInitialResult: defaults.bool(
+                forKey: awaitingInitialPermissionResultKey),
+            userPreference: hasExplicitChoice
+                ? defaults.object(forKey: enabledKey) as? Bool
+                : nil,
+            hasShownTranslationExplanation: defaults.bool(
+                forKey: translationExplanationShownKey)
+        )
+    }
+
+    private static func saveState(_ state: SelectedTextPermissionState) {
+        let defaults = UserDefaults.standard
+        defaults.set(state.initialRequestWasMade, forKey: initialPermissionRequestKey)
+        defaults.set(
+            state.isAwaitingInitialResult,
+            forKey: awaitingInitialPermissionResultKey)
+        defaults.set(
+            state.hasShownTranslationExplanation,
+            forKey: translationExplanationShownKey)
+        if let userPreference = state.userPreference {
+            defaults.set(true, forKey: explicitUserPreferenceKey)
+            defaults.set(userPreference, forKey: enabledKey)
+        }
     }
 }
 

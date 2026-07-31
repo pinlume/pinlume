@@ -296,6 +296,9 @@
 "Ask where to save" = "询问保存位置";
 "Disable shadow outside selection" = "禁用选区外的阴影";
 "Translate selected text" = "翻译选中的文字";
+"Translate Selected Text" = "翻译选中的文字";
+"With Accessibility permission, Pinlume can automatically read text selected in other apps. Without it, clipboard text can still be translated normally." = "授予辅助功能后，Pinlume 才能自动读取其他 App 已选中的文字；不授予仍可正常翻译剪贴板中的文字。";
+"Open System Settings" = "打开系统设置";
 "Show shortcuts in tooltips" = "在工具提示中显示快捷键";
 "OCR Capture:" = "OCR 捕获:";
 "OCR & QR Capture:" = "OCR & QR 捕获:";

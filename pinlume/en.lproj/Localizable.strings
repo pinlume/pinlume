@@ -232,6 +232,9 @@
 "Hide capture instructions" = "Hide capture instructions";
 "Disable shadow outside selection" = "Disable shadow outside selection";
 "Translate selected text" = "Translate selected text";
+"Translate Selected Text" = "Translate Selected Text";
+"With Accessibility permission, Pinlume can automatically read text selected in other apps. Without it, clipboard text can still be translated normally." = "With Accessibility permission, Pinlume can automatically read text selected in other apps. Without it, clipboard text can still be translated normally.";
+"Open System Settings" = "Open System Settings";
 "Use window title in saved filename" = "Use window title in saved filename";
 "Hide menu bar icon" = "Hide menu bar icon";
 "Hotkeys still work. To show the icon again, re-launch Pinlume." = "Hotkeys still work. To show the icon again, re-launch Pinlume.";
