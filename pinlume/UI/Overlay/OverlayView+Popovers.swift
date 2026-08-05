@@ -481,6 +481,7 @@ extension OverlayView {
 
     func performAutoRedact() {
         guard state == .selected, let screenshot = screenshotImage else { return }
+        let token = beginAsyncOperation()
         let tool: AnnotationTool = currentTool == .pixelate ? .pixelate : .rectangle
         let sourceImg = tool == .pixelate ? screenshotImage : nil
         AutoRedactor.redactPII(
@@ -488,7 +489,7 @@ extension OverlayView {
             redactTool: tool, color: currentColor, sourceImage: sourceImg,
             sourceImageBounds: captureDrawRect
         ) { [weak self] anns in
-            guard let self = self, !anns.isEmpty else { return }
+            guard let self = self, self.isCurrentAsyncOperation(token), !anns.isEmpty else { return }
             self.annotations.append(contentsOf: anns)
             self.undoStack.append(contentsOf: anns.map { .added($0) })
             self.redoStack.removeAll()
@@ -499,6 +500,7 @@ extension OverlayView {
 
     func performRedactAllText() {
         guard state == .selected, let screenshot = screenshotImage else { return }
+        let token = beginAsyncOperation()
         let tool: AnnotationTool = currentTool == .pixelate ? .pixelate : .rectangle
         let sourceImg = tool == .pixelate ? screenshotImage : nil
         AutoRedactor.redactAllText(
@@ -506,7 +508,7 @@ extension OverlayView {
             redactTool: tool, color: currentColor, sourceImage: sourceImg,
             sourceImageBounds: captureDrawRect
         ) { [weak self] anns in
-            guard let self = self, !anns.isEmpty else { return }
+            guard let self = self, self.isCurrentAsyncOperation(token), !anns.isEmpty else { return }
             self.annotations.append(contentsOf: anns)
             self.undoStack.append(contentsOf: anns.map { .added($0) })
             self.redoStack.removeAll()
@@ -517,6 +519,7 @@ extension OverlayView {
 
     func performRedactFaces() {
         guard state == .selected, let screenshot = screenshotImage else { return }
+        let token = beginAsyncOperation()
         let tool: AnnotationTool = currentTool == .pixelate ? .pixelate : .rectangle
         let sourceImg = tool == .pixelate ? screenshotImage : nil
         AutoRedactor.redactFaces(
@@ -524,7 +527,7 @@ extension OverlayView {
             redactTool: tool, color: currentColor, sourceImage: sourceImg,
             sourceImageBounds: captureDrawRect
         ) { [weak self] anns in
-            guard let self = self, !anns.isEmpty else { return }
+            guard let self = self, self.isCurrentAsyncOperation(token), !anns.isEmpty else { return }
             self.annotations.append(contentsOf: anns)
             self.undoStack.append(contentsOf: anns.map { .added($0) })
             self.redoStack.removeAll()
@@ -535,6 +538,7 @@ extension OverlayView {
 
     func performRedactPeople() {
         guard state == .selected, let screenshot = screenshotImage else { return }
+        let token = beginAsyncOperation()
         let tool: AnnotationTool = currentTool == .pixelate ? .pixelate : .rectangle
         let sourceImg = tool == .pixelate ? screenshotImage : nil
         AutoRedactor.redactPeople(
@@ -542,7 +546,7 @@ extension OverlayView {
             redactTool: tool, color: currentColor, sourceImage: sourceImg,
             sourceImageBounds: captureDrawRect
         ) { [weak self] anns in
-            guard let self = self, !anns.isEmpty else { return }
+            guard let self = self, self.isCurrentAsyncOperation(token), !anns.isEmpty else { return }
             self.annotations.append(contentsOf: anns)
             self.undoStack.append(contentsOf: anns.map { .added($0) })
             self.redoStack.removeAll()
@@ -586,6 +590,7 @@ extension OverlayView {
 
     func performTranslate(targetLang: String) {
         guard state == .selected, let screenshot = screenshotImage else { return }
+        let token = beginAsyncOperation()
         annotations.removeAll { $0.tool == .translateOverlay }
         isTranslating = true
         needsDisplay = true
@@ -594,12 +599,13 @@ extension OverlayView {
             screenshot: screenshot, selectionRect: selectionRect, captureDrawRect: captureDrawRect,
             targetLang: targetLang,
             onError: { [weak self] msg in
-                self?.isTranslating = false
-                self?.showOverlayError(msg)
-                self?.needsDisplay = true
+                guard let self, self.isCurrentAsyncOperation(token) else { return }
+                self.isTranslating = false
+                self.showOverlayError(msg)
+                self.needsDisplay = true
             },
             completion: { [weak self] anns in
-                guard let self = self else { return }
+                guard let self = self, self.isCurrentAsyncOperation(token) else { return }
                 self.isTranslating = false
                 self.annotations.removeAll { $0.tool == .translateOverlay }
                 self.annotations.append(contentsOf: anns)

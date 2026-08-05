@@ -46,7 +46,7 @@ final class SettingsProfileRuntimeCoordinator {
             let prefix = "hotkey.\(definition.slot)"
             let keyCode = integerValue(for: "\(prefix).keyCode", in: payload) ?? definition.defaultKeyCode
             let modifiers = integerValue(for: "\(prefix).modifiers", in: payload) ?? definition.defaultModifiers
-            let disabled = boolValue(for: "\(prefix).disabled", in: payload) ?? false
+            let disabled = boolValue(for: "\(prefix).disabled", in: payload) ?? definition.defaultDisabled
             guard !disabled,
                   modifiers != 0 || SettingsProfileHotkeyDefinition.functionKeyCodes.contains(keyCode)
             else { continue }

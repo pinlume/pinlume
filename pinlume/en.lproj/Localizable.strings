@@ -38,6 +38,8 @@
 "Enable Hotkeys" = "Enable Hotkeys";
 "Check for Updates..." = "Check for Updates...";
 "Quit Pinlume" = "Quit Pinlume";
+"Recognized Text" = "Recognized Text";
+"Screenshot Thumbnail" = "Screenshot Thumbnail";
 "No recent captures" = "No recent captures";
 "Clear History" = "Clear History";
 
@@ -435,7 +437,7 @@
 "Accessibility Access Required" = "Accessibility Access Required";
 "Pinlume needs Accessibility permission to auto-scroll other apps. Please grant access in System Settings, then try again." = "Pinlume needs Accessibility permission to auto-scroll other apps. Please grant access in System Settings, then try again.";
 "Pinlume needs Accessibility permission for scroll capture. Please grant access in System Settings, then try again." = "Pinlume needs Accessibility permission for scroll capture. Please grant access in System Settings, then try again.";
-"Pinlume needs Accessibility permission to translate selected text. Open System Settings to grant access. If Pinlume is not listed, click the + button and choose the running Pinlume app." = "Pinlume needs Accessibility permission to translate selected text. Open System Settings to grant access. If Pinlume is not listed, click the + button and choose the running Pinlume app.";
+"Pinlume needs Accessibility permission to translate selected text. Open System Settings to grant access. If Pinlume is not listed, click the + button and choose Pinlume." = "Pinlume needs Accessibility permission to translate selected text. Open System Settings to grant access. If Pinlume is not listed, click the + button and choose Pinlume.";
 "Open Settings" = "Open Settings";
 "Continue with Clipboard" = "Continue with Clipboard";
 "Cancel" = "Cancel";
@@ -603,7 +605,6 @@
 "Press Shift to switch RGB/HEX" = "Press Shift to switch RGB/HEX";
 "Press %@ to switch RGB/HEX" = "Press %@ to switch RGB/HEX";
 "Quick capture copied to clipboard" = "Quick capture copied to clipboard";
-"Quit Pinlume" = "Quit Pinlume";
 "Restored pins (closes current pins immediately)" = "Restored pins (closes current pins immediately)";
 "Rotate Clockwise" = "Rotate Clockwise";
 "Screenshot history and editable annotations" = "Screenshot history and editable annotations";
@@ -848,3 +849,13 @@
 "Restore All Default Shortcuts?" = "Restore All Default Shortcuts?";
 "This restores global, tool, selection, and pin interaction shortcuts. Other settings will not change." = "This restores global, tool, selection, and pin interaction shortcuts. Other settings will not change.";
 "Restore Defaults" = "Restore Defaults";
+"Apple Translation requires macOS 15 or later." = "Apple Translation requires macOS 15 or later.";
+"Apple Translation failed: %@" = "Apple Translation failed: %@";
+"Apple Translation timed out. Please try again." = "Apple Translation timed out. Please try again.";
+"Apple language download timed out. The download may continue in System Settings." = "Apple language download timed out. The download may continue in System Settings.";
+"Apple language download did not finish. Please try again after the download completes." = "Apple language download did not finish. Please try again after the download completes.";
+"Invalid translation URL" = "Invalid translation URL";
+"No response from translation service" = "No response from translation service";
+"Could not parse translation response" = "Could not parse translation response";
+"Translation returned empty result" = "Translation returned empty result";
+"Translation request was superseded" = "Translation request was superseded";

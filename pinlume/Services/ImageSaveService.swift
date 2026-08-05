@@ -181,7 +181,7 @@ enum ImageSaveService {
                     return
                 }
                 do {
-                    try imageData.write(to: url)
+                    try TransactionalOutput.write(imageData, to: url)
                     os_log(
                         "save write success elapsed=%.3f bytes=%{public}d",
                         log: imageSaveLog,
@@ -194,6 +194,7 @@ enum ImageSaveService {
                     #if DEBUG
                     NSLog("Pinlume: failed to save screenshot to \(url.path): \(error.localizedDescription)")
                     #endif
+                    reportWriteFailure(error)
                     completionOnMain(completion, false)
                 }
             }
@@ -269,14 +270,15 @@ enum ImageSaveService {
                 return
             }
 
-            let fileURL = uniqueFileURL(in: dirURL, filename: filename)
             do {
-                try imageData.write(to: fileURL)
+                let fileURL = try TransactionalOutput.reserveUnique(in: dirURL, filename: filename)
+                try TransactionalOutput.write(imageData, to: fileURL, reservedDestination: true)
                 completionOnMain(completion, true)
             } catch {
                 #if DEBUG
-                NSLog("Pinlume: failed to save screenshot to \(fileURL.path): \(error.localizedDescription)")
+                NSLog("Pinlume: failed to save screenshot to \(dirURL.appendingPathComponent(filename).path): \(error.localizedDescription)")
                 #endif
+                reportWriteFailure(error)
                 completionOnMain(completion, false)
             }
         }
@@ -364,22 +366,12 @@ enum ImageSaveService {
         panel.setFrameOrigin(origin)
     }
 
-    private static func uniqueFileURL(in dirURL: URL, filename: String) -> URL {
-        var candidate = dirURL.appendingPathComponent(filename)
-        guard FileManager.default.fileExists(atPath: candidate.path) else { return candidate }
-
-        let base = (filename as NSString).deletingPathExtension
-        let ext = (filename as NSString).pathExtension
-        var counter = 2
-        while counter < 1000 {
-            let nextName = ext.isEmpty ? "\(base) (\(counter))" : "\(base) (\(counter)).\(ext)"
-            candidate = dirURL.appendingPathComponent(nextName)
-            if !FileManager.default.fileExists(atPath: candidate.path) {
-                return candidate
-            }
-            counter += 1
+    private static func reportWriteFailure(_ error: Error) {
+        DispatchQueue.main.async {
+            let alert = NSAlert(error: error)
+            alert.messageText = L("Save failed")
+            alert.runModal()
         }
-        return candidate
     }
 
     private static func completionOnMain(_ completion: Completion?, _ success: Bool) {

@@ -192,6 +192,32 @@ struct PersistedPinRecord: Codable {
     }
 }
 
+enum PinPersistenceLoadState: Equatable {
+    case missing
+    case success
+    case corrupt
+}
+
+struct PinPersistenceSession {
+    let state: PinPersistenceLoadState
+    let records: [PersistedPinRecord]
+    private let directory: URL
+
+    fileprivate init(state: PinPersistenceLoadState, records: [PersistedPinRecord], directory: URL) {
+        self.state = state
+        self.records = records
+        self.directory = directory
+    }
+
+    /// Automatic shutdown persistence must never replace a corrupt index with
+    /// an empty session, because that would make existing Pin images orphaned.
+    @discardableResult
+    func save(_ records: [PersistedPinRecord]) -> Bool {
+        guard state != .corrupt else { return false }
+        return PinPersistenceStore.save(records, to: directory)
+    }
+}
+
 enum PinPersistenceStore {
     private static let productionDirectory: URL = {
         let dir = AppIdentity.applicationSupportDirectory
@@ -199,68 +225,78 @@ enum PinPersistenceStore {
         return dir
     }()
 
-    static func load() -> [PersistedPinRecord] { load(from: productionDirectory) }
+    static func open() -> PinPersistenceSession { open(from: productionDirectory) }
 
-    static func save(_ records: [PersistedPinRecord]) { save(records, to: productionDirectory) }
+    static func load() -> [PersistedPinRecord] { open().records }
+
+    @discardableResult
+    static func save(_ records: [PersistedPinRecord]) -> Bool { save(records, to: productionDirectory) }
 
     static func clear() { clear(at: productionDirectory) }
 
-    static func load(from directory: URL) -> [PersistedPinRecord] {
-        guard let data = try? Data(contentsOf: directory.appendingPathComponent("pins.json")),
-              let records = try? JSONDecoder().decode([PersistedPinRecord].self, from: data) else { return [] }
-
-        let migrated = records.enumerated().compactMap { index, record -> PersistedPinRecord? in
-            let translation = loadedTranslationState(record.translationState, from: directory)
-            if record.translationState != nil && translation == nil { return nil }
-            if let imagePNG = record.imagePNG {
-                return recordWithImage(record, data: imagePNG,
-                    fileName: "pin-\(index)-\(UUID().uuidString).png", translationState: translation)
-            }
-            guard let fileName = safeImageFileName(record.imageFileName),
-                  let imageData = try? Data(contentsOf: imagesDirectory(for: directory).appendingPathComponent(fileName)) else {
-                return nil
-            }
-            return recordWithImage(record, data: imageData, fileName: fileName, translationState: translation)
+    static func open(from directory: URL) -> PinPersistenceSession {
+        let indexFile = directory.appendingPathComponent("pins.json")
+        let fileManager = FileManager.default
+        guard fileManager.fileExists(atPath: indexFile.path) else {
+            return PinPersistenceSession(state: .missing, records: [], directory: directory)
+        }
+        guard let data = try? Data(contentsOf: indexFile),
+              let storedRecords = try? JSONDecoder().decode([PersistedPinRecord].self, from: data),
+              let records = loadedRecords(storedRecords, from: directory) else {
+            return PinPersistenceSession(state: .corrupt, records: [], directory: directory)
         }
 
-        if records.contains(where: { $0.imagePNG != nil }) {
-            save(migrated, to: directory)
+        if storedRecords.contains(where: { $0.imagePNG != nil }) {
+            _ = save(records, to: directory)
         }
-        return migrated
+        return PinPersistenceSession(state: .success, records: records, directory: directory)
     }
 
-    static func save(_ records: [PersistedPinRecord], to directory: URL) {
+    static func load(from directory: URL) -> [PersistedPinRecord] { open(from: directory).records }
+
+    @discardableResult
+    static func save(_ records: [PersistedPinRecord], to directory: URL) -> Bool {
         let fileManager = FileManager.default
         let imagesDirectory = imagesDirectory(for: directory)
-        try? fileManager.createDirectory(at: directory, withIntermediateDirectories: true, attributes: [.posixPermissions: 0o700])
-        try? fileManager.createDirectory(at: imagesDirectory, withIntermediateDirectories: true, attributes: [.posixPermissions: 0o700])
+        let transactionDirectory = directory.appendingPathComponent(".pins-transaction-\(UUID().uuidString)", isDirectory: true)
+        var copiedFileNames: [String] = []
+        var didCommitIndex = false
 
-        let prepared = records.enumerated().compactMap { index, record -> PersistedPinRecord? in
-            guard let imageData = record.imagePNG else { return nil }
-            let fileName = safeImageFileName(record.imageFileName) ?? "pin-\(index)-\(UUID().uuidString).png"
-            guard safeImageFileName(fileName) != nil else { return nil }
-            do {
-                try imageData.write(to: imagesDirectory.appendingPathComponent(fileName), options: .atomic)
-                let translation = try preparedTranslationState(
-                    record.translationState, recordIndex: index, imagesDirectory: imagesDirectory)
-                return recordWithImage(record, data: nil, fileName: fileName, translationState: translation)
-            } catch {
-                return nil
+        defer {
+            if !didCommitIndex {
+                for fileName in copiedFileNames {
+                    try? fileManager.removeItem(at: imagesDirectory.appendingPathComponent(fileName))
+                }
             }
+            try? fileManager.removeItem(at: transactionDirectory)
         }
 
-        // An index is committed only after every new image is safely written.
-        guard prepared.count == records.count,
-              let indexData = try? JSONEncoder().encode(prepared),
-              (try? indexData.write(to: directory.appendingPathComponent("pins.json"), options: .atomic)) != nil else { return }
+        do {
+            try fileManager.createDirectory(at: directory, withIntermediateDirectories: true, attributes: [.posixPermissions: 0o700])
+            let transaction = try prepareTransaction(for: records)
+            // Encode the complete metadata before writing any target resource.
+            let indexData = try JSONEncoder().encode(transaction.records)
 
-        let referenced = Set(prepared.flatMap { record in
-            [record.imageFileName, record.translationState?.originalImageFileName,
-             record.translationState?.translatedImageFileName].compactMap { $0 }
-        })
-        let oldImages = (try? fileManager.contentsOfDirectory(at: imagesDirectory, includingPropertiesForKeys: nil)) ?? []
-        for url in oldImages where url.pathExtension.lowercased() == "png" && !referenced.contains(url.lastPathComponent) {
-            try? fileManager.removeItem(at: url)
+            let stagedImages = transactionDirectory.appendingPathComponent("images", isDirectory: true)
+            try fileManager.createDirectory(at: stagedImages, withIntermediateDirectories: true, attributes: [.posixPermissions: 0o700])
+            for resource in transaction.resources {
+                try resource.data.write(to: stagedImages.appendingPathComponent(resource.fileName), options: .atomic)
+            }
+
+            try fileManager.createDirectory(at: imagesDirectory, withIntermediateDirectories: true, attributes: [.posixPermissions: 0o700])
+            for resource in transaction.resources {
+                let source = stagedImages.appendingPathComponent(resource.fileName)
+                let destination = imagesDirectory.appendingPathComponent(resource.fileName)
+                try fileManager.copyItem(at: source, to: destination)
+                copiedFileNames.append(resource.fileName)
+            }
+
+            try indexData.write(to: directory.appendingPathComponent("pins.json"), options: .atomic)
+            didCommitIndex = true
+            removeUnreferencedImages(in: imagesDirectory, records: transaction.records, fileManager: fileManager)
+            return true
+        } catch {
+            return false
         }
     }
 
@@ -279,6 +315,67 @@ enum PinPersistenceStore {
               fileName.lowercased().hasSuffix(".png"),
               !fileName.isEmpty else { return nil }
         return fileName
+    }
+
+    private struct TransactionResource {
+        let fileName: String
+        let data: Data
+    }
+
+    private struct PreparedTransaction {
+        let records: [PersistedPinRecord]
+        let resources: [TransactionResource]
+    }
+
+    private static func loadedRecords(_ records: [PersistedPinRecord], from directory: URL) -> [PersistedPinRecord]? {
+        var loaded: [PersistedPinRecord] = []
+        for (index, record) in records.enumerated() {
+            let translation = loadedTranslationState(record.translationState, from: directory)
+            if record.translationState != nil && translation == nil { return nil }
+            if let imagePNG = record.imagePNG {
+                loaded.append(recordWithImage(record, data: imagePNG,
+                    fileName: generatedImageFileName(prefix: "pin-\(index)"), translationState: translation))
+                continue
+            }
+            guard let fileName = safeImageFileName(record.imageFileName),
+                  let imageData = try? Data(contentsOf: imagesDirectory(for: directory).appendingPathComponent(fileName)) else {
+                return nil
+            }
+            loaded.append(recordWithImage(record, data: imageData, fileName: fileName, translationState: translation))
+        }
+        return loaded
+    }
+
+    private static func prepareTransaction(for records: [PersistedPinRecord]) throws -> PreparedTransaction {
+        var preparedRecords: [PersistedPinRecord] = []
+        var resources: [TransactionResource] = []
+        for (index, record) in records.enumerated() {
+            guard let imageData = record.imagePNG else { throw CocoaError(.fileWriteUnknown) }
+            let imageFileName = generatedImageFileName(prefix: "pin-\(index)")
+            let translation = try preparedTranslationState(record.translationState, recordIndex: index)
+            resources.append(TransactionResource(fileName: imageFileName, data: imageData))
+            resources.append(contentsOf: translation.resources)
+            preparedRecords.append(recordWithImage(
+                record, data: nil, fileName: imageFileName, translationState: translation.state))
+        }
+        return PreparedTransaction(records: preparedRecords, resources: resources)
+    }
+
+    private static func removeUnreferencedImages(
+        in imagesDirectory: URL, records: [PersistedPinRecord], fileManager: FileManager
+    ) {
+        let referenced = Set(records.flatMap { record in
+            [record.imageFileName, record.translationState?.originalImageFileName,
+             record.translationState?.translatedImageFileName].compactMap { $0 }
+        })
+        let oldImages = (try? fileManager.contentsOfDirectory(at: imagesDirectory, includingPropertiesForKeys: nil)) ?? []
+        for url in oldImages where url.pathExtension.lowercased() == "png" && !referenced.contains(url.lastPathComponent) {
+            try? fileManager.removeItem(at: url)
+        }
+    }
+
+    private static func generatedImageFileName(prefix: String) -> String {
+        "\(prefix)-\(UUID().uuidString).png"
     }
 
     private static func loadedTranslationState(
@@ -301,20 +398,16 @@ enum PinPersistenceStore {
     }
 
     private static func preparedTranslationState(
-        _ state: PersistedTranslationPinState?, recordIndex: Int, imagesDirectory: URL
-    ) throws -> PersistedTranslationPinState? {
-        guard let state else { return nil }
+        _ state: PersistedTranslationPinState?, recordIndex: Int
+    ) throws -> (state: PersistedTranslationPinState?, resources: [TransactionResource]) {
+        guard let state else { return (nil, []) }
         guard let originalData = state.originalImagePNG,
               let translatedData = state.translatedImagePNG else {
             throw CocoaError(.fileWriteUnknown)
         }
-        let originalName = safeImageFileName(state.originalImageFileName)
-            ?? "pin-\(recordIndex)-original-\(UUID().uuidString).png"
-        let translatedName = safeImageFileName(state.translatedImageFileName)
-            ?? "pin-\(recordIndex)-translated-\(UUID().uuidString).png"
-        try originalData.write(to: imagesDirectory.appendingPathComponent(originalName), options: .atomic)
-        try translatedData.write(to: imagesDirectory.appendingPathComponent(translatedName), options: .atomic)
-        return PersistedTranslationPinState(
+        let originalName = generatedImageFileName(prefix: "pin-\(recordIndex)-original")
+        let translatedName = generatedImageFileName(prefix: "pin-\(recordIndex)-translated")
+        let preparedState = PersistedTranslationPinState(
             originalImagePNG: nil, translatedImagePNG: nil,
             originalImageFileName: originalName, translatedImageFileName: translatedName,
             translatedBlocks: state.translatedBlocks,
@@ -322,6 +415,10 @@ enum PinPersistenceStore {
             translatedSelectionBlocks: state.translatedSelectionBlocks,
             sourceLanguage: state.sourceLanguage,
             targetLanguage: state.targetLanguage, displayMode: state.displayMode)
+        return (preparedState, [
+            TransactionResource(fileName: originalName, data: originalData),
+            TransactionResource(fileName: translatedName, data: translatedData),
+        ])
     }
 
     private static func recordWithImage(

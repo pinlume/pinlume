@@ -7,7 +7,7 @@ enum ToolbarToolPreferences {
     static let secondaryOrderDefaultsKey = "secondaryToolbarToolOrder"
 
     static let defaultPrimaryTools: [AnnotationTool] = [
-        .pencil, .rectangle, .number, .marker, .text, .pixelate,
+        .rectangle, .pencil, .number, .marker, .text, .pixelate,
     ]
 
     static let defaultSecondaryTools: [AnnotationTool] = [
@@ -211,21 +211,29 @@ enum PinToolbarLayoutPreferences {
             .map(PinToolbarLayoutItem.tool)
         var allowed = tools
         if isPinShadowPrimary == inPrimary { allowed.append(.pinShadow) }
-        if isSelectTextPrimary == inPrimary { allowed.append(.selectText) }
-        if isScreenTranslationPrimary == inPrimary { allowed.append(.screenTranslation) }
+        if inPrimary {
+            allowed.append(contentsOf: fixedOrdinarySelectionItems)
+        }
 
         let key = inPrimary ? primaryOrderDefaultsKey : secondaryOrderDefaultsKey
         let saved = (UserDefaults.standard.stringArray(forKey: key) ?? [])
             .compactMap { PinToolbarLayoutItem(storageValue: $0) }
-        var result = saved.filter { allowed.contains($0) }
+        var result = saved.filter {
+            allowed.contains($0) && !fixedOrdinarySelectionItems.contains($0)
+        }
         for item in defaultItems(inPrimary: inPrimary, tools: tools) where !result.contains(item) {
             result.append(item)
         }
         for item in allowed where !result.contains(item) { result.append(item) }
+        if inPrimary {
+            result.removeAll { fixedOrdinarySelectionItems.contains($0) }
+            result.append(contentsOf: fixedOrdinarySelectionItems)
+        }
         return result
     }
 
     static func move(_ item: PinToolbarLayoutItem, inPrimary: Bool, offset: Int) {
+        guard !fixedOrdinarySelectionItems.contains(item) else { return }
         var ordered = items(inPrimary: inPrimary)
         guard let index = ordered.firstIndex(of: item) else { return }
         let destination = index + offset
@@ -235,6 +243,7 @@ enum PinToolbarLayoutPreferences {
     }
 
     static func transfer(_ item: PinToolbarLayoutItem, toPrimary: Bool) {
+        guard !fixedOrdinarySelectionItems.contains(item) else { return }
         let source = items(inPrimary: !toPrimary).filter { $0 != item }
         var destination = items(inPrimary: toPrimary).filter { $0 != item }
         switch item {
@@ -264,6 +273,8 @@ enum PinToolbarLayoutPreferences {
         UserDefaults.standard.object(forKey: screenTranslationPrimaryKey) as? Bool ?? true
     }
 
+    private static let fixedOrdinarySelectionItems: [PinToolbarLayoutItem] = [.selectText, .screenTranslation]
+
     private static func defaultItems(
         inPrimary: Bool,
         tools: [PinToolbarLayoutItem]
@@ -271,20 +282,9 @@ enum PinToolbarLayoutPreferences {
         var result = tools
         guard inPrimary else {
             if !isPinShadowPrimary { result.append(.pinShadow) }
-            if !isSelectTextPrimary { result.append(.selectText) }
-            if !isScreenTranslationPrimary { result.append(.screenTranslation) }
             return result
         }
-        if isSelectTextPrimary {
-            let index = result.firstIndex(of: .tool(.text)).map { result.index(after: $0) } ?? result.endIndex
-            result.insert(.selectText, at: index)
-        }
-        if isScreenTranslationPrimary {
-            let index = result.firstIndex(of: .selectText).map { result.index(after: $0) }
-                ?? result.firstIndex(of: .tool(.text)).map { result.index(after: $0) }
-                ?? result.endIndex
-            result.insert(.screenTranslation, at: index)
-        }
+        result.append(contentsOf: fixedOrdinarySelectionItems)
         if isPinShadowPrimary {
             let index = result.firstIndex(of: .tool(.pixelate)).map { result.index(after: $0) } ?? result.endIndex
             result.insert(.pinShadow, at: index)

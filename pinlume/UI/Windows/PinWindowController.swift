@@ -932,6 +932,10 @@ class PinWindowController {
         pointerIsInsidePin(at: screenPoint) || activeZoomAnchorMode != nil
     }
 
+    fileprivate var routingWindow: NSWindow? { window }
+    fileprivate var routingToolbarWindow: NSWindow? { toolbarPanel }
+    fileprivate var hasLockedZoomSession: Bool { activeZoomAnchorMode != nil }
+
     private func removeMonitors() {
         PinEventRouter.shared.unregister(self)
         resetZoomSession(reason: "remove-monitors")
@@ -1383,9 +1387,6 @@ class PinWindowController {
                 tooltip: L("Copy Translation"),
                 shortcutAction: .copyTranslatedText
             )),
-            (.selectText, ToolbarButton(
-                action: .selectText, sfSymbol: "text.cursor", tooltip: L("Select Text"),
-                isSelected: textSelectionSession.suspendsPinInteraction)),
         ]
         return buttons.compactMap { tool, button in
             DedicatedToolPreferences.isVisible(tool, in: .translationPin) ? button : nil
@@ -2458,8 +2459,33 @@ private final class PinEventRouter {
         return registrations.compactMap(\.controller).filter(\.isRoutable)
     }
 
-    private func firstVisibleTarget(at screenPoint: NSPoint) -> PinWindowController? {
-        liveControllers().first { $0.canRoutePointerEvent(at: screenPoint) }
+    private func frontmostTargets() -> [PinWindowController] {
+        let ordered = NSApp.orderedWindows
+        let ranks = Dictionary(uniqueKeysWithValues: ordered.enumerated().map { ($0.element.windowNumber, $0.offset) })
+        return liveControllers().sorted { lhs, rhs in
+            let left = lhs.routingWindow.flatMap { ranks[$0.windowNumber] } ?? Int.max
+            let right = rhs.routingWindow.flatMap { ranks[$0.windowNumber] } ?? Int.max
+            if left != right { return left < right }
+            // Ordered windows can omit non-key floating panels while an app is
+            // inactive. Key/main state is the next closest system z-order hint.
+            let leftKey = lhs.routingWindow?.isKeyWindow == true || lhs.routingWindow?.isMainWindow == true
+            let rightKey = rhs.routingWindow?.isKeyWindow == true || rhs.routingWindow?.isMainWindow == true
+            return leftKey && !rightKey
+        }
+    }
+
+    private func target(for event: NSEvent, screenPoint: NSPoint, isLocal: Bool) -> PinWindowController? {
+        let controllers = frontmostTargets()
+        if isLocal, let eventWindow = event.window,
+           let exact = controllers.first(where: { $0.routingWindow === eventWindow || $0.routingToolbarWindow === eventWindow }) {
+            return exact
+        }
+        // Keep a pinch/wheel session bound to its original pin even after the
+        // image moves away from the mouse as it shrinks.
+        if let locked = controllers.first(where: \.hasLockedZoomSession) {
+            return locked
+        }
+        return controllers.first { $0.canRoutePointerEvent(at: screenPoint) }
     }
 
     private func routeActiveMouseMovement(at screenPoint: NSPoint) {
@@ -2469,33 +2495,31 @@ private final class PinEventRouter {
     }
 
     private func routeLocal(_ event: NSEvent) -> NSEvent? {
+        route(event: event, isLocal: true)
+    }
+
+    private func route(event: NSEvent, isLocal: Bool) -> NSEvent? {
         defer { refreshMovementMonitors() }
         let screenPoint = event.window?.convertPoint(toScreen: event.locationInWindow) ?? NSEvent.mouseLocation
         switch event.type {
         case .leftMouseDown, .rightMouseDown:
-            for controller in liveControllers() {
-                controller.routeMouseDown(at: screenPoint)
-            }
+            target(for: event, screenPoint: screenPoint, isLocal: isLocal)?.routeMouseDown(at: screenPoint)
         case .scrollWheel:
-            guard let target = firstVisibleTarget(at: screenPoint) else { return event }
+            guard let target = target(for: event, screenPoint: screenPoint, isLocal: isLocal) else { return event }
             return target.routeScroll(event) ? nil : event
         case .beginGesture, .endGesture, .gesture, .magnify:
-            guard let target = firstVisibleTarget(at: screenPoint) else { return event }
+            guard let target = target(for: event, screenPoint: screenPoint, isLocal: isLocal) else { return event }
             return target.routeGesture(event) ? nil : event
         case .mouseMoved, .rightMouseDragged:
             routeActiveMouseMovement(at: screenPoint)
         case .leftMouseDragged:
-            let controllers = liveControllers()
-            controllers.forEach {
-                $0.routeMouseDrag(at: screenPoint, modifierFlags: event.modifierFlags)
-            }
+            target(for: event, screenPoint: screenPoint, isLocal: isLocal)?
+                .routeMouseDrag(at: screenPoint, modifierFlags: event.modifierFlags)
             routeActiveMouseMovement(at: screenPoint)
         case .leftMouseUp:
-            liveControllers().forEach { $0.finishExternalMeasureDrag() }
+            target(for: event, screenPoint: screenPoint, isLocal: isLocal)?.finishExternalMeasureDrag()
         case .flagsChanged:
-            for controller in liveControllers() {
-                controller.routeFlags(event, at: NSEvent.mouseLocation)
-            }
+            target(for: event, screenPoint: screenPoint, isLocal: isLocal)?.routeFlags(event, at: screenPoint)
         default:
             break
         }
@@ -2503,7 +2527,7 @@ private final class PinEventRouter {
     }
 
     private func routeGlobal(_ event: NSEvent) {
-        _ = routeLocal(event)
+        _ = route(event: event, isLocal: false)
     }
 }
 

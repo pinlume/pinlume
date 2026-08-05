@@ -10,13 +10,18 @@ class OCRResultController: NSObject, NSWindowDelegate {
     private var copyButton: NSButton?
     private var spinnerView: NSProgressIndicator?
 
-    private var originalText: String
+    private var drafts: OCRTranslationDraftState
     private var qrCodes: [QRCodePayload]
-    private var isShowingTranslation = false
+    private var isTranslating = false
+    private var isProgrammaticTextUpdate = false
     var onClose: (() -> Void)?
 
+    private var isShowingTranslation: Bool {
+        drafts.displayedDraft == .translated
+    }
+
     init(text: String, image: NSImage?, qrCodes: [QRCodePayload] = []) {
-        self.originalText = text
+        self.drafts = OCRTranslationDraftState(sourceDraft: text)
         self.qrCodes = qrCodes
         super.init()
         buildWindow(text: text, image: image, qrCodes: qrCodes)
@@ -228,6 +233,7 @@ class OCRResultController: NSObject, NSWindowDelegate {
             tv.textColor = .secondaryLabelColor
         }
         tv.usesFindBar = true
+        tv.delegate = self
         scrollView.documentView = tv
         self.textView = tv
 
@@ -329,6 +335,7 @@ class OCRResultController: NSObject, NSWindowDelegate {
 
     private func finishClosing() {
         guard window != nil else { return }
+        invalidateTranslationRequest()
         window = nil
         let callback = onClose
         onClose = nil
@@ -373,9 +380,12 @@ class OCRResultController: NSObject, NSWindowDelegate {
     @objc private func languageChanged(_ sender: NSPopUpButton) {
         guard let code = sender.selectedItem?.representedObject as? String else { return }
         TranslationService.targetLanguage = code
-        // If currently showing translation, re-translate with new language
-        if isShowingTranslation {
+        // A language switch must invalidate an in-flight response even when
+        // the window is still showing original OCR text.
+        if isShowingTranslation || isTranslating {
             performTranslation(targetLang: code)
+        } else {
+            drafts.invalidateTranslation(clearTranslatedDraft: true)
         }
     }
 
@@ -390,37 +400,50 @@ class OCRResultController: NSObject, NSWindowDelegate {
     }
 
     @objc private func restoreOriginal() {
-        isShowingTranslation = false
-        setTextViewString(originalText)  // registers undo back to translated state
+        let previousDraft = drafts.displayedDraft
+        invalidateTranslationRequest()
+        drafts.showSource()
+        setTextViewString(drafts.sourceDraft, previousDisplayedDraft: previousDraft)
         translateButton?.title = L("Translate")
-        updateCharCount(for: originalText)
+        updateCharCount(for: drafts.sourceDraft)
     }
 
     /// Sets the text view string and registers an undo action that restores
     /// the previous string AND flips isShowingTranslation + button title.
-    private func setTextViewString(_ newText: String) {
+    private func setTextViewString(
+        _ newText: String,
+        previousDisplayedDraft: OCRTranslationDraftState.DisplayedDraft? = nil
+    ) {
         guard let tv = textView, let um = tv.undoManager else {
+            isProgrammaticTextUpdate = true
             textView?.string = newText
+            isProgrammaticTextUpdate = false
             return
         }
         let previousText = tv.string
-        let wasShowingTranslation = isShowingTranslation
+        let previousDraft = previousDisplayedDraft ?? drafts.displayedDraft
+        isProgrammaticTextUpdate = true
         tv.string = newText
+        isProgrammaticTextUpdate = false
         um.registerUndo(withTarget: self) { [weak self] target in
             guard let self = self else { return }
-            self.isShowingTranslation = wasShowingTranslation
-            self.setTextViewString(previousText)
-            self.translateButton?.title = wasShowingTranslation ? L("Show Original") : L("Translate")
+            let currentDraft = self.drafts.displayedDraft
+            self.drafts.restoreVisibleDraft(previousText, displayedDraft: previousDraft)
+            self.setTextViewString(previousText, previousDisplayedDraft: currentDraft)
+            self.translateButton?.title = previousDraft == .translated ? L("Show Original") : L("Translate")
             self.updateCharCount(for: previousText)
         }
         um.setActionName(L("Translation"))
     }
 
     private func performTranslation(targetLang: String) {
-        guard let tv = textView else { return }
-        let sourceText = isShowingTranslation ? originalText : tv.string
+        guard textView != nil else { return }
+        let sourceText = drafts.sourceDraft
         guard !sourceText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty,
               !sourceText.hasPrefix("(No text") else { return }
+
+        let token = drafts.beginTranslation()
+        isTranslating = true
 
         translateButton?.isEnabled = false
         spinnerView?.isHidden = false
@@ -436,13 +459,15 @@ class OCRResultController: NSObject, NSWindowDelegate {
             texts: nonEmpty,
             sourceLang: sourceLanguage,
             targetLang: targetLang) { [weak self] result in
-            guard let self = self else { return }
+            guard let self = self, self.drafts.contains(token) else { return }
+            self.isTranslating = false
             self.spinnerView?.stopAnimation(nil)
             self.spinnerView?.isHidden = true
             self.translateButton?.isEnabled = true
 
             switch result {
             case .failure(let error):
+                self.drafts.invalidateTranslation()
                 let alert = NSAlert()
                 alert.messageText = L("Translation Failed")
                 alert.informativeText = error.localizedDescription
@@ -460,18 +485,41 @@ class OCRResultController: NSObject, NSWindowDelegate {
                     }
                 }
                 let translatedText = result.joined(separator: "\n")
-                self.isShowingTranslation = true
-                self.setTextViewString(translatedText)
+                let previousDraft = self.drafts.displayedDraft
+                guard self.drafts.acceptTranslation(translatedText, token: token) else { return }
+                self.setTextViewString(translatedText, previousDisplayedDraft: previousDraft)
                 self.translateButton?.title = L("Show Original")
                 self.updateCharCount(for: translatedText)
             }
         }
     }
 
+    private func invalidateTranslationRequest() {
+        drafts.invalidateTranslation()
+        isTranslating = false
+        spinnerView?.stopAnimation(nil)
+        spinnerView?.isHidden = true
+        translateButton?.isEnabled = true
+    }
+
     private func updateCharCount(for text: String) {
         let chars = text.count
         let words = text.split(whereSeparator: { $0.isWhitespace || $0.isNewline }).count
         charCountLabel?.stringValue = String(format: L("%d chars · %d words"), chars, words)
+    }
+}
+
+extension OCRResultController: NSTextViewDelegate {
+    func textDidChange(_ notification: Notification) {
+        guard !isProgrammaticTextUpdate,
+              let changedTextView = notification.object as? NSTextView,
+              changedTextView === textView else { return }
+        drafts.editVisibleText(changedTextView.string)
+        isTranslating = false
+        spinnerView?.stopAnimation(nil)
+        spinnerView?.isHidden = true
+        translateButton?.isEnabled = true
+        updateCharCount(for: changedTextView.string)
     }
 }
 

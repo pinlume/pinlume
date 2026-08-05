@@ -1,6 +1,7 @@
 import Cocoa
 import AVFoundation
 import AVKit
+import ImageIO
 import UniformTypeIdentifiers
 
 /// Standalone video editor window for trimming and exporting recorded videos.
@@ -203,6 +204,10 @@ private final class VideoEditorView: NSView {
     private var finderBtnRect: NSRect = .zero
     private var isMuted: Bool = false
     private var savedURL: URL?
+    /// Exactly one export may own this editor's temporary output at a time.
+    /// The operation survives AVFoundation's asynchronous completion and is
+    /// explicitly cancelled when the editor closes.
+    private var activeExportOperation: VideoExportOperation?
     private var statusMessage: String?
     private var statusIsError: Bool = false
     private var statusTimer: Timer?
@@ -575,6 +580,13 @@ private final class VideoEditorView: NSView {
 
         playerSetupTask?.cancel()
         playerSetupTask = nil
+        let sourceURL = videoURL
+        let removeOwnedSource: () -> Void = { [deleteOnClose] in
+            if deleteOnClose { try? FileManager.default.removeItem(at: sourceURL) }
+        }
+        let sourceCleanupWasDeferred = activeExportOperation?.cancelAndCleanup(
+            afterWorkerStops: removeOwnedSource) == true
+        activeExportOperation = nil
         thumbnailGeneration &+= 1
         thumbnailGenerator?.cancelAllCGImageGeneration()
         thumbnailGenerator = nil
@@ -597,9 +609,7 @@ private final class VideoEditorView: NSView {
         asset = nil
         // Delete only if the file was a temporary recording we own. User-
         // opened files must never be deleted — that would be data loss.
-        if deleteOnClose {
-            try? FileManager.default.removeItem(at: videoURL)
-        }
+        if !sourceCleanupWasDeferred { removeOwnedSource() }
     }
 
     private var currentPlaybackTime: Double {
@@ -1541,21 +1551,51 @@ private final class VideoEditorView: NSView {
             start: CMTime(seconds: trimStart, preferredTimescale: 600),
             end: CMTime(seconds: trimEnd, preferredTimescale: 600)
         )
-        let complete: (Bool) -> Void = { success in
+        let complete: (Bool, Bool) -> Void = { success, needsManualCleanup in
             DispatchQueue.main.async {
-                if !success { try? FileManager.default.removeItem(at: temporaryURL) }
+                if !success && needsManualCleanup { try? FileManager.default.removeItem(at: temporaryURL) }
                 completion(success ? temporaryURL : nil)
             }
         }
         if exportQuality != .high {
-            reencodeExport(asset: asset, timeRange: timeRange, outputURL: temporaryURL, completion: complete)
+            let operation = VideoExportOperation()
+            activeExportOperation = operation
+            operation.startExternal(temporaryURL: temporaryURL, work: { [weak self] cancellation, finish in
+                guard let self else {
+                    finish(.failure(VideoExportOperation.Failure.cancelled))
+                    return
+                }
+                self.reencodeExport(
+                    asset: asset, timeRange: timeRange, outputURL: temporaryURL,
+                    cancellation: cancellation
+                ) { success in
+                    finish(success
+                        ? .success(temporaryURL)
+                        : .failure(VideoExportOperation.Failure.exportFailed(nil)))
+                }
+            }, completion: { [weak self, weak operation] result in
+                guard let self, self.activeExportOperation === operation else { return }
+                self.activeExportOperation = nil
+                if case .success = result {
+                    complete(true, false)
+                } else {
+                    complete(false, false)
+                }
+            })
         } else if let session = exportSession(asset: asset, timeRange: timeRange, outputURL: temporaryURL) {
-            Task {
-                await session.export()
-                await MainActor.run { complete(session.status == .completed) }
+            let operation = VideoExportOperation()
+            activeExportOperation = operation
+            operation.start(session: session, temporaryURL: temporaryURL) { [weak self, weak operation] result in
+                guard let self, self.activeExportOperation === operation else { return }
+                self.activeExportOperation = nil
+                if case .success = result {
+                    complete(true, false)
+                } else {
+                    complete(false, false)
+                }
             }
         } else {
-            complete(false)
+            complete(false, true)
         }
     }
 
@@ -1648,11 +1688,18 @@ private final class VideoEditorView: NSView {
         }
         let ext = exportAsGIF ? "gif" : videoURL.pathExtension
         let name = videoURL.deletingPathExtension().lastPathComponent + ".\(ext)"
-        let destURL = dirURL.appendingPathComponent(name)
+        guard let destURL = try? TransactionalOutput.reserveUnique(in: dirURL, filename: name) else {
+            SaveDirectoryAccess.stopAccessing(url: dirURL)
+            showStatus(L("Save failed"), isError: true)
+            return
+        }
         if exportAsGIF && !isGIF {
-            convertToGIF(destURL: destURL)
+            convertToGIF(
+                destURL: destURL,
+                reservedDestination: true,
+                scopedDirectory: dirURL)
         } else {
-            saveToDestination(destURL, dirURL: dirURL)
+            saveToDestination(destURL, dirURL: dirURL, reservedDestination: true)
         }
     }
 
@@ -1743,15 +1790,21 @@ private final class VideoEditorView: NSView {
         }
     }
 
-    private func convertToGIF(destURL: URL, completion: ((Bool) -> Void)? = nil) {
+    private func convertToGIF(
+        destURL: URL,
+        reservedDestination: Bool = false,
+        scopedDirectory: URL? = nil,
+        completion: ((Bool) -> Void)? = nil
+    ) {
         guard let asset = asset else { completion?(false); return }
         showStatus(L("Processing GIF…"), persist: true)
 
         let startTime = CMTime(seconds: trimStart, preferredTimescale: 600)
         let endTime = CMTime(seconds: trimEnd, preferredTimescale: 600)
         let timeRange = CMTimeRange(start: startTime, end: endTime)
-        // GIF capped at 15fps
-        let gifFPS = min(15, asset.tracks(withMediaType: .video).first.map { Int($0.nominalFrameRate.rounded()) } ?? 15)
+        // GIF is capped at 15fps; missing/zero metadata falls back to 15fps.
+        let nominalFrameRate = Double(asset.tracks(withMediaType: .video).first?.nominalFrameRate ?? 0)
+        let gifFPS = GIFFrameTiming.targetFPS(nominalFrameRate: nominalFrameRate)
         let scale = exportScale
         let hasEffects = !zoomSegments.isEmpty || !censorSegments.isEmpty || !textSegments.isEmpty
 
@@ -1791,16 +1844,26 @@ private final class VideoEditorView: NSView {
             }
         }
 
-        DispatchQueue.global(qos: .background).async { [weak self] in
-            do {
+        let tmpURL = FileManager.default.temporaryDirectory
+            .appendingPathComponent(UUID().uuidString + ".gif")
+        let operation = VideoExportOperation()
+        activeExportOperation = operation
+        operation.startExternal(
+            temporaryURL: tmpURL,
+            targetURL: destURL,
+            reservedTarget: reservedDestination,
+            scopedDirectory: scopedDirectory,
+            work: { [weak self] cancellation, finish in
+                DispatchQueue.global(qos: .background).async { [weak self] in
+                    do {
+                        guard !cancellation.isCancelled else {
+                            throw VideoExportOperation.Failure.cancelled
+                        }
                 let reader = try AVAssetReader(asset: readerAsset)
                 guard let videoTrack = readerVideoTrackOpt else {
-                    DispatchQueue.main.async {
-                        self?.showStatus(L("No video track found"), isError: true)
-                        completion?(false)
-                    }
-                    return
+                    throw CocoaError(.fileReadUnknown)
                 }
+                cancellation.register { reader.cancelReading() }
 
                 let readerOutput: AVAssetReaderOutput
                 if let comp = readerVideoComposition {
@@ -1833,10 +1896,11 @@ private final class VideoEditorView: NSView {
                 reader.timeRange = readerTimeRange
                 reader.add(readerOutput)
 
-                let tmpURL = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString + ".gif")
-                let sourceFPS = Int(videoTrack.nominalFrameRate.rounded())
-                let encoder = GIFEncoder(url: tmpURL, fps: gifFPS, sourceFPS: max(sourceFPS, gifFPS))
-                reader.startReading()
+                let sourceFPS = max(Int(videoTrack.nominalFrameRate.rounded()), gifFPS)
+                let encoder = GIFEncoder(url: tmpURL, fps: gifFPS)
+                guard reader.startReading() else {
+                    throw reader.error ?? CocoaError(.fileReadUnknown)
+                }
 
                 let durationSec = CMTimeGetSeconds(readerTimeRange.duration)
                 let estimatedFrames = max(1, Int(durationSec * Double(sourceFPS)))
@@ -1844,10 +1908,13 @@ private final class VideoEditorView: NSView {
                 var lastReportedPct = -1
 
                 while reader.status == .reading {
-                    autoreleasepool {
+                    guard !cancellation.isCancelled else {
+                        throw VideoExportOperation.Failure.cancelled
+                    }
+                    try autoreleasepool {
                         if let sampleBuffer = readerOutput.copyNextSampleBuffer(),
                            let pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) {
-                            encoder.addFrame(pixelBuffer)
+                            try encoder.addFrame(pixelBuffer, presentationTime: CMSampleBufferGetPresentationTimeStamp(sampleBuffer))
                             framesRead += 1
                         }
                     }
@@ -1856,6 +1923,7 @@ private final class VideoEditorView: NSView {
                     if pct != lastReportedPct {
                         lastReportedPct = pct
                         DispatchQueue.main.async {
+                            guard !cancellation.isCancelled else { return }
                             self?.showStatus(String(format: L("Processing GIF…") + " %d%%", pct), persist: true)
                         }
                     }
@@ -1864,31 +1932,45 @@ private final class VideoEditorView: NSView {
                 DispatchQueue.main.async {
                     self?.showStatus(L("Processing GIF…") + " 50%", persist: true)
                 }
-                encoder.finish()
+                guard reader.status == .completed else {
+                    throw reader.error ?? CocoaError(.fileReadUnknown)
+                }
+                guard !cancellation.isCancelled else {
+                    throw VideoExportOperation.Failure.cancelled
+                }
+                try encoder.finish(finalPresentationTime: readerTimeRange.end)
                 DispatchQueue.main.async {
                     self?.showStatus(L("Processing GIF…") + " 100%", persist: true)
                 }
 
-                // Move to destination
-                try? FileManager.default.removeItem(at: destURL)
-                try FileManager.default.moveItem(at: tmpURL, to: destURL)
-
-                DispatchQueue.main.async {
-                    self?.savedURL = destURL
-                    self?.showStatus(String(format: L("Saved to %@"), destURL.lastPathComponent))
-                    self?.needsDisplay = true
-                    completion?(true)
+                try TransactionalOutput.commit(to: destURL, reservedDestination: reservedDestination, produce: { stagedURL in
+                    try FileManager.default.copyItem(at: tmpURL, to: stagedURL)
+                }, validate: Self.validateGIFOutput)
+                try? FileManager.default.removeItem(at: tmpURL)
+                        finish(.success(destURL))
+                    } catch {
+                        finish(.failure(error))
+                    }
                 }
-            } catch {
-                DispatchQueue.main.async {
-                    self?.showStatus(L("GIF conversion failed"), isError: true)
+            },
+            completion: { [weak self, weak operation] result in
+                guard let self, self.activeExportOperation === operation else { return }
+                self.activeExportOperation = nil
+                switch result {
+                case .success:
+                    self.savedURL = destURL
+                    self.showStatus(String(format: L("Saved to %@"), destURL.lastPathComponent))
+                    self.needsDisplay = true
+                    completion?(true)
+                case .failure:
+                    self.showStatus(L("GIF conversion failed"), isError: true)
                     completion?(false)
                 }
             }
-        }
+        )
     }
 
-    private func saveToDestination(_ destURL: URL, dirURL: URL?) {
+    private func saveToDestination(_ destURL: URL, dirURL: URL?, reservedDestination: Bool = false) {
         let needsRecompress = exportQuality != .high
         let needsExport = hasPendingEdits
 
@@ -1905,9 +1987,10 @@ private final class VideoEditorView: NSView {
                 needsDisplay = true
                 return
             }
-            try? FileManager.default.removeItem(at: destURL)
             do {
-                try FileManager.default.copyItem(at: videoURL, to: destURL)
+                try TransactionalOutput.commit(to: destURL, reservedDestination: reservedDestination, produce: { stagedURL in
+                    try FileManager.default.copyItem(at: videoURL, to: stagedURL)
+                }, validate: Self.validateMovieOutput)
                 savedURL = destURL
                 if let dirURL = dirURL { SaveDirectoryAccess.stopAccessing(url: dirURL) }
                 showStatus(String(format: L("Saved to %@"), destURL.lastPathComponent))
@@ -1933,12 +2016,14 @@ private final class VideoEditorView: NSView {
 
         let onCompletion: (Bool) -> Void = { [weak self] success in
             guard let self = self else { return }
+            self.activeExportOperation = nil
             if success {
-                try? FileManager.default.removeItem(at: destURL)
                 do {
-                    try FileManager.default.moveItem(at: tmpURL, to: destURL)
+                    try TransactionalOutput.commit(to: destURL, reservedDestination: reservedDestination, produce: { stagedURL in
+                        try FileManager.default.copyItem(at: tmpURL, to: stagedURL)
+                    }, validate: Self.validateMovieOutput)
+                    try? FileManager.default.removeItem(at: tmpURL)
                     self.savedURL = destURL
-                    if let dirURL = dirURL { SaveDirectoryAccess.stopAccessing(url: dirURL) }
                     self.showStatus(String(format: L("Saved to %@"), destURL.lastPathComponent))
                     self.needsDisplay = true
                 } catch {
@@ -1946,28 +2031,87 @@ private final class VideoEditorView: NSView {
                 }
             } else {
                 self.showStatus(L("Export failed"), isError: true)
-                try? FileManager.default.removeItem(at: tmpURL)
             }
         }
 
         if needsRecompress {
-            reencodeExport(asset: asset, timeRange: timeRange, outputURL: tmpURL, completion: onCompletion)
+            let operation = VideoExportOperation()
+            activeExportOperation = operation
+            operation.startExternal(
+                temporaryURL: tmpURL,
+                targetURL: destURL,
+                reservedTarget: reservedDestination,
+                scopedDirectory: dirURL,
+                work: { [weak self] cancellation, finish in
+                    guard let self else {
+                        finish(.failure(VideoExportOperation.Failure.cancelled))
+                        return
+                    }
+                    self.reencodeExport(
+                        asset: asset, timeRange: timeRange, outputURL: tmpURL,
+                        cancellation: cancellation
+                    ) { success in
+                        finish(success
+                            ? .success(tmpURL)
+                            : .failure(VideoExportOperation.Failure.exportFailed(nil)))
+                    }
+                },
+                completion: { [weak self, weak operation] result in
+                    guard let self, self.activeExportOperation === operation else { return }
+                    if case .success = result { onCompletion(true) } else { onCompletion(false) }
+                }
+            )
         } else {
             guard let session = exportSession(asset: asset, timeRange: timeRange, outputURL: tmpURL) else {
                 showStatus(L("Export failed"), isError: true)
+                if let dirURL = dirURL { SaveDirectoryAccess.stopAccessing(url: dirURL) }
                 return
             }
-            Task {
-                await session.export()
-                await MainActor.run { onCompletion(session.status == .completed) }
+            let operation = VideoExportOperation()
+            activeExportOperation = operation
+            operation.start(
+                session: session,
+                temporaryURL: tmpURL,
+                targetURL: destURL,
+                reservedTarget: reservedDestination,
+                scopedDirectory: dirURL
+            ) { [weak self, weak operation] result in
+                guard let self, self.activeExportOperation === operation else { return }
+                if case .success = result {
+                    onCompletion(true)
+                } else {
+                    onCompletion(false)
+                }
             }
+        }
+    }
+
+    private static func validateMovieOutput(_ url: URL) throws {
+        try TransactionalOutput.validateNonEmptyFile(url)
+        let asset = AVAsset(url: url)
+        guard asset.isPlayable, !asset.tracks(withMediaType: .video).isEmpty else {
+            throw CocoaError(.fileReadCorruptFile)
+        }
+    }
+
+    private static func validateGIFOutput(_ url: URL) throws {
+        try TransactionalOutput.validateNonEmptyFile(url)
+        guard let source = CGImageSourceCreateWithURL(url as CFURL, nil), CGImageSourceGetCount(source) > 0 else {
+            throw CocoaError(.fileReadCorruptFile)
         }
     }
 
     /// Re-encode pipeline with explicit bitrate control via AVAssetReader/Writer.
     /// Used when the user selects a non-High quality preset so the bitrate
     /// actually takes effect (AVAssetExportSession presets hardcode bitrate).
-    private func reencodeExport(asset: AVAsset, timeRange: CMTimeRange, outputURL: URL, completion: @escaping (Bool) -> Void) {
+    private func reencodeExport(
+        asset: AVAsset,
+        timeRange: CMTimeRange,
+        outputURL: URL,
+        cancellation: VideoExportCancellation,
+        completion: @escaping (Bool) -> Void
+    ) {
+        guard !cancellation.isCancelled else { completion(false); return }
         guard let videoTrack = asset.tracks(withMediaType: .video).first else {
             completion(false)
             return
@@ -2037,6 +2181,7 @@ private final class VideoEditorView: NSView {
         DispatchQueue.global(qos: .userInitiated).async { [weak self] in
             guard let self = self else { completion(false); return }
             do {
+                guard !cancellation.isCancelled else { completion(false); return }
                 try? FileManager.default.removeItem(at: outputURL)
                 let writer = try AVAssetWriter(outputURL: outputURL, fileType: .mp4)
                 let videoSettings = VideoEncodingSettings.outputSettings(
@@ -2055,6 +2200,11 @@ private final class VideoEditorView: NSView {
 
                 let reader = try AVAssetReader(asset: readerAsset)
                 reader.timeRange = readerTimeRange
+                cancellation.register {
+                    reader.cancelReading()
+                    writer.cancelWriting()
+                }
+                guard !cancellation.isCancelled else { completion(false); return }
 
                 // Video output: either composition output (zoom path) or direct
                 // track output (scale-only path).
@@ -2122,7 +2272,7 @@ private final class VideoEditorView: NSView {
                 group.enter()
                 videoInput.requestMediaDataWhenReady(on: videoQueue) {
                     while videoInput.isReadyForMoreMediaData {
-                        guard reader.status == .reading,
+                        guard !cancellation.isCancelled, reader.status == .reading,
                               let sample = videoOutput.copyNextSampleBuffer() else {
                             videoInput.markAsFinished()
                             group.leave()
@@ -2146,7 +2296,7 @@ private final class VideoEditorView: NSView {
                     group.enter()
                     input.requestMediaDataWhenReady(on: audioQueue) {
                         while input.isReadyForMoreMediaData {
-                            guard reader.status == .reading,
+                            guard !cancellation.isCancelled, reader.status == .reading,
                                   let sample = output.copyNextSampleBuffer() else {
                                 input.markAsFinished()
                                 group.leave()
@@ -2166,8 +2316,13 @@ private final class VideoEditorView: NSView {
                 }
 
                 group.notify(queue: .global(qos: .userInitiated)) {
+                    guard !cancellation.isCancelled else {
+                        completion(false)
+                        return
+                    }
                     writer.finishWriting {
-                        let ok = (writer.status == .completed) && (reader.status != .failed)
+                        let ok = !cancellation.isCancelled
+                            && (writer.status == .completed) && (reader.status != .failed)
                         DispatchQueue.main.async { completion(ok) }
                     }
                 }
@@ -2179,50 +2334,30 @@ private final class VideoEditorView: NSView {
 
     #if !OFFLINE
     private func uploadVideo() {
-        let provider = UserDefaults.standard.string(forKey: "uploadProvider") ?? "imgbb"
-
-        if provider == "gdrive" && !GoogleDriveUploader.shared.isSignedIn {
-            showStatus(L("Sign in to Google Drive in Settings"), isError: true)
-            return
-        }
-        if provider == "s3" && !S3Uploader.shared.isConfigured {
-            showStatus(L("Configure S3 in Settings"), isError: true)
-            return
-        }
-        if provider != "gdrive" && provider != "s3" {
-            showStatus(L("Video upload requires Google Drive or S3"), isError: true)
-            return
-        }
-
-        let providerLabel = provider == "s3" ? "S3" : "Drive"
-        showStatus(String(format: L("Uploading to %@... %d%%"), providerLabel, 0))
-
-        let progressHandler: (Double) -> Void = { [weak self] fraction in
-            self?.showStatus(String(format: L("Uploading to %@... %d%%"), providerLabel, Int(fraction * 100)))
-        }
-
-        let completionHandler: (Result<String, Error>) -> Void = { [weak self] result in
-            switch result {
-            case .success(let link):
-                NSPasteboard.general.clearContents()
-                NSPasteboard.general.setString(link, forType: .string)
-                self?.showStatus(L("Uploaded! Link copied."))
-            case .failure(let error):
-                self?.showStatus(String(format: L("Upload failed: %@"), error.localizedDescription), isError: true)
-            }
-        }
-
         let uploadFileURL: (URL, Bool) -> Void = { fileURL, isTemp in
-            let wrappedCompletion: (Result<String, Error>) -> Void = { result in
+            let providerLabel = (UserDefaults.standard.string(forKey: "uploadProvider") ?? "imgbb") == "s3" ? "S3" : "Drive"
+            let accepted = UploadGateway.shared.upload(
+                .video(fileURL),
+                presentingWindow: self.window,
+                onStart: { [weak self] in
+                    self?.showStatus(String(format: L("Uploading to %@... %d%%"), providerLabel, 0))
+                },
+                onProgress: { [weak self] fraction in
+                    self?.showStatus(String(format: L("Uploading to %@... %d%%"), providerLabel, Int(fraction * 100)))
+                }
+            ) { [weak self] result in
                 if isTemp { try? FileManager.default.removeItem(at: fileURL) }
-                completionHandler(result)
+                switch result {
+                case .success(let result):
+                    NSPasteboard.general.clearContents()
+                    NSPasteboard.general.setString(result.link, forType: .string)
+                    self?.showStatus(L("Uploaded! Link copied."))
+                case .failure(let error):
+                    self?.showStatus(String(format: L("Upload failed: %@"), error.localizedDescription), isError: true)
+                }
             }
-            if provider == "s3" {
-                S3Uploader.shared.onProgress = progressHandler
-                S3Uploader.shared.uploadVideo(url: fileURL, completion: wrappedCompletion)
-            } else {
-                GoogleDriveUploader.shared.onProgress = progressHandler
-                GoogleDriveUploader.shared.uploadVideo(url: fileURL, completion: wrappedCompletion)
+            if !accepted, isTemp {
+                try? FileManager.default.removeItem(at: fileURL)
             }
         }
 
@@ -2246,15 +2381,16 @@ private final class VideoEditorView: NSView {
                 return
             }
 
-            Task {
-                await session.export()
-                await MainActor.run {
-                    guard session.status == .completed else {
-                        self.showStatus(L("Export failed"), isError: true)
-                        return
-                    }
-                    uploadFileURL(tmpURL, true)
+            let operation = VideoExportOperation()
+            activeExportOperation = operation
+            operation.start(session: session, temporaryURL: tmpURL) { [weak self, weak operation] result in
+                guard let self, self.activeExportOperation === operation else { return }
+                self.activeExportOperation = nil
+                guard case .success = result else {
+                    self.showStatus(L("Export failed"), isError: true)
+                    return
                 }
+                uploadFileURL(tmpURL, true)
             }
         }
     }

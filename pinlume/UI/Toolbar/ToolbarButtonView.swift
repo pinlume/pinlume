@@ -236,6 +236,59 @@ class ToolbarButtonView: NSView {
     }
 
     override func acceptsFirstMouse(for event: NSEvent?) -> Bool { true }
+    override var acceptsFirstResponder: Bool { !isSeparator && isEnabled }
+
+    override func becomeFirstResponder() -> Bool {
+        guard acceptsFirstResponder else { return false }
+        needsDisplay = true
+        return true
+    }
+
+    override func resignFirstResponder() -> Bool {
+        needsDisplay = true
+        return true
+    }
+
+    override func keyDown(with event: NSEvent) {
+        guard acceptsFirstResponder else { return }
+        switch event.keyCode {
+        case 36, 49, 76: // Return, Space, keypad Enter
+            _ = performPrimaryAction()
+        default:
+            super.keyDown(with: event)
+        }
+    }
+
+    // MARK: - Accessibility
+
+    override func isAccessibilityElement() -> Bool { !isSeparator }
+
+    override func accessibilityRole() -> NSAccessibility.Role? {
+        isSeparator ? nil : .button
+    }
+
+    override func accessibilityLabel() -> String? {
+        tooltipText.isEmpty ? sfSymbol : tooltipText
+    }
+
+    override func accessibilityValue() -> Any? {
+        NSNumber(value: isOn)
+    }
+
+    override func isAccessibilityEnabled() -> Bool { isEnabled && !isSeparator }
+
+    override func isAccessibilitySelected() -> Bool { isOn }
+
+    override func accessibilityPerformPress() -> Bool {
+        performPrimaryAction()
+    }
+
+    @discardableResult
+    private func performPrimaryAction() -> Bool {
+        guard !isSeparator, isEnabled, let onClick else { return false }
+        onClick(action)
+        return true
+    }
 
     // Toolbar buttons always show the arrow cursor, overriding the overlay's
     // crosshair / hidden drawing-cursor that would otherwise bleed through.
@@ -352,7 +405,7 @@ class ToolbarButtonView: NSView {
         }
         forwardingDrag = false
         if wasPressed && bounds.contains(convert(event.locationInWindow, from: nil)) {
-            onClick?(action)
+            _ = performPrimaryAction()
         }
     }
 

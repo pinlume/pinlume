@@ -4,11 +4,15 @@ import AVFoundation
 /// Shows a dialog to merge microphone + system audio tracks into one,
 /// with individual volume sliders. Presented after recording when both
 /// audio sources were active.
-final class AudioMergeController {
+final class AudioMergeController: NSObject, NSWindowDelegate {
 
     private var window: NSPanel?
     private var micSlider: NSSlider!
     private var systemSlider: NSSlider!
+    private var sourceURL: URL?
+    private var completion: ((URL) -> Void)?
+    private var isMerging = false
+    private var completionGate = AudioMergeCompletionGate()
 
     /// Merge the audio tracks and call completion with the final URL.
     /// If the user skips merging, completion is called with the original URL.
@@ -35,6 +39,7 @@ final class AudioMergeController {
         panel.center()
         panel.isReleasedWhenClosed = false
         panel.appearance = NSAppearance(named: .darkAqua)
+        panel.delegate = self
 
         let content = NSView(frame: NSRect(x: 0, y: 0, width: panelW, height: panelH))
 
@@ -88,36 +93,46 @@ final class AudioMergeController {
         skipBtn.action = #selector(skipClicked)
 
         // Store state for callbacks
-        _url = url
-        _completion = completion
+        sourceURL = url
+        self.completion = completion
+        completionGate = AudioMergeCompletionGate()
 
         panel.makeKeyAndOrderFront(nil)
         NSApp.activate(ignoringOtherApps: true)
     }
 
-    private var _url: URL!
-    private var _completion: ((URL) -> Void)!
-
     @objc private func mergeClicked() {
         let micVol = Float(micSlider.doubleValue)
         let sysVol = Float(systemSlider.doubleValue)
-        let url = _url!
-        let completion = _completion!
+        guard let url = sourceURL else { return }
+        isMerging = true
         window?.close()
         window = nil
 
-        mergeAudioTracks(url: url, micVolume: micVol, systemVolume: sysVol) { mergedURL in
-            DispatchQueue.main.async {
-                completion(mergedURL ?? url)
-            }
+        mergeAudioTracks(url: url, micVolume: micVol, systemVolume: sysVol) { [self] mergedURL in
+            DispatchQueue.main.async { self.finishOnce(mergedURL ?? url) }
         }
     }
 
     @objc private func skipClicked() {
-        let url = _url!
-        let completion = _completion!
+        guard let url = sourceURL else { return }
+        finishOnce(url)
         window?.close()
         window = nil
+    }
+
+    func windowWillClose(_ notification: Notification) {
+        // Red close, Cmd-W and Esc all mean "keep original" unless a merge is
+        // already running. This is deliberately one completion path.
+        if !isMerging, let sourceURL { finishOnce(sourceURL) }
+        window = nil
+    }
+
+    private func finishOnce(_ url: URL) {
+        guard completionGate.finishOnce() else { return }
+        guard let completion else { return }
+        self.completion = nil
+        sourceURL = nil
         completion(url)
     }
 
@@ -172,10 +187,10 @@ final class AudioMergeController {
         sysParams.setVolume(systemVolume, at: .zero)
         audioMix.inputParameters = [micParams, sysParams]
 
-        // Export to a new file
+        // Never remove the recording before a complete, validated replacement
+        // exists. The temporary path is private to this merge attempt.
         let mergedURL = url.deletingLastPathComponent()
-            .appendingPathComponent(url.deletingPathExtension().lastPathComponent + "_merged.mp4")
-        try? FileManager.default.removeItem(at: mergedURL)
+            .appendingPathComponent("." + url.deletingPathExtension().lastPathComponent + ".merge-" + UUID().uuidString + ".mp4")
 
         guard let exporter = AVAssetExportSession(asset: composition, presetName: AVAssetExportPresetPassthrough) else {
             completion(nil)
@@ -187,13 +202,16 @@ final class AudioMergeController {
 
         exporter.exportAsynchronously {
             if exporter.status == .completed {
-                // Replace original with merged version
                 do {
-                    try FileManager.default.removeItem(at: url)
-                    try FileManager.default.moveItem(at: mergedURL, to: url)
+                    try TransactionalOutput.commit(to: url, produce: { stagedURL in
+                        try FileManager.default.copyItem(at: mergedURL, to: stagedURL)
+                    }, validate: Self.validateMovieOutput)
+                    try? FileManager.default.removeItem(at: mergedURL)
                     completion(url)
                 } catch {
-                    completion(mergedURL)
+                    // Preserve both the original and the diagnostic temporary
+                    // file; the caller safely continues with the original.
+                    completion(nil)
                 }
             } else {
                 #if DEBUG
@@ -201,6 +219,14 @@ final class AudioMergeController {
                 #endif
                 completion(nil)
             }
+        }
+    }
+
+    private static func validateMovieOutput(_ url: URL) throws {
+        try TransactionalOutput.validateNonEmptyFile(url)
+        let asset = AVAsset(url: url)
+        guard asset.isPlayable, !asset.tracks(withMediaType: .video).isEmpty else {
+            throw CocoaError(.fileReadCorruptFile)
         }
     }
 }

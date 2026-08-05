@@ -155,15 +155,26 @@ class OverlayWindowController {
     private var shareDelegate: SharePickerDelegate?
     private var shareDismissTime: Date = .distantPast
     private var screenTranslationRequestToken = 0
+    private var captureSessionGeneration: UInt = 0
+    private var operationGeneration: UInt = 0
     private var localEscapeMonitor: Any?
     private var globalEscapeMonitor: Any?
     /// The source overlay remains ordered only to anchor an NSSavePanel sheet
     /// on its capture display. Its pixels and input must stay hidden until the
     /// sheet completes, then cancellation can restore the same selection.
     private var saveSheetHostIsVisuallyHidden = false
+    private func beginOperationGeneration() -> (capture: UInt, operation: UInt) {
+        operationGeneration &+= 1
+        return (captureSessionGeneration, operationGeneration)
+    }
+
+    private func isCurrentOperation(_ token: (capture: UInt, operation: UInt)) -> Bool {
+        token.capture == captureSessionGeneration && token.operation == operationGeneration
+    }
     var windowNumber: CGWindowID {
         overlayWindow.map { CGWindowID($0.windowNumber) } ?? CGWindowID.max
     }
+    var presentationWindow: NSWindow? { overlayWindow }
     private(set) var screen: NSScreen = NSScreen.main ?? NSScreen.screens.first ?? NSScreen()
     var screenshotImage: NSImage? { overlayView?.screenshotImage }
     var selectionRect: NSRect { overlayView?.selectionRect ?? .zero }
@@ -249,6 +260,9 @@ class OverlayWindowController {
     /// Install the screenshot into the overlay's backing layer. Once set, the
     /// window becomes opaque (dark dim) and the overlay can render annotations.
     private func installScreenshot(_ image: CGImage) {
+        captureSessionGeneration &+= 1
+        operationGeneration &+= 1
+        overlayView?.beginCaptureSessionGeneration()
         let nsImage = NSImage(cgImage: image, size: screen.frame.size)
         overlayView?.captureSourceImage = nsImage
         overlayView?.screenshotImage = nsImage
@@ -548,6 +562,9 @@ class OverlayWindowController {
         removeGlobalEscapeMonitor()
         saveSheetHostIsVisuallyHidden = false
         screenTranslationRequestToken &+= 1
+        captureSessionGeneration &+= 1
+        operationGeneration &+= 1
+        overlayView?.invalidateAsyncOperations()
         saveSelectionIfNeeded()
         overlayView?.dismissPixelInspector()
         overlayView?.reset()
@@ -909,11 +926,13 @@ extension OverlayWindowController: OverlayViewDelegate {
             return
         }
 
+        let token = beginOperationGeneration()
         DispatchQueue.global(qos: .userInitiated).async {
             VisionOCR.performTextAndQRCodeRecognition(cgImage: cgImage) { [weak self] result in
                 guard let self = self else { return }
                 let capturedImage = image  // capture before dismiss
                 DispatchQueue.main.async {
+                    guard self.isCurrentOperation(token) else { return }
                     self.playCopySound()
                     self.dismiss()
                     self.overlayDelegate?.overlayDidRequestOCR(self, result: result, image: capturedImage)
@@ -929,8 +948,10 @@ extension OverlayWindowController: OverlayViewDelegate {
             overlayView?.failSelectableOCRRecognition(token: token)
             return
         }
+        let operationToken = beginOperationGeneration()
         VisionOCR.performStructuredTextRecognition(cgImage: cgImage) { [weak self] result in
             guard let self else { return }
+            guard self.isCurrentOperation(operationToken) else { return }
             switch result {
             case .success(let structuredResult):
                 self.overlayView?.finishSelectableOCRRecognition(token: token, result: structuredResult)
@@ -956,6 +977,7 @@ extension OverlayWindowController: OverlayViewDelegate {
     func overlayViewDidRequestScreenTranslation() {
         screenTranslationRequestToken &+= 1
         let token = screenTranslationRequestToken
+        let operationToken = beginOperationGeneration()
         guard let frame = selectedGlobalFrame(), screen.frame.contains(frame) else {
             overlayView?.failScreenTranslation(L("Screen translation must stay on one display")); return
         }
@@ -963,8 +985,11 @@ extension OverlayWindowController: OverlayViewDelegate {
               let cgImage = image.cgImage(forProposedRect: nil, context: nil, hints: nil) else {
             overlayView?.failScreenTranslation(L("Unable to capture selection")); return
         }
-        VisionOCR.performStructuredTextRecognition(cgImage: cgImage) { [weak self] result in
-            guard let self, token == self.screenTranslationRequestToken else { return }
+        VisionOCR.performStructuredTextRecognition(
+            cgImage: cgImage,
+            mode: .screenTranslation) { [weak self] result in
+            guard let self, token == self.screenTranslationRequestToken,
+                  self.isCurrentOperation(operationToken) else { return }
             switch result {
             case .success(let structured) where !structured.blocks.isEmpty:
                 self.overlayDelegate?.overlayDidRequestScreenTranslation(
@@ -978,6 +1003,7 @@ extension OverlayWindowController: OverlayViewDelegate {
 
     func overlayViewDidInvalidateScreenTranslation() {
         screenTranslationRequestToken &+= 1
+        operationGeneration &+= 1
     }
 
     func finishScreenTranslation(requestToken: Int, session: ScreenTranslationSession) {
@@ -998,8 +1024,9 @@ extension OverlayWindowController: OverlayViewDelegate {
         guard var image = captureRegion() else { return }
         let annotationData = currentAnnotationDataForHistory()
         image = applyBeautifyIfNeeded(image) ?? image
-        playCopySound()
-        dismiss()
+        // Keep the capture session intact while UploadGateway presents its
+        // confirmation. AppDelegate dismisses only after the gateway accepts;
+        // cancelling therefore returns to the same editable selection.
         overlayDelegate?.overlayDidRequestUpload(self, image: image, annotationData: annotationData)
         #endif
     }
@@ -1159,6 +1186,7 @@ extension OverlayWindowController: OverlayViewDelegate {
     @available(macOS 14.0, *)
     func overlayViewDidRequestRemoveBackground() {
         guard var image = captureRegion() else { return }
+        let token = beginOperationGeneration()
         image = applyBeautifyIfNeeded(image) ?? image
 
         guard let cgImage = image.cgImage(forProposedRect: nil, context: nil, hints: nil) else {
@@ -1204,6 +1232,7 @@ extension OverlayWindowController: OverlayViewDelegate {
                 let finalNSImage = NSImage(cgImage: finalCGImage, size: image.size)
 
                 DispatchQueue.main.async {
+                    guard self.isCurrentOperation(token) else { return }
                     let outputAction = CaptureOutputAction.current()
                     if outputAction.copiesToClipboard {
                         self.copyImageToClipboard(finalNSImage)
@@ -1227,6 +1256,7 @@ extension OverlayWindowController: OverlayViewDelegate {
                     print("Vision background removal error: \(error.localizedDescription)")
                 #endif
                 DispatchQueue.main.async {
+                    guard self.isCurrentOperation(token) else { return }
                     self.overlayView?.showOverlayError(
                         "Background removal failed — no clear subject found.")
                 }

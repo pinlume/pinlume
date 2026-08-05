@@ -260,7 +260,7 @@ struct SettingsProfile: Codable, Equatable, Identifiable {
 }
 
 struct SettingsProfileDocument: Codable, Equatable {
-    static let currentSchemaVersion = 17
+    static let currentSchemaVersion = 20
 
     var schemaVersion: Int
     var profiles: [SettingsProfile]

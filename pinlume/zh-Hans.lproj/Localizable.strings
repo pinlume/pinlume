@@ -41,6 +41,8 @@
 "Preferences..." = "偏好设置...";
 "Check for Updates..." = "检查更新...";
 "Quit Pinlume" = "退出 Pinlume";
+"Recognized Text" = "识别到的文本";
+"Screenshot Thumbnail" = "截图缩略图";
 "No recent captures" = "暂无最近捕获";
 "Clear History" = "清除历史";
 
@@ -405,7 +407,7 @@
 "Accessibility Access Required" = "需要辅助功能权限";
 "Pinlume needs Accessibility permission to auto-scroll other apps. Please grant access in System Settings, then try again." = "Pinlume 需要辅助功能权限才能自动滚动其他应用。请在系统设置中授予权限，然后重试。";
 "Pinlume needs Accessibility permission for scroll capture. Please grant access in System Settings, then try again." = "Pinlume 需要辅助功能权限才能进行滚动截图。请在系统设置中授予访问权限，然后重试。";
-"Pinlume needs Accessibility permission to translate selected text. Open System Settings to grant access. If Pinlume is not listed, click the + button and choose the running Pinlume app." = "Pinlume 需要辅助功能权限才能翻译选中的文字。请打开系统设置授予权限；如果列表中没有 Pinlume，请点击 + 并选择当前运行的 Pinlume 应用。";
+"Pinlume needs Accessibility permission to translate selected text. Open System Settings to grant access. If Pinlume is not listed, click the + button and choose Pinlume." = "Pinlume 需要辅助功能权限才能翻译选中的文字。请打开系统设置授予权限；如果列表中没有 Pinlume，请点击 + 并选择 Pinlume 应用。";
 "Open Settings" = "打开设置";
 "Continue with Clipboard" = "继续使用剪贴板";
 "Cancel" = "取消";
@@ -797,7 +799,6 @@
 "Press Shift to switch RGB/HEX" = "按 Shift 切换 RGB/HEX";
 "Press %@ to switch RGB/HEX" = "按 %@ 切换 RGB/HEX";
 "Quick capture copied to clipboard" = "快速捕获已拷贝到剪贴板";
-"Quit Pinlume" = "退出 Pinlume";
 "Restored pins (closes current pins immediately)" = "已恢复的贴图（会立即关闭当前贴图）";
 "Rotate Clockwise" = "顺时针旋转";
 "Screenshot history and editable annotations" = "截图历史和可编辑标注";
@@ -849,6 +850,16 @@
 "Restore All Default Shortcuts?" = "恢复全部默认快捷键？";
 "This restores global, tool, selection, and pin interaction shortcuts. Other settings will not change." = "这会恢复全局、工具、选区和贴图交互快捷键；不会修改其他设置。";
 "Restore Defaults" = "恢复默认";
+"Apple Translation requires macOS 15 or later." = "Apple 翻译需要 macOS 15 或更高版本。";
+"Apple Translation failed: %@" = "Apple 翻译失败：%@";
+"Apple Translation timed out. Please try again." = "Apple 翻译超时，请重试。";
+"Apple language download timed out. The download may continue in System Settings." = "Apple 语言包下载等待超时；下载可能仍会在系统设置中继续。";
+"Apple language download did not finish. Please try again after the download completes." = "Apple 语言包尚未下载完成，请等待下载完成后重试。";
+"Invalid translation URL" = "翻译请求地址无效。";
+"No response from translation service" = "翻译服务没有返回内容。";
+"Could not parse translation response" = "无法解析翻译结果。";
+"Translation returned empty result" = "翻译结果为空。";
+"Translation request was superseded" = "翻译请求已被新的请求替代。";
 /* Added for v4.1.0-beta.3 — video editor, effects, open-video, shortcuts help */
 /* Appearance / Settings */
 /* Settings — shortcuts help text */

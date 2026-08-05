@@ -592,6 +592,9 @@ class ToolbarLayout {
         buttons.append(colorBtn)
         buttons.append(ToolbarButton(action: .undo, sfSymbol: "arrow.uturn.backward", tooltip: L("Undo"), isEnabled: canUndo))
         buttons.append(ToolbarButton(action: .redo, sfSymbol: "arrow.uturn.forward", tooltip: L("Redo"), isEnabled: canRedo))
+        if includeOrdinarySelectionActions {
+            buttons.append(contentsOf: fixedOrdinarySelectionButtons(enabledActions: enabledActions))
+        }
         if hasMoreTools {
             var more = ToolbarButton(action: .moreTools, sfSymbol: "ellipsis", tooltip: L("More Tools"))
             more.isSelected = moreExpanded
@@ -710,19 +713,19 @@ class ToolbarLayout {
             case .tool(let tool):
                 guard ToolbarToolPreferences.isToolEnabled(tool, in: enabledTools) else { return nil }
                 return annotationToolbarButton(for: tool, selectedTool: selectedTool)
-            case .selectText:
-                guard includeSpecialActions,
-                      ToolbarActionPreferences.isEnabled(.selectText, in: enabledActions)
-                else { return nil }
-                return ToolbarCustomAction.selectText.makeToolbarButton()
-            case .screenTranslation:
-                guard includeSpecialActions,
-                      ToolbarActionPreferences.isEnabled(.screenTranslation, in: enabledActions)
-                else { return nil }
-                return ToolbarCustomAction.screenTranslation.makeToolbarButton()
+            case .selectText, .screenTranslation:
+                return nil
             case .pinShadow:
                 return nil
             }
+        }
+    }
+
+    private static func fixedOrdinarySelectionButtons(enabledActions: [Int]?) -> [ToolbarButton] {
+        let actions: [ToolbarCustomAction] = [.selectText, .screenTranslation]
+        return actions.compactMap { action in
+            guard ToolbarActionPreferences.isEnabled(action, in: enabledActions) else { return nil }
+            return action.makeToolbarButton()
         }
     }
 

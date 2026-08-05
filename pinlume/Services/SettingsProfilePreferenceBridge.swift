@@ -25,7 +25,7 @@ final class SettingsProfilePreferenceBridge {
     ]
 
     private static let defaultToolbarTools = [0, 3, 8, 6, 7, 9, 1, 2, 5, 18, 12, 17, 16, 11, 19]
-    private static let defaultToolbarPrimaryTools = [0, 3, 8, 6, 7, 9]
+    private static let defaultToolbarPrimaryTools = [3, 0, 8, 6, 7, 9]
     private static let defaultToolbarSecondaryTools = [1, 2, 5, 18, 12, 17, 16, 11, 19]
     private static let defaultToolbarActions = Array(1_001...1_023)
     private static let defaultStatusPrimaryItems = CaptureMenuItemID.defaultPrimaryOrder.map(\.rawValue)
@@ -170,7 +170,7 @@ final class SettingsProfilePreferenceBridge {
             let prefix = "hotkey.\(binding.slot)"
             values["\(prefix).keyCode"] = .integer((defaults.object(forKey: binding.keyCodeKey) as? NSNumber)?.intValue ?? binding.defaultKeyCode)
             values["\(prefix).modifiers"] = .integer((defaults.object(forKey: binding.modifiersKey) as? NSNumber)?.intValue ?? binding.defaultModifiers)
-            values["\(prefix).disabled"] = .bool((defaults.object(forKey: "hotkeyDisabled_\(binding.slot)") as? Bool) ?? false)
+            values["\(prefix).disabled"] = .bool((defaults.object(forKey: "hotkeyDisabled_\(binding.slot)") as? Bool) ?? binding.defaultDisabled)
         }
     }
 
@@ -179,7 +179,7 @@ final class SettingsProfilePreferenceBridge {
             let prefix = "hotkey.\(binding.slot)"
             defaults.set(integerValue("\(prefix).keyCode", from: payload) ?? binding.defaultKeyCode, forKey: binding.keyCodeKey)
             defaults.set(integerValue("\(prefix).modifiers", from: payload) ?? binding.defaultModifiers, forKey: binding.modifiersKey)
-            defaults.set(boolValue("\(prefix).disabled", from: payload) ?? false, forKey: "hotkeyDisabled_\(binding.slot)")
+            defaults.set(boolValue("\(prefix).disabled", from: payload) ?? binding.defaultDisabled, forKey: "hotkeyDisabled_\(binding.slot)")
         }
     }
 
@@ -216,8 +216,16 @@ final class SettingsProfilePreferenceBridge {
         defaults.set(enabledActions, forKey: "enabledActions")
         defaults.set(Self.defaultToolbarActions, forKey: "knownActionTags")
 
-        let primaryPinItems = stringArrayValue("layout.pin.primaryItemIDs", from: payload) ?? Self.defaultPinPrimaryItems
-        let secondaryPinItems = stringArrayValue("layout.pin.secondaryItemIDs", from: payload) ?? Self.defaultPinSecondaryItems
+        let primaryPinItems = normalizedPinItems(
+            stringArrayValue("layout.pin.primaryItemIDs", from: payload) ?? Self.defaultPinPrimaryItems,
+            toolRawValues: primaryTools,
+            inPrimary: true
+        )
+        let secondaryPinItems = normalizedPinItems(
+            stringArrayValue("layout.pin.secondaryItemIDs", from: payload) ?? Self.defaultPinSecondaryItems,
+            toolRawValues: secondaryTools,
+            inPrimary: false
+        )
         defaults.set(primaryPinItems, forKey: "primaryPinToolbarItemOrder")
         defaults.set(secondaryPinItems, forKey: "secondaryPinToolbarItemOrder")
         defaults.set(primaryPinItems.contains("pinShadow"), forKey: "pinShadowToolInPrimary")
@@ -236,6 +244,24 @@ final class SettingsProfilePreferenceBridge {
         for (key, visible) in dedicatedValues {
             defaults.set(visible, forKey: "dedicatedToolbar.\(key).visible")
         }
+    }
+
+    /// Tool order has one owner: the ordinary toolbar layout. Pin-specific
+    /// storage may retain only its own extra controls; it must never reorder
+    /// drawing tools after a profile applies.
+    private func normalizedPinItems(
+        _ storedItems: [String],
+        toolRawValues: [Int],
+        inPrimary: Bool
+    ) -> [String] {
+        var items = toolRawValues.map { "tool:\($0)" }
+        if storedItems.contains("pinShadow") {
+            items.append("pinShadow")
+        }
+        if inPrimary {
+            items.append(contentsOf: ["selectText", "screenTranslation"])
+        }
+        return items
     }
 
     private func readColor(forKey key: String) throws -> SettingsProfileRGBA {

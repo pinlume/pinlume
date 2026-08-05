@@ -26,6 +26,22 @@ struct OCRScanResult {
     }
 }
 
+enum StructuredOCRMode {
+    case accurate
+    case screenTranslation
+
+    var recognitionLevel: VNRequestTextRecognitionLevel {
+        switch self {
+        case .accurate: return .accurate
+        case .screenTranslation: return .fast
+        }
+    }
+
+    var retriesWithFastOnFailure: Bool {
+        self == .accurate
+    }
+}
+
 enum VisionOCR {
 
     static func makeTextRecognitionRequest(
@@ -59,10 +75,15 @@ enum VisionOCR {
 
     static func performStructuredTextRecognition(
         cgImage: CGImage,
+        mode: StructuredOCRMode = .accurate,
         completionHandler: @escaping (Result<StructuredOCRResult, Error>) -> Void
     ) {
         DispatchQueue.global(qos: .userInitiated).async {
-            performTextRecognition(cgImage: cgImage) { request, error in
+            performTextRecognition(
+                cgImage: cgImage,
+                recognitionLevel: mode.recognitionLevel,
+                retryWithFastOnFailure: mode.retriesWithFastOnFailure
+            ) { request, error in
                 let result: Result<StructuredOCRResult, Error>
                 if let error {
                     result = .failure(error)

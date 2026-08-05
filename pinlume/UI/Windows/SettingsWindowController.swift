@@ -53,6 +53,99 @@ private final class AppearanceAwareSettingsCardView: NSView {
     }
 }
 
+/// A compact permission prompt with the app icon centered above its content.
+/// NSAlert fixes the icon at the leading edge, which makes this explanatory
+/// prompt visually inconsistent with Pinlume's centered onboarding artwork.
+private final class CenteredAccessibilityPermissionAlert: NSObject {
+    private let panel: NSPanel
+    private var result: NSApplication.ModalResponse = .cancel
+
+    init(parentWindow: NSWindow?) {
+        let contentSize = NSSize(width: 392, height: 270)
+        panel = NSPanel(
+            contentRect: NSRect(origin: .zero, size: contentSize),
+            styleMask: [.borderless, .nonactivatingPanel],
+            backing: .buffered,
+            defer: false
+        )
+        super.init()
+
+        panel.isOpaque = false
+        panel.backgroundColor = .windowBackgroundColor
+        panel.hasShadow = true
+        panel.level = .modalPanel
+        panel.titlebarAppearsTransparent = true
+        panel.isReleasedWhenClosed = false
+        panel.contentView?.wantsLayer = true
+        panel.contentView?.layer?.cornerRadius = 14
+        panel.contentView?.layer?.masksToBounds = true
+
+        if let parentWindow {
+            panel.setFrameOrigin(NSPoint(
+                x: parentWindow.frame.midX - contentSize.width / 2,
+                y: parentWindow.frame.midY - contentSize.height / 2
+            ))
+        } else {
+            panel.center()
+        }
+
+        guard let contentView = panel.contentView else { return }
+
+        let icon = NSImageView(frame: NSRect(x: 164, y: 178, width: 64, height: 64))
+        icon.image = NSImage(named: "AppIcon")
+        icon.imageScaling = .scaleProportionallyUpOrDown
+        contentView.addSubview(icon)
+
+        let title = NSTextField(labelWithString: L("Accessibility Access Required"))
+        title.font = .systemFont(ofSize: 17, weight: .semibold)
+        title.alignment = .center
+        title.frame = NSRect(x: 24, y: 140, width: 344, height: 24)
+        contentView.addSubview(title)
+
+        let message = NSTextField(wrappingLabelWithString: L(
+            "Pinlume needs Accessibility permission to translate selected text. Open System Settings to grant access. If Pinlume is not listed, click the + button and choose Pinlume."
+        ))
+        message.font = .systemFont(ofSize: 13)
+        message.textColor = .secondaryLabelColor
+        message.alignment = .center
+        message.maximumNumberOfLines = 3
+        message.frame = NSRect(x: 28, y: 76, width: 336, height: 54)
+        contentView.addSubview(message)
+
+        let cancel = NSButton(title: L("Cancel"), target: self, action: #selector(cancelClicked))
+        cancel.bezelStyle = .rounded
+        cancel.frame = NSRect(x: 94, y: 24, width: 94, height: 32)
+        cancel.keyEquivalent = "\u{1b}"
+        contentView.addSubview(cancel)
+
+        let open = NSButton(title: L("Open Settings"), target: self, action: #selector(openClicked))
+        open.bezelStyle = .rounded
+        open.frame = NSRect(x: 204, y: 24, width: 94, height: 32)
+        open.keyEquivalent = "\r"
+        contentView.addSubview(open)
+    }
+
+    func runModal() -> Bool {
+        panel.makeKeyAndOrderFront(nil)
+        NSApp.activate(ignoringOtherApps: true)
+        return NSApp.runModal(for: panel) == .OK
+    }
+
+    @objc private func openClicked() {
+        result = .OK
+        close()
+    }
+
+    @objc private func cancelClicked() {
+        close()
+    }
+
+    private func close() {
+        NSApp.stopModal(withCode: result)
+        panel.orderOut(nil)
+    }
+}
+
 class SettingsWindowController: NSWindowController, NSToolbarDelegate, NSWindowDelegate {
 
     // MARK: - Toolbar tab definitions
@@ -160,6 +253,8 @@ class SettingsWindowController: NSWindowController, NSToolbarDelegate, NSWindowD
     private var captureMenuMoreRowsStack: NSStackView?
     private var primaryToolsRowsStack: NSStackView?
     private var secondaryToolsRowsStack: NSStackView?
+    private var nonDrawingActionCheckboxes: [NSButton] = []
+    private var dedicatedToolbarVisibilityCheckboxes: [String: NSButton] = [:]
     // embedColorProfileCheckbox removed — native color profile is always embedded
     private var localMonitor: Any?
     #if !OFFLINE
@@ -1472,6 +1567,10 @@ class SettingsWindowController: NSWindowController, NSToolbarDelegate, NSWindowD
 
         localMonitor = NSEvent.addLocalMonitorForEvents(matching: .keyDown) { [weak self] event in
             guard let self = self else { return event }
+            if event.keyCode == 53 { // Escape — cancel
+                self.stopShortcutRecording()
+                return nil
+            }
             let modifiers = event.modifierFlags
             var carbonMods: UInt32 = 0
             if modifiers.contains(.command) { carbonMods |= UInt32(cmdKey) }
@@ -1805,6 +1904,7 @@ class SettingsWindowController: NSWindowController, NSToolbarDelegate, NSWindowD
             checkbox.identifier = NSUserInterfaceItemIdentifier(
                 "\(context.rawValue).\(tool.rawValue)")
             checkbox.state = DedicatedToolPreferences.isVisible(tool, in: context) ? .on : .off
+            dedicatedToolbarVisibilityCheckboxes[checkbox.identifier!.rawValue] = checkbox
             return checkbox
         }
         let grid = makeTwoColumnCheckboxGrid(checkboxes)
@@ -1950,6 +2050,15 @@ class SettingsWindowController: NSWindowController, NSToolbarDelegate, NSWindowD
             in: ToolbarActionPreferences.enabledRawValuesAfterMigration()
         ) ? .on : .off
         checkbox.widthAnchor.constraint(greaterThanOrEqualToConstant: 160).isActive = true
+
+        if item == .selectText || item == .screenTranslation {
+            let row = NSStackView(views: [checkbox])
+            row.orientation = .horizontal
+            row.spacing = 8
+            row.alignment = .centerY
+            row.translatesAutoresizingMaskIntoConstraints = false
+            return row
+        }
 
         let identifier = "\(isPrimary ? "primary" : "secondary")|\(item.storageValue)"
         let upButton = compactButton(L("Move Up"), action: #selector(specialPinToolbarItemMoveUp(_:)))
@@ -2283,7 +2392,7 @@ class SettingsWindowController: NSWindowController, NSToolbarDelegate, NSWindowD
         stack.addArrangedSubview(labeledRow(L("Bucket:"), controls: [s3BucketField]))
 
         s3AccessKeyField = NSTextField()
-        s3AccessKeyField.placeholderString = "Example access key ID"
+        s3AccessKeyField.placeholderString = "AKIAIOSFODNN7EXAMPLE"
         s3AccessKeyField.font = NSFont.monospacedSystemFont(ofSize: 11, weight: .regular)
         s3AccessKeyField.stringValue = UserDefaults.standard.string(forKey: "s3AccessKeyID") ?? ""
         s3AccessKeyField.target = self
@@ -2442,7 +2551,14 @@ class SettingsWindowController: NSWindowController, NSToolbarDelegate, NSWindowD
         stack.addArrangedSubview(desc)
         stack.setCustomSpacing(20, after: desc)
 
-        #if OFFLINE
+        #if PLUS
+        let plusNote = NSTextField(wrappingLabelWithString: L("Plus build: personal build with update checks disabled. Preferences, history, and permissions are separate from the original Pinlume app."))
+        plusNote.font = NSFont.systemFont(ofSize: 12)
+        plusNote.textColor = .secondaryLabelColor
+        plusNote.alignment = .center
+        stack.addArrangedSubview(plusNote)
+        stack.setCustomSpacing(20, after: plusNote)
+        #elseif OFFLINE
         let offlineNote = NSTextField(wrappingLabelWithString: L("Offline build: upload and cloud storage integrations are removed. Update checks may still connect to Pinlume's update server. Screenshots and recordings stay local unless you share or save them yourself."))
         offlineNote.font = NSFont.systemFont(ofSize: 12)
         offlineNote.textColor = .secondaryLabelColor
@@ -2614,10 +2730,7 @@ class SettingsWindowController: NSWindowController, NSToolbarDelegate, NSWindowD
         s3StatusLabel.stringValue = L("Testing...")
         s3StatusLabel.textColor = .secondaryLabelColor
 
-        // Upload a tiny test file
-        let testData = Data("Pinlume connection test".utf8)
-        let testKey = ".pinlume_test_\(UUID().uuidString.prefix(8)).txt"
-        S3Uploader.shared.upload(data: testData, filename: testKey, contentType: "text/plain") { [weak self] result in
+        UploadGateway.shared.testS3Connection { [weak self] result in
             guard let self = self else { return }
             self.s3TestBtn.isEnabled = true
             switch result {
@@ -2858,6 +2971,9 @@ class SettingsWindowController: NSWindowController, NSToolbarDelegate, NSWindowD
             checkbox.identifier = NSUserInterfaceItemIdentifier(defaultsKey)
             return checkbox
         }
+        if defaultsKey == ToolbarActionPreferences.enabledDefaultsKey {
+            nonDrawingActionCheckboxes = checkboxes
+        }
         return makeTwoColumnCheckboxGrid(checkboxes)
     }
 
@@ -2925,7 +3041,6 @@ class SettingsWindowController: NSWindowController, NSToolbarDelegate, NSWindowD
         defer { isApplyingSettingsProfile = false }
         do {
             try applySettingsProfile(profile, storing: updatedDocument, restoring: document, appDelegate: appDelegate)
-            loadSettings()
             refreshSettingsProfilePopup()
         } catch {
             refreshSettingsProfilePopup()
@@ -3017,7 +3132,6 @@ class SettingsWindowController: NSWindowController, NSToolbarDelegate, NSWindowD
             isApplyingSettingsProfile = true
             defer { isApplyingSettingsProfile = false }
             try applySettingsProfile(copiedProfile, storing: updatedDocument, restoring: document, appDelegate: appDelegate)
-            loadSettings()
             refreshSettingsProfilePopup()
         } catch {
             showSettingsProfileError("Could not copy configuration.")
@@ -3052,7 +3166,6 @@ class SettingsWindowController: NSWindowController, NSToolbarDelegate, NSWindowD
         isApplyingSettingsProfile = true
         defer { isApplyingSettingsProfile = false }
         try applySettingsProfile(imported, storing: updatedDocument, restoring: document, appDelegate: appDelegate)
-        loadSettings()
         refreshSettingsProfilePopup()
     }
 
@@ -3117,7 +3230,6 @@ class SettingsWindowController: NSWindowController, NSToolbarDelegate, NSWindowD
         isApplyingSettingsProfile = true
         defer { isApplyingSettingsProfile = false }
         try applySettingsProfile(basic, storing: updatedDocument, restoring: document, appDelegate: appDelegate)
-        loadSettings()
         refreshSettingsProfilePopup()
     }
 
@@ -3374,6 +3486,35 @@ class SettingsWindowController: NSWindowController, NSToolbarDelegate, NSWindowD
         scrollMaxHeightStepper.integerValue = maxH
         let frozenDetect = UserDefaults.standard.object(forKey: "scrollFrozenDetection") as? Bool ?? true
         scrollFrozenDetectionCheckbox.state = frozenDetect ? .on : .off
+
+        // These rows own their checkbox state at creation time, so a profile
+        // switch must rebuild them after its layout preferences are applied.
+        rebuildToolbarToolOrderRows(isPrimary: true)
+        rebuildToolbarToolOrderRows(isPrimary: false)
+        refreshNonDrawingActionCheckboxes()
+        refreshDedicatedToolbarVisibilityCheckboxes()
+    }
+
+    private func refreshNonDrawingActionCheckboxes() {
+        let enabledActions = ToolbarActionPreferences.enabledRawValuesAfterMigration()
+        for checkbox in nonDrawingActionCheckboxes {
+            guard let action = ToolbarCustomAction(rawValue: checkbox.tag) else { continue }
+            checkbox.state = ToolbarActionPreferences.isEnabled(
+                action,
+                in: enabledActions
+            ) ? .on : .off
+        }
+    }
+
+    private func refreshDedicatedToolbarVisibilityCheckboxes() {
+        for (identifier, checkbox) in dedicatedToolbarVisibilityCheckboxes {
+            let parts = identifier.split(separator: ".", maxSplits: 1)
+            guard parts.count == 2,
+                  let context = DedicatedToolbarContext(rawValue: String(parts[0])),
+                  let tool = DedicatedToolbarTool(rawValue: String(parts[1]))
+            else { continue }
+            checkbox.state = DedicatedToolPreferences.isVisible(tool, in: context) ? .on : .off
+        }
     }
 
     func refreshHotkeyRegistrationStatus() {
@@ -3390,11 +3531,10 @@ class SettingsWindowController: NSWindowController, NSToolbarDelegate, NSWindowD
         }
     }
 
-    /// Profile application currently changes global shortcut status before the
-    /// profile picker UI is added; keep this semantic refresh point centralized
-    /// for that later settings section.
+    /// The only Settings-side profile refresh path. Every control reads the
+    /// UserDefaults projection of the profile through `loadSettings()`.
     func refreshAfterSettingsProfileApply() {
-        refreshHotkeyRegistrationStatus()
+        loadSettings()
     }
 
     private func updateQualityVisibility() {
@@ -3829,13 +3969,7 @@ class SettingsWindowController: NSWindowController, NSToolbarDelegate, NSWindowD
             sender.state = .off
             SelectedTextReader.requestAccessibilityPermission()
 
-            let alert = NSAlert()
-            alert.messageText = L("Accessibility Access Required")
-            alert.informativeText = L("Pinlume needs Accessibility permission to translate selected text. Open System Settings to grant access. If Pinlume is not listed, click the + button and choose the running Pinlume app.")
-            alert.alertStyle = .warning
-            alert.addButton(withTitle: L("Open Settings"))
-            alert.addButton(withTitle: L("Cancel"))
-            if alert.runModal() == .alertFirstButtonReturn,
+            if CenteredAccessibilityPermissionAlert(parentWindow: window).runModal(),
                let url = URL(string: "x-apple.systempreferences:com.apple.preference.security?Privacy_Accessibility") {
                 NSWorkspace.shared.open(url)
             } else {

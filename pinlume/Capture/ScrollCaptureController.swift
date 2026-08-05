@@ -12,8 +12,8 @@ import Vision
 ///   = content has truly stopped rendering. Zero tolerance, no false positives.
 /// - **Timer-driven `captureAndCompare`** on a dedicated serial queue — consistent
 ///   timing, no main-thread contention.
-/// - **Incremental stitching** — new content is merged into `mergedImage` immediately
-///   after each match, keeping memory bounded (no storing all raw strips).
+/// - **Disk-backed stitching** — matched strips are spooled immediately; the full image
+///   is rendered once at Stop rather than redrawing an ever-growing bitmap per strip.
 /// - **Vision-only offset detection** — `VNTranslationalImageRegistrationRequest`
 ///   for pixel-precise scroll offset measurement.
 /// - **`matchNotFoundCount`** tracking — surfaces errors to the user via callbacks
@@ -35,8 +35,7 @@ final class ScrollCaptureController {
 
     /// Current estimated total height of the final image (points).
     var estimatedTotalHeight: CGFloat {
-        guard let merged = mergedImage else { return 0 }
-        return CGFloat(merged.height) / backingScale
+        return CGFloat(stitchedPixelSize.height) / backingScale
     }
 
     // MARK: - Callbacks
@@ -70,7 +69,11 @@ final class ScrollCaptureController {
     private var shotA: CGImage?          // previous frame
     private var shotB: CGImage?          // current frame
     private var lastComparedTIFF: Data?  // TIFF of last settled frame for byte comparison
-    private var mergedImage: CGImage?    // accumulated stitched result
+    private var mergedImage: CGImage?    // final image only; strips stay on disk while capturing
+    private var spool: ScrollCaptureSpool?
+    private var lifecycle = ScrollCaptureLifecycle()
+    private var maxPixelBudget = 180_000_000
+    private var maxByteBudget = 720 * 1024 * 1024
     private var headerHeight: Int = 0    // frozen header height in pixels
     private var headerDetectionDone: Bool = false
     private var headerDetectionSamples: Int = 0
@@ -99,6 +102,7 @@ final class ScrollCaptureController {
     private let manualCaptureInterval: TimeInterval = 0.15
     private var lastCaptureTime: TimeInterval = 0
     private var pendingCaptureTask: Task<Void, Never>?
+    private var pendingCaptureGeneration: UInt = 0
     private var settlementTimer: Timer?
     private let settlementInterval: TimeInterval = 0.25
 
@@ -123,7 +127,7 @@ final class ScrollCaptureController {
     // MARK: - Session
 
     func startSession() async {
-        guard !isActive else { return }
+        guard let generation = lifecycle.start() else { return }
 
         let ud = UserDefaults.standard
         autoScrollEnabled = ud.object(forKey: "scrollAutoScrollEnabled") as? Bool ?? false
@@ -144,9 +148,11 @@ final class ScrollCaptureController {
         resolveTargetWindow()
         resolveTargetApp()
 
-        // Capture first settled frame
-        guard let firstFrame = await captureSettledFrame() else {
-            onSessionDone?(nil)
+        // Capture first settled frame. Stop may arrive while this awaits.
+        guard let firstFrame = await captureSettledFrame(generation: generation),
+              lifecycle.activate(generation: generation) else {
+            if lifecycle.state == .starting { _ = lifecycle.stop() }
+            if lifecycle.finish(generation: generation) { onSessionDone?(nil) }
             return
         }
 
@@ -154,7 +160,15 @@ final class ScrollCaptureController {
         shotA = nil
         shotB = nil
         lastComparedTIFF = nil
-        mergedImage = firstFrame
+        mergedImage = nil
+        guard let spool = ScrollCaptureSpool(), spool.append(firstFrame) else {
+            isActive = false
+            lifecycle.stop()
+            _ = lifecycle.finish(generation: generation)
+            onSessionDone?(nil)
+            return
+        }
+        self.spool = spool
         headerHeight = 0
         headerDetectionDone = false
         headerDetectionSamples = 0
@@ -167,51 +181,51 @@ final class ScrollCaptureController {
         frozenTopHeight = 0
         stripCount = 1
 
+        shotA = firstFrame // registration baseline; failures must never replace it.
         stitchedImage = firstFrame
         stitchedPixelSize = CGSize(width: CGFloat(firstFrame.width), height: CGFloat(firstFrame.height))
         emitPreview()
         onStripAdded?(stripCount)
 
         if autoScrollEnabled {
-            startAutoScroll()
+            startAutoScroll(generation: generation)
         } else {
-            startManualScrollMonitors()
+            startManualScrollMonitors(generation: generation)
         }
     }
 
     func stopSession() {
-        guard isActive else { return }
+        guard let generation = lifecycle.stop() else { return }
         isActive = false
 
         autoScrollTask?.cancel(); autoScrollTask = nil
         settlementTimer?.invalidate(); settlementTimer = nil
-        pendingCaptureTask?.cancel(); pendingCaptureTask = nil
+        cancelPendingCaptureTask()
         if let m = scrollMonitorGlobal { NSEvent.removeMonitor(m); scrollMonitorGlobal = nil }
         if let m = scrollMonitorLocal  { NSEvent.removeMonitor(m); scrollMonitorLocal  = nil }
         autoScrollActive = false
 
-        // Deliver final image
-        let finalImage: NSImage?
-        if let cg = mergedImage {
-            let ptSize = CGSize(width: CGFloat(cg.width) / backingScale,
-                                height: CGFloat(cg.height) / backingScale)
-            finalImage = NSImage(cgImage: cg, size: ptSize)
-        } else {
-            finalImage = nil
+        Task { [weak self] in
+            guard let self else { return }
+            let image = await self.renderSpool(generation: generation)
+            guard self.lifecycle.finish(generation: generation) else { return }
+            self.onSessionDone?(image)
         }
-        onSessionDone?(finalImage)
     }
 
     func cancelSession() {
-        guard isActive else { return }
+        guard lifecycle.stop() != nil else { return }
         isActive = false
 
         autoScrollTask?.cancel(); autoScrollTask = nil
         settlementTimer?.invalidate(); settlementTimer = nil
-        pendingCaptureTask?.cancel(); pendingCaptureTask = nil
+        cancelPendingCaptureTask()
         if let m = scrollMonitorGlobal { NSEvent.removeMonitor(m); scrollMonitorGlobal = nil }
         if let m = scrollMonitorLocal  { NSEvent.removeMonitor(m); scrollMonitorLocal  = nil }
         autoScrollActive = false
+        spool?.discard()
+        spool = nil
+        _ = lifecycle.finish(generation: lifecycle.generation)
     }
 
     // MARK: - Target window/app management
@@ -286,27 +300,27 @@ final class ScrollCaptureController {
     /// Captures the screen region using CGWindowListCreateImage.
     /// Returns a complete, compositor-finished snapshot — no stream management needed.
     private func captureFrame() -> CGImage? {
-        let excludeSet = Set(excludedWindowIDs)
-        let listOption: CGWindowListOption = [.optionOnScreenBelowWindow]
-        let windowID = excludeSet.isEmpty ? kCGNullWindowID : (excludeSet.first ?? kCGNullWindowID)
-
         let imageOption: CGWindowImageOption = [.boundsIgnoreFraming]
-
-        guard let image = CGWindowListCreateImage(
-            captureRectCG, listOption, windowID, imageOption
-        ) else { return nil }
-
-        return image
+        if targetWindowID != kCGNullWindowID,
+           !excludedWindowIDs.contains(targetWindowID) {
+            return CGWindowListCreateImage(
+                captureRectCG, .optionIncludingWindow, targetWindowID, imageOption
+            )
+        }
+        return CGWindowListCreateImage(
+            captureRectCG, .optionOnScreenOnly, kCGNullWindowID, imageOption
+        )
     }
 
     /// Captures a settled frame: grabs frames until two consecutive TIFF representations
     /// match byte-for-byte. Used for initial capture and manual scroll mode.
-    private func captureSettledFrame() async -> CGImage? {
+    private func captureSettledFrame(generation: UInt? = nil) async -> CGImage? {
         var previousTIFF: Data? = nil
         var previousCG: CGImage? = nil
         var waitNs: UInt64 = 10_000_000  // 10ms
 
         for _ in 0..<30 {
+            if let generation, lifecycle.generation != generation || lifecycle.state == .stopping { return nil }
             guard let cg = captureFrame() else {
                 try? await Task.sleep(nanoseconds: 30_000_000)
                 continue
@@ -340,7 +354,8 @@ final class ScrollCaptureController {
 
     // MARK: - Auto-scroll
 
-    private func startAutoScroll() {
+    private func startAutoScroll(generation: UInt) {
+        guard lifecycle.acceptsActive(generation: generation) else { return }
         autoScrollActive = true
         onAutoScrollStarted?()
 
@@ -369,14 +384,21 @@ final class ScrollCaptureController {
 
         autoScrollTask = Task { [weak self] in
             try? await Task.sleep(nanoseconds: 300_000_000)
-            guard let self = self, self.isActive, self.autoScrollActive else { return }
-            await self.autoScrollLoop(linesPerTick: linesPerTick, burstCount: burstCount)
+            guard let self = self,
+                  !Task.isCancelled,
+                  self.lifecycle.acceptsActive(generation: generation),
+                  self.isActive,
+                  self.autoScrollActive else { return }
+            await self.autoScrollLoop(
+                linesPerTick: linesPerTick,
+                burstCount: burstCount,
+                generation: generation)
         }
     }
 
     /// Core auto-scroll loop: scroll → captureAndCompare → repeat.
-    private func autoScrollLoop(linesPerTick: Int32, burstCount: Int) async {
-        while isActive && autoScrollActive {
+    private func autoScrollLoop(linesPerTick: Int32, burstCount: Int, generation: UInt) async {
+        while lifecycle.acceptsActive(generation: generation) && isActive && autoScrollActive {
             // Post scroll event(s)
             for _ in 0..<burstCount {
                 if let event = CGEvent(scrollWheelEvent2Source: nil, units: .line, wheelCount: 1,
@@ -386,7 +408,8 @@ final class ScrollCaptureController {
             }
 
             // captureAndCompare: settle, capture, compare, stitch
-            let success = await captureAndCompare()
+            let success = await captureAndCompare(generation: generation)
+            guard lifecycle.acceptsActive(generation: generation), !Task.isCancelled else { return }
 
             if !success {
                 matchNotFoundCount += 1
@@ -399,11 +422,17 @@ final class ScrollCaptureController {
             }
 
             // Check max height
-            if let merged = mergedImage, maxScrollHeight > 0 {
-                if merged.height >= maxScrollHeight {
+            if maxScrollHeight > 0, stitchedPixelSize.height >= CGFloat(maxScrollHeight) {
+                stopSession()
+                return
+            }
+            if stitchedPixelSize.width * stitchedPixelSize.height > CGFloat(maxPixelBudget) {
+                stopSession()
+                return
+            }
+            if let spool, spool.totalBytes >= maxByteBudget {
                     stopSession()
                     return
-                }
             }
 
             // Small breathing room
@@ -415,9 +444,11 @@ final class ScrollCaptureController {
     /// Waits for pixel-perfect settlement via TIFF comparison, then computes the scroll
     /// offset via Vision and merges new content into the accumulated image.
     /// Returns true if a match was found, false if no shift detected.
-    private func captureAndCompare() async -> Bool {
+    private func captureAndCompare(generation: UInt) async -> Bool {
+        guard lifecycle.acceptsActive(generation: generation), !Task.isCancelled else { return false }
         // Initial delay for scroll animation to begin
         try? await Task.sleep(nanoseconds: 50_000_000)  // 50ms
+        guard lifecycle.acceptsActive(generation: generation), !Task.isCancelled else { return false }
 
         // Wait for settlement: poll frames until two consecutive TIFFs match
         var previousTIFF: Data? = nil
@@ -425,7 +456,9 @@ final class ScrollCaptureController {
         var waitNs: UInt64 = 12_000_000
 
         for _ in 0..<30 {
-            guard isActive else { return false }
+            guard lifecycle.acceptsActive(generation: generation),
+                  isActive,
+                  !Task.isCancelled else { return false }
 
             guard let cg = captureFrame() else {
                 try? await Task.sleep(nanoseconds: 30_000_000)
@@ -438,6 +471,7 @@ final class ScrollCaptureController {
                     cont.resume(returning: bitmapRep.tiffRepresentation)
                 }
             }
+            guard lifecycle.acceptsActive(generation: generation), !Task.isCancelled else { return false }
             guard let currentTIFF = tiffData else {
                 try? await Task.sleep(nanoseconds: waitNs)
                 waitNs = min(waitNs * 3 / 2, 80_000_000)
@@ -455,13 +489,7 @@ final class ScrollCaptureController {
             waitNs = min(waitNs * 3 / 2, 80_000_000)
         }
 
-        guard let currentFrame = settledCG else { return false }
-        guard let previousFrame = shotA ?? mergedImage?.cropping(to: CGRect(
-            x: 0, y: 0, width: currentFrame.width, height: currentFrame.height
-        )) else {
-            shotA = currentFrame
-            return false
-        }
+        guard let currentFrame = settledCG, let previousFrame = shotA else { return false }
 
         // Scrollbar detection (once)
         if !rightMarginDetected {
@@ -470,7 +498,6 @@ final class ScrollCaptureController {
 
         // Compute offset via Vision
         guard let offset = visionShift(current: currentFrame, previous: previousFrame) else {
-            shotA = currentFrame
             consecutiveZeroShifts += 1
             if hasScrolledOnce && consecutiveZeroShifts >= maxZeroShiftsBeforeStop {
                 stopSession()
@@ -480,7 +507,6 @@ final class ScrollCaptureController {
 
         let offsetPx = Int(round(offset))
         guard offsetPx > 0 else {
-            shotA = currentFrame
             return false
         }
 
@@ -506,7 +532,7 @@ final class ScrollCaptureController {
         let safeOffset = max(1, offsetPx - 1)
 
         // Incremental stitch: merge new content into mergedImage
-        mergeNewContent(currentFrame: currentFrame, offsetPx: safeOffset)
+        guard mergeNewContent(currentFrame: currentFrame, offsetPx: safeOffset) else { return false }
 
         shotA = currentFrame
         stripCount += 1
@@ -520,44 +546,44 @@ final class ScrollCaptureController {
 
     /// Merges the newly-scrolled content from `currentFrame` into `mergedImage`.
     /// Only the new rows (below the overlap region) are appended.
-    private func mergeNewContent(currentFrame: CGImage, offsetPx: Int) {
-        guard let existing = mergedImage else {
-            mergedImage = currentFrame
-            return
-        }
-
+    private func mergeNewContent(currentFrame: CGImage, offsetPx: Int) -> Bool {
         let w = currentFrame.width
-        let existingH = existing.height
         let newRows = offsetPx  // pixels of new content
-        guard newRows > 0, newRows <= currentFrame.height else { return }
-
-        let totalH = existingH + newRows
-
-        let cs = existing.colorSpace ?? CGColorSpace(name: CGColorSpace.sRGB)!
-        let bitmapInfo = CGImageAlphaInfo.premultipliedFirst.rawValue | CGBitmapInfo.byteOrder32Little.rawValue
-        guard let ctx = CGContext(data: nil, width: w, height: totalH,
-                                  bitsPerComponent: 8, bytesPerRow: w * 4,
-                                  space: cs, bitmapInfo: bitmapInfo) else { return }
-
-        // Draw existing image at the top (CGContext: bottom-left origin, so top = highest y)
-        ctx.draw(existing, in: CGRect(x: 0, y: newRows, width: w, height: existingH))
-
-        if headerDetectionDone && headerHeight > 0 {
-            // Sticky header detected: only append the bottom newRows pixels.
-            let stripY = currentFrame.height - newRows
-            if let strip = currentFrame.cropping(to: CGRect(
-                x: 0, y: stripY, width: w, height: newRows)) {
-                ctx.draw(strip, in: CGRect(x: 0, y: 0, width: w, height: newRows))
-            }
-        } else {
-            // No header: draw full current frame with natural overlap.
-            ctx.draw(currentFrame, in: CGRect(x: 0, y: 0, width: w, height: currentFrame.height))
+        guard newRows > 0, newRows <= currentFrame.height else { return false }
+        let nextHeight = (spool?.totalHeight ?? 0) + newRows
+        let nextPixels = w * nextHeight
+        let nextBytes = (spool?.totalBytes ?? 0) + currentFrame.bytesPerRow * newRows
+        guard (maxScrollHeight <= 0 || nextHeight <= maxScrollHeight),
+              nextPixels <= maxPixelBudget,
+              nextBytes <= maxByteBudget else {
+            stopSession()
+            return false
         }
+        let stripY = headerDetectionDone && headerHeight > 0 ? currentFrame.height - newRows : 0
+        guard let strip = currentFrame.cropping(to: CGRect(x: 0, y: stripY, width: w, height: newRows)),
+              spool?.append(strip) == true else { return false }
+        stitchedImage = currentFrame // lightweight live preview; final render happens once at Stop.
+        stitchedPixelSize = CGSize(width: CGFloat(w), height: CGFloat(spool?.totalHeight ?? currentFrame.height))
+        return true
+    }
 
-        guard let merged = ctx.makeImage() else { return }
-        mergedImage = merged
-        stitchedImage = merged
-        stitchedPixelSize = CGSize(width: CGFloat(w), height: CGFloat(totalH))
+    private func renderSpool(generation: UInt) async -> NSImage? {
+        guard lifecycle.generation == generation,
+              lifecycle.state == .stopping,
+              let spool else { return nil }
+        let image: CGImage? = await withCheckedContinuation { continuation in
+            captureQueue.async {
+                continuation.resume(returning: spool.render())
+            }
+        }
+        spool.discard()
+        self.spool = nil
+        guard let image else { return nil }
+        mergedImage = image
+        stitchedImage = image
+        stitchedPixelSize = CGSize(width: CGFloat(image.width), height: CGFloat(image.height))
+        return NSImage(cgImage: image, size: CGSize(width: CGFloat(image.width) / backingScale,
+                                                     height: CGFloat(image.height) / backingScale))
     }
 
     private func stopAutoScroll() {
@@ -566,37 +592,40 @@ final class ScrollCaptureController {
     }
 
     func toggleAutoScroll() {
+        let generation = lifecycle.generation
+        guard lifecycle.acceptsActive(generation: generation) else { return }
         if autoScrollActive {
             stopAutoScroll()
-            startManualScrollMonitors()
+            startManualScrollMonitors(generation: generation)
         } else {
             if let m = scrollMonitorGlobal { NSEvent.removeMonitor(m); scrollMonitorGlobal = nil }
             if let m = scrollMonitorLocal  { NSEvent.removeMonitor(m); scrollMonitorLocal  = nil }
             settlementTimer?.invalidate(); settlementTimer = nil
-            startAutoScroll()
+            startAutoScroll(generation: generation)
         }
     }
 
     // MARK: - Manual scroll
 
-    private func startManualScrollMonitors() {
+    private func startManualScrollMonitors(generation: UInt) {
         scrollMonitorGlobal = NSEvent.addGlobalMonitorForEvents(matching: .scrollWheel) { [weak self] _ in
-            self?.onManualScrollEvent()
+            self?.onManualScrollEvent(generation: generation)
         }
         scrollMonitorLocal = NSEvent.addLocalMonitorForEvents(matching: .scrollWheel) { [weak self] event in
-            self?.onManualScrollEvent()
+            self?.onManualScrollEvent(generation: generation)
             return event
         }
     }
 
-    private func onManualScrollEvent() {
-        guard isActive else { return }
+    private func onManualScrollEvent(generation: UInt) {
+        guard lifecycle.acceptsActive(generation: generation), isActive else { return }
 
         // After scrolling stops, do a final settled capture (TIFF comparison)
         settlementTimer?.invalidate()
         settlementTimer = Timer.scheduledTimer(withTimeInterval: settlementInterval, repeats: false) { [weak self] _ in
-            guard let self = self else { return }
-            Task { @MainActor in await self.settledCapture() }
+            Task { @MainActor [weak self] in
+                self?.scheduleSettledCapture(generation: generation)
+            }
         }
 
         // During scrolling, grab and process frames immediately at a fixed interval —
@@ -607,34 +636,29 @@ final class ScrollCaptureController {
         guard now - lastCaptureTime >= manualCaptureInterval else { return }
         lastCaptureTime = now
 
-        grabAndProcess()
+        grabAndProcess(generation: generation)
     }
 
     /// Immediate frame grab + process during active scrolling. No TIFF settlement —
     /// just captures whatever is on screen right now and tries to stitch it.
-    private func grabAndProcess() {
-        guard isActive, !isCapturing else { return }
+    private func grabAndProcess(generation: UInt) {
+        guard lifecycle.acceptsActive(generation: generation), isActive, !isCapturing else { return }
         isCapturing = true
         defer { isCapturing = false }
 
         guard let currentFrame = captureFrame() else { return }
-        guard let previousFrame = shotA else {
-            shotA = currentFrame
-            return
-        }
+        guard let previousFrame = shotA else { return }
 
         if !rightMarginDetected {
             detectRightMargin(current: currentFrame, previous: previousFrame)
         }
 
         guard let offset = visionShift(current: currentFrame, previous: previousFrame) else {
-            shotA = currentFrame
             return
         }
 
         let offsetPx = Int(round(offset))
         guard offsetPx > 0 else {
-            shotA = currentFrame
             return
         }
 
@@ -649,7 +673,7 @@ final class ScrollCaptureController {
         }
 
         let safeOffset = max(1, offsetPx - 1)
-        mergeNewContent(currentFrame: currentFrame, offsetPx: safeOffset)
+        guard mergeNewContent(currentFrame: currentFrame, offsetPx: safeOffset) else { return }
 
         shotA = currentFrame
         stripCount += 1
@@ -660,12 +684,36 @@ final class ScrollCaptureController {
     }
 
     /// Final settled capture after scrolling stops — uses full TIFF settlement.
-    private func settledCapture() async {
-        guard isActive, !isCapturing else { return }
+    private func settledCapture(generation: UInt) async {
+        guard lifecycle.acceptsActive(generation: generation),
+              isActive,
+              !isCapturing,
+              !Task.isCancelled else { return }
         isCapturing = true
         defer { isCapturing = false }
 
-        let _ = await captureAndCompare()
+        let _ = await captureAndCompare(generation: generation)
+    }
+
+    private func scheduleSettledCapture(generation: UInt) {
+        guard lifecycle.acceptsActive(generation: generation) else { return }
+        cancelPendingCaptureTask()
+        pendingCaptureGeneration &+= 1
+        let captureGeneration = pendingCaptureGeneration
+        pendingCaptureTask = Task { @MainActor [weak self] in
+            guard let self,
+                  self.pendingCaptureGeneration == captureGeneration,
+                  self.lifecycle.acceptsActive(generation: generation) else { return }
+            await self.settledCapture(generation: generation)
+            guard self.pendingCaptureGeneration == captureGeneration else { return }
+            self.pendingCaptureTask = nil
+        }
+    }
+
+    private func cancelPendingCaptureTask() {
+        pendingCaptureGeneration &+= 1
+        pendingCaptureTask?.cancel()
+        pendingCaptureTask = nil
     }
 
     // MARK: - Vision shift detection
@@ -695,58 +743,48 @@ final class ScrollCaptureController {
         return obs.alignmentTransform.ty
     }
 
-    /// Extract raw BGRA pixel data from a CGImage.
-    private func pixelData(for image: CGImage) -> UnsafePointer<UInt8>? {
-        guard let dataProvider = image.dataProvider,
-              let data = dataProvider.data else { return nil }
-        return CFDataGetBytePtr(data)
-    }
-
     // MARK: - Scrollbar detection
 
     private func detectRightMargin(current: CGImage, previous: CGImage) {
         rightMarginDetected = true
 
-        guard current.width == previous.width, current.height == previous.height else { return }
-        guard let curData = pixelData(for: current),
-              let prevData = pixelData(for: previous) else { return }
+        guard let currentPixels = ScrollCapturePixelBuffer(image: current),
+              let previousPixels = ScrollCapturePixelBuffer(image: previous),
+              currentPixels.layout == previousPixels.layout else { return }
 
-        let w = current.width
-        let h = current.height
-        let bytesPerRow = w * 4
+        currentPixels.withUnsafeBytes { currentBytes, layout in
+            previousPixels.withUnsafeBytes { previousBytes, _ in
+                let rowStart = layout.height * 2 / 10
+                let rowEnd = layout.height * 8 / 10
+                let rowStep = max(1, (rowEnd - rowStart) / 40)
+                var scrollbarWidth = 0
+                let maxScanCols = min(50, layout.width / 8)
 
-        let rowStart = h * 2 / 10
-        let rowEnd = h * 8 / 10
-        let rowStep = max(1, (rowEnd - rowStart) / 40)
-
-        var scrollbarWidth = 0
-        let maxScanCols = min(50, w / 8)
-
-        for colOffset in 0..<maxScanCols {
-            let col = w - 1 - colOffset
-            var sad: UInt64 = 0
-            var samples: Int = 0
-
-            for row in stride(from: rowStart, to: rowEnd, by: rowStep) {
-                let idx = row * bytesPerRow + col * 4
-                guard idx + 2 < h * bytesPerRow else { continue }
-                sad += UInt64(abs(Int(curData[idx]) - Int(prevData[idx]))
-                            + abs(Int(curData[idx + 1]) - Int(prevData[idx + 1]))
-                            + abs(Int(curData[idx + 2]) - Int(prevData[idx + 2])))
-                samples += 1
+                for colOffset in 0..<maxScanCols {
+                    let col = layout.width - 1 - colOffset
+                    var sad: UInt64 = 0
+                    var samples = 0
+                    for row in stride(from: rowStart, to: rowEnd, by: rowStep) {
+                        let index = row * layout.bytesPerRow + col * layout.bytesPerPixel
+                        guard index + 2 < currentBytes.count,
+                              index + 2 < previousBytes.count else { continue }
+                        sad += UInt64(abs(Int(currentBytes[index]) - Int(previousBytes[index]))
+                                    + abs(Int(currentBytes[index + 1]) - Int(previousBytes[index + 1]))
+                                    + abs(Int(currentBytes[index + 2]) - Int(previousBytes[index + 2])))
+                        samples += 1
+                    }
+                    guard samples > 0 else { continue }
+                    let average = sad / UInt64(samples)
+                    if average > 8 {
+                        scrollbarWidth = colOffset + 1
+                    } else if scrollbarWidth > 0 {
+                        break
+                    }
+                }
+                if scrollbarWidth >= 3 && scrollbarWidth <= 40 {
+                    rightMarginPx = scrollbarWidth + 4
+                }
             }
-            guard samples > 0 else { continue }
-            let avgSAD = sad / UInt64(samples)
-
-            if avgSAD > 8 {
-                scrollbarWidth = colOffset + 1
-            } else if scrollbarWidth > 0 {
-                break
-            }
-        }
-
-        if scrollbarWidth >= 3 && scrollbarWidth <= 40 {
-            rightMarginPx = scrollbarWidth + 4
         }
     }
 
@@ -756,40 +794,34 @@ final class ScrollCaptureController {
         guard current.width == previous.width, current.height == previous.height else { return }
         guard shiftPx > 5 else { return }
 
-        let w = current.width
-        let h = current.height
+        guard let currentPixels = ScrollCapturePixelBuffer(image: current),
+              let previousPixels = ScrollCapturePixelBuffer(image: previous),
+              currentPixels.layout == previousPixels.layout else { return }
 
-        guard let curData = pixelData(for: current),
-              let prevData = pixelData(for: previous) else { return }
-
-        let bytesPerRow = w * 4
-        let compareBytes = max(4, (w - rightMarginPx)) * 4
-        let colStep = 4
-
-        var frozenRows = 0
-        for row in 0..<h {
-            var rowSAD: UInt64 = 0
-            var samples: Int = 0
-            let offset = row * bytesPerRow
-            for col in stride(from: 0, to: compareBytes, by: colStep * 4) {
-                let cR = Int(curData[offset + col])
-                let cG = Int(curData[offset + col + 1])
-                let cB = Int(curData[offset + col + 2])
-                let pR = Int(prevData[offset + col])
-                let pG = Int(prevData[offset + col + 1])
-                let pB = Int(prevData[offset + col + 2])
-                rowSAD += UInt64(abs(cR - pR) + abs(cG - pG) + abs(cB - pB))
-                samples += 1
+        let frozenRows: Int? = currentPixels.withUnsafeBytes { currentBytes, layout in
+            previousPixels.withUnsafeBytes { previousBytes, _ in
+                let compareWidth = max(1, layout.width - rightMarginPx)
+                for row in 0..<layout.height {
+                    var rowSAD: UInt64 = 0
+                    var samples = 0
+                    let rowOffset = row * layout.bytesPerRow
+                    for col in stride(from: 0, to: compareWidth, by: 4) {
+                        let index = rowOffset + col * layout.bytesPerPixel
+                        guard index + 2 < currentBytes.count,
+                              index + 2 < previousBytes.count else { return nil }
+                        rowSAD += UInt64(abs(Int(currentBytes[index]) - Int(previousBytes[index]))
+                                        + abs(Int(currentBytes[index + 1]) - Int(previousBytes[index + 1]))
+                                        + abs(Int(currentBytes[index + 2]) - Int(previousBytes[index + 2])))
+                        samples += 1
+                    }
+                    if samples > 0, rowSAD / UInt64(samples) > 8 { return row }
+                }
+                return nil
             }
-            let avg = samples > 0 ? rowSAD / UInt64(samples) : 999
-            if avg > 8 {
-                frozenRows = row
-                break
-            }
-            if row == h - 1 { return }
         }
+        guard let frozenRows else { return }
 
-        if frozenRows >= 10 && frozenRows < (h * 6 / 10) {
+        if frozenRows >= 10 && frozenRows < (currentPixels.layout.height * 6 / 10) {
             headerDetectionSamples += 1
 
             if headerDetectionSamples == 1 {
@@ -814,7 +846,7 @@ final class ScrollCaptureController {
     // MARK: - Preview
 
     private func emitPreview() {
-        guard let cg = mergedImage, let callback = onPreviewUpdated else { return }
+        guard let cg = stitchedImage, let callback = onPreviewUpdated else { return }
         let ptSize = CGSize(width: CGFloat(cg.width) / backingScale,
                             height: CGFloat(cg.height) / backingScale)
         callback(NSImage(cgImage: cg, size: ptSize))

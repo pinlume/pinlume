@@ -195,6 +195,14 @@ private enum ThumbnailDismissGesture {
     case scroll
 }
 
+/// The preview must not activate Pinlume merely because it appears, but it must
+/// be able to own a keyboard/VoiceOver focus session after the user interacts
+/// with it. A plain non-activating NSPanel cannot become key.
+private final class FloatingThumbnailPanel: NSPanel {
+    override var canBecomeKey: Bool { true }
+    override var canBecomeMain: Bool { false }
+}
+
 @MainActor
 class FloatingThumbnailController: NSObject, NSDraggingSource, QLPreviewPanelDataSource, QLPreviewPanelDelegate {
 
@@ -262,7 +270,7 @@ class FloatingThumbnailController: NSObject, NSDraggingSource, QLPreviewPanelDat
 
         let startX = corner.isLeft ? screenFrame.minX - thumbSize.width - 10 : screenFrame.maxX + 10
 
-        let panel = NSPanel(
+        let panel = FloatingThumbnailPanel(
             contentRect: NSRect(x: startX, y: finalY, width: thumbSize.width, height: thumbSize.height),
             styleMask: [.borderless, .nonactivatingPanel],
             backing: .buffered,
@@ -276,6 +284,7 @@ class FloatingThumbnailController: NSObject, NSDraggingSource, QLPreviewPanelDat
         panel.hidesOnDeactivate = false
         panel.collectionBehavior = [.canJoinAllSpaces, .stationary]
         panel.acceptsMouseMovedEvents = true
+        panel.autorecalculatesKeyViewLoop = false
 
         let view = ThumbnailView(image: image, thumbSize: thumbSize)
         view.frame = NSRect(origin: .zero, size: thumbSize)
@@ -302,6 +311,8 @@ class FloatingThumbnailController: NSObject, NSDraggingSource, QLPreviewPanelDat
         view.onHoverExit  = { [weak self] in self?.scheduleAutoDismiss() }
 
         panel.contentView = view
+        panel.initialFirstResponder = view
+        view.installKeyboardFocusLoop()
         self.window = panel
         self.thumbnailView = view
 
@@ -724,6 +735,7 @@ private class ThumbnailView: NSView {
     private var saveBtnRect:   NSRect = .zero
 
     private var hoveredRect: NSRect = .zero
+    private var pressedAction: ThumbnailAction?
 
     private enum DragMode {
         case idle
@@ -731,6 +743,68 @@ private class ThumbnailView: NSView {
         case pending
         case dismissing
         case exporting
+    }
+
+    private enum ThumbnailAction: Hashable {
+        case close
+        case pin
+        #if !OFFLINE
+        case upload
+        #endif
+        case copy
+        case save
+    }
+
+    /// Native controls provide the AX press action, enabled state and keyboard
+    /// semantics. They remain visually transparent because ThumbnailView keeps
+    /// drawing the established hover chrome and handling the existing mouse
+    /// press/release identity contract itself.
+    private final class ActionButton: NSButton {
+        let thumbnailAction: ThumbnailAction
+        var onEscape: (() -> Void)?
+
+        init(action: ThumbnailAction, label: String) {
+            thumbnailAction = action
+            super.init(frame: .zero)
+            title = ""
+            toolTip = label
+            isBordered = false
+            isTransparent = true
+            focusRingType = .default
+            setAccessibilityLabel(label)
+        }
+
+        required init?(coder: NSCoder) { fatalError() }
+
+        override func becomeFirstResponder() -> Bool {
+            let accepted = super.becomeFirstResponder()
+            if accepted { superview?.needsDisplay = true }
+            return accepted
+        }
+
+        override func resignFirstResponder() -> Bool {
+            let resigned = super.resignFirstResponder()
+            if resigned { superview?.needsDisplay = true }
+            return resigned
+        }
+
+        override func keyDown(with event: NSEvent) {
+            if event.keyCode == 53 {
+                onEscape?()
+                return
+            }
+            super.keyDown(with: event)
+        }
+    }
+
+    private var actionButtons: [ThumbnailAction: ActionButton] = [:]
+    private var orderedActions: [ThumbnailAction] {
+        var actions: [ThumbnailAction] = [.close, .pin]
+        #if !OFFLINE
+        actions.append(.upload)
+        #endif
+        actions.append(contentsOf: [.copy, .save])
+        return actions
     }
 
     private struct ScrollDismissSample {
@@ -772,13 +846,159 @@ private class ThumbnailView: NSView {
         max(minimum, round(value * controlScale))
     }
 
+    private func updateActionGeometry() {
+        let r = thumbnailDrawRect
+        let pad = scaled(10, minimum: 5)
+        let cornerD = scaled(28, minimum: 18)
+        closeBtnRect = NSRect(
+            x: r.minX + pad,
+            y: r.maxY - pad - cornerD,
+            width: cornerD,
+            height: cornerD
+        )
+        pinBtnRect = NSRect(
+            x: r.maxX - pad - cornerD,
+            y: r.maxY - pad - cornerD,
+            width: cornerD,
+            height: cornerD
+        )
+        #if !OFFLINE
+        uploadBtnRect = NSRect(
+            x: r.maxX - pad - cornerD,
+            y: r.minY + pad,
+            width: cornerD,
+            height: cornerD
+        )
+        #endif
+
+        let centerBtnH = scaled(32, minimum: 18)
+        let centerGap = scaled(8, minimum: 4)
+        let titleFont = NSFont.systemFont(ofSize: scaled(13, minimum: 9), weight: .medium)
+        let titleAttrs: [NSAttributedString.Key: Any] = [.font: titleFont]
+        let maxTitleW = max(
+            (L("Copy") as NSString).size(withAttributes: titleAttrs).width,
+            (L("Save") as NSString).size(withAttributes: titleAttrs).width
+        )
+        let preferredCenterW = max(
+            scaled(110, minimum: 64),
+            ceil(maxTitleW + scaled(32, minimum: 18))
+        )
+        let centerBtnW = min(r.width - pad * 2, preferredCenterW)
+        let totalH = centerBtnH * 2 + centerGap
+        let buttonsY = r.midY - totalH / 2
+        copyBtnRect = NSRect(
+            x: r.midX - centerBtnW / 2,
+            y: buttonsY + centerBtnH + centerGap,
+            width: centerBtnW,
+            height: centerBtnH
+        )
+        saveBtnRect = NSRect(
+            x: r.midX - centerBtnW / 2,
+            y: buttonsY,
+            width: centerBtnW,
+            height: centerBtnH
+        )
+
+        actionButtons[.close]?.frame = closeBtnRect
+        actionButtons[.pin]?.frame = pinBtnRect
+        #if !OFFLINE
+        actionButtons[.upload]?.frame = uploadBtnRect
+        #endif
+        actionButtons[.copy]?.frame = copyBtnRect
+        actionButtons[.save]?.frame = saveBtnRect
+    }
+
     init(image: NSImage, thumbSize: NSSize) {
         self.image = image
         self.thumbSize = thumbSize
         super.init(frame: .zero)
+        installActionButtons()
         updateTrackingArea()
     }
     required init?(coder: NSCoder) { fatalError() }
+
+    override var acceptsFirstResponder: Bool { true }
+
+    override func acceptsFirstMouse(for event: NSEvent?) -> Bool { true }
+
+    override func keyDown(with event: NSEvent) {
+        switch event.keyCode {
+        case 53: // Escape
+            onClose?()
+        case 8: // C
+            activateAction(.copy)
+        case 35: // P
+            activateAction(.pin)
+        case 1: // S
+            activateAction(.save)
+        case 36, 49, 76: // Return, Space, keypad Enter
+            activateAction(.copy)
+        default:
+            super.keyDown(with: event)
+        }
+    }
+
+    // MARK: - Accessibility
+
+    override func isAccessibilityElement() -> Bool { true }
+
+    override func accessibilityRole() -> NSAccessibility.Role? { .button }
+
+    override func accessibilityLabel() -> String? { L("Screenshot Thumbnail") }
+
+    override func accessibilityValue() -> Any? {
+        "\(Int(image.size.width)) × \(Int(image.size.height))"
+    }
+
+    override func isAccessibilityEnabled() -> Bool { true }
+
+    override func isAccessibilitySelected() -> Bool { isHovering }
+
+    override func accessibilityPerformPress() -> Bool {
+        activateAction(.copy)
+        return true
+    }
+
+    override func accessibilityChildren() -> [Any]? {
+        orderedActions.compactMap { actionButtons[$0] }
+    }
+
+    func installKeyboardFocusLoop() {
+        let buttons = orderedActions.compactMap { actionButtons[$0] }
+        guard let first = buttons.first else { return }
+        nextKeyView = first
+        for (current, next) in zip(buttons, buttons.dropFirst()) {
+            current.nextKeyView = next
+        }
+        buttons.last?.nextKeyView = self
+    }
+
+    private func installActionButtons() {
+        for action in orderedActions {
+            let button = ActionButton(action: action, label: accessibilityLabel(for: action))
+            button.target = self
+            button.action = #selector(actionButtonPressed(_:))
+            button.onEscape = { [weak self] in self?.onClose?() }
+            addSubview(button)
+            actionButtons[action] = button
+        }
+    }
+
+    private func accessibilityLabel(for action: ThumbnailAction) -> String {
+        switch action {
+        case .close: return L("Close")
+        case .pin: return L("Pin to Screen")
+        #if !OFFLINE
+        case .upload: return L("Upload")
+        #endif
+        case .copy: return L("Copy")
+        case .save: return L("Save")
+        }
+    }
+
+    @objc private func actionButtonPressed(_ sender: ActionButton) {
+        activateAction(sender.thumbnailAction)
+    }
 
     func updateImage(_ newImage: NSImage) {
         image = newImage
@@ -788,6 +1008,18 @@ private class ThumbnailView: NSView {
     override func updateTrackingAreas() {
         super.updateTrackingAreas()
         updateTrackingArea()
+    }
+
+    override func layout() {
+        super.layout()
+        updateActionGeometry()
+    }
+
+    /// Preserve the established drag/dismiss and pressed-action mouse path.
+    /// The transparent NSButtons are reached through the key-view loop and AX
+    /// tree rather than becoming a second competing pointer route.
+    override func hitTest(_ point: NSPoint) -> NSView? {
+        bounds.contains(point) ? self : nil
     }
 
     private func updateTrackingArea() {
@@ -831,6 +1063,7 @@ private class ThumbnailView: NSView {
     // MARK: - Drawing
 
     override func draw(_ dirtyRect: NSRect) {
+        updateActionGeometry()
         let r = thumbnailDrawRect
         let cr: CGFloat = 12
 
@@ -974,10 +1207,13 @@ private class ThumbnailView: NSView {
     // MARK: - Mouse events
 
     override func mouseDown(with event: NSEvent) {
+        window?.makeKey()
+        window?.makeFirstResponder(self)
         dragStartScreenPoint = screenPoint(for: event)
         dismissDragOffset = 0
         let point = convert(event.locationInWindow, from: nil)
-        dragMode = actionButtonRect(containing: point) == nil ? .pending : .button
+        pressedAction = actionButton(at: point)
+        dragMode = pressedAction == nil ? .pending : .button
     }
 
     override func mouseDragged(with event: NSEvent) {
@@ -1029,16 +1265,15 @@ private class ThumbnailView: NSView {
         let p = convert(event.locationInWindow, from: nil)
         defer { resetMouseDragState() }
 
-        if closeBtnRect.contains(p)  { onClose?();  return }
-        if pinBtnRect.contains(p)    { onPin?();    return }
-        #if !OFFLINE
-        if uploadBtnRect.contains(p) { onUpload?(); return }
-        #endif
-        if copyBtnRect.contains(p)   { onCopy?();   return }
-        if saveBtnRect.contains(p)   { onSave?();   return }
+        let actionButton = actionButton(at: p)
+        if let pressedAction, pressedAction == actionButton {
+            activateAction(pressedAction)
+            return
+        }
 
-        // Click anywhere else on thumbnail — dismiss
-        if isHovering { onClose?() }
+        // A content click still dismisses, but never turns a press on one
+        // action into a release on another action after the pointer moves.
+        if pressedAction == nil, actionButton == nil, isHovering { onClose?() }
     }
 
     override func scrollWheel(with event: NSEvent) {
@@ -1109,18 +1344,39 @@ private class ThumbnailView: NSView {
         dragStartScreenPoint = nil
         dragMode = .idle
         dismissDragOffset = 0
+        pressedAction = nil
     }
 
     private func screenPoint(for event: NSEvent) -> NSPoint {
         window?.convertPoint(toScreen: event.locationInWindow) ?? NSEvent.mouseLocation
     }
 
-    private func actionButtonRect(containing point: NSPoint) -> NSRect? {
-        var rects = [closeBtnRect, pinBtnRect, copyBtnRect, saveBtnRect]
+    private func actionButton(at point: NSPoint) -> ThumbnailAction? {
+        if closeBtnRect.contains(point) { return .close }
+        if pinBtnRect.contains(point) { return .pin }
         #if !OFFLINE
-        rects.insert(uploadBtnRect, at: 3)
+        if uploadBtnRect.contains(point) { return .upload }
         #endif
-        return rects.first { !$0.isEmpty && $0.contains(point) }
+        if copyBtnRect.contains(point) { return .copy }
+        if saveBtnRect.contains(point) { return .save }
+        return nil
+    }
+
+    private func activateAction(_ action: ThumbnailAction) {
+        switch action {
+        case .close:
+            onClose?()
+        case .pin:
+            onPin?()
+        #if !OFFLINE
+        case .upload:
+            onUpload?()
+        #endif
+        case .copy:
+            onCopy?()
+        case .save:
+            onSave?()
+        }
     }
 
     private static func scrollDismissSample(from event: NSEvent) -> ScrollDismissSample {

@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.0.7
+
+- Prepare missing Apple Translation language packs before starting translation, and keep the screenshot overlay from blocking the system download sheet.
+- Make translation progress and detailed errors use separate status areas; Esc now closes the translation window through its normal cancellation path.
+- Render screenshot translation text at a true Retina-aware 8 pt minimum and use fast OCR only for the screenshot-translation path.
+- Refresh the permission-onboarding guide artwork.
+
 ## 1.0.6
 
 - Keep selected-text translation optional: request Accessibility once, synchronize the setting with the real permission result, and preserve clipboard translation when permission is declined.

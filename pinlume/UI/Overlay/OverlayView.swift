@@ -105,6 +105,12 @@ class OverlayView: NSView {
 
     weak var overlayDelegate: OverlayViewDelegate?
     var timingMark: ((String) -> Void)?
+    private var asyncGeneration = OverlayOperationGeneration()
+
+    func beginCaptureSessionGeneration() { asyncGeneration.beginCaptureSession() }
+    func beginAsyncOperation() -> OverlayOperationToken { asyncGeneration.beginOperation() }
+    func isCurrentAsyncOperation(_ token: OverlayOperationToken) -> Bool { asyncGeneration.contains(token) }
+    func invalidateAsyncOperations() { asyncGeneration.invalidateOperations() }
 
     override var isOpaque: Bool {
         !usesExternalScreenshotPreview && screenshotImage != nil && !isScrollCapturing && !isRecording && !isEditorMode
@@ -8376,15 +8382,7 @@ class OverlayView: NSView {
             confirmAnnotationEditing()
         case .upload:
             #if !OFFLINE
-            if UploadConfirmation.confirmIfNeeded(presentingWindow: window) {
-                // `NSAlert.runModal()` returns before AppKit has finished
-                // restoring the source panel's order. Tear down the Overlay on
-                // the next main-loop turn so that restoration cannot place its
-                // screen-saver-level panel back above the upload toast.
-                DispatchQueue.main.async { [weak self] in
-                    self?.overlayDelegate?.overlayViewDidRequestUpload()
-                }
-            }
+            overlayDelegate?.overlayViewDidRequestUpload()
             #endif
         case .share:
             // Show share picker anchored to the share button, then dismiss on selection
@@ -9598,6 +9596,9 @@ class OverlayView: NSView {
                 if let shortcutAction = ToolShortcutManager.action(for: event) {
                     guard let action = ToolShortcutManager.toolbarAction(for: shortcutAction) else { return }
                     switch action {
+                    case .tool(let tool):
+                        guard ToolbarToolPreferences.isToolEnabled(tool) else { return }
+                        handleToolbarAction(action)
                     case .detach:
                         if shouldAllowDetach() { handleToolbarAction(.detach) }
                     case .pin, .scrollCapture:
@@ -10629,6 +10630,7 @@ class OverlayView: NSView {
     }
 
     func reset() {
+        invalidateAsyncOperations()
         releaseSessionResources()
         dismissPixelInspector()
         resetSelectableOCRUI()

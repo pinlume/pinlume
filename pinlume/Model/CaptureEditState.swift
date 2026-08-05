@@ -62,6 +62,32 @@ struct CaptureEditState: Codable, Equatable {
     }
 }
 
+extension CaptureEditState {
+    private enum CodingKeys: String, CodingKey {
+        case effectsPresetRaw, effectsBrightness, effectsContrast, effectsSaturation, effectsSharpness
+        case beautifyEnabled, beautifyModeRaw, beautifyStyleIndex, beautifyPadding, beautifyCornerRadius
+        case beautifyShadowRadius, beautifyBackgroundBlur, beautifyIsWindowSnap, customBeautifyBackgroundPNG
+    }
+
+    init(from decoder: Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        effectsPresetRaw = try c.decodeIfPresent(Int.self, forKey: .effectsPresetRaw) ?? ImageEffectPreset.none.rawValue
+        effectsBrightness = try c.decodeIfPresent(Float.self, forKey: .effectsBrightness) ?? 0
+        effectsContrast = try c.decodeIfPresent(Float.self, forKey: .effectsContrast) ?? 1
+        effectsSaturation = try c.decodeIfPresent(Float.self, forKey: .effectsSaturation) ?? 1
+        effectsSharpness = try c.decodeIfPresent(Float.self, forKey: .effectsSharpness) ?? 0
+        beautifyEnabled = try c.decodeIfPresent(Bool.self, forKey: .beautifyEnabled) ?? false
+        beautifyModeRaw = try c.decodeIfPresent(Int.self, forKey: .beautifyModeRaw) ?? BeautifyMode.window.rawValue
+        beautifyStyleIndex = try c.decodeIfPresent(Int.self, forKey: .beautifyStyleIndex) ?? 0
+        beautifyPadding = try c.decodeIfPresent(Double.self, forKey: .beautifyPadding) ?? 48
+        beautifyCornerRadius = try c.decodeIfPresent(Double.self, forKey: .beautifyCornerRadius) ?? 10
+        beautifyShadowRadius = try c.decodeIfPresent(Double.self, forKey: .beautifyShadowRadius) ?? 20
+        beautifyBackgroundBlur = try c.decodeIfPresent(Double.self, forKey: .beautifyBackgroundBlur) ?? 0
+        beautifyIsWindowSnap = try c.decodeIfPresent(Bool.self, forKey: .beautifyIsWindowSnap) ?? false
+        customBeautifyBackgroundPNG = try c.decodeIfPresent(Data.self, forKey: .customBeautifyBackgroundPNG)
+    }
+}
+
 extension OverlayView {
     func captureEditState() -> CaptureEditState {
         let customBackgroundData: Data? = {

@@ -22,10 +22,17 @@ enum TranslatedImageRenderer {
             }
             context.draw(source, in: CGRect(x: 0, y: 0, width: width, height: height))
             var selectionBlocks: [RecognizedTextBlock] = []
+            let horizontalScale = logicalSize.width > 0 ? CGFloat(width) / logicalSize.width : 1
+            let verticalScale = logicalSize.height > 0 ? CGFloat(height) / logicalSize.height : 1
+            let pixelScale = max(1, min(horizontalScale, verticalScale))
             for item in blocks {
                 let box = item.block.normalizedBoundingBox
-                let drawRect = CGRect(x: box.minX * CGFloat(width), y: box.minY * CGFloat(height),
+                let originalDrawRect = CGRect(x: box.minX * CGFloat(width), y: box.minY * CGFloat(height),
                     width: box.width * CGFloat(width), height: box.height * CGFloat(height))
+                let drawRect = expandedForMinimumTextHeight(
+                    originalDrawRect,
+                    minimumHeight: 8 * pixelScale * 1.45 + min(8 * pixelScale, originalDrawRect.height * 0.1),
+                    canvasHeight: CGFloat(height))
                 let sampleRect = ScreenTranslationGeometry.samplePixelRect(normalizedBox: box, pixelSize: CGSize(width: width, height: height))
                 context.setFillColor(sampleAverageColor(in: source, region: sampleRect, alpha: 0.94))
                 context.fill(drawRect)
@@ -34,8 +41,17 @@ enum TranslatedImageRenderer {
                                                 dy: min(4, drawRect.height * 0.05))
                 let textColor = preferredTextColor(
                     for: sampleAverageColor(in: source, region: sampleRect, alpha: 1))
-                let fontSize = fittingFontSize(for: text, in: textRect)
-                let attributed = attributedString(text, fontSize: fontSize, color: textColor)
+                let fontSize = fittingFontSize(
+                    for: text,
+                    in: textRect,
+                    minimum: 8 * pixelScale,
+                    maximum: 34 * pixelScale,
+                    pixelScale: pixelScale)
+                let attributed = attributedString(
+                    text,
+                    fontSize: fontSize,
+                    pixelScale: pixelScale,
+                    color: textColor)
                 let frame = CTFramesetterCreateFrame(CTFramesetterCreateWithAttributedString(attributed),
                     CFRange(location: 0, length: attributed.length), CGPath(rect: textRect, transform: nil), nil)
                 CTFrameDraw(frame, context)
@@ -128,14 +144,23 @@ enum TranslatedImageRenderer {
         }
     }
 
-    private static func fittingFontSize(for text: String, in rect: CGRect) -> CGFloat {
-        guard !text.isEmpty, rect.width > 1, rect.height > 1 else { return 7 }
-        var lower: CGFloat = 7
-        var upper: CGFloat = min(34, max(7, rect.height * 0.65))
+    private static func fittingFontSize(
+        for text: String,
+        in rect: CGRect,
+        minimum: CGFloat,
+        maximum: CGFloat,
+        pixelScale: CGFloat
+    ) -> CGFloat {
+        guard !text.isEmpty, rect.width > 1, rect.height > 1 else { return minimum }
+        var lower = minimum
+        var upper = min(maximum, max(minimum, rect.height * 0.65))
         for _ in 0..<9 {
             let candidate = (lower + upper) / 2
             let attributed = attributedString(
-                text, fontSize: candidate, color: CGColor(gray: 0, alpha: 1))
+                text,
+                fontSize: candidate,
+                pixelScale: pixelScale,
+                color: CGColor(gray: 0, alpha: 1))
             let framesetter = CTFramesetterCreateWithAttributedString(attributed)
             let suggested = CTFramesetterSuggestFrameSizeWithConstraints(
                 framesetter,
@@ -152,17 +177,33 @@ enum TranslatedImageRenderer {
         return floor(lower * 2) / 2
     }
 
+    private static func expandedForMinimumTextHeight(
+        _ rect: CGRect,
+        minimumHeight: CGFloat,
+        canvasHeight: CGFloat
+    ) -> CGRect {
+        guard rect.height < minimumHeight else { return rect }
+        let height = min(canvasHeight, minimumHeight)
+        let originY = max(0, min(rect.midY - height / 2, canvasHeight - height))
+        return CGRect(x: rect.minX, y: originY, width: rect.width, height: height)
+    }
+
     private static func attributedString(
         _ text: String,
         fontSize: CGFloat,
+        pixelScale: CGFloat,
         color: CGColor
     ) -> NSAttributedString {
+        let scale = max(1, pixelScale)
+        let pointSize = fontSize / scale
+        let baseFont = NSFont.systemFont(ofSize: pointSize, weight: .regular) as CTFont
+        var transform = CGAffineTransform(scaleX: scale, y: scale)
+        let font = CTFontCreateCopyWithAttributes(baseFont, pointSize, &transform, nil)
         let paragraph = NSMutableParagraphStyle()
         paragraph.lineBreakMode = .byWordWrapping
         paragraph.lineSpacing = max(0, fontSize * 0.08)
         return NSAttributedString(string: text, attributes: [
-            NSAttributedString.Key(rawValue: kCTFontAttributeName as String):
-                CTFontCreateWithName("Helvetica" as CFString, fontSize, nil),
+            NSAttributedString.Key(rawValue: kCTFontAttributeName as String): font,
             NSAttributedString.Key(rawValue: kCTForegroundColorAttributeName as String): color,
             .paragraphStyle: paragraph,
         ])

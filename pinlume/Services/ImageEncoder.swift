@@ -256,7 +256,10 @@ enum ImageEncoder {
     /// history tools do not keep references to deleted `/tmp` files.
     static func copyToClipboard(_ image: NSImage, sourceFileURL: URL? = nil) {
         let pasteboard = NSPasteboard.general
-        let generation = beginClipboardCopy()
+        let gate = ClipboardCommitGate(
+            generation: beginClipboardCopy(),
+            pasteboardChangeCount: pasteboard.changeCount
+        )
 
         DispatchQueue.global(qos: .userInitiated).async {
             let validSourceURL = reusableSourceURL(sourceFileURL)
@@ -264,7 +267,7 @@ enum ImageEncoder {
                   let pngData = bitmap.representation(using: .png, properties: [:]) else {
                 if let validSourceURL {
                     DispatchQueue.main.async {
-                        guard isCurrentClipboardCopy(generation) else { return }
+                        guard permitsClipboardCommit(gate, pasteboard: pasteboard) else { return }
                         pasteboard.clearContents()
                         pasteboard.writeObjects([validSourceURL as NSURL])
                     }
@@ -276,7 +279,7 @@ enum ImageEncoder {
             let tiffData = bitmap.representation(using: .tiff, properties: [:])
 
             DispatchQueue.main.async {
-                guard isCurrentClipboardCopy(generation) else { return }
+                guard permitsClipboardCommit(gate, pasteboard: pasteboard) else { return }
                 writeImagePasteboard(
                     pasteboard,
                     backingURL: backingURL,
@@ -294,10 +297,14 @@ enum ImageEncoder {
         return clipboardGeneration
     }
 
-    private static func isCurrentClipboardCopy(_ generation: Int) -> Bool {
+    private static func permitsClipboardCommit(_ gate: ClipboardCommitGate, pasteboard: NSPasteboard) -> Bool {
         clipboardGenerationLock.lock()
-        defer { clipboardGenerationLock.unlock() }
-        return generation == clipboardGeneration
+        let generation = clipboardGeneration
+        clipboardGenerationLock.unlock()
+        return gate.permitsCommit(
+            currentGeneration: generation,
+            currentPasteboardChangeCount: pasteboard.changeCount
+        )
     }
 
     private static func reusableSourceURL(_ url: URL?) -> URL? {

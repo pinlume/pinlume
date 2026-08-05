@@ -1,4 +1,5 @@
 import Foundation
+import Darwin
 
 /// Retained backing files for pasteboard file-URL representations.
 ///
@@ -24,11 +25,21 @@ enum ClipboardBackingStore {
     }()
 
     static func writeImageData(_ data: Data) -> URL? {
-        let url = makeUniqueURL(fileExtension: "png")
+        writeImageData(data, directory: directory)
+    }
+
+    static func writeImageData(_ data: Data, directory: URL) -> URL? {
+        let url = directory.appendingPathComponent(UUID().uuidString + ".png")
+        let descriptor = open(url.path, O_WRONLY | O_CREAT | O_EXCL, S_IRUSR | S_IWUSR)
+        guard descriptor >= 0 else { return nil }
         do {
-            try data.write(to: url, options: .atomic)
+            let handle = FileHandle(fileDescriptor: descriptor, closeOnDealloc: true)
+            try handle.write(contentsOf: data)
+            try handle.close()
             return url
         } catch {
+            close(descriptor)
+            try? FileManager.default.removeItem(at: url)
             return nil
         }
     }
@@ -79,21 +90,4 @@ enum ClipboardBackingStore {
         contents.forEach { try? fileManager.removeItem(at: $0) }
     }
 
-    private static func makeUniqueURL(fileExtension: String) -> URL {
-        let filename = FilenameFormatter.defaultImageFilename(fileExtension: fileExtension)
-        let base = (filename as NSString).deletingPathExtension
-        let ext = (filename as NSString).pathExtension
-
-        var candidate = directory.appendingPathComponent(filename)
-        var counter = 2
-        while FileManager.default.fileExists(atPath: candidate.path) {
-            let name = ext.isEmpty ? "\(base) (\(counter))" : "\(base) (\(counter)).\(ext)"
-            candidate = directory.appendingPathComponent(name)
-            counter += 1
-            if counter > 1000 {
-                return directory.appendingPathComponent("\(UUID().uuidString).\(fileExtension)")
-            }
-        }
-        return candidate
-    }
 }

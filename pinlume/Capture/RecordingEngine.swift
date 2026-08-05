@@ -17,8 +17,10 @@ final class RecordingEngine: NSObject {
 
     // MARK: - State
 
-    enum State { case idle, recording, paused, stopping }
-    private(set) var state: State = .idle
+    typealias State = RecordingLifecycleState
+    private var lifecycle = RecordingLifecycle()
+    var state: State { lifecycle.state }
+    private var startupTask: Task<Void, Never>?
 
     // MARK: - Config (read from UserDefaults at start)
 
@@ -44,6 +46,7 @@ final class RecordingEngine: NSObject {
     /// only holds a reference and forwards lifecycle calls.
     private var writerSession: MP4WriterSession?
     private var outputURL: URL?
+    private var writerOutputURL: URL?
 
     // MARK: - Mic capture
 
@@ -55,6 +58,8 @@ final class RecordingEngine: NSObject {
 
     var onProgress: RecordingProgressCallback?
     var onCompletion: RecordingCompletionCallback?
+    var onStarted: (() -> Void)?
+    var onStopping: (() -> Void)?
 
     private var progressTimer: Timer?
     private var elapsedSeconds: Int = 0
@@ -83,8 +88,7 @@ final class RecordingEngine: NSObject {
 
     func startRecording(rect: NSRect, screen: NSScreen, fpsOverride: Int? = nil, excludeWindowNumbers: [CGWindowID] = []) {
         self.excludeWindowNumbers = excludeWindowNumbers
-        guard state == .idle else { return }
-        state = .recording
+        guard let generation = lifecycle.beginStarting() else { return }
 
         self.screen = screen
         // Convert AppKit rect (bottom-left origin) → screen coords (top-left origin)
@@ -103,13 +107,15 @@ final class RecordingEngine: NSObject {
             requested: fpsOverride ?? defaultFPS,
             displayRefreshRate: Self.displayRefreshRate(for: screen)
         )
-        Task {
+        startupTask = Task { [weak self] in
+            guard let self else { return }
             // Resolve mic permission before starting capture so the prompt
             // doesn't block the UI while frames are already being recorded.
             if UserDefaults.standard.bool(forKey: "recordMicAudio") {
                 let micStatus = AVCaptureDevice.authorizationStatus(for: .audio)
                 if micStatus == .notDetermined {
                     let granted = await AVCaptureDevice.requestAccess(for: .audio)
+                    guard self.acceptsStartup(generation) else { return }
                     if !granted {
                         UserDefaults.standard.set(false, forKey: "recordMicAudio")
                     }
@@ -117,13 +123,13 @@ final class RecordingEngine: NSObject {
                     UserDefaults.standard.set(false, forKey: "recordMicAudio")
                 }
             }
-            await self.beginCapture(rect: rect)
+            guard self.acceptsStartup(generation) else { return }
+            await self.beginCapture(rect: rect, generation: generation)
         }
     }
 
     func pauseRecording() {
-        guard state == .recording else { return }
-        state = .paused
+        guard lifecycle.pause(generation: lifecycle.generation) else { return }
         pauseStartTime = Date()
         writerSession?.pause()
         progressTimer?.invalidate()
@@ -132,10 +138,9 @@ final class RecordingEngine: NSObject {
     }
 
     func resumeRecording() {
-        guard state == .paused else { return }
+        guard lifecycle.resume(generation: lifecycle.generation) else { return }
         let pausedFor = pauseStartTime.map { Date().timeIntervalSince($0) } ?? 0
         pauseStartTime = nil
-        state = .recording
         writerSession?.resume(addingPausedDuration: pausedFor)
         progressTimer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { [weak self] _ in
             guard let self = self else { return }
@@ -146,26 +151,30 @@ final class RecordingEngine: NSObject {
     }
 
     func stopRecording() {
-        guard state == .recording || state == .paused else { return }
-        state = .stopping
+        guard let generation = lifecycle.stop() else { return }
+        onStopping?()
+        startupTask?.cancel()
+        startupTask = nil
         // Stop accepting samples ASAP (more may arrive during SCStream teardown).
         writerSession?.requestStop()
         progressTimer?.invalidate()
         progressTimer = nil
-        Task { await self.finalizeCapture() }
+        Task { await self.finalizeCapture(generation: generation) }
     }
 
     // MARK: - Setup
 
-    private func beginCapture(rect: NSRect) async {
+    private func beginCapture(rect: NSRect, generation: UInt) async {
         do {
             // Find the SCDisplay matching our screen by display ID
             let content = try await SCShareableContent.excludingDesktopWindows(false, onScreenWindowsOnly: true)
+            guard acceptsStartup(generation) else { return }
             let screenID = screen.deviceDescription[NSDeviceDescriptionKey("NSScreenNumber")] as? CGDirectDisplayID
-            guard let display = content.displays.first(where: { d in
-                screenID != nil && d.displayID == screenID!
-            }) ?? content.displays.first else {
-                await MainActor.run { self.fail(RecordingError.noDisplay) }
+            guard let targetDisplayID = RecordingDisplaySelection.target(
+                    requested: screenID,
+                    available: content.displays.map(\.displayID)),
+                  let display = content.displays.first(where: { $0.displayID == targetDisplayID }) else {
+                await fail(RecordingError.noDisplay, generation: generation)
                 return
             }
 
@@ -178,8 +187,11 @@ final class RecordingEngine: NSObject {
             }
             let filter = SCContentFilter(display: display, excludingWindows: excludeWindows)
             let config = SCStreamConfiguration()
-            config.width = Int(cropRect.width * screen.backingScaleFactor)
-            config.height = Int(cropRect.height * screen.backingScaleFactor)
+            let dimensions = RecordingCaptureDimensions.even(
+                width: Int(cropRect.width * screen.backingScaleFactor),
+                height: Int(cropRect.height * screen.backingScaleFactor))
+            config.width = Int(dimensions.width)
+            config.height = Int(dimensions.height)
             config.minimumFrameInterval = CMTime(value: 1, timescale: CMTimeScale(fps))
             config.showsCursor = true   // we'll draw our own highlight on top if needed
             config.sourceRect = cropRect
@@ -209,11 +221,12 @@ final class RecordingEngine: NSObject {
             let pixelH = config.height
 
             // Prepare output file
-            outputURL = makeOutputURL()
-            guard let outURL = outputURL else {
-                await MainActor.run { self.fail(RecordingError.noOutput) }
+            guard let outputReservation = makeOutputURL() else {
+                await fail(RecordingError.noOutput, generation: generation)
                 return
             }
+            outputURL = outputReservation.finalURL
+            writerOutputURL = outputReservation.writerURL
 
             let recordSystemAudio: Bool = {
                 if #available(macOS 13.0, *) { return UserDefaults.standard.bool(forKey: "recordSystemAudio") }
@@ -228,7 +241,8 @@ final class RecordingEngine: NSObject {
                 fps: fps
             )
             let writer = try MP4WriterSession.make(
-                queue: recordingQueue, url: outURL, width: pixelW, height: pixelH, fps: fps,
+                queue: recordingQueue, url: outputReservation.writerURL,
+                width: pixelW, height: pixelH, fps: fps,
                 quality: VideoQuality(rawValue: liveQuality.rawValue) ?? .medium,
                 recordSystemAudio: recordSystemAudio, recordMicAudio: recordMicAudio)
             self.writerSession = writer
@@ -255,30 +269,33 @@ final class RecordingEngine: NSObject {
                     try stream.addStreamOutput(output, type: .audio, sampleHandlerQueue: recordingQueue)
                 }
             }
-            try await stream.startCapture()
             self.stream = stream
+            try await stream.startCapture()
+            guard acceptsStartup(generation) else {
+                try? await stream.stopCapture()
+                return
+            }
+            guard lifecycle.markRecording(generation: generation) else { return }
+            onStarted?()
 
             // Start mic capture if enabled and authorized (permission resolved before capture started)
             if UserDefaults.standard.bool(forKey: "recordMicAudio") &&
                AVCaptureDevice.authorizationStatus(for: .audio) == .authorized {
-                await MainActor.run { self.startMicCapture() }
+                startMicCapture()
             }
 
-            await MainActor.run {
-                self.elapsedSeconds = 0
-                self.progressTimer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { [weak self] _ in
-                    guard let self = self else { return }
-                    self.elapsedSeconds += 1
-                    self.onProgress?(self.elapsedSeconds)
-                }
+            self.elapsedSeconds = 0
+            self.progressTimer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { [weak self] _ in
+                guard let self = self else { return }
+                self.elapsedSeconds += 1
+                self.onProgress?(self.elapsedSeconds)
             }
-
         } catch {
-            await MainActor.run { self.fail(error) }
+            await fail(error, generation: generation)
         }
     }
 
-    private func finalizeCapture() async {
+    private func finalizeCapture(generation: UInt) async {
         if let stream = stream {
             try? await stream.stopCapture()
             self.stream = nil
@@ -287,18 +304,23 @@ final class RecordingEngine: NSObject {
         stopMicCapture()
 
         guard let writer = writerSession else {
-            succeed()
+            succeed(generation: generation)
             return
         }
         do {
             try await writer.finish()
             writerSession = nil
-            succeed()
+            guard let writerOutputURL, let outputURL else {
+                throw RecordingError.noOutput
+            }
+            try TransactionalOutput.transfer(
+                writerOutputURL,
+                to: outputURL,
+                reservedDestination: true)
+            self.writerOutputURL = nil
+            succeed(generation: generation)
         } catch {
-            writerSession = nil
-            // Clean up the (corrupt/empty) output file so it isn't mistaken for valid.
-            if let url = outputURL { try? FileManager.default.removeItem(at: url) }
-            fail(error)
+            await fail(error, generation: generation)
         }
     }
 
@@ -351,24 +373,47 @@ final class RecordingEngine: NSObject {
 
     // MARK: - Output URL
 
-    private func makeOutputURL() -> URL? {
+    private func makeOutputURL() -> RecordingOutputReservation? {
         // Save to temp directory — always writable in sandbox.
         // The video editor handles final export to the user's chosen location.
         let dir = FileManager.default.temporaryDirectory
         let template = UserDefaults.standard.string(forKey: FilenameFormatter.recordingUserDefaultsKey) ?? FilenameFormatter.defaultRecordingTemplate
         let base = FilenameFormatter.format(template: template, fallback: FilenameFormatter.defaultRecordingTemplate)
-        return dir.appendingPathComponent("\(base).mp4")
+        return RecordingOutputURL.make(in: dir, baseName: base)
     }
 
     // MARK: - Helpers
 
-    @MainActor private func succeed() {
-        state = .idle
+    private func acceptsStartup(_ generation: UInt) -> Bool {
+        lifecycle.generation == generation && lifecycle.state == .starting && !Task.isCancelled
+    }
+
+    private func succeed(generation: UInt) {
+        guard lifecycle.complete(generation: generation) else { return }
+        startupTask = nil
         onCompletion?(outputURL, nil)
     }
 
-    @MainActor private func fail(_ error: Error) {
-        state = .idle
+    private func fail(_ error: Error, generation: UInt) async {
+        guard lifecycle.abort(generation: generation) else { return }
+        startupTask = nil
+        progressTimer?.invalidate()
+        progressTimer = nil
+        if let stream {
+            try? await stream.stopCapture()
+        }
+        stream = nil
+        streamOutput = nil
+        if let writer = writerSession {
+            writer.requestStop()
+            try? await writer.finish()
+        }
+        writerSession = nil
+        stopMicCapture()
+        if let writerOutputURL { try? FileManager.default.removeItem(at: writerOutputURL) }
+        writerOutputURL = nil
+        if let outputURL { try? FileManager.default.removeItem(at: outputURL) }
+        outputURL = nil
         onCompletion?(nil, error)
     }
 

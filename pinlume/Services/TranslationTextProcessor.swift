@@ -122,6 +122,24 @@ enum TranslationTextProcessor {
         return segments(for: text, direction: direction)
     }
 
+    static func chunkedSegments(
+        for text: String,
+        direction: TranslationDirection,
+        maximumCharacters: Int = 1_200
+    ) -> [TranslationSegment] {
+        precondition(maximumCharacters > 0)
+        return segments(for: text, direction: direction).flatMap { segment in
+            guard segment.kind == .translatable,
+                  segment.original.count > maximumCharacters else { return [segment] }
+            return naturalChunks(in: segment.original, limit: maximumCharacters).map {
+                TranslationSegment(
+                    original: $0,
+                    requestText: expandedIdentifiers(in: $0),
+                    kind: .translatable)
+            }
+        }
+    }
+
     static func sentenceComparison(source: String, translated: String) -> String {
         let sourceSentences = sentences(in: source)
         let translatedSentences = sentences(in: translated)
@@ -288,6 +306,31 @@ enum TranslationTextProcessor {
             range: range,
             withTemplate: template
         )
+    }
+
+    private static func naturalChunks(in text: String, limit: Int) -> [String] {
+        let characters = Array(text)
+        var result: [String] = []
+        var start = 0
+        while start < characters.count {
+            let hardEnd = min(start + limit, characters.count)
+            guard hardEnd < characters.count else {
+                result.append(String(characters[start..<characters.count]))
+                break
+            }
+            var preferredEnd: Int?
+            for index in start..<hardEnd where isChunkBoundary(characters[index]) {
+                preferredEnd = index + 1
+            }
+            let end = preferredEnd.flatMap { $0 > start ? $0 : nil } ?? hardEnd
+            result.append(String(characters[start..<end]))
+            start = end
+        }
+        return result
+    }
+
+    private static func isChunkBoundary(_ character: Character) -> Bool {
+        character.isWhitespace || ".!?。！？；;".contains(character)
     }
 
     private static func sentences(in text: String) -> [String] {

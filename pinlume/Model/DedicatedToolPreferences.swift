@@ -54,7 +54,7 @@ enum DedicatedToolPreferences {
         case .screenTranslation:
             return [.language, .compare, .toggleOriginalTranslation, .copyOriginal, .copyTranslation, .pin, .cancel]
         case .translationPin:
-            return [.language, .toggleOriginalTranslation, .copyOriginal, .copyTranslation, .selectText]
+            return [.language, .toggleOriginalTranslation, .copyOriginal, .copyTranslation]
         }
     }
 

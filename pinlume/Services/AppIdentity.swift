@@ -3,7 +3,12 @@ import Foundation
 enum AppIdentity {
     static let maintainerName = "duhuajie"
     static let maintainerURL = URL(string: "https://github.com/duhuajie")!
+
+    #if INTERNAL_DEBUG
+    static let bundleIdentifier = "com.pinlume.app.debug"
+    #else
     static let bundleIdentifier = "com.pinlume.app"
+    #endif
     static let applicationSupportDirectoryName = bundleIdentifier
 
     /// Read only for the one-time on-disk migration. These are not active
@@ -12,6 +17,17 @@ enum AppIdentity {
         "com.xiegang.macshot.plus",
         "com.sw33tlie.macshot",
     ]
+
+    /// Internal Debug copies the current release preferences once so daily
+    /// development starts with the same settings, without sharing later edits
+    /// or moving the release app's history, pins, and other on-disk data.
+    static let legacyPreferenceBundleIdentifiers: [String] = {
+        #if INTERNAL_DEBUG
+        return ["com.pinlume.app"] + legacyApplicationSupportDirectoryNames
+        #else
+        return legacyApplicationSupportDirectoryNames
+        #endif
+    }()
     static let preferencesMigrationMarkerKey = "pinlumeLegacyPreferencesMigrated"
 
     /// Copies the old app's UserDefaults domain once. The new domain wins on
@@ -19,7 +35,7 @@ enum AppIdentity {
     static func migrateLegacyPreferences(
         in defaults: UserDefaults = .standard,
         currentBundleIdentifier: String = bundleIdentifier,
-        legacyBundleIdentifiers: [String] = legacyApplicationSupportDirectoryNames
+        legacyBundleIdentifiers: [String] = legacyPreferenceBundleIdentifiers
     ) {
         let current = defaults.persistentDomain(forName: currentBundleIdentifier) ?? [:]
         guard (current[preferencesMigrationMarkerKey] as? Bool) != true else { return }

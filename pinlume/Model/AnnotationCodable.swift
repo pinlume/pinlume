@@ -72,6 +72,72 @@ struct CodableAnnotation: Codable {
     var dimOpacity: CGFloat = 0.55  // highlight (spotlight) dim strength
 }
 
+extension CodableAnnotation {
+    private enum CodingKeys: String, CodingKey {
+        case tool, startX, startY, endX, endY, colorRGBA, strokeWidth
+        case text, attributedTextRTF, fontSize, isBold, isItalic, isUnderline, isStrikethrough
+        case textDrawRect, textBgColorRGBA, textOutlineColorRGBA, textGlyphStrokeColorRGBA, textAlignment, fontFamilyName, textImagePNG
+        case number, numberFormat, points, pressures, controlPointXY, anchorPoints
+        case rotation, rectCornerRadius, lineStyle, arrowStyle, arrowReversed, rectFillStyle, outlineColorRGBA
+        case stampImagePNG, bakedBlurPNG, loupeMagnification, loupeSourceRect, loupeOutlineEnabled
+        case measureInPoints, censorMode, censorShape, censorStrength, groupID, randomSeed, dimOpacity
+    }
+
+    /// Core geometry/tool fields are deliberately strict: without them an
+    /// annotation cannot be positioned safely. Every later presentation field
+    /// is optional for compatibility with pre-feature history JSON.
+    init(from decoder: Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        tool = try c.decode(Int.self, forKey: .tool)
+        startX = try c.decode(CGFloat.self, forKey: .startX)
+        startY = try c.decode(CGFloat.self, forKey: .startY)
+        endX = try c.decode(CGFloat.self, forKey: .endX)
+        endY = try c.decode(CGFloat.self, forKey: .endY)
+        colorRGBA = try c.decode([CGFloat].self, forKey: .colorRGBA)
+        strokeWidth = try c.decode(CGFloat.self, forKey: .strokeWidth)
+
+        text = try c.decodeIfPresent(String.self, forKey: .text)
+        attributedTextRTF = try c.decodeIfPresent(Data.self, forKey: .attributedTextRTF)
+        fontSize = try c.decodeIfPresent(CGFloat.self, forKey: .fontSize) ?? 20
+        isBold = try c.decodeIfPresent(Bool.self, forKey: .isBold) ?? false
+        isItalic = try c.decodeIfPresent(Bool.self, forKey: .isItalic) ?? false
+        isUnderline = try c.decodeIfPresent(Bool.self, forKey: .isUnderline) ?? false
+        isStrikethrough = try c.decodeIfPresent(Bool.self, forKey: .isStrikethrough) ?? false
+        textDrawRect = try c.decodeIfPresent([CGFloat].self, forKey: .textDrawRect)
+        textBgColorRGBA = try c.decodeIfPresent([CGFloat].self, forKey: .textBgColorRGBA)
+        textOutlineColorRGBA = try c.decodeIfPresent([CGFloat].self, forKey: .textOutlineColorRGBA)
+        textGlyphStrokeColorRGBA = try c.decodeIfPresent([CGFloat].self, forKey: .textGlyphStrokeColorRGBA)
+        textAlignment = try c.decodeIfPresent(Int.self, forKey: .textAlignment) ?? 0
+        fontFamilyName = try c.decodeIfPresent(String.self, forKey: .fontFamilyName)
+        textImagePNG = try c.decodeIfPresent(Data.self, forKey: .textImagePNG)
+        number = try c.decodeIfPresent(Int.self, forKey: .number)
+        numberFormat = try c.decodeIfPresent(Int.self, forKey: .numberFormat) ?? 0
+        points = try c.decodeIfPresent([[CGFloat]].self, forKey: .points)
+        pressures = try c.decodeIfPresent([CGFloat].self, forKey: .pressures)
+        controlPointXY = try c.decodeIfPresent([CGFloat].self, forKey: .controlPointXY)
+        anchorPoints = try c.decodeIfPresent([[CGFloat]].self, forKey: .anchorPoints)
+        rotation = try c.decodeIfPresent(CGFloat.self, forKey: .rotation) ?? 0
+        rectCornerRadius = try c.decodeIfPresent(CGFloat.self, forKey: .rectCornerRadius) ?? 0
+        lineStyle = try c.decodeIfPresent(Int.self, forKey: .lineStyle) ?? 0
+        arrowStyle = try c.decodeIfPresent(Int.self, forKey: .arrowStyle) ?? 0
+        arrowReversed = try c.decodeIfPresent(Bool.self, forKey: .arrowReversed) ?? false
+        rectFillStyle = try c.decodeIfPresent(Int.self, forKey: .rectFillStyle) ?? 0
+        outlineColorRGBA = try c.decodeIfPresent([CGFloat].self, forKey: .outlineColorRGBA)
+        stampImagePNG = try c.decodeIfPresent(Data.self, forKey: .stampImagePNG)
+        bakedBlurPNG = try c.decodeIfPresent(Data.self, forKey: .bakedBlurPNG)
+        loupeMagnification = try c.decodeIfPresent(CGFloat.self, forKey: .loupeMagnification)
+        loupeSourceRect = try c.decodeIfPresent([CGFloat].self, forKey: .loupeSourceRect)
+        loupeOutlineEnabled = try c.decodeIfPresent(Bool.self, forKey: .loupeOutlineEnabled) ?? false
+        measureInPoints = try c.decodeIfPresent(Bool.self, forKey: .measureInPoints) ?? false
+        censorMode = try c.decodeIfPresent(Int.self, forKey: .censorMode) ?? 0
+        censorShape = try c.decodeIfPresent(Int.self, forKey: .censorShape)
+        censorStrength = try c.decodeIfPresent(CGFloat.self, forKey: .censorStrength)
+        groupID = try c.decodeIfPresent(String.self, forKey: .groupID)
+        randomSeed = try c.decodeIfPresent(UInt32.self, forKey: .randomSeed) ?? 0
+        dimOpacity = try c.decodeIfPresent(CGFloat.self, forKey: .dimOpacity) ?? 0.55
+    }
+}
+
 extension Annotation {
 
     func toCodable() -> CodableAnnotation {
@@ -280,7 +346,14 @@ enum AnnotationSerializer {
     }
 
     static func decode(_ data: Data) -> [Annotation]? {
-        guard let codables = try? JSONDecoder().decode([CodableAnnotation].self, from: data) else { return nil }
+        // Decode each JSON element independently: a malformed legacy item must
+        // not make the rest of an editable capture disappear.
+        guard let raw = try? JSONSerialization.jsonObject(with: data) as? [Any] else { return nil }
+        let codables = raw.compactMap { item -> CodableAnnotation? in
+            guard JSONSerialization.isValidJSONObject([item]),
+                  let itemData = try? JSONSerialization.data(withJSONObject: [item]) else { return nil }
+            return try? JSONDecoder().decode([CodableAnnotation].self, from: itemData).first
+        }
         let annotations = codables.compactMap { Annotation.fromCodable($0) }
         return annotations.isEmpty ? nil : annotations
     }

@@ -1,10 +1,15 @@
 import Cocoa
 import CoreGraphics
 
+private final class PermissionOnboardingPanel: NSPanel {
+    override var canBecomeKey: Bool { true }
+    override var canBecomeMain: Bool { true }
+}
+
 /// A custom onboarding window shown on first launch (or when screen recording
 /// permission is missing). Guides the user step-by-step instead of letting
 /// macOS throw its own generic dialogs.
-class PermissionOnboardingController: NSWindowController {
+class PermissionOnboardingController: NSWindowController, NSWindowDelegate {
 
     // Called when the user has granted permission and we're ready to go
     var onPermissionGranted: (() -> Void)?
@@ -15,7 +20,7 @@ class PermissionOnboardingController: NSWindowController {
     // MARK: - Init
 
     init() {
-        let window = NSWindow(
+        let window = PermissionOnboardingPanel(
             contentRect: NSRect(x: 0, y: 0, width: 400, height: 520),
             styleMask: [.titled, .closable],
             backing: .buffered,
@@ -26,8 +31,8 @@ class PermissionOnboardingController: NSWindowController {
         window.isReleasedWhenClosed = false
         window.titlebarAppearsTransparent = false
         window.isMovableByWindowBackground = true
-
         super.init(window: window)
+        window.delegate = self
         buildUI()
     }
 
@@ -35,6 +40,10 @@ class PermissionOnboardingController: NSWindowController {
 
     deinit {
         pollTimer?.invalidate()
+    }
+
+    func windowWillClose(_ notification: Notification) {
+        stopPolling()
     }
 
     // MARK: - UI
@@ -203,7 +212,7 @@ class PermissionOnboardingController: NSWindowController {
     // MARK: - Permission polling
 
     private func startPolling() {
-        pollTimer?.invalidate()
+        stopPolling()
         // Poll every 0.75s using CGPreflightScreenCaptureAccess() — this is a pure
         // TCC status query that never triggers the native system dialog.
         pollTimer = Timer.scheduledTimer(withTimeInterval: 0.75, repeats: true) { [weak self] _ in
@@ -215,10 +224,14 @@ class PermissionOnboardingController: NSWindowController {
         guard !permissionGranted else { return }
         if CGPreflightScreenCaptureAccess() {
             permissionGranted = true
-            pollTimer?.invalidate()
-            pollTimer = nil
+            stopPolling()
             showGranted()
         }
+    }
+
+    private func stopPolling() {
+        pollTimer?.invalidate()
+        pollTimer = nil
     }
 
     /// Check screen recording permission without triggering a system dialog.
@@ -252,10 +265,10 @@ class PermissionOnboardingController: NSWindowController {
     // MARK: - Actions
 
     @objc private func openSettings() {
-        // Deep-link directly to Privacy & Security → Screen Recording.
-        // macOS will add Pinlume to the list automatically when it first
-        // attempts a capture — no CGRequestScreenCaptureAccess() call needed
-        // (that API shows the redundant native dialog we want to avoid).
+        // Make the explicit user action a real TCC request before opening
+        // System Settings. This is what makes macOS add Pinlume to the
+        // Screen Recording list; opening the pane alone cannot do that.
+        CGRequestScreenCaptureAccess()
         if let url = URL(string: "x-apple.systempreferences:com.apple.preference.security?Privacy_ScreenCapture") {
             NSWorkspace.shared.open(url)
         }
@@ -264,8 +277,7 @@ class PermissionOnboardingController: NSWindowController {
     }
 
     @objc private func continueClicked() {
-        pollTimer?.invalidate()
-        pollTimer = nil
+        stopPolling()
         window?.orderOut(nil)
         onPermissionGranted?()
     }

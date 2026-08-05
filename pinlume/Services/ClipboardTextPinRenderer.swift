@@ -2,6 +2,15 @@ import AppKit
 
 enum ClipboardTextPinRenderer {
 
+    struct ImportBudget {
+        static let maxDocumentBytes = 4 * 1024 * 1024
+        static let maxImageBytes = 64 * 1024 * 1024
+        static let maxCharacters = 200_000
+        static let maxAttachments = 0
+        static let maxImagePixels = 40_000_000
+        static let maxPlainTextCharacters = 100_000
+    }
+
     private static let padding = NSEdgeInsets(top: 15, left: 15, bottom: 15, right: 15)
     private static let plainFont = NSFont.systemFont(ofSize: 13, weight: .regular)
     private static let defaultTextPinWidth: CGFloat = 600
@@ -11,7 +20,9 @@ enum ClipboardTextPinRenderer {
     private static let maxImportedParagraphSpacing: CGFloat = 8
 
     static func attributedString(html data: Data) -> NSAttributedString? {
-        attributedString(
+        guard data.count <= ImportBudget.maxDocumentBytes,
+              !containsExternalResourceReference(in: data) else { return nil }
+        return attributedString(
             data: data,
             options: [
                 .documentType: NSAttributedString.DocumentType.html,
@@ -21,14 +32,16 @@ enum ClipboardTextPinRenderer {
     }
 
     static func attributedString(rtf data: Data) -> NSAttributedString? {
-        attributedString(
+        guard data.count <= ImportBudget.maxDocumentBytes else { return nil }
+        return attributedString(
             data: data,
             options: [.documentType: NSAttributedString.DocumentType.rtf]
         )
     }
 
     static func attributedString(rtfd data: Data) -> NSAttributedString? {
-        attributedString(
+        guard data.count <= ImportBudget.maxDocumentBytes else { return nil }
+        return attributedString(
             data: data,
             options: [.documentType: NSAttributedString.DocumentType.rtfd]
         )
@@ -44,6 +57,8 @@ enum ClipboardTextPinRenderer {
             options: options,
             documentAttributes: &documentAttributes
         ) else { return nil }
+        guard attributed.length <= ImportBudget.maxCharacters,
+              attachmentCount(in: attributed) <= ImportBudget.maxAttachments else { return nil }
 
         let mutable = NSMutableAttributedString(attributedString: attributed)
         normalizeImportedListMarkers(in: mutable)
@@ -78,15 +93,66 @@ enum ClipboardTextPinRenderer {
     }
 
     static func containsAttachments(_ attributed: NSAttributedString) -> Bool {
-        var found = false
+        attachmentCount(in: attributed) > 0
+    }
+
+    static func safePlainText(_ string: String) -> String {
+        guard string.count > ImportBudget.maxPlainTextCharacters else { return string }
+        let end = string.index(string.startIndex, offsetBy: ImportBudget.maxPlainTextCharacters)
+        return String(string[..<end]) + "\n…"
+    }
+
+    static func imageFitsBudget(_ image: NSImage) -> Bool {
+        guard let representation = image.bestRepresentation(for: NSRect(origin: .zero, size: image.size), context: nil, hints: nil) else {
+            return false
+        }
+        let pixels = Int64(representation.pixelsWide) * Int64(representation.pixelsHigh)
+        return representation.pixelsWide > 0 && representation.pixelsHigh > 0 && pixels <= Int64(ImportBudget.maxImagePixels)
+    }
+
+    private static func attachmentCount(in attributed: NSAttributedString) -> Int {
+        var count = 0
         let fullRange = NSRange(location: 0, length: attributed.length)
         attributed.enumerateAttribute(.attachment, in: fullRange) { value, _, stop in
             if value is NSTextAttachment {
-                found = true
-                stop.pointee = true
+                count += 1
+                if count > ImportBudget.maxAttachments { stop.pointee = true }
             }
         }
-        return found
+        return count
+    }
+
+    private static func containsExternalResourceReference(in data: Data) -> Bool {
+        guard let rawSource = String(data: data, encoding: .utf8) else { return true }
+        let source = decodeNumericHTMLEntities(in: rawSource).lowercased()
+        // NSAttributedString's HTML importer may fetch URL-backed resources.
+        // Clipboard pins are intentionally offline: external URLs are rejected
+        // before invoking the importer rather than hidden after the fact.
+        return source.range(of: #"(?:src|srcset|background|data)\s*="#, options: .regularExpression) != nil
+            || source.range(of: #"href\s*=\s*[\"']?\s*(?:https?:|file:|//)"#, options: .regularExpression) != nil
+            || source.range(of: #"(?:url\s*\(|@import\b)"#, options: .regularExpression) != nil
+    }
+
+    private static func decodeNumericHTMLEntities(in source: String) -> String {
+        guard let expression = try? NSRegularExpression(pattern: #"&#(?:x([0-9a-fA-F]+)|([0-9]+));?"#) else {
+            return source
+        }
+        var decoded = source
+        let matches = expression.matches(
+            in: decoded,
+            range: NSRange(decoded.startIndex..., in: decoded)
+        )
+        for match in matches.reversed() {
+            let hexRange = match.range(at: 1)
+            let decimalRange = match.range(at: 2)
+            let digitsRange = hexRange.location != NSNotFound ? hexRange : decimalRange
+            guard let swiftRange = Range(digitsRange, in: decoded),
+                  let scalarValue = UInt32(decoded[swiftRange], radix: hexRange.location != NSNotFound ? 16 : 10),
+                  let scalar = UnicodeScalar(scalarValue),
+                  let entityRange = Range(match.range, in: decoded) else { continue }
+            decoded.replaceSubrange(entityRange, with: String(Character(scalar)))
+        }
+        return decoded
     }
 
     static func render(_ attributed: NSAttributedString, fallbackBackground: NSColor = .white) -> NSImage? {

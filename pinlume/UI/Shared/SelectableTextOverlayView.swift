@@ -25,6 +25,28 @@ final class SelectableTextOverlayView: NSView {
     override var isFlipped: Bool { false }
     override var acceptsFirstResponder: Bool { true }
 
+    // MARK: - Accessibility
+
+    override func isAccessibilityElement() -> Bool { true }
+
+    override func accessibilityRole() -> NSAccessibility.Role? { .textArea }
+
+    override func accessibilityLabel() -> String? { L("Recognized Text") }
+
+    override func accessibilityValue() -> Any? {
+        hasSelection ? selectedText : fullText
+    }
+
+    override func isAccessibilityEnabled() -> Bool { hasRecognizedText }
+
+    override func isAccessibilitySelected() -> Bool { hasSelection }
+
+    override func accessibilityPerformPress() -> Bool {
+        guard hasRecognizedText else { return false }
+        window?.makeFirstResponder(self)
+        return true
+    }
+
     override func keyDown(with event: NSEvent) {
         if handleKeyDown(event) { return }
         super.keyDown(with: event)

@@ -10,6 +10,10 @@ private class TranslationWindow: NSWindow {
         }
         return super.performKeyEquivalent(with: event)
     }
+
+    override func cancelOperation(_ sender: Any?) {
+        performClose(sender)
+    }
 }
 
 @MainActor
@@ -19,6 +23,7 @@ final class TranslationWindowController: NSObject, NSWindowDelegate, NSTextViewD
     private let resultView = NSTextView()
     private let sourcePopup = NSPopUpButton()
     private let targetPopup = NSPopUpButton()
+    private let inlineStatusLabel = NSTextField(labelWithString: "")
     private let statusLabel = NSTextField(labelWithString: "")
     private let progress = NSProgressIndicator()
     private var debounceTimer: Timer?
@@ -37,14 +42,13 @@ final class TranslationWindowController: NSObject, NSWindowDelegate, NSTextViewD
     }
 
     override init() {
-        coordinator = TranslationSessionCoordinator { text, source, target, completion in
+        coordinator = TranslationSessionCoordinator { texts, source, target, progress, completion in
             TranslationService.translateBatch(
-                texts: [text], sourceLang: source, targetLang: target) { result in
-                switch result {
-                case .success(let values): completion(.success(values.first ?? text))
-                case .failure(let error): completion(.failure(error))
-                }
-            }
+                texts: texts,
+                sourceLang: source,
+                targetLang: target,
+                progress: progress,
+                completion: completion)
         }
         super.init()
     }
@@ -71,7 +75,7 @@ final class TranslationWindowController: NSObject, NSWindowDelegate, NSTextViewD
         sourceView.string = sourceText
         resultView.string = ""
         rawTranslation = ""
-        statusLabel.stringValue = ""
+        clearStatus()
         comparisonEnabled = false
         comparisonButton?.state = .off
         lastResolvedSource = nil
@@ -152,12 +156,19 @@ final class TranslationWindowController: NSObject, NSWindowDelegate, NSTextViewD
         let spacer = NSView()
         spacer.setContentHuggingPriority(.defaultLow, for: .horizontal)
         languageRow.addArrangedSubview(spacer)
+        inlineStatusLabel.textColor = .secondaryLabelColor
+        inlineStatusLabel.lineBreakMode = .byTruncatingTail
+        inlineStatusLabel.maximumNumberOfLines = 1
+        inlineStatusLabel.isHidden = true
+        inlineStatusLabel.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
+        inlineStatusLabel.setAccessibilityLabel(L("Translation Status"))
+        languageRow.addArrangedSubview(inlineStatusLabel)
         statusLabel.textColor = .secondaryLabelColor
-        statusLabel.lineBreakMode = .byTruncatingTail
-        statusLabel.maximumNumberOfLines = 1
-        statusLabel.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
+        statusLabel.lineBreakMode = .byWordWrapping
+        statusLabel.maximumNumberOfLines = 2
+        statusLabel.translatesAutoresizingMaskIntoConstraints = false
+        statusLabel.isHidden = true
         statusLabel.setAccessibilityLabel(L("Translation Status"))
-        languageRow.addArrangedSubview(statusLabel)
 
         configureEditor(sourceView, label: L("Source Text"))
         configureEditor(resultView, label: L("Translated Text"))
@@ -200,6 +211,7 @@ final class TranslationWindowController: NSObject, NSWindowDelegate, NSTextViewD
         let content = NSView()
         panel.contentView = content
         content.addSubview(languageRow)
+        content.addSubview(statusLabel)
         content.addSubview(split)
         content.addSubview(footer)
         NSLayoutConstraint.activate([
@@ -208,10 +220,12 @@ final class TranslationWindowController: NSObject, NSWindowDelegate, NSTextViewD
             languageRow.topAnchor.constraint(equalTo: content.topAnchor, constant: 12),
             sourcePopup.widthAnchor.constraint(greaterThanOrEqualToConstant: 135),
             targetPopup.widthAnchor.constraint(greaterThanOrEqualToConstant: 135),
-            statusLabel.widthAnchor.constraint(lessThanOrEqualToConstant: 180),
+            statusLabel.leadingAnchor.constraint(equalTo: content.leadingAnchor, constant: 12),
+            statusLabel.trailingAnchor.constraint(equalTo: content.trailingAnchor, constant: -12),
+            statusLabel.topAnchor.constraint(equalTo: languageRow.bottomAnchor, constant: 6),
             split.leadingAnchor.constraint(equalTo: content.leadingAnchor, constant: 12),
             split.trailingAnchor.constraint(equalTo: content.trailingAnchor, constant: -12),
-            split.topAnchor.constraint(equalTo: languageRow.bottomAnchor, constant: 12),
+            split.topAnchor.constraint(equalTo: statusLabel.bottomAnchor, constant: 8),
             split.bottomAnchor.constraint(equalTo: footer.topAnchor, constant: -12),
             split.heightAnchor.constraint(greaterThanOrEqualToConstant: 280),
             footer.leadingAnchor.constraint(equalTo: content.leadingAnchor, constant: 12),
@@ -286,7 +300,7 @@ final class TranslationWindowController: NSObject, NSWindowDelegate, NSTextViewD
             progress.isHidden = true
             rawTranslation = ""
             resultView.string = ""
-            statusLabel.stringValue = ""
+            clearStatus()
             lastResolvedSource = nil
             lastResolvedTarget = nil
             return
@@ -297,24 +311,42 @@ final class TranslationWindowController: NSObject, NSWindowDelegate, NSTextViewD
             : nil
         progress.isHidden = false
         progress.startAnimation(nil)
-        statusLabel.stringValue = L("Translating…")
-        coordinator.translate(source, sourceLanguage: sourceCode, targetLanguage: targetCode) { [weak self] presentation in
-            guard let self, self.window != nil else { return }
-            self.progress.stopAnimation(nil)
-            self.progress.isHidden = true
-            self.rawTranslation = presentation.translatedText
-            self.lastResolvedSource = presentation.sourceLanguage
-            self.lastResolvedTarget = presentation.targetLanguage
-            if sourceCode == "auto" {
-                self.updateAutoDetectTitle(languageCode: presentation.sourceLanguage)
-            }
-            if let target = presentation.targetLanguage,
-               let index = self.targetPopup.itemArray.firstIndex(where: { ($0.representedObject as? String) == target }) {
-                self.targetPopup.selectItem(at: index)
-            }
-            self.renderResult()
-            self.statusLabel.stringValue = presentation.status ?? L("Translation complete")
+        showTranslatingStatus()
+        coordinator.translate(
+            source,
+            sourceLanguage: sourceCode,
+            targetLanguage: targetCode,
+            progress: { [weak self] presentation in
+                self?.apply(presentation, sourceCode: sourceCode, completed: false)
+            },
+            completion: { [weak self] presentation in
+                self?.apply(presentation, sourceCode: sourceCode, completed: true)
+            })
+    }
+
+    private func apply(
+        _ presentation: TranslationPresentation,
+        sourceCode: String?,
+        completed: Bool
+    ) {
+        guard window != nil else { return }
+        rawTranslation = presentation.translatedText
+        lastResolvedSource = presentation.sourceLanguage
+        lastResolvedTarget = presentation.targetLanguage
+        if sourceCode == "auto" {
+            updateAutoDetectTitle(languageCode: presentation.sourceLanguage)
         }
+        if let target = presentation.targetLanguage,
+           let index = targetPopup.itemArray.firstIndex(where: {
+               ($0.representedObject as? String) == target
+           }) {
+            targetPopup.selectItem(at: index)
+        }
+        renderResult()
+        guard completed else { return }
+        progress.stopAnimation(nil)
+        progress.isHidden = true
+        showDetailedStatus(presentation.status)
     }
 
     @objc private func sourceLanguageChanged() {
@@ -352,7 +384,7 @@ final class TranslationWindowController: NSObject, NSWindowDelegate, NSTextViewD
         sourceView.string = ""
         resultView.string = ""
         rawTranslation = ""
-        statusLabel.stringValue = ""
+        clearStatus()
         comparisonEnabled = false
         comparisonButton?.state = .off
         lastResolvedSource = nil
@@ -393,10 +425,34 @@ final class TranslationWindowController: NSObject, NSWindowDelegate, NSTextViewD
             sourceView.string = sourceText
             translateNow()
         case .preserveEditedResult:
-            statusLabel.stringValue = L("Languages swapped; edited translation was preserved")
+            showDetailedStatus(L("Languages swapped; edited translation was preserved"))
         case .unavailable:
-            statusLabel.stringValue = L("Translate before swapping languages")
+            showDetailedStatus(L("Translate before swapping languages"))
         }
+    }
+
+    private func clearStatus() {
+        inlineStatusLabel.stringValue = ""
+        inlineStatusLabel.isHidden = true
+        statusLabel.stringValue = ""
+        statusLabel.toolTip = nil
+        statusLabel.isHidden = true
+    }
+
+    private func showTranslatingStatus() {
+        inlineStatusLabel.stringValue = L("Translating…")
+        inlineStatusLabel.isHidden = false
+        statusLabel.stringValue = ""
+        statusLabel.toolTip = nil
+        statusLabel.isHidden = true
+    }
+
+    private func showDetailedStatus(_ status: String?) {
+        inlineStatusLabel.stringValue = ""
+        inlineStatusLabel.isHidden = true
+        statusLabel.stringValue = status ?? ""
+        statusLabel.toolTip = status
+        statusLabel.isHidden = status?.isEmpty != false
     }
 
     private func selectLanguage(_ code: String, in popup: NSPopUpButton) {

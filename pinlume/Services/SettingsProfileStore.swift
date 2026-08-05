@@ -149,6 +149,10 @@ final class SettingsProfileStore {
         Self.applyBuiltinMarkerDefaults(to: &full)
         Self.applySlimColorScheme(to: &basic)
         Self.applyBuiltinToolbarColorScheme(to: &full)
+        Self.applyBuiltinToolbarLayout(to: &basic)
+        Self.applyBuiltinToolbarLayout(to: &full)
+        Self.applyBuiltinPinToolbarLayout(to: &basic)
+        Self.applyBuiltinPinToolbarLayout(to: &full)
         let document = SettingsProfileDocument(profiles: [basic, full], activeProfileID: basic.id)
         try save(document, to: defaults)
         return LoadResult(
@@ -512,6 +516,33 @@ final class SettingsProfileStore {
             for index in migrated.profiles.indices where migrated.profiles[index].kind != .custom {
                 Self.applyBuiltinToolbarColorScheme(to: &migrated.profiles[index])
             }
+            try validate(migrated, schemaVersion: 17, systemProfilesAreEditable: false)
+            return try migrateStoredDocumentIfNeeded(migrated, currentPayload: currentPayload)
+        case 17:
+            try validate(document, schemaVersion: 17, systemProfilesAreEditable: false)
+            var migrated = document
+            migrated.schemaVersion = 18
+            for index in migrated.profiles.indices where migrated.profiles[index].kind != .custom {
+                Self.applyBuiltinToolbarLayout(to: &migrated.profiles[index])
+            }
+            try validate(migrated, schemaVersion: 18, systemProfilesAreEditable: false)
+            return try migrateStoredDocumentIfNeeded(migrated, currentPayload: currentPayload)
+        case 18:
+            try validate(document, schemaVersion: 18, systemProfilesAreEditable: false)
+            var migrated = document
+            migrated.schemaVersion = 19
+            for index in migrated.profiles.indices where migrated.profiles[index].kind != .custom {
+                Self.applyBuiltinToolbarLayout(to: &migrated.profiles[index])
+            }
+            try validate(migrated, schemaVersion: 19, systemProfilesAreEditable: false)
+            return try migrateStoredDocumentIfNeeded(migrated, currentPayload: currentPayload)
+        case 19:
+            try validate(document, schemaVersion: 19, systemProfilesAreEditable: false)
+            var migrated = document
+            migrated.schemaVersion = 20
+            for index in migrated.profiles.indices where migrated.profiles[index].kind != .custom {
+                Self.applyBuiltinPinToolbarLayout(to: &migrated.profiles[index])
+            }
             try validate(migrated)
             return migrated
         default:
@@ -674,6 +705,56 @@ final class SettingsProfileStore {
 
     private static func applyBuiltinToolbarColorScheme(to profile: inout SettingsProfile) {
         profile.payload.values["toolbarColorSchemeID"] = .string("graphiteBlue")
+    }
+
+    private enum BuiltinToolbarLayoutKey {
+        static let enabledTools = "layout.toolbar.enabledToolRawValues"
+        static let primaryTools = "layout.toolbar.primaryToolRawValues"
+        static let secondaryTools = "layout.toolbar.secondaryToolRawValues"
+        static let enabledActions = "layout.toolbar.enabledActionRawValues"
+    }
+
+    /// Built-in toolbar availability is a product preset, not a snapshot of
+    /// whichever preferences happen to exist when a profile is first created.
+    private static func applyBuiltinToolbarLayout(to profile: inout SettingsProfile) {
+        let enabledTools: [Int]
+        let primaryTools: [Int]
+        let secondaryTools: [Int]
+        let enabledActions: [Int]
+
+        switch profile.kind {
+        case .systemBasic:
+            enabledTools = [0, 3, 6, 7, 9, 15, 10, 19, 8]
+            primaryTools = [3, 0, 8, 7, 6, 9, 19]
+            secondaryTools = [1, 5, 18, 12, 16, 11, 2, 17]
+            enabledActions = [1007, 1002, 1018, 1021, 1022, 1020, 1019, 1017, 1023]
+        case .systemFull:
+            enabledTools = [0, 3, 8, 6, 7, 9, 1, 2, 5, 18, 12, 17, 16, 11, 19]
+            primaryTools = [3, 0, 8, 6, 7, 9]
+            secondaryTools = [1, 2, 5, 18, 12, 17, 16, 11, 19]
+            enabledActions = Array(1001...1023)
+        case .custom:
+            preconditionFailure("Built-in toolbar layout cannot be applied to a custom profile")
+        }
+
+        profile.payload.values[BuiltinToolbarLayoutKey.enabledTools] = .integers(enabledTools)
+        profile.payload.values[BuiltinToolbarLayoutKey.primaryTools] = .integers(primaryTools)
+        profile.payload.values[BuiltinToolbarLayoutKey.secondaryTools] = .integers(secondaryTools)
+        profile.payload.values[BuiltinToolbarLayoutKey.enabledActions] = .integers(enabledActions)
+    }
+
+    private static func applyBuiltinPinToolbarLayout(to profile: inout SettingsProfile) {
+        guard case .integers(let primaryTools)? = profile.payload.values[BuiltinToolbarLayoutKey.primaryTools],
+              case .integers(let secondaryTools)? = profile.payload.values[BuiltinToolbarLayoutKey.secondaryTools]
+        else {
+            preconditionFailure("Built-in Pin layout requires the ordinary toolbar layout")
+        }
+        profile.payload.values["layout.pin.primaryItemIDs"] = .strings(
+            primaryTools.map { "tool:\($0)" } + ["pinShadow", "selectText", "screenTranslation"]
+        )
+        profile.payload.values["layout.pin.secondaryItemIDs"] = .strings(
+            secondaryTools.map { "tool:\($0)" }
+        )
     }
 
     private func canonicalName(_ name: String) -> String {

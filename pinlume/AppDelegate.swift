@@ -17,51 +17,6 @@ private enum CaptureTrigger: String {
     case urlScheme = "url-scheme"
 }
 
-#if !OFFLINE
-/// One preference and one confirmation presentation shared by every image
-/// upload entry point. Keeping this outside individual toolbars prevents a
-/// new source (such as a Pin) from silently bypassing the user's choice.
-@MainActor
-enum UploadConfirmation {
-    static let preferenceKey = "uploadConfirmEnabled"
-
-    static var isEnabled: Bool {
-        get { UserDefaults.standard.bool(forKey: preferenceKey) }
-        set { UserDefaults.standard.set(newValue, forKey: preferenceKey) }
-    }
-
-    static func confirmIfNeeded(presentingWindow: NSWindow?) -> Bool {
-        guard isEnabled else { return true }
-
-        let provider = UserDefaults.standard.string(forKey: "uploadProvider") ?? "imgbb"
-        let title: String
-        switch provider {
-        case "gdrive": title = L("Upload to Google Drive?")
-        case "s3": title = L("Upload to S3?")
-        default: title = L("Upload to imgbb.com?")
-        }
-
-        let alert = NSAlert()
-        alert.messageText = title
-        alert.informativeText = L("Your screenshot will be uploaded.")
-        alert.addButton(withTitle: L("Upload"))
-        alert.addButton(withTitle: L("Cancel"))
-        alert.alertStyle = .informational
-
-        // The source panel can be at screen-saver/status-bar level. Temporarily
-        // lower it so the system modal stays above it, then restore its exact
-        // level whether the user confirms or cancels.
-        let originalLevel = presentingWindow?.level
-        presentingWindow?.level = .normal
-        let response = alert.runModal()
-        if let originalLevel {
-            presentingWindow?.level = originalLevel
-        }
-        return response == .alertFirstButtonReturn
-    }
-}
-#endif
-
 private extension CaptureMenuItemID {
     enum Section: Int {
         case capture
@@ -274,6 +229,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     )
     private var onboardingController: PermissionOnboardingController?
     private var pinControllers: [PinWindowController] = []
+    private var pinPersistenceSession: PinPersistenceSession?
     private var transparentAnnotationSession: TransparentAnnotationSessionController?
     private var presentationDrawingSession: TransparentAnnotationSessionController?
     private var transparentAnnotationPins: [TransparentAnnotationPinController] = []
@@ -296,6 +252,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     private var uploadToastController: UploadToastController?
     #endif
     private var recordingEngine: RecordingEngine?
+    private var recordingLifecycle = RecordingLifecycle()
+    private var recordingTerminationPending = false
     private var audioMergeController: AudioMergeController?
     private var recordingOverlayController: OverlayWindowController?
     private var recordingHUDPanel: RecordingHUDPanel?
@@ -526,7 +484,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     private func performIdleUIWarmup() {
         idleUIWarmupTask = nil
         guard !isCapturing,
-              recordingEngine == nil,
+              recordingLifecycle.state == .idle,
               overlayControllers.isEmpty,
               onboardingController == nil,
               NSApp.modalWindow == nil
@@ -574,12 +532,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     @objc private func systemDidWake() {
-        guard !isCapturing, recordingEngine == nil else { return }
+        guard !isCapturing, recordingLifecycle.state == .idle else { return }
         prewarmCapturePath()
     }
 
     @objc private func screenParametersDidChange() {
-        guard !isCapturing, recordingEngine == nil else { return }
+        guard !isCapturing, recordingLifecycle.state == .idle else { return }
         prewarmCapturePath()
     }
 
@@ -746,6 +704,20 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         closeSignalLog()
     }
 
+    func applicationShouldTerminate(_ sender: NSApplication) -> NSApplication.TerminateReply {
+        switch recordingLifecycle.state {
+        case .idle:
+            return .terminateNow
+        case .countdown:
+            cancelRecordingCountdown()
+            return .terminateNow
+        case .starting, .recording, .paused, .stopping:
+            recordingTerminationPending = true
+            stopRecording()
+            return .terminateLater
+        }
+    }
+
     // MARK: - Signal Handlers
 
     /// Opens a write-only log fd and registers the SIGTERM handler.
@@ -864,7 +836,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     /// from Settings so changes take effect without a relaunch. No-op while recording — the
     /// recording state owns the icon then and restores the preferred one when it ends.
     func refreshStatusBarIcon() {
-        guard recordingEngine == nil, let button = statusItem.button else { return }
+        guard recordingLifecycle.state == .idle, let button = statusItem.button else { return }
         applyPreferredIconImage(to: button)
     }
 
@@ -874,7 +846,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
         self.historyMenu = nil
         self.recordingStatusMenuItem = nil
-        if recordingEngine != nil {
+        if recordingLifecycle.state != .idle {
             addRecordingStatusMenuItems(to: menu)
         }
         addStatusMenuItems(CaptureMenuItemID.primaryItems(), to: menu)
@@ -1010,7 +982,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         let item = NSMenuItem(title: title, action: action, keyEquivalent: "")
         item.target = self
         item.image = NSImage(systemSymbolName: itemID.symbolName, accessibilityDescription: nil)
-        if recordingEngine != nil {
+        if recordingLifecycle.state != .idle {
             switch itemID {
             case .recordArea, .recordScreen:
                 item.isEnabled = false
@@ -1256,7 +1228,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         DispatchQueue.main.async { [weak self] in
             // Don't hide the app while a recording is in progress — the HUD
             // and selection border are non-titled panels that would be killed.
-            if self?.recordingEngine != nil { return }
+            if self?.recordingLifecycle.state != .idle { return }
             let hasVisibleWindows = NSApp.windows.contains { $0.isVisible && $0.styleMask.contains(.titled) }
             // Windows we hid for the screenshot count as "visible" for
             // activation-policy purposes — they're coming back as soon as
@@ -1482,7 +1454,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 effectiveTrigger.rawValue,
                 request == .recording ? "recording" : "screenshot",
                 isCapturing,
-                recordingEngine != nil
+                recordingLifecycle.state != .idle
             )
             pendingCaptureWorkflow.reset()
             return
@@ -1543,7 +1515,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     private func canStartCapture(_ request: CaptureStartRequest = .screenshot) -> Bool {
         CaptureStartGate.canBeginCapture(
             isCapturing: isCapturing,
-            isRecording: recordingEngine != nil,
+            isRecording: recordingLifecycle.state != .idle,
             request: request
         )
     }
@@ -2163,13 +2135,13 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             guard let self = self, let controller = controller else { return }
             let image = controller.image
             let data = controller.annotationData
+            guard self.showUploadProgress(image: image) else { return }
             ScreenshotHistory.shared.add(
                 image: image,
                 rawImage: data?.rawImage,
                 annotations: data?.annotations,
                 editState: data?.editState
             )
-            self.showUploadProgress(image: image)
         }
         #endif
         controller.onTransform = { transformed in
@@ -2221,14 +2193,29 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 let batchDate = Date()
 
                 DispatchQueue.global(qos: .userInitiated).async {
+                    var outputs: [(filename: String, data: Data)] = []
+                    var outputError: Error?
                     for (i, image) in images.enumerated() {
-                        guard let data = ImageEncoder.encode(image) else { continue }
+                        guard let data = ImageEncoder.encode(image) else {
+                            outputError = CocoaError(.fileWriteInapplicableStringEncoding)
+                            break
+                        }
                         let base = FilenameFormatter.format(template: template, index: i + 1, date: batchDate)
                         let filename = "\(base).\(ImageEncoder.fileExtension)"
-                        let fileURL = dirURL.appendingPathComponent(filename)
-                        try? data.write(to: fileURL)
+                        outputs.append((filename: filename, data: data))
+                    }
+                    if outputError == nil {
+                        do {
+                            _ = try TransactionalOutput.writeBatch(outputs, to: dirURL)
+                        } catch {
+                            outputError = error
+                        }
                     }
                     DispatchQueue.main.async {
+                        if let outputError {
+                            self?.showOutputSaveFailure(outputError)
+                            return
+                        }
                         self?.playCopySound()
                         let all = self?.thumbnailControllers ?? []
                         self?.thumbnailControllers.removeAll()
@@ -2237,6 +2224,16 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 }
             }
         }
+    }
+
+    private func showOutputSaveFailure(_ error: Error) {
+        let underlying = (error as? TransactionalOutput.Failure)?.underlyingError ?? error
+        let alert = NSAlert()
+        alert.alertStyle = .warning
+        alert.messageText = L("Save failed")
+        alert.informativeText = underlying.localizedDescription
+        alert.addButton(withTitle: L("OK"))
+        alert.runModal()
     }
 
     private func reflowThumbnails() {
@@ -2365,9 +2362,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     @discardableResult
     func uploadImage(_ image: NSImage, presentingWindow: NSWindow? = nil) -> Bool {
-        guard UploadConfirmation.confirmIfNeeded(presentingWindow: presentingWindow) else { return false }
-        showUploadProgress(image: image)
-        return true
+        showUploadProgress(image: image, presentingWindow: presentingWindow)
     }
     #endif
 
@@ -2473,7 +2468,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     private func restorePersistedPins() {
-        let records = PinPersistenceStore.load()
+        let session = PinPersistenceStore.open()
+        pinPersistenceSession = session
+        let records = session.records
         guard !records.isEmpty else { return }
         allPinsHidden = false
         for record in records {
@@ -2527,7 +2524,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     private func savePersistedPins() {
-        PinPersistenceStore.save(pinControllers.compactMap { $0.persistenceRecord() })
+        let records = pinControllers.map { $0.persistenceRecord() }
+        guard records.allSatisfy({ $0 != nil }) else { return }
+        _ = pinPersistenceSession?.save(records.compactMap { $0 })
     }
 
     #if !OFFLINE
@@ -2541,81 +2540,44 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
     }
 
-    private func showUploadProgress(image: NSImage, sourceOverlay: OverlayWindowController? = nil) {
-        uploadToastController?.dismiss()
-        let toast = UploadToastController()
-        uploadToastController = toast
-        toast.onDismiss = { [weak self] in
-            self?.uploadToastController = nil
-        }
-        toast.show(status: "Uploading...")
-
-        let provider = UserDefaults.standard.string(forKey: "uploadProvider") ?? "imgbb"
-
-        if provider == "gdrive" && !GoogleDriveUploader.shared.isSignedIn {
-            releaseCompletedUploadOverlayIfNeeded(sourceOverlay)
-            toast.showError(message: "Google Drive not signed in")
-            return
-        }
-
-        if provider == "s3" && !S3Uploader.shared.isConfigured {
-            releaseCompletedUploadOverlayIfNeeded(sourceOverlay)
-            toast.showError(message: "S3 not configured — check Settings")
-            return
+    private func showUploadProgress(
+        image: NSImage,
+        sourceOverlay: OverlayWindowController? = nil,
+        presentingWindow: NSWindow? = nil
+    ) -> Bool {
+        var toast: UploadToastController?
+        func makeToast() -> UploadToastController {
+            if let toast { return toast }
+            uploadToastController?.dismiss()
+            let newToast = UploadToastController()
+            uploadToastController = newToast
+            newToast.onDismiss = { [weak self] in self?.uploadToastController = nil }
+            toast = newToast
+            return newToast
         }
 
-        if provider == "gdrive" {
-            GoogleDriveUploader.shared.uploadImage(image) { result in
-                switch result {
-                case .success(let link):
-                    self.releaseCompletedUploadOverlayIfNeeded(sourceOverlay)
-                    let pasteboard = NSPasteboard.general
-                    pasteboard.clearContents()
-                    pasteboard.setString(link, forType: .string)
-                    toast.showSuccess(link: link, deleteURL: "")
-                case .failure(let error):
-                    self.releaseCompletedUploadOverlayIfNeeded(sourceOverlay)
-                    toast.showError(message: error.localizedDescription)
-                }
-            }
-        } else if provider == "s3" {
-            S3Uploader.shared.onProgress = { fraction in
-                toast.updateProgress(fraction)
-            }
-            S3Uploader.shared.uploadImage(image) { result in
-                switch result {
-                case .success(let link):
-                    self.releaseCompletedUploadOverlayIfNeeded(sourceOverlay)
-                    let pasteboard = NSPasteboard.general
-                    pasteboard.clearContents()
-                    pasteboard.setString(link, forType: .string)
-                    toast.showSuccess(link: link, deleteURL: "")
-                case .failure(let error):
-                    self.releaseCompletedUploadOverlayIfNeeded(sourceOverlay)
-                    toast.showError(message: error.localizedDescription)
-                }
-            }
-        } else {
-            ImageUploader.upload(image: image) { result in
-                switch result {
-                case .success(let uploadResult):
-                    self.releaseCompletedUploadOverlayIfNeeded(sourceOverlay)
-                    let pasteboard = NSPasteboard.general
-                    pasteboard.clearContents()
-                    pasteboard.setString(uploadResult.link, forType: .string)
-
+        return UploadGateway.shared.upload(
+            .image(image),
+            presentingWindow: presentingWindow ?? sourceOverlay?.presentationWindow,
+            onStart: { makeToast().show(status: "Uploading...") },
+            onProgress: { makeToast().updateProgress($0) }
+        ) { [weak self] result in
+            guard let self else { return }
+            self.releaseCompletedUploadOverlayIfNeeded(sourceOverlay)
+            let toast = makeToast()
+            switch result {
+            case .success(let result):
+                let pasteboard = NSPasteboard.general
+                pasteboard.clearContents()
+                pasteboard.setString(result.link, forType: .string)
+                if !result.deleteURL.isEmpty {
                     var uploads = UserDefaults.standard.array(forKey: "imgbbUploads") as? [[String: String]] ?? []
-                    uploads.append([
-                        "deleteURL": uploadResult.deleteURL,
-                        "link": uploadResult.link,
-                    ])
+                    uploads.append(["deleteURL": result.deleteURL, "link": result.link])
                     UserDefaults.standard.set(uploads, forKey: "imgbbUploads")
-
-                    toast.showSuccess(link: uploadResult.link, deleteURL: uploadResult.deleteURL)
-                case .failure(let error):
-                    self.releaseCompletedUploadOverlayIfNeeded(sourceOverlay)
-                    toast.showError(message: error.localizedDescription)
                 }
+                toast.showSuccess(link: result.link, deleteURL: result.deleteURL)
+            case .failure(let error):
+                toast.showError(message: error.localizedDescription)
             }
         }
     }
@@ -2884,6 +2846,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             pinControllers.forEach { $0.close() }
             pinControllers.removeAll()
             PinPersistenceStore.clear()
+            pinPersistenceSession = PinPersistenceStore.open()
         }
         pending.notify(queue: .main, execute: completion)
     }
@@ -3014,7 +2977,9 @@ extension AppDelegate: OverlayWindowControllerDelegate {
                 return
             }
 
-            VisionOCR.performStructuredTextRecognition(cgImage: cgImage) { [weak self, weak window] result in
+            VisionOCR.performStructuredTextRecognition(
+                cgImage: cgImage,
+                mode: .screenTranslation) { [weak self, weak window] result in
                 guard let self, let window, self.screenTranslationState.accept(token) else { return }
                 guard case .success(let structured) = result, !structured.blocks.isEmpty else {
                     window.showStatus(L("No text found"))
@@ -3107,10 +3072,6 @@ extension AppDelegate: OverlayWindowControllerDelegate {
             pin.show()
             pin.setSelected(index == pinSessions.count - 1)
             pinControllers.append(pin)
-            let visibleTextBlocks = pinSession.displayMode == .original
-                ? pinSession.selectableOriginalBlocks
-                : pinSession.selectableTranslatedBlocks
-            pin.beginTextSelectionMode(blocks: visibleTextBlocks)
         }
         screenTranslationController?.close()
         screenTranslationController = nil
@@ -3122,9 +3083,9 @@ extension AppDelegate: OverlayWindowControllerDelegate {
     func overlayDidCancel(_ controller: OverlayWindowController) {
         // If the user cancels while in recording setup (before capture started),
         // just dismiss. If recording is actively capturing, stop it.
-        if controller === recordingOverlayController, let engine = recordingEngine {
-            engine.stopRecording()
-            // stopRecordingUI() will be called by onCompletion callback
+        if controller === recordingOverlayController, recordingLifecycle.state != .idle {
+            stopRecording()
+            // stopRecordingUI() runs after the writer completion callback.
         }
         dismissOverlays()
 
@@ -3340,6 +3301,8 @@ extension AppDelegate: OverlayWindowControllerDelegate {
 
     func overlayDidRequestUpload(_ controller: OverlayWindowController, image: NSImage, annotationData: CaptureAnnotationData?) {
         #if !OFFLINE
+        guard showUploadProgress(image: image, sourceOverlay: controller) else { return }
+        playCopySound()
         ScreenshotHistory.shared.add(
             image: image,
             rawImage: annotationData?.rawImage,
@@ -3348,7 +3311,6 @@ extension AppDelegate: OverlayWindowControllerDelegate {
         )
         let appToRefocus = previousApp
         dismissOverlays(refocusPreviousApp: false)
-        showUploadProgress(image: image, sourceOverlay: controller)
         // Return focus — upload toast stays visible (hidesOnDeactivate=false)
         if let app = appToRefocus, !app.isTerminated, app.bundleIdentifier != Bundle.main.bundleIdentifier {
             DispatchQueue.main.async { AppDelegate.activateApp(app) }
@@ -3357,14 +3319,18 @@ extension AppDelegate: OverlayWindowControllerDelegate {
     }
 
     func overlayDidRequestStartRecording(_ controller: OverlayWindowController, rect: NSRect, screen: NSScreen) {
-        recordingScreenRect = rect
-        recordingScreen = screen
-
         // Capture session overrides before dismissing overlays (which destroys the overlay view)
         let fpsOverride = controller.sessionRecordingFPS
         let onStopOverride = controller.sessionRecordingOnStop
         let delayOverride = controller.sessionRecordingDelay
         let hideHUD = controller.sessionHideRecordingHUD ?? UserDefaults.standard.bool(forKey: "hideRecordingHUD")
+        let delay = delayOverride ?? UserDefaults.standard.integer(forKey: "captureDelaySeconds")
+        let generation = delay > 0
+            ? recordingLifecycle.beginCountdown()
+            : recordingLifecycle.beginStarting()
+        guard let generation else { return }
+        recordingScreenRect = rect
+        recordingScreen = screen
 
         // Detach webcam preview before dismissing overlays so we can reuse the live session
         let existingWebcam = controller.detachWebcamPreview()
@@ -3377,28 +3343,34 @@ extension AppDelegate: OverlayWindowControllerDelegate {
         dismissOverlays()  // refocusPreviousApp: true (default) — handles focus
         previousApp = nil
 
-        let delay = delayOverride ?? UserDefaults.standard.integer(forKey: "captureDelaySeconds")
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
             if delay > 0 {
+                guard self.recordingLifecycle.generation == generation,
+                      self.recordingLifecycle.state == .countdown else { return }
                 existingWebcam?.stopPreview()
                 existingWebcam?.close()
                 self.startRecordingCountdown(seconds: delay, rect: rect, screen: screen,
-                                        fpsOverride: fpsOverride,
-                                        onStopOverride: onStopOverride)
+                                             fpsOverride: fpsOverride,
+                                             onStopOverride: onStopOverride,
+                                             generation: generation)
             } else {
+                guard self.recordingLifecycle.generation == generation,
+                      self.recordingLifecycle.state == .starting else { return }
                 self.beginRecording(rect: rect, screen: screen,
-                               fpsOverride: fpsOverride,
-                               onStopOverride: onStopOverride,
-                               existingWebcam: existingWebcam,
-                               hideHUD: hideHUD)
+                                    fpsOverride: fpsOverride,
+                                    onStopOverride: onStopOverride,
+                                    existingWebcam: existingWebcam,
+                                    hideHUD: hideHUD,
+                                    generation: generation)
             }
         }
     }
 
     private func startRecordingCountdown(seconds: Int, rect: NSRect, screen: NSScreen,
                                           fpsOverride: Int?,
-                                          onStopOverride: String?) {
+                                          onStopOverride: String?,
+                                          generation: UInt) {
         let size = NSSize(width: 140, height: 140)
         let origin = NSPoint(
             x: rect.midX - size.width / 2,
@@ -3442,16 +3414,24 @@ extension AppDelegate: OverlayWindowControllerDelegate {
         var remaining = seconds
         delayTimer?.invalidate()
         delayTimer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { [weak self] timer in
+            guard let self,
+                  self.recordingLifecycle.generation == generation,
+                  self.recordingLifecycle.state == .countdown else {
+                timer.invalidate()
+                return
+            }
             remaining -= 1
             if remaining <= 0 {
                 timer.invalidate()
-                self?.delayTimer = nil
-                self?.delayCountdownWindow?.orderOut(nil)
-                self?.delayCountdownWindow = nil
-                self?.removeDelayEscMonitors()
-                self?.beginRecording(rect: rect, screen: screen,
-                                     fpsOverride: fpsOverride,
-                                     onStopOverride: onStopOverride)
+                self.delayTimer = nil
+                self.delayCountdownWindow?.orderOut(nil)
+                self.delayCountdownWindow = nil
+                self.removeDelayEscMonitors()
+                guard self.recordingLifecycle.markStarting(generation: generation) else { return }
+                self.beginRecording(rect: rect, screen: screen,
+                                    fpsOverride: fpsOverride,
+                                    onStopOverride: onStopOverride,
+                                    generation: generation)
             } else {
                 countdownView.remaining = remaining
                 countdownView.needsDisplay = true
@@ -3460,6 +3440,8 @@ extension AppDelegate: OverlayWindowControllerDelegate {
     }
 
     private func cancelRecordingCountdown() {
+        guard recordingLifecycle.state == .countdown else { return }
+        _ = recordingLifecycle.stop()
         delayTimer?.invalidate()
         delayTimer = nil
         delayCountdownWindow?.orderOut(nil)
@@ -3473,18 +3455,44 @@ extension AppDelegate: OverlayWindowControllerDelegate {
                                  fpsOverride: Int?,
                                  onStopOverride: String?,
                                  existingWebcam: WebcamOverlay? = nil,
-                                 hideHUD: Bool = false) {
+                                 hideHUD: Bool = false,
+                                 generation: UInt) {
+        guard recordingLifecycle.generation == generation,
+              recordingLifecycle.state == .starting else { return }
         let engine = RecordingEngine()
-        engine.onProgress = { [weak self] seconds in
-            self?.updateRecordingHUD(seconds: seconds)
+        engine.onStarted = { [weak self, weak engine] in
+            guard let self, self.recordingEngine === engine,
+                  self.recordingLifecycle.markRecording(generation: generation) else { return }
+        }
+        engine.onStopping = { [weak self, weak engine] in
+            guard let self, self.recordingEngine === engine,
+                  self.recordingLifecycle.generation == generation else { return }
+            _ = self.recordingLifecycle.stop()
+        }
+        engine.onProgress = { [weak self, weak engine] seconds in
+            guard let self, self.recordingEngine === engine,
+                  self.recordingLifecycle.generation == generation,
+                  self.recordingLifecycle.state == .recording else { return }
+            self.updateRecordingHUD(seconds: seconds)
         }
         // Capture audio settings before recording starts (they may change during)
         let hadSystemAudio = UserDefaults.standard.bool(forKey: "recordSystemAudio")
         let hadMicAudio = UserDefaults.standard.bool(forKey: "recordMicAudio")
 
-        engine.onCompletion = { [weak self] url, error in
-            guard let self = self else { return }
+        engine.onCompletion = { [weak self, weak engine] url, error in
+            guard let self, self.recordingEngine === engine,
+                  self.recordingLifecycle.generation == generation else { return }
+            let finished = error == nil
+                ? self.recordingLifecycle.complete(generation: generation)
+                : self.recordingLifecycle.abort(generation: generation)
+            guard finished else { return }
             self.stopRecordingUI()
+
+            if self.recordingTerminationPending {
+                self.recordingTerminationPending = false
+                NSApp.reply(toApplicationShouldTerminate: true)
+                return
+            }
 
             if let url = url {
                 let deliverRecording: (URL) -> Void = { [weak self] finalURL in
@@ -3543,10 +3551,12 @@ extension AppDelegate: OverlayWindowControllerDelegate {
                 self?.stopRecording()
             }
             hud.onPauseRecording = { [weak self] in
-                self?.recordingEngine?.pauseRecording()
+                guard let self, self.recordingLifecycle.pause(generation: generation) else { return }
+                self.recordingEngine?.pauseRecording()
             }
             hud.onResumeRecording = { [weak self] in
-                self?.recordingEngine?.resumeRecording()
+                guard let self, self.recordingLifecycle.resume(generation: generation) else { return }
+                self.recordingEngine?.resumeRecording()
             }
             hud.orderFrontRegardless()
             recordingHUDPanel = hud
@@ -3618,19 +3628,29 @@ extension AppDelegate: OverlayWindowControllerDelegate {
     }
 
     func overlayDidRequestStopRecording(_ controller: OverlayWindowController) {
-        if let engine = recordingEngine {
-            engine.stopRecording()
-        } else {
-            // Recording mode was entered but capture never started — just dismiss
-            dismissOverlays()
-        }
+        stopRecording()
     }
 
     // MARK: - Recording UI
 
     @objc private func stopRecording() {
-        guard let engine = recordingEngine else { return }
-        engine.stopRecording()
+        let wasCountdown = recordingLifecycle.state == .countdown
+        guard recordingLifecycle.stop() != nil else { return }
+        if wasCountdown {
+            cancelRecordingCountdownUI()
+            return
+        }
+        recordingEngine?.stopRecording()
+    }
+
+    private func cancelRecordingCountdownUI() {
+        delayTimer?.invalidate()
+        delayTimer = nil
+        delayCountdownWindow?.orderOut(nil)
+        delayCountdownWindow = nil
+        selectionBorderOverlay?.close()
+        selectionBorderOverlay = nil
+        removeDelayEscMonitors()
     }
 
     private func updateRecordingHUD(seconds: Int) {
@@ -3709,21 +3729,10 @@ extension AppDelegate: OverlayWindowControllerDelegate {
     /// Move `src` into `dir`, renaming on collision, returning the new URL.
     /// Returns nil if the move fails (bad permissions, disk full, etc.).
     private func moveRecording(from src: URL, intoDirectory dir: URL) -> URL? {
-        let fm = FileManager.default
         let name = src.lastPathComponent
-        let base = (name as NSString).deletingPathExtension
-        let ext = (name as NSString).pathExtension
-
-        var dest = dir.appendingPathComponent(name)
-        var counter = 2
-        while fm.fileExists(atPath: dest.path) {
-            let newName = ext.isEmpty ? "\(base) (\(counter))" : "\(base) (\(counter)).\(ext)"
-            dest = dir.appendingPathComponent(newName)
-            counter += 1
-            if counter > 1000 { return nil }  // sanity cap
-        }
         do {
-            try fm.moveItem(at: src, to: dest)
+            let dest = try TransactionalOutput.reserveUnique(in: dir, filename: name)
+            try TransactionalOutput.transfer(src, to: dest, reservedDestination: true)
             return dest
         } catch {
             return nil
@@ -3743,9 +3752,11 @@ extension AppDelegate: OverlayWindowControllerDelegate {
         panel.isExtensionHidden = false
         panel.begin { response in
             guard response == .OK, let dest = panel.url else { return }
-            try? FileManager.default.removeItem(at: dest)
-            if (try? FileManager.default.moveItem(at: tmpURL, to: dest)) != nil {
+            do {
+                try TransactionalOutput.transfer(tmpURL, to: dest)
                 NSWorkspace.shared.activateFileViewerSelecting([dest])
+            } catch {
+                self.showOutputSaveFailure(error)
             }
         }
     }

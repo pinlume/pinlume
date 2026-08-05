@@ -10,6 +10,7 @@ enum TranslationProvider: String {
 }
 
 enum TranslationService {
+    static let googleMaximumEncodedRequestBytes = 16_000
 
     // MARK: - Provider
 
@@ -101,31 +102,46 @@ enum TranslationService {
 
     /// Translates multiple strings using the selected provider.
     /// Calls completion on the main queue.
+    @discardableResult
     static func translateBatch(
         texts: [String],
         sourceLang: String? = nil,
         targetLang: String,
+        progress: ((Int, String) -> Void)? = nil,
         completion: @escaping (Result<[String], Error>) -> Void
-    ) {
+    ) -> TranslationRequestHandle {
+        let gate = TranslationCompletionGate(completion)
+        let finish: (Result<[String], Error>) -> Void = { result in
+            DispatchQueue.main.async { gate.finish(result) }
+        }
         guard !texts.isEmpty else {
-            completion(.success([]))
-            return
+            finish(.success([]))
+            return TranslationRequestHandle()
         }
 
         switch provider {
         case .google:
-            translateBatchGoogle(texts: texts, targetLang: targetLang, completion: completion)
+            return translateBatchGoogle(
+                texts: texts,
+                targetLang: targetLang,
+                progress: progress,
+                completion: finish)
         case .apple:
             if #available(macOS 15.0, *) {
-                translateBatchApple(
+                return translateBatchApple(
                     texts: texts,
                     sourceLang: sourceLang,
                     targetLang: targetLang,
-                    completion: completion)
+                    progress: progress,
+                    completion: finish)
             } else {
-                completion(.failure(TranslationError.appleTranslation(
-                    "Apple Translation requires macOS 15 or later."
+                finish(.failure(TranslationError.appleTranslation(
+                    NSLocalizedString(
+                        "Apple Translation requires macOS 15 or later.",
+                        comment: "Apple Translation availability"
+                    )
                 )))
+                return TranslationRequestHandle()
             }
         }
     }
@@ -135,84 +151,24 @@ enum TranslationService {
     private static func translateBatchGoogle(
         texts: [String],
         targetLang: String,
+        progress: ((Int, String) -> Void)?,
         completion: @escaping (Result<[String], Error>) -> Void
-    ) {
+    ) -> TranslationRequestHandle {
+        let handle = TranslationRequestHandle()
         guard googleTranslationAllowed else {
             DispatchQueue.main.async {
                 completion(.failure(TranslationError.googleTranslationDisabled))
             }
-            return
+            return handle
         }
-
-        var results = Array(repeating: "", count: texts.count)
-        let group = DispatchGroup()
-        var firstError: Error?
-        let lock = NSLock()
-
-        for (i, text) in texts.enumerated() {
-            let trimmed = text.trimmingCharacters(in: .whitespacesAndNewlines)
-            guard !trimmed.isEmpty else {
-                results[i] = text
-                continue
-            }
-            group.enter()
-            translateOneGoogle(text: trimmed, targetLang: targetLang) { result in
-                lock.lock()
-                switch result {
-                case .success(let translated):
-                    results[i] = translated
-                case .failure(let error):
-                    if firstError == nil { firstError = error }
-                    results[i] = ""
-                }
-                lock.unlock()
-                group.leave()
-            }
-        }
-
-        group.notify(queue: .main) {
-            if let error = firstError {
-                completion(.failure(error))
-            } else {
-                completion(.success(results))
-            }
-        }
-    }
-
-    private static func translateOneGoogle(
-        text: String,
-        targetLang: String,
-        completion: @escaping (Result<String, Error>) -> Void
-    ) {
-        let request: URLRequest
-        do {
-            request = try makeGoogleRequest(text: text, targetLang: targetLang)
-        } catch {
-            completion(.failure(error))
-            return
-        }
-
-        URLSession.shared.dataTask(with: request) { data, response, error in
-            if let error = error {
-                completion(.failure(error))
-                return
-            }
-            guard let data = data else {
-                completion(.failure(TranslationError.noData))
-                return
-            }
-            guard let json = try? JSONSerialization.jsonObject(with: data) as? [Any],
-                  let outer = json.first as? [[Any]] else {
-                completion(.failure(TranslationError.parseError))
-                return
-            }
-            let translated = outer.compactMap { $0.first as? String }.joined()
-            guard !translated.isEmpty else {
-                completion(.failure(TranslationError.emptyResult))
-                return
-            }
-            completion(.success(translated))
-        }.resume()
+        let operation = GoogleBatchOperation(
+            texts: texts,
+            targetLanguage: targetLang,
+            progress: progress,
+            completion: completion)
+        handle.registerCancellation { operation.cancel() }
+        operation.start { handle.finish() }
+        return handle
     }
 
     /// Builds the Google request only after the privacy preference has been checked.
@@ -248,8 +204,10 @@ enum TranslationService {
         texts: [String],
         sourceLang: String?,
         targetLang: String,
+        progress: ((Int, String) -> Void)?,
         completion: @escaping (Result<[String], Error>) -> Void
-    ) {
+    ) -> TranslationRequestHandle {
+        let handle = TranslationRequestHandle()
         guard let sourceLang, !sourceLang.isEmpty, sourceLang != "auto" else {
             DispatchQueue.main.async {
                 completion(.failure(TranslationError.appleTranslation(
@@ -257,30 +215,60 @@ enum TranslationService {
                         "Could not determine the source language.",
                         comment: "Apple translation source language detection failed"))))
             }
-            return
+            return handle
         }
         if sourceLang == targetLang {
             DispatchQueue.main.async { completion(.success(texts)) }
-            return
+            return handle
         }
         let source = appleLocale(from: sourceLang)
         let target = appleLocale(from: targetLang)
         checkAppleLanguagePairAvailability(source: source, target: target) { status in
+            guard !handle.isCancelled else { return }
             switch status {
             case .installed:
-                let config = TranslationSession.Configuration(source: source, target: target)
-                Task { @MainActor in
-                    TranslationBridge.shared.translate(
-                        texts: texts, configuration: config, completion: completion)
-                }
+                startInstalledTranslation(
+                    texts: texts,
+                    source: source,
+                    target: target,
+                    progress: progress,
+                    completion: completion,
+                    handle: handle)
             case .supported:
-                let sourceName = languageDisplayName(sourceLang)
-                let targetName = languageDisplayName(targetLang)
-                completion(.failure(TranslationError.appleTranslation(String(
-                    format: NSLocalizedString(
-                        "Apple translation needs the %@ → %@ language pack. Download it in System Settings.",
-                        comment: "Apple translation language pack download required"),
-                    sourceName, targetName))))
+                Task { @MainActor in
+                    let configuration = TranslationSession.Configuration(
+                        source: source, target: target)
+                    let requestID = TranslationBridge.shared.prepare(
+                        configuration: configuration) { result in
+                            guard !handle.isCancelled else { return }
+                            switch result {
+                            case .success:
+                                checkAppleLanguagePairAvailability(
+                                    source: source, target: target) { installedStatus in
+                                        guard !handle.isCancelled else { return }
+                                        guard installedStatus == .installed else {
+                                            completion(.failure(
+                                                TranslationError.appleLanguageDownloadDidNotFinish))
+                                            return
+                                        }
+                                        startInstalledTranslation(
+                                            texts: texts,
+                                            source: source,
+                                            target: target,
+                                            progress: progress,
+                                            completion: completion,
+                                            handle: handle)
+                                    }
+                            case .failure(let error):
+                                completion(.failure(error))
+                            }
+                        }
+                    handle.registerCancellation {
+                        Task { @MainActor in
+                            TranslationBridge.shared.cancel(requestID: requestID)
+                        }
+                    }
+                }
             case .unsupported:
                 completion(.failure(TranslationError.appleTranslation(String(
                     format: NSLocalizedString(
@@ -292,6 +280,35 @@ enum TranslationService {
                     NSLocalizedString(
                         "Apple translation language availability is unknown.",
                         comment: "Unknown Apple translation language availability"))))
+            }
+        }
+        return handle
+    }
+
+    @available(macOS 15.0, *)
+    private static func startInstalledTranslation(
+        texts: [String],
+        source: Locale.Language,
+        target: Locale.Language,
+        progress: ((Int, String) -> Void)?,
+        completion: @escaping (Result<[String], Error>) -> Void,
+        handle: TranslationRequestHandle
+    ) {
+        guard !handle.isCancelled else { return }
+        Task { @MainActor in
+            let configuration = TranslationSession.Configuration(source: source, target: target)
+            let requestID = TranslationBridge.shared.translateInstalled(
+                texts: texts,
+                configuration: configuration,
+                progress: progress) { result in
+                    guard !handle.isCancelled else { return }
+                    handle.finish()
+                    completion(result)
+                }
+            handle.registerCancellation {
+                Task { @MainActor in
+                    TranslationBridge.shared.cancel(requestID: requestID)
+                }
             }
         }
     }
@@ -327,71 +344,287 @@ enum TranslationService {
     }
 }
 
+private final class GoogleBatchOperation: @unchecked Sendable {
+    private let texts: [String]
+    private let targetLanguage: String
+    private let progress: ((Int, String) -> Void)?
+    private let completion: (Result<[String], Error>) -> Void
+    private let lock = NSLock()
+    private var results: [String]
+    private var nextIndex = 0
+    private var currentTask: URLSessionDataTask?
+    private var cancelled = false
+    private var finished = false
+    private var onFinish: (() -> Void)?
+
+    init(
+        texts: [String],
+        targetLanguage: String,
+        progress: ((Int, String) -> Void)?,
+        completion: @escaping (Result<[String], Error>) -> Void
+    ) {
+        self.texts = texts
+        self.targetLanguage = targetLanguage
+        self.progress = progress
+        self.completion = completion
+        results = Array(repeating: "", count: texts.count)
+    }
+
+    func start(onFinish: @escaping () -> Void) {
+        lock.lock()
+        self.onFinish = onFinish
+        lock.unlock()
+        advance()
+    }
+
+    func cancel() {
+        lock.lock()
+        guard !cancelled, !finished else {
+            lock.unlock()
+            return
+        }
+        cancelled = true
+        currentTask?.cancel()
+        currentTask = nil
+        onFinish = nil
+        lock.unlock()
+    }
+
+    private func advance() {
+        lock.lock()
+        guard !cancelled, !finished else {
+            lock.unlock()
+            return
+        }
+        while nextIndex < texts.count,
+              texts[nextIndex].trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+            results[nextIndex] = texts[nextIndex]
+            nextIndex += 1
+        }
+        guard nextIndex < texts.count else {
+            let completedResults = results
+            lock.unlock()
+            finish(.success(completedResults))
+            return
+        }
+        let index = nextIndex
+        let text = texts[index].trimmingCharacters(in: .whitespacesAndNewlines)
+        lock.unlock()
+
+        let request: URLRequest
+        do {
+            request = try TranslationService.makeGoogleRequest(text: text, targetLang: targetLanguage)
+            guard (request.url?.absoluteString.utf8.count ?? Int.max)
+                    <= TranslationService.googleMaximumEncodedRequestBytes else {
+                finish(.failure(TranslationError.googleTextTooLong))
+                return
+            }
+        } catch {
+            finish(.failure(error))
+            return
+        }
+        let task = URLSession.shared.dataTask(with: request) { [weak self] data, response, error in
+            self?.receive(data: data, response: response, error: error, index: index)
+        }
+        lock.lock()
+        guard !cancelled, !finished else {
+            lock.unlock()
+            task.cancel()
+            return
+        }
+        currentTask = task
+        lock.unlock()
+        task.resume()
+    }
+
+    private func receive(data: Data?, response: URLResponse?, error: Error?, index: Int) {
+        lock.lock()
+        currentTask = nil
+        let shouldIgnore = cancelled || finished || index != nextIndex
+        lock.unlock()
+        guard !shouldIgnore else { return }
+        if let error {
+            finish(.failure(error))
+            return
+        }
+        guard let http = response as? HTTPURLResponse,
+              (200..<300).contains(http.statusCode) else {
+            finish(.failure(TranslationError.httpStatus(
+                (response as? HTTPURLResponse)?.statusCode ?? -1)))
+            return
+        }
+        guard let data else {
+            finish(.failure(TranslationError.noData))
+            return
+        }
+        guard let json = try? JSONSerialization.jsonObject(with: data) as? [Any],
+              let outer = json.first as? [[Any]] else {
+            finish(.failure(TranslationError.parseError))
+            return
+        }
+        let translated = outer.compactMap { $0.first as? String }.joined()
+        guard !translated.isEmpty else {
+            finish(.failure(TranslationError.emptyResult))
+            return
+        }
+        lock.lock()
+        guard !cancelled, !finished, index == nextIndex else {
+            lock.unlock()
+            return
+        }
+        results[index] = translated
+        nextIndex += 1
+        lock.unlock()
+        DispatchQueue.main.async { [weak self] in self?.progress?(index, translated) }
+        advance()
+    }
+
+    private func finish(_ result: Result<[String], Error>) {
+        lock.lock()
+        guard !cancelled, !finished else {
+            lock.unlock()
+            return
+        }
+        finished = true
+        currentTask = nil
+        let finishAction = onFinish
+        onFinish = nil
+        lock.unlock()
+        DispatchQueue.main.async { [completion] in
+            finishAction?()
+            completion(result)
+        }
+    }
+}
+
 // MARK: - SwiftUI bridge for Apple Translation
 
 /// Uses a hidden SwiftUI view with .translationTask() to obtain a TranslationSession.
 /// This is the supported way to use the Translation framework from AppKit.
 @available(macOS 15.0, *)
 @MainActor
-final class TranslationBridge: ObservableObject {
+final class TranslationBridge {
     static let shared = TranslationBridge()
 
-    @Published var config: TranslationSession.Configuration?
+    private enum Operation {
+        case prepare((Result<Void, Error>) -> Void)
+        case translate(
+            texts: [String],
+            progress: ((Int, String) -> Void)?,
+            completion: (Result<[String], Error>) -> Void)
+    }
+
     private var hostingView: NSView?
-    private var pendingTexts: [String] = []
-    private var pendingCompletion: ((Result<[String], Error>) -> Void)?
+    private var operation: Operation?
+    private var requestID: UUID?
+    private var timeout: DispatchWorkItem?
+    private weak var hostWindow: NSWindow?
+    private var hostWindowOriginalLevel: NSWindow.Level?
 
-    private var translationID: UUID?
+    func prepare(
+        configuration: TranslationSession.Configuration,
+        completion: @escaping (Result<Void, Error>) -> Void
+    ) -> UUID {
+        begin(
+            operation: .prepare(completion),
+            configuration: configuration,
+            timeoutInterval: 40,
+            lowersOverlay: true)
+    }
 
-    func translate(
+    func translateInstalled(
         texts: [String],
         configuration: TranslationSession.Configuration,
+        progress: ((Int, String) -> Void)?,
         completion: @escaping (Result<[String], Error>) -> Void
-    ) {
-        // Cancel any in-flight translation before starting a new one
-        if pendingCompletion != nil {
-            cleanup()
-        }
+    ) -> UUID {
+        begin(
+            operation: .translate(
+                texts: texts, progress: progress, completion: completion),
+            configuration: configuration,
+            timeoutInterval: 10,
+            lowersOverlay: false)
+    }
 
-        let thisID = UUID()
-        translationID = thisID
-        pendingTexts = texts
-        pendingCompletion = completion
+    func cancel(requestID: UUID) {
+        guard self.requestID == requestID else { return }
+        cleanup()
+    }
 
-        // Create hidden SwiftUI view and attach to a window
-        let view = TranslationBridgeView(bridge: self)
+    private func begin(
+        operation: Operation,
+        configuration: TranslationSession.Configuration,
+        timeoutInterval: TimeInterval,
+        lowersOverlay: Bool
+    ) -> UUID {
+        cleanup()
+        let newRequestID = UUID()
+        requestID = newRequestID
+        self.operation = operation
+
+        let view = TranslationBridgeView(
+            bridge: self,
+            requestID: newRequestID,
+            configuration: configuration)
         let hosting = NSHostingView(rootView: view)
-        hosting.frame = NSRect(x: -1, y: -1, width: 1, height: 1)
-        if let window = NSApp.windows.first(where: { $0.contentView != nil }) {
-            window.contentView?.addSubview(hosting)
+        if let window = NSApp.keyWindow
+            ?? NSApp.mainWindow
+            ?? NSApp.windows.first(where: { $0.isVisible && $0.contentView != nil }),
+           let contentView = window.contentView {
+            hostWindow = window
+            if lowersOverlay,
+               window.level.rawValue >= NSWindow.Level.screenSaver.rawValue {
+                hostWindowOriginalLevel = window.level
+                window.level = .normal
+            }
+            hosting.frame = NSRect(
+                x: contentView.bounds.midX - 0.5,
+                y: contentView.bounds.midY - 0.5,
+                width: 1,
+                height: 1)
+            hosting.autoresizingMask = [.minXMargin, .maxXMargin, .minYMargin, .maxYMargin]
+            contentView.addSubview(hosting)
         }
         hostingView = hosting
 
-        // Setting config triggers .translationTask
-        config = configuration
-
-        // Timeout: if session doesn't respond in 10s, report error
-        DispatchQueue.main.asyncAfter(deadline: .now() + 10) { [weak self] in
-            guard let self = self, self.translationID == thisID, self.pendingCompletion != nil else { return }
-            let completion = self.pendingCompletion
+        let timeout = DispatchWorkItem { [weak self] in
+            guard let self, self.requestID == newRequestID else { return }
+            let activeOperation = self.operation
             self.cleanup()
-            completion?(.failure(TranslationError.appleTranslation("Apple Translation timed out. The language pack may need to be downloaded in System Settings.")))
+            switch activeOperation {
+            case .prepare(let completion):
+                completion(.failure(TranslationError.appleLanguageDownloadTimedOut))
+            case .translate(_, _, let completion):
+                completion(.failure(TranslationError.appleSessionTimedOut))
+            case nil:
+                break
+            }
         }
+        self.timeout = timeout
+        DispatchQueue.main.asyncAfter(
+            deadline: .now() + timeoutInterval,
+            execute: timeout)
+        return newRequestID
     }
 
-    fileprivate func sessionReady(_ session: TranslationSession) {
-        // Ignore stale sessions from cancelled translations
-        guard pendingCompletion != nil else { return }
-        let texts = pendingTexts
-        let completion = pendingCompletion
-        let activeID = translationID
-        Task {
-            do {
+    fileprivate func sessionReady(
+        _ session: TranslationSession,
+        requestID: UUID
+    ) async {
+        guard self.requestID == requestID, let operation else { return }
+        timeout?.cancel()
+        timeout = nil
+        do {
+            switch operation {
+            case .prepare(let completion):
+                try await session.prepareTranslation()
+                guard self.requestID == requestID, !Task.isCancelled else { return }
+                cleanup()
+                completion(.success(()))
+            case .translate(let texts, let progress, let completion):
                 var results = Array(repeating: "", count: texts.count)
                 for (i, text) in texts.enumerated() {
-                    // Bail if a new translation was started while we're iterating
-                    let stillActive = await MainActor.run { self.translationID == activeID }
-                    guard stillActive else { return }
+                    guard self.requestID == requestID, !Task.isCancelled else { return }
                     let trimmed = text.trimmingCharacters(in: .whitespacesAndNewlines)
                     guard !trimmed.isEmpty else {
                         results[i] = text
@@ -399,63 +632,119 @@ final class TranslationBridge: ObservableObject {
                     }
                     let response = try await session.translate(trimmed)
                     results[i] = response.targetText
+                    progress?(i, response.targetText)
                 }
-                await MainActor.run {
-                    guard self.translationID == activeID else { return }
-                    self.cleanup()
-                    completion?(.success(results))
-                }
-            } catch {
-                await MainActor.run {
-                    guard self.translationID == activeID else { return }
-                    self.cleanup()
-                    let desc = error.localizedDescription
-                    let msg = "Apple Translation failed: \(desc). You can switch to Google Translate in Settings."
-                    completion?(.failure(TranslationError.appleTranslation(msg)))
-                }
+                guard self.requestID == requestID else { return }
+                cleanup()
+                completion(.success(results))
+            }
+        } catch {
+            guard self.requestID == requestID else { return }
+            let activeOperation = self.operation
+            cleanup()
+            let wrapped = TranslationError.appleTranslation(String(
+                format: NSLocalizedString(
+                    "Apple Translation failed: %@",
+                    comment: "Apple Translation failure with system detail"),
+                error.localizedDescription))
+            switch activeOperation {
+            case .prepare(let completion):
+                completion(.failure(wrapped))
+            case .translate(_, _, let completion):
+                completion(.failure(wrapped))
+            case nil:
+                break
             }
         }
     }
 
     private func cleanup() {
+        requestID = nil
+        timeout?.cancel()
+        timeout = nil
         hostingView?.removeFromSuperview()
         hostingView = nil
-        pendingTexts = []
-        pendingCompletion = nil
-        config = nil
+        restoreHostWindowLevel()
+        hostWindow = nil
+        operation = nil
+    }
+
+    private func restoreHostWindowLevel() {
+        if let window = hostWindow, let originalLevel = hostWindowOriginalLevel {
+            window.level = originalLevel
+        }
+        hostWindowOriginalLevel = nil
     }
 }
 
 @available(macOS 15.0, *)
 private struct TranslationBridgeView: View {
-    @ObservedObject var bridge: TranslationBridge
+    let bridge: TranslationBridge
+    let requestID: UUID
+    let configuration: TranslationSession.Configuration
 
     var body: some View {
         Color.clear
             .frame(width: 1, height: 1)
-            .translationTask(bridge.config) { session in
-                await MainActor.run {
-                    bridge.sessionReady(session)
-                }
+            .translationTask(configuration) { session in
+                await bridge.sessionReady(session, requestID: requestID)
             }
     }
 }
 
 enum TranslationError: LocalizedError {
-    case badURL, noData, parseError, emptyResult
+    case badURL, noData, parseError, emptyResult, cancelled
     case googleTranslationDisabled
+    case googleTextTooLong
+    case httpStatus(Int)
+    case appleLanguageDownloadTimedOut
+    case appleLanguageDownloadDidNotFinish
+    case appleSessionTimedOut
     case appleTranslation(String)
     var errorDescription: String? {
         switch self {
-        case .badURL:      return "Invalid translation URL"
-        case .noData:      return "No response from translation service"
-        case .parseError:  return "Could not parse translation response"
-        case .emptyResult: return "Translation returned empty result"
+        case .badURL:
+            return NSLocalizedString(
+                "Invalid translation URL", comment: "Translation URL error")
+        case .noData:
+            return NSLocalizedString(
+                "No response from translation service", comment: "Empty translation response")
+        case .parseError:
+            return NSLocalizedString(
+                "Could not parse translation response", comment: "Translation parse error")
+        case .emptyResult:
+            return NSLocalizedString(
+                "Translation returned empty result", comment: "Empty translated text")
+        case .cancelled:
+            return NSLocalizedString(
+                "Translation request was superseded", comment: "Superseded translation request")
         case .googleTranslationDisabled:
             return NSLocalizedString(
                 "Google translation is disabled in Settings.",
                 comment: "Google translation privacy setting is disabled"
             )
+        case .googleTextTooLong:
+            return NSLocalizedString(
+                "The text exceeds Google Translate's single-request limit. Shorten it and try again.",
+                comment: "Google translation encoded request is too long")
+        case .httpStatus(let statusCode):
+            return String(
+                format: NSLocalizedString(
+                    "Google Translate returned HTTP error %d.",
+                    comment: "Google translation HTTP status error"),
+                statusCode)
+        case .appleLanguageDownloadTimedOut:
+            return NSLocalizedString(
+                "Apple language download timed out. The download may continue in System Settings.",
+                comment: "Apple language preparation timeout")
+        case .appleLanguageDownloadDidNotFinish:
+            return NSLocalizedString(
+                "Apple language download did not finish. Please try again after the download completes.",
+                comment: "Apple language preparation did not install resources")
+        case .appleSessionTimedOut:
+            return NSLocalizedString(
+                "Apple Translation timed out. Please try again.",
+                comment: "Apple Translation session startup timeout")
         case .appleTranslation(let msg): return msg
         }
     }

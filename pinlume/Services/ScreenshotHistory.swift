@@ -35,9 +35,10 @@ class ScreenshotHistory {
     private(set) var entries: [HistoryEntry] = []
 
     private let historyDir: URL
-    private let indexFile: URL
+    private let indexStore: ScreenshotHistoryIndexStore
     private let historyIOQueue = DispatchQueue(label: "com.xiegang.Pinlume.history-io", qos: .utility)
     private var writeGeneration = 0
+    private let artifactLifecycle = HistoryArtifactLifecycle()
 
     var maxEntries: Int {
         if UserDefaults.standard.bool(forKey: "historyUnlimited") { return Int.max }
@@ -50,17 +51,26 @@ class ScreenshotHistory {
     private init() {
         historyDir = AppIdentity.applicationSupportDirectory
             .appendingPathComponent("history", isDirectory: true)
-        indexFile = historyDir.appendingPathComponent("index.json")
+        indexStore = ScreenshotHistoryIndexStore(historyDirectory: historyDir)
 
-        // Create directory with 0700 permissions (owner only)
-        if !FileManager.default.fileExists(atPath: historyDir.path) {
-            try? FileManager.default.createDirectory(at: historyDir, withIntermediateDirectories: true, attributes: [
-                .posixPermissions: 0o700
-            ])
+        // Startup can quarantine a corrupt index and atomically write a rebuilt
+        // one. Keep those mutations on the same serial boundary as every later
+        // history artifact/index write and delete. `sync` preserves the existing
+        // invariant that entries are ready before the singleton is published.
+        let startup = historyIOQueue.sync { [historyDir, indexStore] in
+            if !FileManager.default.fileExists(atPath: historyDir.path) {
+                try? FileManager.default.createDirectory(
+                    at: historyDir,
+                    withIntermediateDirectories: true,
+                    attributes: [.posixPermissions: 0o700]
+                )
+            }
+            return indexStore.prepareForStartup()
         }
-
-        loadIndex()
-        pruneOrphanedFiles()
+        loadIndex(startup.entries, applyingRetentionPolicy: startup.state == .valid)
+        if startup.shouldPruneOrphanedFiles {
+            pruneOrphanedFiles()
+        }
     }
 
     /// Delete files in the history directory that aren't referenced by
@@ -70,7 +80,6 @@ class ScreenshotHistory {
     /// the shared `DirectorySweeper` helper.
     private func pruneOrphanedFiles() {
         let dir = historyDir
-        let indexName = indexFile.lastPathComponent
         let validIDs = Set(entries.map { $0.id })
         historyIOQueue.async {
             DirectorySweeper.sweep(
@@ -79,11 +88,7 @@ class ScreenshotHistory {
                 // lookup against `index.json`, not mtime.
                 olderThan: nil,
                 shouldDelete: { name in
-                    if name == indexName { return false }
-                    guard name.count >= 36 else { return false }
-                    let uuid = String(name.prefix(36))
-                    guard UUID(uuidString: uuid) != nil else { return false }
-                    return !validIDs.contains(uuid)
+                    self.indexStore.isOrphanedArtifact(named: name, validIDs: validIDs)
                 }
             )
         }
@@ -145,6 +150,7 @@ class ScreenshotHistory {
         let annURL = historyDir.appendingPathComponent("\(id)_annotations.json")
         let editURL = historyDir.appendingPathComponent("\(id)_edit.json")
         let generation = writeGeneration
+        let artifactGeneration = artifactLifecycle.beginWrite(for: id)
         historyIOQueue.async { [weak self] in
             guard let self = self else { return }
             let thumb = self.makeThumbnail(image: image, maxWidth: 36)
@@ -155,40 +161,49 @@ class ScreenshotHistory {
             // safely on-disk — subsequent reads go through loadThumbnail's
             // disk path so we don't pin every entry's bitmap forever.
             DispatchQueue.main.async {
-                guard self.writeGeneration == generation else { return }
+                guard self.writeGeneration == generation,
+                      self.artifactLifecycle.isLive(id: id, generation: artifactGeneration) else { return }
                 if let idx = self.entries.firstIndex(where: { $0.id == id }) {
                     self.entries[idx].thumbnail = thumb
                 }
                 self.saveIndex()
             }
 
+            guard self.artifactLifecycle.isLive(id: id, generation: artifactGeneration) else { return }
             // Write composited image
             if let imageData = ImageEncoder.encodePNGPreservingSourcePixels(image) {
+                guard self.artifactLifecycle.isLive(id: id, generation: artifactGeneration) else { return }
                 try? imageData.write(to: fileURL, options: .atomic)
             }
             if let thumbPng = ImageEncoder.encodePNGPreservingSourcePixels(thumb) {
+                guard self.artifactLifecycle.isLive(id: id, generation: artifactGeneration) else { return }
                 try? thumbPng.write(to: thumbURL, options: .atomic)
             }
             if let prevPng = ImageEncoder.encodePNGPreservingSourcePixels(preview) {
+                guard self.artifactLifecycle.isLive(id: id, generation: artifactGeneration) else { return }
                 try? prevPng.write(to: previewURL, options: .atomic)
             }
 
             // Write raw image + annotations if available
             if let raw = rawImage,
                let rawData = ImageEncoder.encodePNGPreservingSourcePixels(raw) {
+                guard self.artifactLifecycle.isLive(id: id, generation: artifactGeneration) else { return }
                 try? rawData.write(to: rawURL, options: .atomic)
             }
             if let annData = annotationData {
+                guard self.artifactLifecycle.isLive(id: id, generation: artifactGeneration) else { return }
                 try? annData.write(to: annURL, options: .atomic)
             }
             if let editData = editStateData {
+                guard self.artifactLifecycle.isLive(id: id, generation: artifactGeneration) else { return }
                 try? editData.write(to: editURL, options: .atomic)
             }
 
             // Disk artifacts are now on disk — drop the in-memory thumbnail.
             // loadThumbnail() will read from disk on next access.
             DispatchQueue.main.async {
-                guard self.writeGeneration == generation else { return }
+                guard self.writeGeneration == generation,
+                      self.artifactLifecycle.isLive(id: id, generation: artifactGeneration) else { return }
                 if let idx = self.entries.firstIndex(where: { $0.id == id }) {
                     self.entries[idx].thumbnail = nil
                 }
@@ -246,6 +261,7 @@ class ScreenshotHistory {
         let annURL = historyDir.appendingPathComponent("\(id)_annotations.json")
         let editURL = historyDir.appendingPathComponent("\(id)_edit.json")
         let generation = writeGeneration
+        let artifactGeneration = artifactLifecycle.beginWrite(for: id)
 
         // Update thumbnail in memory immediately
         let thumb = makeThumbnail(image: compositedImage, maxWidth: 36)
@@ -255,35 +271,41 @@ class ScreenshotHistory {
             let edited = entries.remove(at: idx)
             entries.insert(edited, at: 0)
         }
-        saveIndex()
 
         historyIOQueue.async { [weak self] in
             guard let self = self else { return }
+            guard self.artifactLifecycle.isLive(id: id, generation: artifactGeneration) else { return }
             // Composited image
             if let data = ImageEncoder.encodePNGPreservingSourcePixels(compositedImage) {
+                guard self.artifactLifecycle.isLive(id: id, generation: artifactGeneration) else { return }
                 try? data.write(to: fileURL, options: .atomic)
             }
             // Thumbnail + preview
             if let thumbPng = ImageEncoder.encodePNGPreservingSourcePixels(thumb) {
+                guard self.artifactLifecycle.isLive(id: id, generation: artifactGeneration) else { return }
                 try? thumbPng.write(to: thumbURL, options: .atomic)
             }
             let preview = self.makePreview(image: compositedImage)
             if let prevPng = ImageEncoder.encodePNGPreservingSourcePixels(preview) {
+                guard self.artifactLifecycle.isLive(id: id, generation: artifactGeneration) else { return }
                 try? prevPng.write(to: previewURL, options: .atomic)
             }
             // Raw image + annotations
             if let raw = rawImage,
                let rawData = ImageEncoder.encodePNGPreservingSourcePixels(raw) {
+                guard self.artifactLifecycle.isLive(id: id, generation: artifactGeneration) else { return }
                 try? rawData.write(to: rawURL, options: .atomic)
             } else {
                 try? FileManager.default.removeItem(at: rawURL)
             }
             if let annData = annotationData {
+                guard self.artifactLifecycle.isLive(id: id, generation: artifactGeneration) else { return }
                 try? annData.write(to: annURL, options: .atomic)
             } else {
                 try? FileManager.default.removeItem(at: annURL)
             }
             if let editData = editStateData {
+                guard self.artifactLifecycle.isLive(id: id, generation: artifactGeneration) else { return }
                 try? editData.write(to: editURL, options: .atomic)
             } else {
                 try? FileManager.default.removeItem(at: editURL)
@@ -292,10 +314,12 @@ class ScreenshotHistory {
             // Disk artifacts updated — drop the in-memory thumbnail so the
             // next read pulls the fresh on-disk version through loadThumbnail.
             DispatchQueue.main.async {
-                guard self.writeGeneration == generation else { return }
+                guard self.writeGeneration == generation,
+                      self.artifactLifecycle.isLive(id: id, generation: artifactGeneration) else { return }
                 if let idx = self.entries.firstIndex(where: { $0.id == id }) {
                     self.entries[idx].thumbnail = nil
                 }
+                self.saveIndex()
             }
         }
     }
@@ -316,12 +340,14 @@ class ScreenshotHistory {
     func removeEntry(id: String) {
         guard let index = entries.firstIndex(where: { $0.id == id }) else { return }
         let entry = entries.remove(at: index)
+        artifactLifecycle.tombstone(entry.id)
         deleteFiles(for: entry.id, ext: entry.fileExtension)
         saveIndex()
     }
 
     func clear(completion: @escaping () -> Void = {}) {
         writeGeneration &+= 1
+        entries.forEach { artifactLifecycle.tombstone($0.id) }
         entries.removeAll()
         let directory = historyDir
         historyIOQueue.async {
@@ -413,32 +439,17 @@ class ScreenshotHistory {
 
     // MARK: - Persistence
 
-    private struct IndexEntry: Codable {
-        let id: String
-        let fileExtension: String
-        let timestamp: Date
-        let pixelWidth: Int
-        let pixelHeight: Int
-        var hasAnnotations: Bool?  // optional for backward compat with old index files
-        var lastEditedAt: Date?    // optional for backward compat (nil = never edited)
-    }
-
     private func saveIndex() {
         let indexEntries = entries.map {
-            IndexEntry(id: $0.id, fileExtension: $0.fileExtension, timestamp: $0.timestamp,
-                       pixelWidth: $0.pixelWidth, pixelHeight: $0.pixelHeight,
-                       hasAnnotations: $0.hasAnnotations ? true : nil,
-                       lastEditedAt: $0.lastEditedAt)
+            ScreenshotHistoryIndexEntry(id: $0.id, fileExtension: $0.fileExtension, timestamp: $0.timestamp,
+                                        pixelWidth: $0.pixelWidth, pixelHeight: $0.pixelHeight,
+                                        hasAnnotations: $0.hasAnnotations ? true : nil,
+                                        lastEditedAt: $0.lastEditedAt)
         }
-        if let data = try? JSONEncoder().encode(indexEntries) {
-            try? data.write(to: indexFile, options: .atomic)
-        }
+        historyIOQueue.async { [indexStore] in _ = indexStore.save(indexEntries) }
     }
 
-    private func loadIndex() {
-        guard let data = try? Data(contentsOf: indexFile),
-              let indexEntries = try? JSONDecoder().decode([IndexEntry].self, from: data) else { return }
-
+    private func loadIndex(_ indexEntries: [ScreenshotHistoryIndexEntry], applyingRetentionPolicy: Bool) {
         entries = indexEntries.compactMap { ie in
             // Only include entries whose image file still exists
             let ext = ie.fileExtension
@@ -451,7 +462,9 @@ class ScreenshotHistory {
         // it immediately (when off, this is a no-op — array stays creation-order).
         applyHistoryOrderPreference()
 
-        // Prune if maxEntries was lowered since last run
+        // Retention deletes user files, so it only runs after the index was
+        // successfully verified. A recovered/corrupt index is preserved intact.
+        guard applyingRetentionPolicy else { return }
         let max = maxEntries
         if max <= 0 {
             clear()
@@ -469,18 +482,17 @@ class ScreenshotHistory {
     // MARK: - File helpers
 
     private func deleteFiles(for id: String, ext: String = "png") {
+        artifactLifecycle.tombstone(id)
         let fileURL = historyDir.appendingPathComponent("\(id).\(ext)")
         let thumbURL = historyDir.appendingPathComponent("\(id)_thumb.png")
         let previewURL = historyDir.appendingPathComponent("\(id)_preview.png")
         let rawURL = historyDir.appendingPathComponent("\(id)_raw.png")
         let annURL = historyDir.appendingPathComponent("\(id)_annotations.json")
         let editURL = historyDir.appendingPathComponent("\(id)_edit.json")
-        try? FileManager.default.removeItem(at: fileURL)
-        try? FileManager.default.removeItem(at: thumbURL)
-        try? FileManager.default.removeItem(at: previewURL)
-        try? FileManager.default.removeItem(at: rawURL)
-        try? FileManager.default.removeItem(at: annURL)
-        try? FileManager.default.removeItem(at: editURL)
+        historyIOQueue.async {
+            let fm = FileManager.default
+            [fileURL, thumbURL, previewURL, rawURL, annURL, editURL].forEach { try? fm.removeItem(at: $0) }
+        }
     }
 
     private func makeThumbnail(image: NSImage, maxWidth: CGFloat) -> NSImage {
