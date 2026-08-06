@@ -414,6 +414,13 @@
 "API key:" = "API key:";
 "Upload History" = "Upload History";
 "No uploads yet." = "No uploads yet.";
+"Showing the most recent %d uploads." = "Showing the most recent %d uploads.";
+"Showing %d of %d uploads." = "Showing %d of %d uploads.";
+"Show More" = "Show More";
+"Remove" = "Remove";
+"Clear Upload History?" = "Clear Upload History?";
+"This only removes local upload records." = "This only removes local upload records.";
+"This only removes local upload records for this service." = "This only removes local upload records for this service.";
 "Base URL for public access. If empty, the S3 endpoint URL is used (may not be publicly accessible)." = "Base URL for public access. If empty, the S3 endpoint URL is used (may not be publicly accessible).";
 "A shared key is included — get your own free key at imgbb.com/api if you hit rate limits. Images only (no video support)." = "A shared key is included — get your own free key at imgbb.com/api if you hit rate limits. Images only (no video support).";
 "Works with AWS S3, Cloudflare R2, MinIO, DigitalOcean Spaces, Backblaze B2, and other S3-compatible services. Supports images and videos." = "Works with AWS S3, Cloudflare R2, MinIO, DigitalOcean Spaces, Backblaze B2, and other S3-compatible services. Supports images and videos.";
@@ -476,6 +483,7 @@
 "URL copied to the clipboard" = "URL copied to the clipboard";
 "Uploading... %d%%" = "Uploading... %d%%";
 "Upload failed: %@" = "Upload failed: %@";
+"Could not reach the selected upload server. Check its network connection and try again." = "Could not reach the selected upload server. Check its network connection and try again.";
 "Uploaded! Link copied." = "Uploaded! Link copied.";
 "Uploading to %@... %d%%" = "Uploading to %@... %d%%";
 "Open" = "Open";
@@ -491,6 +499,7 @@
 "%@ selected" = "%@ selected";
 "Exporting..." = "Exporting...";
 "Export failed" = "Export failed";
+"Saving..." = "Saving...";
 "Saved to %@" = "Saved to %@";
 "Save failed" = "Save failed";
 

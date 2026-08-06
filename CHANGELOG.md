@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.0.8
+
+- Make upload confirmation, selected-server reachability, selection release, and failure recovery follow one explicit lifecycle across imgbb, S3, and Google Drive.
+- Keep upload history scoped to the selected service, with a compact recent view and safe local-only management.
+- Harden screenshot and Pin persistence against corrupt indexes and interrupted writes; make Save As format changes preserve the user-authorized destination.
+- Reuse unchanged GIF exports for later copy and save actions instead of re-encoding them.
+
 ## 1.0.7
 
 - Prepare missing Apple Translation language packs before starting translation, and keep the screenshot overlay from blocking the system download sheet.

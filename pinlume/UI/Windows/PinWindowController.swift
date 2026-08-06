@@ -1854,9 +1854,11 @@ class PinWindowController {
     #if !OFFLINE
     private func uploadPin() {
         let uploadImage = pinView?.outputImage() ?? image
-        if (NSApp.delegate as? AppDelegate)?.uploadImage(uploadImage, presentingWindow: window) == true {
-            hideToolbar(reason: .explicitAction)
-        }
+        (NSApp.delegate as? AppDelegate)?.uploadImage(
+            uploadImage,
+            presentingWindow: window,
+            onAccepted: { [weak self] in self?.hideToolbar(reason: .explicitAction) }
+        )
     }
     #endif
 

@@ -384,6 +384,13 @@
 "API key:" = "API 密钥:";
 "Upload History" = "上传历史";
 "No uploads yet." = "暂无上传记录。";
+"Showing the most recent %d uploads." = "仅保留最近 %d 条上传记录。";
+"Showing %d of %d uploads." = "当前显示 %d / %d 条上传记录。";
+"Show More" = "显示更多";
+"Remove" = "移除";
+"Clear Upload History?" = "清除上传历史？";
+"This only removes local upload records." = "这只会移除本机的上传记录。";
+"This only removes local upload records for this service." = "这只会移除当前服务的本机上传记录。";
 "Base URL for public access. If empty, the S3 endpoint URL is used (may not be publicly accessible)." = "用于公共访问的基础 URL。留空时将使用 S3 端点 URL（可能无法公开访问）。";
 "A shared key is included — get your own free key at imgbb.com/api if you hit rate limits. Images only (no video support)." = "已内置共享密钥 - 如遇到频率限制，请在 imgbb.com/api 获取免费密钥。仅支持图片（不支持视频）。";
 "Works with AWS S3, Cloudflare R2, MinIO, DigitalOcean Spaces, Backblaze B2, and other S3-compatible services. Supports images and videos." = "兼容 AWS S3、Cloudflare R2、MinIO、DigitalOcean Spaces、Backblaze B2 及其他 S3 兼容服务。支持图片和视频。";
@@ -445,6 +452,7 @@
 "URL copied to the clipboard" = "URL 已拷贝到剪贴板";
 "Uploading... %d%%" = "上传中... %d%%";
 "Upload failed: %@" = "上传失败: %@";
+"Could not reach the selected upload server. Check its network connection and try again." = "无法连接当前选择的上传服务器，请检查网络后重试。";
 "Uploaded! Link copied." = "上传完成！链接已拷贝。";
 "Uploading to %@... %d%%" = "正在上传到 %@... %d%%";
 "Open" = "打开";
@@ -464,6 +472,7 @@
 "%@ selected" = "已选择 %@";
 "Exporting..." = "导出中...";
 "Export failed" = "导出失败";
+"Saving..." = "保存中...";
 "Saved to %@" = "已存储到 %@";
 "Save failed" = "存储失败";
 

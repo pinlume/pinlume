@@ -171,8 +171,6 @@ enum ImageSaveService {
                 Double(image.size.width),
                 Double(image.size.height)
             )
-            let url = url(rawURL, withFormat: selectedFormat)
-            saveManualDefaults(directory: url.deletingLastPathComponent(), format: selectedFormat)
             DispatchQueue.global(qos: .userInitiated).async {
                 let encodeStart = CFAbsoluteTimeGetCurrent()
                 guard let imageData = ImageEncoder.encode(image, format: selectedFormat) else {
@@ -181,7 +179,16 @@ enum ImageSaveService {
                     return
                 }
                 do {
-                    try TransactionalOutput.write(imageData, to: url)
+                    // NSSavePanel grants the sandbox write extension for this
+                    // exact URL, not for sibling transaction files.
+                    // A sandboxed NSSavePanel grants access to this exact URL.
+                    // Its extension may be a valid spelling such as `.jpeg`,
+                    // so never rewrite it into a sibling path after approval.
+                    try imageData.write(to: rawURL)
+                    saveManualDefaults(
+                        directory: rawURL.deletingLastPathComponent(),
+                        format: selectedFormat
+                    )
                     os_log(
                         "save write success elapsed=%.3f bytes=%{public}d",
                         log: imageSaveLog,
@@ -192,7 +199,7 @@ enum ImageSaveService {
                     completionOnMain(completion, true)
                 } catch {
                     #if DEBUG
-                    NSLog("Pinlume: failed to save screenshot to \(url.path): \(error.localizedDescription)")
+                    NSLog("Pinlume: failed to save screenshot to \(rawURL.path): \(error.localizedDescription)")
                     #endif
                     reportWriteFailure(error)
                     completionOnMain(completion, false)

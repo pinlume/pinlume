@@ -67,59 +67,77 @@ final class UploadGateway {
         }
     }
 
-    /// The only UI-facing network gate. A cancelled confirmation returns before
-    /// provider validation or a transport call, so rejected uploads issue zero requests.
+    /// The only UI-facing upload gate. It asks for confirmation first, then
+    /// probes the selected service without user content before any upload
+    /// payload or credentials are sent.
     @discardableResult
     func upload(
         _ payload: Payload,
         presentingWindow: NSWindow? = nil,
+        onAccepted: (() -> Void)? = nil,
+        onCancelled: (() -> Void)? = nil,
         onStart: (() -> Void)? = nil,
         onProgress: Progress? = nil,
         completion: @escaping Completion
     ) -> Bool {
-        guard UploadConfirmation.confirmIfNeeded(presentingWindow: presentingWindow) else { return false }
-        let provider = UserDefaults.standard.string(forKey: "uploadProvider") ?? "imgbb"
-        guard provider != "gdrive" || GoogleDriveUploader.shared.isSignedIn else {
-            completion(.failure(Self.error("Google Drive not signed in")))
-            return false
-        }
-        guard provider != "s3" || S3Uploader.shared.isConfigured else {
+        let selectedProvider = UserDefaults.standard.string(forKey: "uploadProvider") ?? "imgbb"
+        guard selectedProvider != "s3" || S3Uploader.shared.isConfigured else {
             completion(.failure(Self.error("S3 not configured — check Settings")))
             return false
         }
-        guard !(payload.isVideo && provider == "imgbb") else {
-            completion(.failure(Self.error("Video upload requires Google Drive or S3")))
-            return false
+        guard UploadConfirmation.confirmIfNeeded(presentingWindow: presentingWindow) else {
+            onCancelled?()
+            return true
         }
+        UploadReachabilityProbe.probeSelectedProvider { reachability in
+            guard case .success = reachability else {
+                if case .failure(let error) = reachability { completion(.failure(error)) }
+                return
+            }
+            let provider = UserDefaults.standard.string(forKey: "uploadProvider") ?? "imgbb"
+            guard provider != "gdrive" || GoogleDriveUploader.shared.isSignedIn else {
+                completion(.failure(Self.error("Google Drive not signed in")))
+                return
+            }
+            guard provider != "s3" || S3Uploader.shared.isConfigured else {
+                completion(.failure(Self.error("S3 not configured — check Settings")))
+                return
+            }
+            guard !(payload.isVideo && provider == "imgbb") else {
+                completion(.failure(Self.error("Video upload requires Google Drive or S3")))
+                return
+            }
 
-        onStart?()
-        switch (provider, payload) {
-        case ("gdrive", .image(let image)):
-            GoogleDriveUploader.shared.onProgress = onProgress
-            GoogleDriveUploader.shared.uploadImage(image) { result in
-                completion(result.map { Result(link: $0, deleteURL: "") })
+            onAccepted?()
+            onStart?()
+            switch (provider, payload) {
+            case ("gdrive", .image(let image)):
+                GoogleDriveUploader.shared.onProgress = onProgress
+                GoogleDriveUploader.shared.uploadImage(image) { result in
+                    completion(result.map { Result(link: $0, deleteURL: "") })
+                }
+            case ("gdrive", .video(let url)):
+                GoogleDriveUploader.shared.onProgress = onProgress
+                GoogleDriveUploader.shared.uploadVideo(url: url) { result in
+                    completion(result.map { Result(link: $0, deleteURL: "") })
+                }
+            case ("s3", .image(let image)):
+                S3Uploader.shared.onProgress = onProgress
+                S3Uploader.shared.uploadImage(image) { result in
+                    completion(result.map { Result(link: $0, deleteURL: "") })
+                }
+            case ("s3", .video(let url)):
+                S3Uploader.shared.onProgress = onProgress
+                S3Uploader.shared.uploadVideo(url: url) { result in
+                    completion(result.map { Result(link: $0, deleteURL: "") })
+                }
+            case (_, .image(let image)):
+                ImageUploader.upload(image: image) { result in
+                    completion(result.map { Result(link: $0.link, deleteURL: $0.deleteURL) })
+                }
+            default:
+                completion(.failure(Self.error("Unsupported upload payload")))
             }
-        case ("gdrive", .video(let url)):
-            GoogleDriveUploader.shared.onProgress = onProgress
-            GoogleDriveUploader.shared.uploadVideo(url: url) { result in
-                completion(result.map { Result(link: $0, deleteURL: "") })
-            }
-        case ("s3", .image(let image)):
-            S3Uploader.shared.onProgress = onProgress
-            S3Uploader.shared.uploadImage(image) { result in
-                completion(result.map { Result(link: $0, deleteURL: "") })
-            }
-        case ("s3", .video(let url)):
-            S3Uploader.shared.onProgress = onProgress
-            S3Uploader.shared.uploadVideo(url: url) { result in
-                completion(result.map { Result(link: $0, deleteURL: "") })
-            }
-        case (_, .image(let image)):
-            ImageUploader.upload(image: image) { result in
-                completion(result.map { Result(link: $0.link, deleteURL: $0.deleteURL) })
-            }
-        default:
-            completion(.failure(Self.error("Unsupported upload payload")))
         }
         return true
     }
@@ -139,4 +157,5 @@ private extension UploadGateway.Payload {
         return false
     }
 }
+
 #endif

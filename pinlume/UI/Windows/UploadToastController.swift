@@ -222,6 +222,18 @@ class UploadToastController {
     }
 
     func showError(message: String) {
+        let fullMessage = String(format: L("Upload failed: %@"), message)
+        if window == nil {
+            showStatus(
+                fullMessage,
+                showsSpinner: false,
+                autoDismissSeconds: 6,
+                symbolName: "exclamationmark.triangle.fill"
+            )
+            statusLabel?.textColor = .systemRed
+            return
+        }
+
         spinner?.stopAnimation(nil)
         spinner?.removeFromSuperview()
         spinner = nil
@@ -229,7 +241,6 @@ class UploadToastController {
 
         guard let panel = window, let contentView = panel.contentView else { return }
 
-        let fullMessage = String(format: L("Upload failed: %@"), message)
         let labelFont = NSFont.systemFont(ofSize: 13, weight: .medium)
         let maxLabelW = toastWidth - 66  // 50 left pad + 16 right pad
         let textSize = (fullMessage as NSString).boundingRect(

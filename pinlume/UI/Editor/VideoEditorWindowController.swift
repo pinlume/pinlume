@@ -204,6 +204,10 @@ private final class VideoEditorView: NSView {
     private var finderBtnRect: NSRect = .zero
     private var isMuted: Bool = false
     private var savedURL: URL?
+    /// A private GIF artifact created for clipboard copy. It is never exposed
+    /// as a user save destination and is discarded on any GIF-affecting edit.
+    private var gifCacheURL: URL?
+    private var gifCacheGeneration: UInt = 0
     /// Exactly one export may own this editor's temporary output at a time.
     /// The operation survives AVFoundation's asynchronous completion and is
     /// explicitly cancelled when the editor closes.
@@ -603,6 +607,10 @@ private final class VideoEditorView: NSView {
         gifPlaybackTimer = nil
         gifImageView?.animates = false
         gifImageView?.image = nil
+        if let cacheURL = gifCacheURL {
+            try? FileManager.default.removeItem(at: cacheURL)
+        }
+        gifCacheURL = nil
         thumbnailImages.removeAll()
         thumbnailStrip = nil
         textRasterCache.removeAll()
@@ -1327,6 +1335,7 @@ private final class VideoEditorView: NSView {
     private func overlayRectChanged(_ rect: CGRect) {
         guard let id = selectedSegmentID else { return }
         savedURL = nil
+        invalidateGIFCache()
         if let seg = zoomSegments.first(where: { $0.id == id }) {
             // Derive zoom level from rect size, clamp to model's range. Use
             // the longer side so the entire rect fits inside the zoom window.
@@ -1420,12 +1429,14 @@ private final class VideoEditorView: NSView {
         if isDraggingStart {
             let t = max(0, min(duration, Double((point.x - timelineRect.minX) / timelineRect.width) * duration))
             trimStart = min(t, trimEnd - 0.1)
+            invalidateGIFCache()
             let target = mapSourceTimeToPreviewClock(trimStart)
             player?.seek(to: CMTime(seconds: target, preferredTimescale: 600), toleranceBefore: .zero, toleranceAfter: .zero)
             needsDisplay = true
         } else if isDraggingEnd {
             let t = max(0, min(duration, Double((point.x - timelineRect.minX) / timelineRect.width) * duration))
             trimEnd = max(t, trimStart + 0.1)
+            invalidateGIFCache()
             let target = mapSourceTimeToPreviewClock(trimEnd)
             player?.seek(to: CMTime(seconds: target, preferredTimescale: 600), toleranceBefore: .zero, toleranceAfter: .zero)
             needsDisplay = true
@@ -1493,13 +1504,25 @@ private final class VideoEditorView: NSView {
     }
 
     private func copyToClipboard() {
-        // If GIF mode is selected but no GIF has been saved yet, convert to a temp GIF first
-        if exportAsGIF && !isGIF && !(savedURL?.pathExtension.lowercased() == "gif") {
+        if exportAsGIF && !isGIF {
+            if let cacheURL = validGIFCacheURL() {
+                copyGIFData(from: cacheURL)
+                return
+            }
+            if let savedURL, savedURL.pathExtension.lowercased() == "gif" {
+                copyGIFData(from: savedURL)
+                return
+            }
             showStatus(L("Converting to GIF…"))
-            let tmpURL = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString + ".gif")
-            convertToGIF(destURL: tmpURL) { [weak self] success in
+            let cacheURL = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString + ".gif")
+            convertToGIF(
+                destURL: cacheURL,
+                cacheURL: cacheURL,
+                cacheGeneration: gifCacheGeneration,
+                cacheDestination: true
+            ) { [weak self] success in
                 guard let self = self, success else { return }
-                self.copyGIFData(from: tmpURL)
+                self.copyGIFData(from: cacheURL)
             }
             return
         }
@@ -1714,9 +1737,18 @@ private final class VideoEditorView: NSView {
         panel.begin { [weak self] response in
             guard let self = self, response == .OK, let url = panel.url else { return }
             if saveAsGIF {
-                self.convertToGIF(destURL: url)
+                if self.validGIFCacheURL() != nil {
+                    self.saveCachedGIF(to: url, fileScopedDestination: true)
+                } else {
+                    self.convertToGIF(
+                        destURL: url,
+                        fileScopedDestination: true,
+                        cacheURL: makeGIFCacheURL(),
+                        cacheGeneration: self.gifCacheGeneration
+                    )
+                }
             } else {
-                self.saveToDestination(url, dirURL: nil)
+                self.saveToDestination(url, dirURL: nil, fileScopedDestination: true)
             }
         }
     }
@@ -1761,6 +1793,7 @@ private final class VideoEditorView: NSView {
     @objc private func dimensionSelected(_ sender: NSMenuItem) {
         exportScale = CGFloat(sender.tag) / 100.0
         savedURL = nil
+        invalidateGIFCache()
         needsDisplay = true
     }
 
@@ -1794,6 +1827,10 @@ private final class VideoEditorView: NSView {
         destURL: URL,
         reservedDestination: Bool = false,
         scopedDirectory: URL? = nil,
+        fileScopedDestination: Bool = false,
+        cacheURL: URL? = nil,
+        cacheGeneration: UInt? = nil,
+        cacheDestination: Bool = false,
         completion: ((Bool) -> Void)? = nil
     ) {
         guard let asset = asset else { completion?(false); return }
@@ -1943,9 +1980,18 @@ private final class VideoEditorView: NSView {
                     self?.showStatus(L("Processing GIF…") + " 100%", persist: true)
                 }
 
-                try TransactionalOutput.commit(to: destURL, reservedDestination: reservedDestination, produce: { stagedURL in
-                    try FileManager.default.copyItem(at: tmpURL, to: stagedURL)
-                }, validate: Self.validateGIFOutput)
+                if fileScopedDestination {
+                    try TransactionalOutput.commitFileScoped(to: destURL, produce: { stagedURL in
+                        try FileManager.default.copyItem(at: tmpURL, to: stagedURL)
+                    }, validate: Self.validateGIFOutput)
+                } else {
+                    try TransactionalOutput.commit(to: destURL, reservedDestination: reservedDestination, produce: { stagedURL in
+                        try FileManager.default.copyItem(at: tmpURL, to: stagedURL)
+                    }, validate: Self.validateGIFOutput)
+                }
+                if let cacheURL, !cacheDestination {
+                    try? FileManager.default.copyItem(at: tmpURL, to: cacheURL)
+                }
                 try? FileManager.default.removeItem(at: tmpURL)
                         finish(.success(destURL))
                     } catch {
@@ -1958,6 +2004,33 @@ private final class VideoEditorView: NSView {
                 self.activeExportOperation = nil
                 switch result {
                 case .success:
+                    if let cacheURL, let cacheGeneration {
+                        guard self.gifCacheGeneration == cacheGeneration else {
+                            try? FileManager.default.removeItem(at: cacheURL)
+                            if cacheDestination {
+                                completion?(false)
+                                return
+                            }
+                            self.savedURL = destURL
+                            self.showStatus(String(format: L("Saved to %@"), destURL.lastPathComponent))
+                            self.needsDisplay = true
+                            completion?(true)
+                            return
+                        }
+                        if FileManager.default.fileExists(atPath: cacheURL.path) {
+                            self.gifCacheURL = cacheURL
+                        }
+                        if cacheDestination {
+                            guard self.gifCacheURL == cacheURL else {
+                                completion?(false)
+                                return
+                            }
+                            self.showStatus(L("Copied to clipboard!"))
+                            self.needsDisplay = true
+                            completion?(true)
+                            return
+                        }
+                    }
                     self.savedURL = destURL
                     self.showStatus(String(format: L("Saved to %@"), destURL.lastPathComponent))
                     self.needsDisplay = true
@@ -1970,7 +2043,64 @@ private final class VideoEditorView: NSView {
         )
     }
 
-    private func saveToDestination(_ destURL: URL, dirURL: URL?, reservedDestination: Bool = false) {
+    private func validGIFCacheURL() -> URL? {
+        guard let cacheURL = gifCacheURL else { return nil }
+        guard FileManager.default.fileExists(atPath: cacheURL.path) else {
+            gifCacheURL = nil
+            return nil
+        }
+        return cacheURL
+    }
+
+    private func makeGIFCacheURL() -> URL {
+        FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString + ".gif")
+    }
+
+    private func invalidateGIFCache() {
+        gifCacheGeneration &+= 1
+        if let cacheURL = gifCacheURL {
+            try? FileManager.default.removeItem(at: cacheURL)
+        }
+        gifCacheURL = nil
+    }
+
+    private func saveCachedGIF(to destination: URL, fileScopedDestination: Bool) {
+        guard let cacheURL = validGIFCacheURL() else {
+            convertToGIF(destURL: destination, fileScopedDestination: fileScopedDestination)
+            return
+        }
+        showStatus(L("Saving..."), persist: true)
+        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+            do {
+                if fileScopedDestination {
+                    try TransactionalOutput.commitFileScoped(to: destination, produce: { stagedURL in
+                        try FileManager.default.copyItem(at: cacheURL, to: stagedURL)
+                    }, validate: Self.validateGIFOutput)
+                } else {
+                    try TransactionalOutput.commit(to: destination, produce: { stagedURL in
+                        try FileManager.default.copyItem(at: cacheURL, to: stagedURL)
+                    }, validate: Self.validateGIFOutput)
+                }
+                DispatchQueue.main.async {
+                    guard let self else { return }
+                    self.savedURL = destination
+                    self.showStatus(String(format: L("Saved to %@"), destination.lastPathComponent))
+                    self.needsDisplay = true
+                }
+            } catch {
+                DispatchQueue.main.async {
+                    self?.showStatus(L("Save failed"), isError: true)
+                }
+            }
+        }
+    }
+
+    private func saveToDestination(
+        _ destURL: URL,
+        dirURL: URL?,
+        reservedDestination: Bool = false,
+        fileScopedDestination: Bool = false
+    ) {
         let needsRecompress = exportQuality != .high
         let needsExport = hasPendingEdits
 
@@ -1988,9 +2118,15 @@ private final class VideoEditorView: NSView {
                 return
             }
             do {
-                try TransactionalOutput.commit(to: destURL, reservedDestination: reservedDestination, produce: { stagedURL in
-                    try FileManager.default.copyItem(at: videoURL, to: stagedURL)
-                }, validate: Self.validateMovieOutput)
+                if fileScopedDestination {
+                    try TransactionalOutput.commitFileScoped(to: destURL, produce: { stagedURL in
+                        try FileManager.default.copyItem(at: videoURL, to: stagedURL)
+                    }, validate: Self.validateMovieOutput)
+                } else {
+                    try TransactionalOutput.commit(to: destURL, reservedDestination: reservedDestination, produce: { stagedURL in
+                        try FileManager.default.copyItem(at: videoURL, to: stagedURL)
+                    }, validate: Self.validateMovieOutput)
+                }
                 savedURL = destURL
                 if let dirURL = dirURL { SaveDirectoryAccess.stopAccessing(url: dirURL) }
                 showStatus(String(format: L("Saved to %@"), destURL.lastPathComponent))
@@ -2019,9 +2155,15 @@ private final class VideoEditorView: NSView {
             self.activeExportOperation = nil
             if success {
                 do {
-                    try TransactionalOutput.commit(to: destURL, reservedDestination: reservedDestination, produce: { stagedURL in
-                        try FileManager.default.copyItem(at: tmpURL, to: stagedURL)
-                    }, validate: Self.validateMovieOutput)
+                    if fileScopedDestination {
+                        try TransactionalOutput.commitFileScoped(to: destURL, produce: { stagedURL in
+                            try FileManager.default.copyItem(at: tmpURL, to: stagedURL)
+                        }, validate: Self.validateMovieOutput)
+                    } else {
+                        try TransactionalOutput.commit(to: destURL, reservedDestination: reservedDestination, produce: { stagedURL in
+                            try FileManager.default.copyItem(at: tmpURL, to: stagedURL)
+                        }, validate: Self.validateMovieOutput)
+                    }
                     try? FileManager.default.removeItem(at: tmpURL)
                     self.savedURL = destURL
                     self.showStatus(String(format: L("Saved to %@"), destURL.lastPathComponent))
@@ -2086,7 +2228,7 @@ private final class VideoEditorView: NSView {
         }
     }
 
-    private static func validateMovieOutput(_ url: URL) throws {
+    private nonisolated static func validateMovieOutput(_ url: URL) throws {
         try TransactionalOutput.validateNonEmptyFile(url)
         let asset = AVAsset(url: url)
         guard asset.isPlayable, !asset.tracks(withMediaType: .video).isEmpty else {
@@ -2094,7 +2236,7 @@ private final class VideoEditorView: NSView {
         }
     }
 
-    private static func validateGIFOutput(_ url: URL) throws {
+    private nonisolated static func validateGIFOutput(_ url: URL) throws {
         try TransactionalOutput.validateNonEmptyFile(url)
         guard let source = CGImageSourceCreateWithURL(url as CFURL, nil), CGImageSourceGetCount(source) > 0 else {
             throw CocoaError(.fileReadCorruptFile)
@@ -2336,9 +2478,12 @@ private final class VideoEditorView: NSView {
     private func uploadVideo() {
         let uploadFileURL: (URL, Bool) -> Void = { fileURL, isTemp in
             let providerLabel = (UserDefaults.standard.string(forKey: "uploadProvider") ?? "imgbb") == "s3" ? "S3" : "Drive"
-            let accepted = UploadGateway.shared.upload(
+            _ = UploadGateway.shared.upload(
                 .video(fileURL),
                 presentingWindow: self.window,
+                onCancelled: {
+                    if isTemp { try? FileManager.default.removeItem(at: fileURL) }
+                },
                 onStart: { [weak self] in
                     self?.showStatus(String(format: L("Uploading to %@... %d%%"), providerLabel, 0))
                 },
@@ -2355,9 +2500,6 @@ private final class VideoEditorView: NSView {
                 case .failure(let error):
                     self?.showStatus(String(format: L("Upload failed: %@"), error.localizedDescription), isError: true)
                 }
-            }
-            if !accepted, isTemp {
-                try? FileManager.default.removeItem(at: fileURL)
             }
         }
 
@@ -3125,6 +3267,7 @@ private final class VideoEditorView: NSView {
             // rebuild re-rasterizes with the new text.
             textRasterCache.removeValue(forKey: id)
             savedURL = nil
+            invalidateGIFCache()
         }
         cancelInlineTextEdit(commit: false)
         if changed {
@@ -3236,6 +3379,7 @@ private final class VideoEditorView: NSView {
         }
         textRasterCache.removeValue(forKey: id)
         savedURL = nil
+        invalidateGIFCache()
         applyZoomTransformForCurrentTime()
         effectsBand?.refreshAfterParentEdit()
     }
@@ -3244,6 +3388,7 @@ private final class VideoEditorView: NSView {
 extension VideoEditorView: EffectsBandViewDelegate {
     func effectsBandDidMutate(_ view: EffectsBandView) {
         savedURL = nil
+        invalidateGIFCache()
         applyZoomTransformForCurrentTime()
         needsDisplay = true
     }

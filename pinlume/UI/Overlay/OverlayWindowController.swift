@@ -1024,9 +1024,9 @@ extension OverlayWindowController: OverlayViewDelegate {
         guard var image = captureRegion() else { return }
         let annotationData = currentAnnotationDataForHistory()
         image = applyBeautifyIfNeeded(image) ?? image
-        // Keep the capture session intact while UploadGateway presents its
-        // confirmation. AppDelegate dismisses only after the gateway accepts;
-        // cancelling therefore returns to the same editable selection.
+        // AppDelegate owns an explicit upload session. It hides this Overlay
+        // before confirmation, restores it on cancellation/failure, and only
+        // lets this session's own completion dismiss it.
         overlayDelegate?.overlayDidRequestUpload(self, image: image, annotationData: annotationData)
         #endif
     }
@@ -1415,6 +1415,10 @@ extension OverlayWindowController: OverlayViewDelegate {
         } else {
             overlayWindow?.orderOut(nil)
         }
+    }
+
+    func showUploadError(_ message: String) {
+        overlayView?.showOverlayError(message)
     }
 
     func restoreAfterModalSave() {

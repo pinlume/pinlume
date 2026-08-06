@@ -78,6 +78,54 @@ enum TransactionalOutput {
         try? FileManager.default.removeItem(at: source)
     }
 
+    /// Commits a small data payload to the exact file selected by NSSavePanel.
+    /// The staging file stays in the app-private temporary directory because a
+    /// sandbox Save As grant does not authorize sibling files beside `destination`.
+    static func writeFileScoped(_ data: Data, to destination: URL) throws {
+        try commitFileScoped(to: destination, produce: { temporaryURL in
+            try data.write(to: temporaryURL, options: .atomic)
+        }, validate: validateNonEmptyFile)
+    }
+
+    /// Transfers a complete private artifact to the exact file selected by
+    /// NSSavePanel, removing the source only after the selected file validates.
+    static func transferFileScoped(
+        _ source: URL,
+        to destination: URL,
+        validate: Validator = validateNonEmptyFile
+    ) throws {
+        if source.standardizedFileURL == destination.standardizedFileURL {
+            try validate(source)
+            return
+        }
+        try commitFileScoped(to: destination, produce: { temporaryURL in
+            try FileManager.default.copyItem(at: source, to: temporaryURL)
+        }, validate: validate)
+        try? FileManager.default.removeItem(at: source)
+    }
+
+    /// A Save As panel authorizes only its selected file, not the destination
+    /// directory. Generate and validate privately, then touch only that file.
+    static func commitFileScoped(
+        to destination: URL,
+        produce: Producer,
+        validate: Validator = validateNonEmptyFile
+    ) throws {
+        let fileManager = FileManager.default
+        let temporaryURL = fileManager.temporaryDirectory.appendingPathComponent(
+            "pinlume-save-\(UUID().uuidString).\(destination.pathExtension)"
+        )
+        defer { try? fileManager.removeItem(at: temporaryURL) }
+
+        try produce(temporaryURL)
+        try validate(temporaryURL)
+        if fileManager.fileExists(atPath: destination.path) {
+            try fileManager.removeItem(at: destination)
+        }
+        try fileManager.moveItem(at: temporaryURL, to: destination)
+        try validate(destination)
+    }
+
     static func commit(
         to destination: URL,
         reservedDestination: Bool = false,
@@ -110,7 +158,7 @@ enum TransactionalOutput {
         }
     }
 
-    static func validateNonEmptyFile(_ url: URL) throws {
+    nonisolated static func validateNonEmptyFile(_ url: URL) throws {
         let values = try url.resourceValues(forKeys: [.fileSizeKey, .isRegularFileKey])
         guard values.isRegularFile == true, (values.fileSize ?? 0) > 0 else {
             throw CocoaError(.fileWriteInapplicableStringEncoding)

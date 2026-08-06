@@ -260,6 +260,7 @@ class SettingsWindowController: NSWindowController, NSToolbarDelegate, NSWindowD
     #if !OFFLINE
     private var imgbbKeyField: NSTextField!
     private weak var uploadsStack: NSStackView?
+    private var uploadHistoryVisibleLimit = 10
     private var providerPopup: NSPopUpButton!
     private var uploadConfirmCheckbox: NSButton!
     private var gdriveSignInBtn: NSButton!
@@ -320,6 +321,14 @@ class SettingsWindowController: NSWindowController, NSToolbarDelegate, NSWindowD
             name: UserDefaults.didChangeNotification,
             object: UserDefaults.standard
         )
+        #if !OFFLINE
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(uploadHistoryDidChange),
+            name: .uploadHistoryDidChange,
+            object: UploadHistoryStore.shared
+        )
+        #endif
     }
 
     required init?(coder: NSCoder) { fatalError() }
@@ -2473,7 +2482,20 @@ class SettingsWindowController: NSWindowController, NSToolbarDelegate, NSWindowD
         stack.setCustomSpacing(20, after: stack.arrangedSubviews.last!)
 
         // ── Upload History ──
-        stack.addArrangedSubview(sectionHeader(L("Upload History")))
+        let historyHeader = NSStackView()
+        historyHeader.orientation = .horizontal
+        historyHeader.alignment = .centerY
+        historyHeader.spacing = 8
+        let historyTitle = sectionHeader(L("Upload History"))
+        let historySpacer = NSView()
+        historySpacer.setContentHuggingPriority(.defaultLow, for: .horizontal)
+        let clearHistoryButton = NSButton(title: L("Clear History"), target: self, action: #selector(clearUploadHistory(_:)))
+        clearHistoryButton.bezelStyle = .rounded
+        clearHistoryButton.font = NSFont.systemFont(ofSize: 11)
+        historyHeader.addArrangedSubview(historyTitle)
+        historyHeader.addArrangedSubview(historySpacer)
+        historyHeader.addArrangedSubview(clearHistoryButton)
+        stack.addArrangedSubview(historyHeader)
         stack.setCustomSpacing(10, after: stack.arrangedSubviews.last!)
 
         // Placeholder for upload history rows
@@ -2682,6 +2704,10 @@ class SettingsWindowController: NSWindowController, NSToolbarDelegate, NSWindowD
         default: provider = "imgbb"
         }
         UserDefaults.standard.set(provider, forKey: "uploadProvider")
+        uploadHistoryVisibleLimit = 10
+        if currentTabID == "uploads" {
+            reloadUploadsTab()
+        }
     }
 
     @objc private func gdriveSignInTapped(_ sender: NSButton) {
@@ -2748,8 +2774,10 @@ class SettingsWindowController: NSWindowController, NSToolbarDelegate, NSWindowD
         guard let stack = uploadsStack else { return }
         stack.arrangedSubviews.forEach { stack.removeArrangedSubview($0); $0.removeFromSuperview() }
 
-        let uploads = ((UserDefaults.standard.array(forKey: "imgbbUploads") as? [[String: String]]) ?? [])
-            .reversed() as [[String: String]]
+        let currentProvider = UserDefaults.standard.string(forKey: "uploadProvider") ?? "imgbb"
+        let providerUploads = UploadHistoryStore.shared.entries()
+            .filter { $0.provider == currentProvider }
+        let uploads = providerUploads.suffix(uploadHistoryVisibleLimit).reversed()
 
         if uploads.isEmpty {
             let lbl = NSTextField(labelWithString: L("No uploads yet."))
@@ -2759,16 +2787,53 @@ class SettingsWindowController: NSWindowController, NSToolbarDelegate, NSWindowD
             lbl.translatesAutoresizingMaskIntoConstraints = false
             stack.addArrangedSubview(lbl)
         } else {
-            for (i, upload) in uploads.enumerated() {
-                let row = makeUploadRow(index: uploads.count - i,
-                                        link: upload["link"] ?? "",
-                                        deleteURL: upload["deleteURL"] ?? "")
+            let policy = NSTextField(labelWithString: String(
+                format: L("Showing %d of %d uploads."),
+                uploads.count,
+                providerUploads.count
+            ))
+            policy.font = NSFont.systemFont(ofSize: 11)
+            policy.textColor = .secondaryLabelColor
+            stack.addArrangedSubview(policy)
+            for upload in uploads {
+                let row = makeUploadRow(entry: upload)
                 stack.addArrangedSubview(row)
+            }
+            if uploads.count < providerUploads.count {
+                let more = NSButton(title: L("Show More"), target: self, action: #selector(showMoreUploadHistory(_:)))
+                more.bezelStyle = .rounded
+                more.font = NSFont.systemFont(ofSize: 11)
+                stack.addArrangedSubview(more)
             }
         }
     }
 
-    private func makeUploadRow(index: Int, link: String, deleteURL: String) -> NSView {
+    @objc private func showMoreUploadHistory(_ sender: NSButton) {
+        uploadHistoryVisibleLimit += 10
+        reloadUploadsTab()
+    }
+
+    @objc private func removeUploadHistoryEntry(_ sender: NSButton) {
+        guard let id = sender.identifier?.rawValue else { return }
+        UploadHistoryStore.shared.remove(id: id)
+        reloadUploadsTab()
+    }
+
+    @objc private func clearUploadHistory(_ sender: NSButton) {
+        let currentProvider = UserDefaults.standard.string(forKey: "uploadProvider") ?? "imgbb"
+        guard UploadHistoryStore.shared.entries().contains(where: { $0.provider == currentProvider }) else { return }
+        let alert = NSAlert()
+        alert.messageText = L("Clear Upload History?")
+        alert.informativeText = L("This only removes local upload records for this service.")
+        alert.alertStyle = .warning
+        alert.addButton(withTitle: L("Clear History"))
+        alert.addButton(withTitle: L("Cancel"))
+        guard alert.runModal() == .alertFirstButtonReturn else { return }
+        UploadHistoryStore.shared.removeAll(provider: currentProvider)
+        reloadUploadsTab()
+    }
+
+    private func makeUploadRow(entry: UploadHistoryEntry) -> NSView {
         let box = AppearanceAwareSettingsCardView(fillAlpha: 0.5, cornerRadius: 6, borderWidth: 0.5)
 
         let inner = NSStackView()
@@ -2786,8 +2851,28 @@ class SettingsWindowController: NSWindowController, NSToolbarDelegate, NSWindowD
             inner.bottomAnchor.constraint(equalTo: box.bottomAnchor),
         ])
 
-        inner.addArrangedSubview(urlRow(tag: "URL", value: link, copyKey: "link::\(link)"))
-        inner.addArrangedSubview(urlRow(tag: "DEL", value: deleteURL, copyKey: "link::\(deleteURL)"))
+        inner.addArrangedSubview(urlRow(tag: "URL", value: entry.link, copyKey: "link::\(entry.link)"))
+        if let deleteURL = entry.deleteURL, !deleteURL.isEmpty {
+            inner.addArrangedSubview(urlRow(tag: "DEL", value: deleteURL, copyKey: "link::\(deleteURL)"))
+        }
+
+        let footer = NSStackView()
+        footer.orientation = .horizontal
+        footer.alignment = .centerY
+        footer.spacing = 8
+        let provider = NSTextField(labelWithString: entry.provider.uppercased())
+        provider.font = NSFont.monospacedSystemFont(ofSize: 10, weight: .medium)
+        provider.textColor = .secondaryLabelColor
+        let spacer = NSView()
+        spacer.setContentHuggingPriority(.defaultLow, for: .horizontal)
+        let remove = NSButton(title: L("Remove"), target: self, action: #selector(removeUploadHistoryEntry(_:)))
+        remove.bezelStyle = .rounded
+        remove.font = NSFont.systemFont(ofSize: 11)
+        remove.identifier = NSUserInterfaceItemIdentifier(entry.id)
+        footer.addArrangedSubview(provider)
+        footer.addArrangedSubview(spacer)
+        footer.addArrangedSubview(remove)
+        inner.addArrangedSubview(footer)
 
         return box
     }
@@ -3187,7 +3272,7 @@ class SettingsWindowController: NSWindowController, NSToolbarDelegate, NSWindowD
             panel.beginSheetModal(for: window) { [weak self] response in
                 guard response == .OK, let self, let url = panel.url else { return }
                 do {
-                    try data.write(to: url, options: .atomic)
+                    try TransactionalOutput.writeFileScoped(data, to: url)
                 } catch {
                     self.showSettingsProfileError("Could not export configuration.")
                 }
@@ -3273,6 +3358,13 @@ class SettingsWindowController: NSWindowController, NSToolbarDelegate, NSWindowD
             self?.captureCurrentSettingsProfileIfNeeded()
         }
     }
+
+    #if !OFFLINE
+    @objc private func uploadHistoryDidChange(_ notification: Notification) {
+        guard currentTabID == "uploads" else { return }
+        reloadUploadsTab()
+    }
+    #endif
 
     private func captureCurrentSettingsProfileIfNeeded() {
         profileCaptureScheduled = false

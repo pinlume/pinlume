@@ -250,6 +250,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     private var delayEscMonitor: Any?
     #if !OFFLINE
     private var uploadToastController: UploadToastController?
+    private var uploadOverlaySession = UploadOverlaySession()
+    private weak var uploadOverlaySource: OverlayWindowController?
     #endif
     private var recordingEngine: RecordingEngine?
     private var recordingLifecycle = RecordingLifecycle()
@@ -1918,6 +1920,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     private func dismissOverlays(refocusPreviousApp: Bool = true, invalidateScreenTranslation: Bool = true) {
+        #if !OFFLINE
+        invalidateUploadOverlaySession()
+        #endif
         if invalidateScreenTranslation { screenTranslationState.cancel() }
         captureTimingTrace?.mark("dismissOverlays entered refocus=\(refocusPreviousApp)")
         autoreleasepool {
@@ -2135,12 +2140,16 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             guard let self = self, let controller = controller else { return }
             let image = controller.image
             let data = controller.annotationData
-            guard self.showUploadProgress(image: image) else { return }
-            ScreenshotHistory.shared.add(
+            _ = self.showUploadProgress(
                 image: image,
-                rawImage: data?.rawImage,
-                annotations: data?.annotations,
-                editState: data?.editState
+                onAccepted: {
+                    ScreenshotHistory.shared.add(
+                        image: image,
+                        rawImage: data?.rawImage,
+                        annotations: data?.annotations,
+                        editState: data?.editState
+                    )
+                }
             )
         }
         #endif
@@ -2361,8 +2370,16 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     // MARK: - Upload
 
     @discardableResult
-    func uploadImage(_ image: NSImage, presentingWindow: NSWindow? = nil) -> Bool {
-        showUploadProgress(image: image, presentingWindow: presentingWindow)
+    func uploadImage(
+        _ image: NSImage,
+        presentingWindow: NSWindow? = nil,
+        onAccepted: (() -> Void)? = nil
+    ) -> Bool {
+        showUploadProgress(
+            image: image,
+            presentingWindow: presentingWindow,
+            onAccepted: onAccepted
+        )
     }
     #endif
 
@@ -2530,21 +2547,75 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     #if !OFFLINE
-    private func releaseCompletedUploadOverlayIfNeeded(_ sourceOverlay: OverlayWindowController?) {
-        // A new screenshot session owns its own Overlay lifecycle. Never let a
-        // late upload completion close that newer interaction.
-        guard !isCapturing else { return }
-        sourceOverlay?.dismiss()
-        if !overlayControllers.isEmpty {
-            dismissOverlays(refocusPreviousApp: false)
+    private func invalidateUploadOverlaySession() {
+        uploadOverlaySession.invalidate()
+        uploadOverlaySource = nil
+    }
+
+    private func beginUploadOverlaySession(
+        _ sourceOverlay: OverlayWindowController
+    ) -> UploadOverlaySession.Token? {
+        guard overlayControllers.contains(where: { $0 === sourceOverlay }) else { return nil }
+        invalidateUploadOverlaySession()
+        let sessionToken = uploadOverlaySession.begin()
+        uploadOverlaySource = sourceOverlay
+        return sessionToken
+    }
+
+    private func acceptUploadSession(_ sessionToken: UploadOverlaySession.Token) -> Bool {
+        guard uploadOverlaySession.accept(sessionToken) else { return false }
+        for overlay in overlayControllers {
+            overlay.suspendForModalSave()
         }
+        return true
+    }
+
+    private func completeUploadSuccess(_ sessionToken: UploadOverlaySession.Token) -> Bool {
+        guard uploadOverlaySession.completeSuccess(sessionToken),
+              let sourceOverlay = uploadOverlaySource,
+              overlayControllers.contains(where: { $0 === sourceOverlay })
+        else { return false }
+        uploadOverlaySource = nil
+        return true
+    }
+
+    private func prepareUploadFailure(
+        _ sessionToken: UploadOverlaySession.Token,
+        message: String
+    ) -> Bool {
+        guard uploadOverlaySession.prepareFailure(sessionToken),
+              let sourceOverlay = uploadOverlaySource,
+              overlayControllers.contains(where: { $0 === sourceOverlay })
+        else { return false }
+        sourceOverlay.showUploadError(String(format: L("Upload failed: %@"), message))
+        for overlay in overlayControllers {
+            overlay.restoreAfterModalSave()
+        }
+        guard uploadOverlaySession.restoreAfterFailure(sessionToken) else { return false }
+        uploadOverlaySource = nil
+        return true
+    }
+
+    private func cancelUploadOverlaySession(_ sessionToken: UploadOverlaySession.Token) -> Bool {
+        guard uploadOverlaySession.cancel(sessionToken),
+              let sourceOverlay = uploadOverlaySource,
+              overlayControllers.contains(where: { $0 === sourceOverlay })
+        else { return false }
+        for overlay in overlayControllers {
+            overlay.restoreAfterModalSave()
+        }
+        uploadOverlaySource = nil
+        return true
     }
 
     private func showUploadProgress(
         image: NSImage,
         sourceOverlay: OverlayWindowController? = nil,
-        presentingWindow: NSWindow? = nil
+        presentingWindow: NSWindow? = nil,
+        onAccepted: (() -> Void)? = nil,
+        onSuccess: ((UploadGateway.Result) -> Void)? = nil
     ) -> Bool {
+        let providerAtStart = UserDefaults.standard.string(forKey: "uploadProvider") ?? "imgbb"
         var toast: UploadToastController?
         func makeToast() -> UploadToastController {
             if let toast { return toast }
@@ -2556,30 +2627,49 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             return newToast
         }
 
-        return UploadGateway.shared.upload(
+        let sessionToken = sourceOverlay.flatMap(beginUploadOverlaySession)
+        let accepted = UploadGateway.shared.upload(
             .image(image),
             presentingWindow: presentingWindow ?? sourceOverlay?.presentationWindow,
-            onStart: { makeToast().show(status: "Uploading...") },
+            onAccepted: onAccepted,
+            onCancelled: {
+                if let sessionToken { _ = self.cancelUploadOverlaySession(sessionToken) }
+            },
+            onStart: {
+                guard sessionToken.map({ self.acceptUploadSession($0) }) ?? true else { return }
+                makeToast().show(status: "Uploading...")
+            },
             onProgress: { makeToast().updateProgress($0) }
         ) { [weak self] result in
             guard let self else { return }
-            self.releaseCompletedUploadOverlayIfNeeded(sourceOverlay)
             let toast = makeToast()
             switch result {
             case .success(let result):
                 let pasteboard = NSPasteboard.general
                 pasteboard.clearContents()
                 pasteboard.setString(result.link, forType: .string)
-                if !result.deleteURL.isEmpty {
-                    var uploads = UserDefaults.standard.array(forKey: "imgbbUploads") as? [[String: String]] ?? []
-                    uploads.append(["deleteURL": result.deleteURL, "link": result.link])
-                    UserDefaults.standard.set(uploads, forKey: "imgbbUploads")
+                UploadHistoryStore.shared.append(
+                    provider: providerAtStart,
+                    link: result.link,
+                    deleteURL: result.deleteURL
+                )
+                if let sessionToken, self.completeUploadSuccess(sessionToken) {
+                    onSuccess?(result)
+                    self.dismissOverlays(refocusPreviousApp: false)
+                } else if sourceOverlay == nil {
+                    onSuccess?(result)
                 }
                 toast.showSuccess(link: result.link, deleteURL: result.deleteURL)
             case .failure(let error):
-                toast.showError(message: error.localizedDescription)
+                if let sessionToken,
+                   self.prepareUploadFailure(sessionToken, message: error.localizedDescription) {
+                    toast.dismiss()
+                } else {
+                    toast.showError(message: error.localizedDescription)
+                }
             }
         }
+        return accepted
     }
     #endif
 
@@ -3301,20 +3391,26 @@ extension AppDelegate: OverlayWindowControllerDelegate {
 
     func overlayDidRequestUpload(_ controller: OverlayWindowController, image: NSImage, annotationData: CaptureAnnotationData?) {
         #if !OFFLINE
-        guard showUploadProgress(image: image, sourceOverlay: controller) else { return }
-        playCopySound()
-        ScreenshotHistory.shared.add(
+        _ = showUploadProgress(
             image: image,
-            rawImage: annotationData?.rawImage,
-            annotations: annotationData?.annotations,
-            editState: annotationData?.editState
+            sourceOverlay: controller,
+            onSuccess: { [weak self] _ in
+                guard let self else { return }
+                self.playCopySound()
+                ScreenshotHistory.shared.add(
+                    image: image,
+                    rawImage: annotationData?.rawImage,
+                    annotations: annotationData?.annotations,
+                    editState: annotationData?.editState
+                )
+                let appToRefocus = self.previousApp
+                // Return focus — upload toast stays visible (hidesOnDeactivate=false).
+                if let app = appToRefocus, !app.isTerminated,
+                   app.bundleIdentifier != Bundle.main.bundleIdentifier {
+                    DispatchQueue.main.async { AppDelegate.activateApp(app) }
+                }
+            }
         )
-        let appToRefocus = previousApp
-        dismissOverlays(refocusPreviousApp: false)
-        // Return focus — upload toast stays visible (hidesOnDeactivate=false)
-        if let app = appToRefocus, !app.isTerminated, app.bundleIdentifier != Bundle.main.bundleIdentifier {
-            DispatchQueue.main.async { AppDelegate.activateApp(app) }
-        }
         #endif
     }
 
@@ -3753,7 +3849,7 @@ extension AppDelegate: OverlayWindowControllerDelegate {
         panel.begin { response in
             guard response == .OK, let dest = panel.url else { return }
             do {
-                try TransactionalOutput.transfer(tmpURL, to: dest)
+                try TransactionalOutput.transferFileScoped(tmpURL, to: dest)
                 NSWorkspace.shared.activateFileViewerSelecting([dest])
             } catch {
                 self.showOutputSaveFailure(error)
