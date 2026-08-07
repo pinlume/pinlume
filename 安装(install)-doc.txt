@@ -7,7 +7,7 @@ Pinlume 安装说明
 首次截图或录制时，请按系统提示授予“屏幕录制”权限。
 “翻译选中的文字”功能首次使用时，需要“辅助功能”权限。
 
-──────── 以上是中文说明 / Below is the English guide ────────
+──────── 以下是英文说明 / Above is the Chinese guide ────────
 
 Pinlume Installation Guide
 
