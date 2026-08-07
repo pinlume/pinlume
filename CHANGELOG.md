@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.0.9
+
+- Refresh the DMG installation experience with a compact guided layout, a bilingual plain-text install guide, and a clearer drag-to-Applications path.
+- Keep release metadata, signing verification, bundled license notices, and the published source version aligned for this release.
+
 ## 1.0.8
 
 - Make upload confirmation, selected-server reachability, selection release, and failure recovery follow one explicit lifecycle across imgbb, S3, and Google Drive.
