@@ -154,6 +154,7 @@ class OverlayWindowController {
     private var overlayWindow: OverlayWindow?
     private var shareDelegate: SharePickerDelegate?
     private var shareDismissTime: Date = .distantPast
+    private var shareOverlayWindowLevel: NSWindow.Level?
     private var screenTranslationRequestToken = 0
     private var captureSessionGeneration: UInt = 0
     private var operationGeneration: UInt = 0
@@ -1021,13 +1022,26 @@ extension OverlayWindowController: OverlayViewDelegate {
 
     func overlayViewDidRequestUpload() {
         #if !OFFLINE
-        guard var image = captureRegion() else { return }
-        let annotationData = currentAnnotationDataForHistory()
-        image = applyBeautifyIfNeeded(image) ?? image
-        // AppDelegate owns an explicit upload session. It hides this Overlay
-        // before confirmation, restores it on cancellation/failure, and only
-        // lets this session's own completion dismiss it.
-        overlayDelegate?.overlayDidRequestUpload(self, image: image, annotationData: annotationData)
+        let requestUpload = { [weak self] in
+            guard let self, self.overlayWindow?.isVisible == true,
+                  var image = self.captureRegion()
+            else { return }
+            let annotationData = self.currentAnnotationDataForHistory()
+            image = self.applyBeautifyIfNeeded(image) ?? image
+            // AppDelegate owns an explicit upload session. It restores this
+            // editable Overlay on cancellation/failure and dismisses it only
+            // after this session's own successful completion.
+            self.overlayDelegate?.overlayDidRequestUpload(
+                self, image: image, annotationData: annotationData)
+        }
+        if endSharePickerPresentationForNewOverlayAction() {
+            // The Share picker closes at the end of the current event. Defer
+            // the modal confirmation one run-loop turn so it cannot be hidden
+            // behind that system-owned picker.
+            DispatchQueue.main.async(execute: requestUpload)
+        } else {
+            requestUpload()
+        }
         #endif
     }
 
@@ -1059,23 +1073,21 @@ extension OverlayWindowController: OverlayViewDelegate {
         // Temporarily lower the overlay so the system share picker popover appears on top.
         // NSSharingServicePicker creates its own window at a standard level that we can't control.
         let savedLevel = overlayWindow?.level ?? NSWindow.Level(257)
+        shareOverlayWindowLevel = savedLevel
         overlayWindow?.level = .floating
 
         let picker = NSSharingServicePicker(items: [tempURL])
         let delegate = SharePickerDelegate(
             onPick: { [weak self] in
                 guard let self = self else { return }
-                self.overlayWindow?.level = savedLevel
-                self.shareDelegate = nil
+                self.finishSharePickerPresentation()
                 self.playCopySound()
                 let img = image
                 self.dismiss()
                 self.overlayDelegate?.overlayDidConfirm(self, capturedImage: img, annotationData: annotationData)
             },
             onDismiss: { [weak self] in
-                self?.overlayWindow?.level = savedLevel
-                self?.shareDelegate = nil
-                self?.shareDismissTime = Date()
+                self?.finishSharePickerPresentation()
             }
         )
         shareDelegate = delegate
@@ -1088,6 +1100,24 @@ extension OverlayWindowController: OverlayViewDelegate {
             let center = NSRect(x: view.bounds.midX - 1, y: view.bounds.midY - 1, width: 2, height: 2)
             picker.show(relativeTo: center, of: view, preferredEdge: .minY)
         }
+    }
+
+    /// NSSharingServicePicker owns its popover and closes it after the current
+    /// click. Restore our own level first so another modal action is never
+    /// presented beneath the picker.
+    private func endSharePickerPresentationForNewOverlayAction() -> Bool {
+        guard shareDelegate != nil else { return false }
+        finishSharePickerPresentation()
+        return true
+    }
+
+    private func finishSharePickerPresentation() {
+        if let shareOverlayWindowLevel {
+            overlayWindow?.level = shareOverlayWindowLevel
+        }
+        shareOverlayWindowLevel = nil
+        shareDelegate = nil
+        shareDismissTime = Date()
     }
 
     func overlayViewDidRequestEnterRecordingMode() {

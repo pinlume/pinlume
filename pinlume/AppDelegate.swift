@@ -412,7 +412,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             guard let self = self else { return }
             if granted {
                 self.prewarmCapturePath()
-                SelectedTextTranslationPreference.requestInitialAccessibilityPermissionIfNeeded()
             } else {
                 self.showOnboarding()
             }
@@ -449,7 +448,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         oc.onPermissionGranted = { [weak self] in
             self?.onboardingController = nil
             self?.prewarmCapturePath()
-            SelectedTextTranslationPreference.requestInitialAccessibilityPermissionIfNeeded()
             self?.scheduleIdleUIWarmup()
         }
         onboardingController = oc

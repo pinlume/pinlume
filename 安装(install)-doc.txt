@@ -1,0 +1,19 @@
+Pinlume 安装说明
+
+1. 将 Pinlume.app 拖动到 Applications（应用程序）文件夹。
+2. 在“应用程序”中打开 Pinlume。
+3. 若 macOS 阻止打开: 点击“完成”并前往“系统设置 → 隐私与安全性”，点击 Pinlume 旁的“仍要打开”，然后输入密码，确认“打开”。
+
+首次截图或录制时，请按系统提示授予“屏幕录制”权限。
+“翻译选中的文字”功能首次使用时，需要“辅助功能”权限。
+
+──────── 以上是中文说明 / Below is the English guide ────────
+
+Pinlume Installation Guide
+
+1. Drag Pinlume.app to the Applications folder.
+2. Open Pinlume from Applications.
+3. If macOS blocks the app, go to System Settings → Privacy & Security, click Open Anyway next to Pinlume, then confirm Open.
+
+When you first capture or record, approve the Screen Recording permission when macOS asks.
+Translate Selected Text needs Accessibility permission only when you use that feature.

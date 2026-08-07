@@ -53,99 +53,6 @@ private final class AppearanceAwareSettingsCardView: NSView {
     }
 }
 
-/// A compact permission prompt with the app icon centered above its content.
-/// NSAlert fixes the icon at the leading edge, which makes this explanatory
-/// prompt visually inconsistent with Pinlume's centered onboarding artwork.
-private final class CenteredAccessibilityPermissionAlert: NSObject {
-    private let panel: NSPanel
-    private var result: NSApplication.ModalResponse = .cancel
-
-    init(parentWindow: NSWindow?) {
-        let contentSize = NSSize(width: 392, height: 270)
-        panel = NSPanel(
-            contentRect: NSRect(origin: .zero, size: contentSize),
-            styleMask: [.borderless, .nonactivatingPanel],
-            backing: .buffered,
-            defer: false
-        )
-        super.init()
-
-        panel.isOpaque = false
-        panel.backgroundColor = .windowBackgroundColor
-        panel.hasShadow = true
-        panel.level = .modalPanel
-        panel.titlebarAppearsTransparent = true
-        panel.isReleasedWhenClosed = false
-        panel.contentView?.wantsLayer = true
-        panel.contentView?.layer?.cornerRadius = 14
-        panel.contentView?.layer?.masksToBounds = true
-
-        if let parentWindow {
-            panel.setFrameOrigin(NSPoint(
-                x: parentWindow.frame.midX - contentSize.width / 2,
-                y: parentWindow.frame.midY - contentSize.height / 2
-            ))
-        } else {
-            panel.center()
-        }
-
-        guard let contentView = panel.contentView else { return }
-
-        let icon = NSImageView(frame: NSRect(x: 164, y: 178, width: 64, height: 64))
-        icon.image = NSImage(named: "AppIcon")
-        icon.imageScaling = .scaleProportionallyUpOrDown
-        contentView.addSubview(icon)
-
-        let title = NSTextField(labelWithString: L("Accessibility Access Required"))
-        title.font = .systemFont(ofSize: 17, weight: .semibold)
-        title.alignment = .center
-        title.frame = NSRect(x: 24, y: 140, width: 344, height: 24)
-        contentView.addSubview(title)
-
-        let message = NSTextField(wrappingLabelWithString: L(
-            "Pinlume needs Accessibility permission to translate selected text. Open System Settings to grant access. If Pinlume is not listed, click the + button and choose Pinlume."
-        ))
-        message.font = .systemFont(ofSize: 13)
-        message.textColor = .secondaryLabelColor
-        message.alignment = .center
-        message.maximumNumberOfLines = 3
-        message.frame = NSRect(x: 28, y: 76, width: 336, height: 54)
-        contentView.addSubview(message)
-
-        let cancel = NSButton(title: L("Cancel"), target: self, action: #selector(cancelClicked))
-        cancel.bezelStyle = .rounded
-        cancel.frame = NSRect(x: 94, y: 24, width: 94, height: 32)
-        cancel.keyEquivalent = "\u{1b}"
-        contentView.addSubview(cancel)
-
-        let open = NSButton(title: L("Open Settings"), target: self, action: #selector(openClicked))
-        open.bezelStyle = .rounded
-        open.frame = NSRect(x: 204, y: 24, width: 94, height: 32)
-        open.keyEquivalent = "\r"
-        contentView.addSubview(open)
-    }
-
-    func runModal() -> Bool {
-        panel.makeKeyAndOrderFront(nil)
-        NSApp.activate(ignoringOtherApps: true)
-        return NSApp.runModal(for: panel) == .OK
-    }
-
-    @objc private func openClicked() {
-        result = .OK
-        close()
-    }
-
-    @objc private func cancelClicked() {
-        close()
-    }
-
-    private func close() {
-        NSApp.stopModal(withCode: result)
-        panel.orderOut(nil)
-    }
-}
-
 class SettingsWindowController: NSWindowController, NSToolbarDelegate, NSWindowDelegate {
 
     // MARK: - Toolbar tab definitions
@@ -4061,7 +3968,15 @@ class SettingsWindowController: NSWindowController, NSToolbarDelegate, NSWindowD
             sender.state = .off
             SelectedTextReader.requestAccessibilityPermission()
 
-            if CenteredAccessibilityPermissionAlert(parentWindow: window).runModal(),
+            let alert = NSAlert()
+            alert.messageText = L("Accessibility Access Required")
+            alert.informativeText = L(
+                "Pinlume needs Accessibility permission to translate selected text. Open System Settings to grant access. If Pinlume is not listed, click the + button and choose Pinlume."
+            )
+            alert.alertStyle = .warning
+            alert.addButton(withTitle: L("Open Settings"))
+            alert.addButton(withTitle: L("Cancel"))
+            if alert.runModal() == .alertFirstButtonReturn,
                let url = URL(string: "x-apple.systempreferences:com.apple.preference.security?Privacy_Accessibility") {
                 NSWorkspace.shared.open(url)
             } else {

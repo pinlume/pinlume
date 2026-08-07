@@ -41,16 +41,6 @@ enum SelectedTextTranslationPreference {
             isAuthorized: SelectedTextReader.hasAccessibilityPermission)
     }
 
-    static func requestInitialAccessibilityPermissionIfNeeded() {
-        var state = loadState()
-        let action = state.beginInitialRequest(
-            isAuthorized: SelectedTextReader.hasAccessibilityPermission)
-        saveState(state)
-        if action == .requestSystemPermission {
-            SelectedTextReader.requestAccessibilityPermission()
-        }
-    }
-
     static func reconcilePermission() {
         var state = loadState()
         state.reconcile(isAuthorized: SelectedTextReader.hasAccessibilityPermission)
