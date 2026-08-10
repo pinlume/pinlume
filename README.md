@@ -21,6 +21,10 @@
 
 Pinlume is a small, fast, native macOS tool for high-frequency desktop work. It lives in the menu bar, yet covers the whole path from capture and pinning to annotation, OCR, translation, and recording. No web wrapper, no broken flow, and no upload to Pinlume's own servers.
 
+## Where Pinlume fits
+
+Pinlume is an independent native macOS app. If you use Snipaste for fast on-screen pinning or MacShot for broader screenshot and recording workflows, Pinlume brings capture, pinning, annotation, OCR, translation, and recording into one local-first tool. Pinlume is not affiliated with either product.
+
 - **Capture, annotate, and pin in one flow** — window snapping, quick copy, on-screen pins, thumbnails, and re-editing all stay on your screen.
 - **Long captures and recordings without leaving your desktop** — stitch scrolling content into a long image; record an area or the full screen to MP4/GIF, then trim and export.
 - **Serious annotation that stays lightweight** — arrows, text, drawing, shapes, numbering, stamps, pixelation, blur, loupe, and measurement in one canvas.
@@ -164,6 +168,10 @@ Pinlume collects no telemetry, analytics, or crash reports by default. Captures,
 ## Requirements
 
 macOS 12.3 (Monterey) or later. Some OCR, translation, and visual features depend on the macOS version and system frameworks available on your Mac.
+
+## License
+
+Pinlume is licensed under the [GNU GPLv3](LICENSE).
 
 ## Contributing
 
