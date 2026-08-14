@@ -13,6 +13,7 @@ final class TranslationSessionCoordinator {
     typealias Translator = @MainActor (
         _ texts: [String],
         _ sourceLanguage: String?,
+        _ sourceLanguageIsExplicitlySelected: Bool,
         _ targetLanguage: String,
         _ progress: @escaping @MainActor (Int, String) -> Void,
         _ completion: @escaping @MainActor (Result<[String], Error>) -> Void
@@ -22,6 +23,7 @@ final class TranslationSessionCoordinator {
         let input: String
         let segments: [TranslationSegment]
         let sourceLanguage: String?
+        let sourceLanguageIsExplicitlySelected: Bool
         let segmentSourceLanguage: String?
         let targetLanguage: String
     }
@@ -95,6 +97,7 @@ final class TranslationSessionCoordinator {
             input: input,
             segments: segments,
             sourceLanguage: resolvedSource,
+            sourceLanguageIsExplicitlySelected: !automatic,
             segmentSourceLanguage: automatic && direction == .mixedToSimplifiedChinese
                 ? "en" : resolvedSource,
             targetLanguage: target)
@@ -119,6 +122,7 @@ final class TranslationSessionCoordinator {
         let handle = translator(
             translatableIndices.map { plan.segments[$0].requestText },
             plan.segmentSourceLanguage,
+            plan.sourceLanguageIsExplicitlySelected,
             plan.targetLanguage,
             { [weak self] providerIndex, value in
                 guard let self,

@@ -627,6 +627,7 @@ enum SettingsProfileSchema {
         double("censorStrength", default: 6, range: 1...10)
         double("censorBrushWidth", default: 12, range: 1...500)
         strings("enabledRedactTypes", maximumCount: 32, unique: true, maximumLength: 64)
+        bool("redactTypesSelectionInitialized")
         integer("numberFormat", range: 0...3)
         integer("numberStartAt", default: 1, range: 0...9_999)
         bool("measureInPoints")

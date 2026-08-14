@@ -1,3 +1,4 @@
+@preconcurrency import AppKit
 import Foundation
 import NaturalLanguage
 
@@ -25,6 +26,14 @@ enum TranslationTextProcessor {
             (0x3040...0x30FF).contains($0.value)
         }
         if containsKana { return "ja" }
+
+        // NLLanguageRecognizer can let an ambiguous leading token dominate a
+        // short English phrase. For example, it classifies “medium screenshot
+        // tool” as Turkish on the current system. Prefer English when the
+        // whole ASCII phrase is recognised by the system English dictionary;
+        // otherwise keep normal language auto-detection for French, Turkish,
+        // and other Latin-script input.
+        if shouldPreferEnglish(for: text) { return "en" }
 
         // Latin product names can dominate a short CJK phrase (for example,
         // "東京都 Apple Store").  Recognize the CJK portion separately before
@@ -347,6 +356,51 @@ enum TranslationTextProcessor {
 
     private static func isASCIILetter(_ value: UInt32) -> Bool {
         (65...90).contains(value) || (97...122).contains(value)
+    }
+
+    private static func shouldPreferEnglish(for text: String) -> Bool {
+        guard text.unicodeScalars.allSatisfy({ scalar in
+            isASCIILetter(scalar.value)
+                || (48...57).contains(scalar.value)
+                || CharacterSet.whitespacesAndNewlines.contains(scalar)
+                || CharacterSet.punctuationCharacters.contains(scalar)
+        }) else {
+            return false
+        }
+
+        let words = text.components(separatedBy: CharacterSet.letters.inverted)
+            .filter { !$0.isEmpty }
+        let checker = NSSpellChecker.shared
+        guard !words.isEmpty,
+              let englishLanguage = checker.availableLanguages.first(where: {
+                  $0.hasPrefix("en")
+              })
+        else {
+            return false
+        }
+
+        let recognizedCount = words.reduce(into: 0) { count, word in
+            let misspelledRange = checker.checkSpelling(
+                of: word,
+                startingAt: 0,
+                language: englishLanguage,
+                wrap: false,
+                inSpellDocumentWithTag: 0,
+                wordCount: nil)
+            if misspelledRange.location == NSNotFound {
+                count += 1
+            }
+        }
+        if recognizedCount == words.count { return true }
+
+        let coverage = Double(recognizedCount) / Double(words.count)
+        let englishAnchorWords: Set<String> = [
+            "a", "an", "and", "are", "as", "at", "be", "by", "for", "from",
+            "has", "have", "in", "is", "it", "of", "on", "or", "that", "the",
+            "this", "to", "was", "with", "you"
+        ]
+        return coverage >= 0.60
+            && words.contains { englishAnchorWords.contains($0.lowercased()) }
     }
 
     private static func isHan(_ value: UInt32) -> Bool {

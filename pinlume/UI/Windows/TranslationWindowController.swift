@@ -42,10 +42,11 @@ final class TranslationWindowController: NSObject, NSWindowDelegate, NSTextViewD
     }
 
     override init() {
-        coordinator = TranslationSessionCoordinator { texts, source, target, progress, completion in
+        coordinator = TranslationSessionCoordinator { texts, source, isExplicitSource, target, progress, completion in
             TranslationService.translateBatch(
                 texts: texts,
                 sourceLang: source,
+                sourceLanguageIsExplicitlySelected: isExplicitSource,
                 targetLang: target,
                 progress: progress,
                 completion: completion)

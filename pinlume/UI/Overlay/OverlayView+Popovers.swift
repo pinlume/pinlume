@@ -46,19 +46,24 @@ extension OverlayView {
         if PopoverHelper.toggleClosedIfOpen() { return }
         let types = AutoRedactor.redactTypeNames
         let picker = ListPickerView()
+        var selectedTypes = AutoRedactTypePreferences.selectedTypes()
         picker.items = types.map { item in
             .init(
                 title: item.label,
-                isSelected: UserDefaults.standard.object(forKey: item.key) as? Bool ?? true)
+                isSelected: selectedTypes.contains(item.key))
         }
         picker.onSelect = { [weak self] idx in
             let key = types[idx].key
-            let current = UserDefaults.standard.object(forKey: key) as? Bool ?? true
-            UserDefaults.standard.set(!current, forKey: key)
+            if selectedTypes.contains(key) {
+                selectedTypes.remove(key)
+            } else {
+                selectedTypes.insert(key)
+            }
+            AutoRedactTypePreferences.store(selectedTypes)
             picker.items = types.map { item in
                 .init(
                     title: item.label,
-                    isSelected: UserDefaults.standard.object(forKey: item.key) as? Bool ?? true)
+                    isSelected: selectedTypes.contains(item.key))
             }
             self?.needsDisplay = true
         }

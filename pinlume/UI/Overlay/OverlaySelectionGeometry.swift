@@ -160,6 +160,30 @@ enum OverlaySelectionGeometry {
         return clampedSelectionRect(expanded, overlayBounds: overlayBounds)
     }
 
+    /// Shrinks the nearest edge of a completed selection to an interior click.
+    /// Equal distances deliberately resolve in left, right, bottom, top order.
+    static func commandClickTrimmedSelectionRect(_ rect: CGRect, at point: CGPoint) -> CGRect {
+        let rect = rect.standardized
+        let distances: [(edge: Int, value: CGFloat)] = [
+            (0, point.x - rect.minX),
+            (1, rect.maxX - point.x),
+            (2, point.y - rect.minY),
+            (3, rect.maxY - point.y),
+        ]
+        guard let nearest = distances.min(by: { $0.value < $1.value })?.edge else { return rect }
+
+        switch nearest {
+        case 0:
+            return CGRect(x: point.x, y: rect.minY, width: rect.maxX - point.x, height: rect.height)
+        case 1:
+            return CGRect(x: rect.minX, y: rect.minY, width: point.x - rect.minX, height: rect.height)
+        case 2:
+            return CGRect(x: rect.minX, y: point.y, width: rect.width, height: rect.maxY - point.y)
+        default:
+            return CGRect(x: rect.minX, y: rect.minY, width: rect.width, height: point.y - rect.minY)
+        }
+    }
+
     static func doubleClickAction(
         clickCount: Int,
         isInsideSelection: Bool,

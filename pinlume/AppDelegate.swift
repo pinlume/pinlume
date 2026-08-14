@@ -4077,6 +4077,12 @@ extension AppDelegate: OverlayWindowControllerDelegate {
         }
     }
 
+    func overlayDidFinishSelection(_ controller: OverlayWindowController) {
+        for other in overlayControllers where other !== controller {
+            other.suspendAfterSelectionOnAnotherScreen()
+        }
+    }
+
     func overlayDidChangeSelection(_ controller: OverlayWindowController, globalRect: NSRect) {
         for other in overlayControllers where other !== controller {
             other.setRemoteSelection(.zero)

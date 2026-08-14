@@ -106,6 +106,7 @@ enum TranslationService {
     static func translateBatch(
         texts: [String],
         sourceLang: String? = nil,
+        sourceLanguageIsExplicitlySelected: Bool = false,
         targetLang: String,
         progress: ((Int, String) -> Void)? = nil,
         completion: @escaping (Result<[String], Error>) -> Void
@@ -123,6 +124,7 @@ enum TranslationService {
         case .google:
             return translateBatchGoogle(
                 texts: texts,
+                sourceLang: sourceLanguageIsExplicitlySelected ? sourceLang : nil,
                 targetLang: targetLang,
                 progress: progress,
                 completion: finish)
@@ -150,6 +152,7 @@ enum TranslationService {
 
     private static func translateBatchGoogle(
         texts: [String],
+        sourceLang: String?,
         targetLang: String,
         progress: ((Int, String) -> Void)?,
         completion: @escaping (Result<[String], Error>) -> Void
@@ -163,6 +166,7 @@ enum TranslationService {
         }
         let operation = GoogleBatchOperation(
             texts: texts,
+            sourceLanguage: sourceLang,
             targetLanguage: targetLang,
             progress: progress,
             completion: completion)
@@ -174,15 +178,21 @@ enum TranslationService {
     /// Builds the Google request only after the privacy preference has been checked.
     /// Keeping this seam separate lets callers prove that disabled mode cannot create
     /// a URL containing user text and leaves room for future provider transports.
-    static func makeGoogleRequest(text: String, targetLang: String) throws -> URLRequest {
+    static func makeGoogleRequest(
+        text: String,
+        sourceLang: String? = nil,
+        targetLang: String
+    ) throws -> URLRequest {
         guard googleTranslationAllowed else {
             throw TranslationError.googleTranslationDisabled
         }
 
         var components = URLComponents(string: "https://translate.googleapis.com/translate_a/single")!
+        let source = sourceLang?.trimmingCharacters(in: .whitespacesAndNewlines)
+        let googleSourceLanguage = (source?.isEmpty == false && source != "auto") ? source! : "auto"
         components.queryItems = [
             URLQueryItem(name: "client", value: "gtx"),
-            URLQueryItem(name: "sl",     value: "auto"),
+            URLQueryItem(name: "sl",     value: googleSourceLanguage),
             URLQueryItem(name: "tl",     value: targetLang),
             URLQueryItem(name: "dt",     value: "t"),
             URLQueryItem(name: "q",      value: text),
@@ -346,6 +356,7 @@ enum TranslationService {
 
 private final class GoogleBatchOperation: @unchecked Sendable {
     private let texts: [String]
+    private let sourceLanguage: String?
     private let targetLanguage: String
     private let progress: ((Int, String) -> Void)?
     private let completion: (Result<[String], Error>) -> Void
@@ -359,11 +370,13 @@ private final class GoogleBatchOperation: @unchecked Sendable {
 
     init(
         texts: [String],
+        sourceLanguage: String?,
         targetLanguage: String,
         progress: ((Int, String) -> Void)?,
         completion: @escaping (Result<[String], Error>) -> Void
     ) {
         self.texts = texts
+        self.sourceLanguage = sourceLanguage
         self.targetLanguage = targetLanguage
         self.progress = progress
         self.completion = completion
@@ -413,7 +426,8 @@ private final class GoogleBatchOperation: @unchecked Sendable {
 
         let request: URLRequest
         do {
-            request = try TranslationService.makeGoogleRequest(text: text, targetLang: targetLanguage)
+            request = try TranslationService.makeGoogleRequest(
+                text: text, sourceLang: sourceLanguage, targetLang: targetLanguage)
             guard (request.url?.absoluteString.utf8.count ?? Int.max)
                     <= TranslationService.googleMaximumEncodedRequestBytes else {
                 finish(.failure(TranslationError.googleTextTooLong))

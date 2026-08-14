@@ -1909,6 +1909,10 @@ class OverlayView: NSView {
         }
 
         if currentTool == .select && pointIsInSelection(point) {
+            if isCommandHeldForSelectionTrim {
+                setSelectionCrosshair(at: point)
+                return
+            }
             setMoveCursor(at: point)
             return
         }
@@ -6063,6 +6067,11 @@ class OverlayView: NSView {
                 }
             }
 
+            if shouldTrimSelectionWithCommandClick(at: point, modifiers: event.modifierFlags) {
+                trimSelectionToNearestEdge(at: point)
+                return
+            }
+
             if currentTool == .select && pointIsInSelection(point) {
                 let canvasPoint = viewToCanvas(point)
                 if startAnnotation(at: canvasPoint) { return }
@@ -7055,9 +7064,38 @@ class OverlayView: NSView {
             toInclude: point,
             overlayBounds: bounds
         )
-        guard !expanded.isEmpty, expanded != selectionRect else { return }
+        applyCommittedSelectionGeometryChange(expanded)
+    }
+
+    private var isCommandHeldForSelectionTrim: Bool {
+        let modifiers = NSApp.currentEvent?.modifierFlags.intersection(.deviceIndependentFlagsMask) ?? []
+        return captureWorkflowMode == .standard
+            && !isEditorMode
+            && currentTool == .select
+            && modifiers == .command
+    }
+
+    private func shouldTrimSelectionWithCommandClick(
+        at point: NSPoint,
+        modifiers: NSEvent.ModifierFlags
+    ) -> Bool {
+        captureWorkflowMode == .standard
+            && !isEditorMode
+            && currentTool == .select
+            && pointIsInSelection(point)
+            && modifiers.intersection(.deviceIndependentFlagsMask) == .command
+    }
+
+    private func trimSelectionToNearestEdge(at point: NSPoint) {
+        applyCommittedSelectionGeometryChange(
+            OverlaySelectionGeometry.commandClickTrimmedSelectionRect(selectionRect, at: point)
+        )
+    }
+
+    private func applyCommittedSelectionGeometryChange(_ rect: NSRect) {
+        guard !rect.isEmpty, rect != selectionRect else { return }
         selectionUndoHistory.append(selectionRect)
-        selectionRect = expanded
+        selectionRect = rect
         selectionIsWindowSnap = false
         snappedWindowID = nil
         snappedWindowImage = nil
@@ -9162,6 +9200,7 @@ class OverlayView: NSView {
             needsDisplay = true
         }
         pixelInspectorShiftWasDown = shiftDown
+        updateCursorForCurrentTool()
     }
 
     /// Called by the Character Palette when the user selects an emoji.

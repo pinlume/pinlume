@@ -264,8 +264,8 @@ enum AutoRedactor {
         }
 
         // Pass 1: regex matching
-        let enabledTypes = UserDefaults.standard.array(forKey: "enabledRedactTypes") as? [String]
-        let activePatterns = sensitivePatterns.filter { enabledTypes == nil || enabledTypes!.contains($0.name) }
+        let enabledTypes = AutoRedactTypePreferences.selectedTypes()
+        let activePatterns = sensitivePatterns.filter { enabledTypes.contains($0.name) }
 
         for (i, obs) in observations.enumerated() {
             guard let candidate = obs.topCandidates(1).first else { continue }

@@ -9,6 +9,12 @@ struct ImageUploadResult {
 enum ImageUploader {
 
     private static let defaultAPIKey = "c2c63d156c6baa11136a464dcd22a404"
+    private static let uploadSession: URLSession = {
+        let configuration = URLSessionConfiguration.ephemeral
+        configuration.timeoutIntervalForRequest = 25
+        configuration.timeoutIntervalForResource = 30
+        return URLSession(configuration: configuration)
+    }()
 
     static var apiKey: String {
         if let custom = UserDefaults.standard.string(forKey: "imgbbAPIKey"), !custom.isEmpty {
@@ -49,7 +55,7 @@ enum ImageUploader {
 
         request.httpBody = body
 
-        URLSession.shared.dataTask(with: request) { data, response, error in
+        uploadSession.dataTask(with: request) { data, response, error in
             if let error = error {
                 DispatchQueue.main.async { completion(.failure(error)) }
                 return

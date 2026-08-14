@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.0.10
+
+- Add Command-click selection-edge trimming and a matching cursor state for faster precise captures.
+- Keep a completed multi-display selection on its active screen, so accidental clicks on another display do not discard annotations.
+- Improve automatic translation source handling for short English text and preserve the distinction between automatic and manually chosen Google source languages.
+- Restore automatic sensitive-data redaction by making its type picker and detector share one persistent selection.
+
 ## 1.0.9
 
 - Refresh the DMG installation experience with a compact guided layout, a bilingual plain-text install guide, and a clearer drag-to-Applications path.

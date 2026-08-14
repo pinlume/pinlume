@@ -93,6 +93,7 @@ protocol OverlayWindowControllerDelegate: AnyObject {
     func overlayDidRequestInputMonitoringPermission(_ controller: OverlayWindowController)
     func overlayDidRequestPointerFocus(_ controller: OverlayWindowController)
     func overlayDidBeginSelection(_ controller: OverlayWindowController)
+    func overlayDidFinishSelection(_ controller: OverlayWindowController)
     func overlayDidChangeSelection(_ controller: OverlayWindowController, globalRect: NSRect)
     func overlayDidRemoteResizeSelection(_ controller: OverlayWindowController, globalRect: NSRect)
     func overlayDidFinishRemoteResize(_ controller: OverlayWindowController, globalRect: NSRect)
@@ -134,6 +135,7 @@ extension OverlayWindowControllerDelegate {
     func overlayDidRequestPointerFocus(_ controller: OverlayWindowController) {}
     func overlayDidBeginModalSave(_ controller: OverlayWindowController) {}
     func overlayDidEndModalSave(_ controller: OverlayWindowController, restoreOverlays: Bool) {}
+    func overlayDidFinishSelection(_ controller: OverlayWindowController) {}
 }
 
 /// Manages one fullscreen overlay per screen.
@@ -446,6 +448,14 @@ class OverlayWindowController {
 
     func clearSelection() {
         overlayView?.clearSelection()
+    }
+
+    /// Once another screen owns a completed selection, this panel must no
+    /// longer intercept accidental clicks. A new capture session will show it
+    /// again through `showOverlay()`.
+    func suspendAfterSelectionOnAnotherScreen() {
+        overlayWindow?.ignoresMouseEvents = true
+        overlayWindow?.orderOut(nil)
     }
 
     func triggerRedraw() {
@@ -788,7 +798,10 @@ class OverlayWindowController {
 
 extension OverlayWindowController: OverlayViewDelegate {
     func overlayViewDidFinishSelection(_ rect: NSRect) {
-        // No-op: window is already key (.nonactivatingPanel + makeKeyAndOrderFront).
+        // The selected screen remains interactive for annotation. Release the
+        // other display overlays only after mouse-up so an in-progress
+        // cross-screen resize is never interrupted.
+        overlayDelegate?.overlayDidFinishSelection(self)
     }
 
     func overlayViewSelectionDidChange(_ rect: NSRect) {
