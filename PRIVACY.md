@@ -53,7 +53,7 @@ All third-party network features are opt-in. Their handling of data is governed 
 
 ## Updates
 
-Current beta builds do not check for or download updates automatically. New versions, if any, must be downloaded manually from the GitHub Releases page. If automatic updates are introduced in a future release, this policy will be updated before that feature is enabled.
+Current beta builds do not check for or download updates automatically. New versions, if any, must be downloaded manually from the [official Pinlume download](https://download.pinlume.cn/Pinlume.dmg). If automatic updates are introduced in a future release, this policy will be updated before that feature is enabled.
 
 ## Permissions
 

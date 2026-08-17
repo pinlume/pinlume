@@ -2,7 +2,7 @@
 
 此 DMG 是面向体验的 Universal 2（Apple Silicon + Intel）Beta 构建。维护者目前没有 Apple Developer Program，因此它使用本地 Beta 签名，**未经过 Apple 公证**，也不提供自动更新。首次启动时 macOS 的安全提示属于预期行为。
 
-请只从 [Pinlume 的 GitHub Releases](https://github.com/pinlume/pinlume/releases) 下载 Beta 包；新版本需要手动下载并替换旧 App。
+请从 [Pinlume 官网](https://pinlume.cn) 或 [官方下载地址](https://download.pinlume.cn/Pinlume.dmg) 下载 Beta 包；新版本需要手动下载并替换旧 App。
 
 ## 安装与首次打开
 
@@ -10,7 +10,7 @@
 2. 在“应用程序”中双击启动。如果 macOS 提示无法验证开发者，先关闭提示。
 3. 打开“系统设置 → 隐私与安全性”，滚动到页面底部，在 Pinlume 的提示旁点击“仍要打开（Open Anyway）”，然后在确认框中点击“打开”。
 
-也可以在“应用程序”中按住 Control 点按 `Pinlume.app`，选择“打开”，再在确认框中选择“打开”。只有你确认下载来源是上述 GitHub 仓库时才这样操作。
+也可以在“应用程序”中按住 Control 点按 `Pinlume.app`，选择“打开”，再在确认框中选择“打开”。只有你确认下载来源是上述官网或官方下载地址时才这样操作。
 
 ## 所需权限
 
@@ -26,7 +26,7 @@
 
 This DMG is a Universal 2 (Apple Silicon + Intel) beta build. The maintainer is not enrolled in the Apple Developer Program, so it uses a local beta signature, is **not notarized by Apple**, and does not include automatic updates. A macOS security prompt on first launch is expected.
 
-Download beta builds only from [Pinlume GitHub Releases](https://github.com/pinlume/pinlume/releases). Download new versions manually and replace the old app.
+Download beta builds from the [Pinlume website](https://pinlume.cn) or the [official download](https://download.pinlume.cn/Pinlume.dmg). Download new versions manually and replace the old app.
 
 ## Install and open for the first time
 
@@ -34,7 +34,7 @@ Download beta builds only from [Pinlume GitHub Releases](https://github.com/pinl
 2. Launch it from Applications. If macOS says the developer cannot be verified, dismiss that message first.
 3. Open **System Settings → Privacy & Security**, scroll to the bottom, click **Open Anyway** beside Pinlume, then confirm with **Open**.
 
-Alternatively, Control-click `Pinlume.app` in Applications, choose **Open**, then confirm. Only do this after confirming that the download came from the GitHub repository above.
+Alternatively, Control-click `Pinlume.app` in Applications, choose **Open**, then confirm. Only do this after confirming that the download came from the official website or download link above.
 
 ## Permissions
 

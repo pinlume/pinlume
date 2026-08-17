@@ -8,7 +8,7 @@
 </p>
 
 <p align="center">
-  <a href="./README.zh-CN.md">简体中文</a> · <a href="https://github.com/pinlume/pinlume/releases">Download Beta</a> · <a href="./CHANGELOG.md">Changelog</a> · <a href="https://github.com/pinlume">GitHub Organization</a> · <a href="./PRIVACY.md">Privacy</a>
+  <a href="./README.zh-CN.md">简体中文</a> · <a href="https://pinlume.cn">Website</a> · <a href="https://download.pinlume.cn/Pinlume.dmg">Download for macOS</a> · <a href="./CHANGELOG.md">Changelog</a> · <a href="https://github.com/pinlume">GitHub Organization</a> · <a href="./PRIVACY.md">Privacy</a>
 </p>
 
 <p align="center">
@@ -35,7 +35,7 @@ Pinlume is an independent native macOS app. If you use Snipaste for fast on-scre
 
 ## Release status
 
-Pinlume provides macOS beta builds. Beta builds use a local signature, are **not notarized by Apple**, and do not include automatic updates. macOS requires a one-time manual confirmation on first launch. Download from this repository's [Releases](https://github.com/pinlume/pinlume/releases), see [what changed](CHANGELOG.md), and read the [Beta Installation and Permissions Guide](BETA_INSTALL.md).
+Pinlume provides macOS beta builds. Beta builds use a local signature, are **not notarized by Apple**, and do not include automatic updates. macOS requires a one-time manual confirmation on first launch. Download the latest DMG from the [Pinlume website](https://pinlume.cn) or [directly from the official download](https://download.pinlume.cn/Pinlume.dmg), see [what changed](CHANGELOG.md), and read the [Beta Installation and Permissions Guide](BETA_INSTALL.md).
 
 ## Quick start
 

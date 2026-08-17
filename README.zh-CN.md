@@ -11,7 +11,7 @@
 
 
 <p align="center">
-  <a href="./README.md">English</a> · <a href="https://github.com/pinlume/pinlume/releases">下载 Beta</a> · <a href="./CHANGELOG.md">更新记录</a> · <a href="https://github.com/pinlume">GitHub 组织</a> · <a href="./PRIVACY.md">隐私说明</a>
+  <a href="./README.md">English</a> · <a href="https://pinlume.cn">官网</a> · <a href="https://download.pinlume.cn/Pinlume.dmg">下载 macOS 版</a> · <a href="./CHANGELOG.md">更新记录</a> · <a href="https://github.com/pinlume">GitHub 组织</a> · <a href="./PRIVACY.md">隐私说明</a>
 </p>
 
 <p align="center">
@@ -38,7 +38,7 @@ Pinlume 是独立维护的原生 macOS 应用。如果你使用 Snipaste 追求�
 
 ## 发布状态
 
-Pinlume 提供可供体验的 macOS Beta 版本。Beta 包使用本地签名、**未经过 Apple 公证**，且暂不提供自动更新；首次启动需按 macOS 的安全提示手动确认。请从本仓库的 [Releases](https://github.com/pinlume/pinlume/releases) 下载，查看 [更新记录](CHANGELOG.md)，并参阅 [Beta 安装与权限说明](BETA_INSTALL.md)。
+Pinlume 提供可供体验的 macOS Beta 版本。Beta 包使用本地签名、**未经过 Apple 公证**，且暂不提供自动更新；首次启动需按 macOS 的安全提示手动确认。请从 [Pinlume 官网](https://pinlume.cn) 或 [官方下载地址](https://download.pinlume.cn/Pinlume.dmg) 下载最新 DMG，查看 [更新记录](CHANGELOG.md)，并参阅 [Beta 安装与权限说明](BETA_INSTALL.md)。
 
 ## 快速开始
 
