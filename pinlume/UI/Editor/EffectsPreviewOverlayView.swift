@@ -25,6 +25,16 @@ final class EffectsPreviewOverlayView: NSView {
         let kind: Kind
         /// Normalized (0..1) rect in video space, origin top-left.
         let rect: CGRect
+        let allowsMove: Bool
+        let resizesFromCenter: Bool
+
+        init(kind: Kind, rect: CGRect, allowsMove: Bool = true,
+             resizesFromCenter: Bool = false) {
+            self.kind = kind
+            self.rect = rect
+            self.allowsMove = allowsMove
+            self.resizesFromCenter = resizesFromCenter
+        }
     }
 
     var selection: Selection? {
@@ -164,7 +174,7 @@ final class EffectsPreviewOverlayView: NSView {
 
         if let corner = hitCorner(point: p, in: r) {
             dragMode = .resize(corner: corner)
-        } else if r.contains(p) {
+        } else if selection.allowsMove, r.contains(p) {
             dragMode = .moveBody(grabOffset: NSPoint(x: p.x - r.minX, y: p.y - r.minY))
         } else {
             dragMode = nil
@@ -187,20 +197,49 @@ final class EffectsPreviewOverlayView: NSView {
             newRect = NSRect(x: nx, y: ny, width: originalView.width, height: originalView.height)
 
         case .resize(let corner):
-            newRect = resizedRect(from: originalView, corner: corner, to: p)
-            // Clamp to video bounds
-            let xLo = max(videoR.minX, newRect.minX)
-            let yLo = max(videoR.minY, newRect.minY)
-            let xHi = min(videoR.maxX, newRect.maxX)
-            let yHi = min(videoR.maxY, newRect.maxY)
-            newRect = NSRect(x: xLo, y: yLo, width: max(0, xHi - xLo), height: max(0, yHi - yLo))
+            if selection.resizesFromCenter {
+                let center = NSPoint(x: originalView.midX, y: originalView.midY)
+                let horizontalSide = 2 * abs(p.x - center.x)
+                let verticalSide = 2 * abs(p.y - center.y)
+                let desiredSide: CGFloat
+                switch corner {
+                case .left, .right:
+                    desiredSide = horizontalSide
+                case .top, .bottom:
+                    desiredSide = verticalSide
+                default:
+                    desiredSide = max(horizontalSide, verticalSide)
+                }
+                let maximumSide = 2 * min(center.x - videoR.minX,
+                                          videoR.maxX - center.x,
+                                          center.y - videoR.minY,
+                                          videoR.maxY - center.y)
+                let side = min(max(desiredSide, 2), maximumSide)
+                newRect = NSRect(x: center.x - side / 2,
+                                 y: center.y - side / 2,
+                                 width: side,
+                                 height: side)
+            } else {
+                newRect = resizedRect(from: originalView, corner: corner, to: p)
+                // Clamp to video bounds
+                let xLo = max(videoR.minX, newRect.minX)
+                let yLo = max(videoR.minY, newRect.minY)
+                let xHi = min(videoR.maxX, newRect.maxX)
+                let yHi = min(videoR.maxY, newRect.maxY)
+                newRect = NSRect(x: xLo, y: yLo,
+                                 width: max(0, xHi - xLo),
+                                 height: max(0, yHi - yLo))
+            }
         }
 
         let normalized = normalize(newRect)
         // Update our own displayed rect immediately so the user sees the
         // resize/move live. The controller writes to the model separately;
         // it won't push back to us because the rect is already up-to-date.
-        self.selection = Selection(kind: selection.kind, rect: normalized)
+        self.selection = Selection(kind: selection.kind,
+                                   rect: normalized,
+                                   allowsMove: selection.allowsMove,
+                                   resizesFromCenter: selection.resizesFromCenter)
         onChange?(normalized)
     }
 

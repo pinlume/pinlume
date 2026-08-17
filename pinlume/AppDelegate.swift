@@ -3573,7 +3573,7 @@ extension AppDelegate: OverlayWindowControllerDelegate {
         let hadSystemAudio = UserDefaults.standard.bool(forKey: "recordSystemAudio")
         let hadMicAudio = UserDefaults.standard.bool(forKey: "recordMicAudio")
 
-        engine.onCompletion = { [weak self, weak engine] url, error in
+        engine.onCompletion = { [weak self, weak engine] artifact, error in
             guard let self, self.recordingEngine === engine,
                   self.recordingLifecycle.generation == generation else { return }
             let finished = error == nil
@@ -3588,7 +3588,9 @@ extension AppDelegate: OverlayWindowControllerDelegate {
                 return
             }
 
-            if let url = url {
+            if let artifact = artifact {
+                let url = artifact.url
+                let trajectory = artifact.mouseTrajectory
                 let deliverRecording: (URL) -> Void = { [weak self] finalURL in
                     guard let self = self else { return }
                     let onStop = onStopOverride ?? UserDefaults.standard.string(forKey: "recordingOnStop") ?? "editor"
@@ -3604,7 +3606,8 @@ extension AppDelegate: OverlayWindowControllerDelegate {
                     case "clipboard":
                         self.copyRecordingToClipboard(url: finalURL)
                     default:
-                        VideoEditorWindowController.open(url: finalURL)
+                        VideoEditorWindowController.open(
+                            url: finalURL, mouseTrajectory: trajectory)
                     }
                 }
 

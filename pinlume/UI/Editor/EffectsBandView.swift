@@ -18,6 +18,8 @@ protocol EffectsBandViewDelegate: AnyObject {
     /// Convenience hook for "please show this status string" — mirrors the
     /// editor's in-view status banner so we don't duplicate that machinery.
     func effectsBand(_ view: EffectsBandView, showStatus message: String, isError: Bool)
+    /// Current source-video playhead time, used as the second paste candidate.
+    func effectsBandCurrentSourceTime(_ view: EffectsBandView) -> Double
 
     /// User asked to edit a text segment's content. Controller should pop
     /// up an inline NSTextField over the player at the segment's rect.
@@ -33,6 +35,7 @@ protocol EffectsBandViewDelegate: AnyObject {
 }
 
 extension EffectsBandViewDelegate {
+    func effectsBandCurrentSourceTime(_ view: EffectsBandView) -> Double { 0 }
     func effectsBandDidRequestTextEdit(_ view: EffectsBandView, segmentID: UUID) {}
     func effectsBandDidRequestTextColorPick(_ view: EffectsBandView,
                                               segmentID: UUID,
@@ -50,6 +53,10 @@ final class EffectsBandView: NSView {
     /// (e.g. after the asset finishes loading).
     var duration: Double = 0 {
         didSet { if duration != oldValue { needsLayout = true; needsDisplay = true } }
+    }
+
+    var mouseTrajectoryAvailable: Bool = false {
+        didSet { if mouseTrajectoryAvailable != oldValue { needsDisplay = true } }
     }
 
     private(set) var zoomSegments: [VideoZoomSegment] = []
@@ -108,6 +115,11 @@ final class EffectsBandView: NSView {
     private var draggingSegmentID: UUID?
     private var draggingSegmentKind: SegmentDragKind?
     private var draggingSegmentAnchor: Double = 0
+    private var dragDidMutate = false
+
+    private var effectClipboard: VideoEffectClipboardPayload?
+    private var pasteUndoStack: [VideoEffectPasteRecord] = []
+    private var pasteRedoStack: [VideoEffectPasteRecord] = []
 
     private var cursorOnBand: NSPoint? {
         didSet { if oldValue != cursorOnBand { needsDisplay = true } }
@@ -134,6 +146,10 @@ final class EffectsBandView: NSView {
 
     /// Remove segment by id regardless of type.
     func removeSegment(id: UUID) {
+        removeSegment(id: id, preservingPasteHistory: false)
+    }
+
+    private func removeSegment(id: UUID, preservingPasteHistory: Bool) {
         zoomSegments.removeAll { $0.id == id }
         censorSegments.removeAll { $0.id == id }
         cutSegments.removeAll { $0.id == id }
@@ -141,7 +157,7 @@ final class EffectsBandView: NSView {
         freezeSegments.removeAll { $0.id == id }
         textSegments.removeAll { $0.id == id }
         if selectedSegmentID == id { selectedSegmentID = nil }
-        relayoutAndNotify()
+        relayoutAndNotify(preservingPasteHistory: preservingPasteHistory)
     }
 
     /// Commit a change the parent made to a segment's properties (e.g. the
@@ -150,6 +166,13 @@ final class EffectsBandView: NSView {
     func refreshAfterParentEdit() {
         layoutRows()
         needsDisplay = true
+    }
+
+    /// Parent-side edits (overlay resize, text entry, color panel) must end
+    /// paste-only undo history before mutating a pasted object.
+    func invalidatePasteHistory() {
+        pasteUndoStack.removeAll()
+        pasteRedoStack.removeAll()
     }
 
     /// Clear the current selection. Safe to call when no segment is selected.
@@ -303,8 +326,15 @@ final class EffectsBandView: NSView {
         }
     }
 
-    private func relayoutAndNotify() {
+    private func relayoutAndNotify(preservingPasteHistory: Bool = false) {
+        if !preservingPasteHistory { invalidatePasteHistory() }
         layoutRows()
+        delegate?.effectsBandDidMutate(self)
+        needsDisplay = true
+    }
+
+    private func notifyMutation() {
+        invalidatePasteHistory()
         delegate?.effectsBandDidMutate(self)
         needsDisplay = true
     }
@@ -355,14 +385,17 @@ final class EffectsBandView: NSView {
         for seg in zoomSegments {
             let rect = zoomPillRect(for: seg)
             guard rect.width > 0 else { continue }
+            let isFollow = seg.mode == .followMouse
             drawEffectPill(
                 rect: rect,
                 isSelected: seg.id == selectedSegmentID,
                 baseFillColor: NSColor(calibratedRed: 0.25, green: 0.55, blue: 1.0, alpha: 1.0),
                 fadeInFrac: seg.effectiveFadeIn / max(seg.duration, 0.001),
                 fadeOutFrac: seg.effectiveFadeOut / max(seg.duration, 0.001),
-                iconSymbol: "plus.magnifyingglass",
-                label: formatZoom(seg.zoomLevel)
+                iconSymbol: isFollow ? "cursor.and.rays" : "plus.magnifyingglass",
+                label: isFollow
+                    ? String(format: L("Follow %@"), formatZoom(seg.zoomLevel))
+                    : formatZoom(seg.zoomLevel)
             )
         }
         for seg in censorSegments {
@@ -843,17 +876,21 @@ final class EffectsBandView: NSView {
         selectedSegmentID = id
         draggingSegmentID = id
         draggingSegmentKind = edge
+        dragDidMutate = false
         switch edge {
         case .resizeStart: draggingSegmentAnchor = clickTime - segStart
         case .resizeEnd:   draggingSegmentAnchor = clickTime - segEnd
         case .move:        draggingSegmentAnchor = clickTime - segStart
         }
-        delegate?.effectsBandDidMutate(self)   // selection is a kind of mutation for composition purposes
         needsDisplay = true
     }
 
     override func mouseDragged(with event: NSEvent) {
         guard let id = draggingSegmentID, let kind = draggingSegmentKind else { return }
+        if !dragDidMutate {
+            invalidatePasteHistory()
+            dragDidMutate = true
+        }
         let p = convert(event.locationInWindow, from: nil)
         let t = max(0, min(duration, Double((p.x - row0Rect.minX) / max(row0Rect.width, 1)) * duration))
         if let seg = zoomSegments.first(where: { $0.id == id }) {
@@ -872,10 +909,11 @@ final class EffectsBandView: NSView {
     }
 
     override func mouseUp(with event: NSEvent) {
-        let wasDragging = draggingSegmentID != nil
+        let didMutate = dragDidMutate
         draggingSegmentID = nil
         draggingSegmentKind = nil
-        if wasDragging {
+        dragDidMutate = false
+        if didMutate {
             delegate?.effectsBandDidMutate(self)
         }
     }
@@ -1095,6 +1133,8 @@ final class EffectsBandView: NSView {
 
     private func showCutPillContextMenu(for seg: VideoCutSegment, at event: NSEvent) {
         let menu = NSMenu()
+        attachCopyPasteItems(to: menu, sourceID: seg.id, clickTime: timelineTime(for: event))
+        menu.addItem(.separator())
         attachAddEffectSubmenu(to: menu, event: event)
         menu.addItem(.separator())
         let del = NSMenuItem(title: L("Delete Cut"),
@@ -1118,6 +1158,8 @@ final class EffectsBandView: NSView {
             menu.addItem(item)
         }
         menu.addItem(.separator())
+        attachCopyPasteItems(to: menu, sourceID: seg.id, clickTime: timelineTime(for: event))
+        menu.addItem(.separator())
         attachAddEffectSubmenu(to: menu, event: event)
         menu.addItem(.separator())
         let del = NSMenuItem(title: L("Delete Freeze"),
@@ -1140,6 +1182,8 @@ final class EffectsBandView: NSView {
             menu.addItem(item)
         }
         menu.addItem(.separator())
+        attachCopyPasteItems(to: menu, sourceID: seg.id, clickTime: timelineTime(for: event))
+        menu.addItem(.separator())
         attachAddEffectSubmenu(to: menu, event: event)
         menu.addItem(.separator())
         let del = NSMenuItem(title: L("Delete Speed"),
@@ -1152,7 +1196,57 @@ final class EffectsBandView: NSView {
 
     private func showZoomPillContextMenu(for seg: VideoZoomSegment, at event: NSEvent) {
         let menu = NSMenu()
+
+        let followTitle = mouseTrajectoryAvailable
+            ? L("Follow Mouse")
+            : L("Follow Mouse (No Mouse Data)")
+        let follow = NSMenuItem(title: followTitle,
+                                action: #selector(handleToggleFollowMouseFromMenu(_:)),
+                                keyEquivalent: "")
+        follow.target = self
+        follow.representedObject = ZoomSegmentRefContext(segmentID: seg.id)
+        follow.state = seg.mode == .followMouse ? .on : .off
+        follow.isEnabled = mouseTrajectoryAvailable || seg.mode == .followMouse
+        menu.addItem(follow)
+
+        let levelParent = NSMenuItem(title: L("Zoom Level"), action: nil, keyEquivalent: "")
+        let levelMenu = NSMenu()
+        for level: CGFloat in [1.5, 2, 3, 4, 5] {
+            let item = NSMenuItem(title: formatZoom(level),
+                                  action: #selector(handleSetZoomLevelFromMenu(_:)),
+                                  keyEquivalent: "")
+            item.target = self
+            item.representedObject = ZoomLevelMenuContext(segmentID: seg.id, level: level)
+            item.state = abs(seg.zoomLevel - level) < 0.01 ? .on : .off
+            levelMenu.addItem(item)
+        }
+        levelParent.submenu = levelMenu
+        menu.addItem(levelParent)
+
+        let exitParent = NSMenuItem(title: L("When Mouse Leaves"), action: nil, keyEquivalent: "")
+        let exitMenu = NSMenu()
+        let exitBehaviors: [(String, VideoZoomMouseExitBehavior)] = [
+            (L("Restore Original"), .restoreOriginal),
+            (L("Hold Last Position"), .holdLastPosition),
+        ]
+        for (title, behavior) in exitBehaviors {
+            let item = NSMenuItem(title: title,
+                                  action: #selector(handleSetMouseExitBehaviorFromMenu(_:)),
+                                  keyEquivalent: "")
+            item.target = self
+            item.representedObject = MouseExitBehaviorMenuContext(
+                segmentID: seg.id, behavior: behavior)
+            item.state = seg.mouseExitBehavior == behavior ? .on : .off
+            exitMenu.addItem(item)
+        }
+        exitParent.submenu = exitMenu
+        exitParent.isEnabled = seg.mode == .followMouse
+        menu.addItem(exitParent)
+
+        menu.addItem(.separator())
         attachFadeSubmenu(to: menu, segmentID: seg.id, currentFade: seg.fadeIn)
+        menu.addItem(.separator())
+        attachCopyPasteItems(to: menu, sourceID: seg.id, clickTime: timelineTime(for: event))
         menu.addItem(.separator())
         attachAddEffectSubmenu(to: menu, event: event)
         menu.addItem(.separator())
@@ -1182,6 +1276,8 @@ final class EffectsBandView: NSView {
         }
         menu.addItem(.separator())
         attachFadeSubmenu(to: menu, segmentID: seg.id, currentFade: seg.fadeIn)
+        menu.addItem(.separator())
+        attachCopyPasteItems(to: menu, sourceID: seg.id, clickTime: timelineTime(for: event))
         menu.addItem(.separator())
         attachAddEffectSubmenu(to: menu, event: event)
         menu.addItem(.separator())
@@ -1303,6 +1399,8 @@ final class EffectsBandView: NSView {
         menu.addItem(.separator())
         attachFadeSubmenu(to: menu, segmentID: seg.id, currentFade: seg.fadeIn)
         menu.addItem(.separator())
+        attachCopyPasteItems(to: menu, sourceID: seg.id, clickTime: timelineTime(for: event))
+        menu.addItem(.separator())
         attachAddEffectSubmenu(to: menu, event: event)
         menu.addItem(.separator())
         let del = NSMenuItem(title: L("Delete Text"),
@@ -1392,7 +1490,7 @@ final class EffectsBandView: NSView {
         // Presets in seconds. 0 = hard cut. Matching tolerance of 0.02s for the
         // checkmark comparison so drift from prior auto-fade values still shows
         // the "right" item as active.
-        let presets: [Double] = [0, 0.15, 0.35, 0.5, 1.0]
+        let presets: [Double] = [0, 0.15, 0.35, 0.5, 0.75, 1.0]
         for seconds in presets {
             let title: String = (seconds == 0)
                 ? L("None")
@@ -1469,7 +1567,18 @@ final class EffectsBandView: NSView {
         textItem.representedObject = AddEffectContext(clickTime: clickTime, gapStart: 0, gapEnd: duration)
         menu.addItem(textItem)
 
+        if effectClipboard != nil {
+            menu.addItem(.separator())
+            attachCopyPasteItems(to: menu, sourceID: nil, clickTime: clickTime)
+        }
+
         menu.popUp(positioning: nil, at: point, in: self)
+    }
+
+    private func timelineTime(for event: NSEvent) -> Double {
+        let point = convert(event.locationInWindow, from: nil)
+        return max(0, min(duration,
+            Double((point.x - row0Rect.minX) / max(row0Rect.width, 1)) * duration))
     }
 
     private func attachAddEffectSubmenu(to menu: NSMenu, event: NSEvent) {
@@ -1584,7 +1693,164 @@ final class EffectsBandView: NSView {
         return nil
     }
 
+    // MARK: - Effect copy / paste
+
+    /// Hardware key codes keep these shortcuts independent of the current
+    /// keyboard layout. Returns true only when this view handled the command.
+    func handleEffectCommand(keyCode: UInt16, modifiers: NSEvent.ModifierFlags) -> Bool {
+        guard modifiers.contains(.command), !modifiers.contains(.option), !modifiers.contains(.control) else {
+            return false
+        }
+        switch keyCode {
+        case 8: // C
+            guard let id = selectedSegmentID, let payload = payload(for: id) else { return false }
+            effectClipboard = payload
+            return true
+        case 9: // V
+            guard effectClipboard != nil else { return false }
+            return pasteEffect(mouseTime: mouseTimeOnBand())
+        case 6: // Z
+            if modifiers.contains(.shift) {
+                return redoPaste()
+            }
+            return undoPaste()
+        default:
+            return false
+        }
+    }
+
+    private func payload(for id: UUID) -> VideoEffectClipboardPayload? {
+        if let segment = zoomSegments.first(where: { $0.id == id }) { return .init(zoom: segment) }
+        if let segment = censorSegments.first(where: { $0.id == id }) { return .init(censor: segment) }
+        if let segment = textSegments.first(where: { $0.id == id }) { return .init(text: segment) }
+        if let segment = cutSegments.first(where: { $0.id == id }) { return .init(cut: segment) }
+        if let segment = speedSegments.first(where: { $0.id == id }) { return .init(speed: segment) }
+        if let segment = freezeSegments.first(where: { $0.id == id }) { return .init(freeze: segment) }
+        return nil
+    }
+
+    private func occupiedIntervals(for payload: VideoEffectClipboardPayload) -> [VideoEffectInterval] {
+        switch payload.kind {
+        case .zoom:
+            return zoomSegments.map { .init(startTime: $0.startTime, endTime: $0.endTime) }
+        case .speed:
+            return speedSegments.map { .init(startTime: $0.startTime, endTime: $0.endTime) }
+        case .censor, .text, .cut, .freeze:
+            return []
+        }
+    }
+
+    private func mouseTimeOnBand() -> Double? {
+        let point: NSPoint
+        if let window {
+            point = convert(window.mouseLocationOutsideOfEventStream, from: nil)
+        } else if let cursorOnBand {
+            point = cursorOnBand
+        } else {
+            return nil
+        }
+        guard bounds.contains(point), duration > 0 else { return nil }
+        return max(0, min(duration,
+            Double((point.x - row0Rect.minX) / max(row0Rect.width, 1)) * duration))
+    }
+
+    @discardableResult
+    private func pasteEffect(mouseTime: Double?) -> Bool {
+        guard let payload = effectClipboard else { return false }
+        let occupied = occupiedIntervals(for: payload)
+        guard let placement = VideoEffectPlacementResolver.resolve(
+            payload: payload,
+            timelineDuration: duration,
+            mouseTime: mouseTime,
+            playheadTime: delegate?.effectsBandCurrentSourceTime(self) ?? 0,
+            occupied: occupied
+        ) else {
+            delegate?.effectsBand(
+                self,
+                showStatus: L("No continuous space is available for this effect. Shorten it or choose another time."),
+                isError: true
+            )
+            return true
+        }
+
+        let id = UUID()
+        insert(payload.makeSegment(id: id, placement: placement))
+        selectedSegmentID = id
+        pasteUndoStack.append(VideoEffectPasteRecord(payload: payload, placement: placement, id: id))
+        pasteRedoStack.removeAll()
+        relayoutAndNotify(preservingPasteHistory: true)
+        return true
+    }
+
+    private func insert(_ created: VideoEffectCreatedSegment) {
+        switch created {
+        case .zoom(let segment): zoomSegments.append(segment)
+        case .censor(let segment): censorSegments.append(segment)
+        case .text(let segment): textSegments.append(segment)
+        case .cut(let segment): cutSegments.append(segment)
+        case .speed(let segment): speedSegments.append(segment)
+        case .freeze(let segment): freezeSegments.append(segment)
+        }
+    }
+
+    private func undoPaste() -> Bool {
+        guard let record = pasteUndoStack.popLast() else { return false }
+        removeSegment(id: record.id, preservingPasteHistory: true)
+        pasteRedoStack.append(record)
+        return true
+    }
+
+    private func redoPaste() -> Bool {
+        guard let record = pasteRedoStack.last else { return false }
+        let occupied = occupiedIntervals(for: record.payload)
+        guard VideoEffectPlacementResolver.isValid(
+            payload: record.payload,
+            placement: record.placement,
+            timelineDuration: duration,
+            occupied: occupied
+        ) else {
+            pasteRedoStack.removeAll()
+            return false
+        }
+        _ = pasteRedoStack.popLast()
+        insert(record.payload.makeSegment(id: record.id, placement: record.placement))
+        selectedSegmentID = record.id
+        pasteUndoStack.append(record)
+        relayoutAndNotify(preservingPasteHistory: true)
+        return true
+    }
+
+    private func attachCopyPasteItems(to menu: NSMenu, sourceID: UUID?, clickTime: Double) {
+        if let sourceID {
+            let copy = NSMenuItem(title: L("Copy Effect"),
+                                  action: #selector(handleCopyEffectFromMenu(_:)),
+                                  keyEquivalent: "")
+            copy.target = self
+            copy.representedObject = EffectCopyContext(segmentID: sourceID)
+            menu.addItem(copy)
+        }
+        if effectClipboard != nil {
+            let paste = NSMenuItem(title: L("Paste Effect"),
+                                   action: #selector(handlePasteEffectFromMenu(_:)),
+                                   keyEquivalent: "")
+            paste.target = self
+            paste.representedObject = EffectPasteContext(clickTime: clickTime)
+            menu.addItem(paste)
+        }
+    }
+
     // MARK: - Menu callbacks
+
+    @objc private func handleCopyEffectFromMenu(_ sender: NSMenuItem) {
+        guard let context = sender.representedObject as? EffectCopyContext,
+              let payload = payload(for: context.segmentID) else { return }
+        effectClipboard = payload
+    }
+
+    @objc private func handlePasteEffectFromMenu(_ sender: NSMenuItem) {
+        guard let context = sender.representedObject as? EffectPasteContext else { return }
+        pasteEffect(mouseTime: context.clickTime)
+    }
 
     @objc private func handleDeleteSelectedFromMenu() {
         guard let id = selectedSegmentID else { return }
@@ -1595,8 +1861,7 @@ final class EffectsBandView: NSView {
         guard let ctx = sender.representedObject as? CensorStyleMenuContext,
               let seg = censorSegments.first(where: { $0.id == ctx.segmentID }) else { return }
         seg.style = ctx.style
-        delegate?.effectsBandDidMutate(self)
-        needsDisplay = true
+        notifyMutation()
     }
 
     @objc private func handleSetFadeFromMenu(_ sender: NSMenuItem) {
@@ -1613,8 +1878,34 @@ final class EffectsBandView: NSView {
         } else {
             return
         }
-        delegate?.effectsBandDidMutate(self)
-        needsDisplay = true
+        notifyMutation()
+    }
+
+    @objc private func handleToggleFollowMouseFromMenu(_ sender: NSMenuItem) {
+        guard let ctx = sender.representedObject as? ZoomSegmentRefContext,
+              let seg = zoomSegments.first(where: { $0.id == ctx.segmentID }) else { return }
+        if seg.mode == .followMouse {
+            seg.mode = .fixed
+        } else {
+            guard mouseTrajectoryAvailable else { return }
+            seg.mode = .followMouse
+        }
+        notifyMutation()
+    }
+
+    @objc private func handleSetZoomLevelFromMenu(_ sender: NSMenuItem) {
+        guard let ctx = sender.representedObject as? ZoomLevelMenuContext,
+              let seg = zoomSegments.first(where: { $0.id == ctx.segmentID }) else { return }
+        seg.zoomLevel = max(VideoZoomSegment.minZoom,
+                            min(VideoZoomSegment.maxZoom, ctx.level))
+        notifyMutation()
+    }
+
+    @objc private func handleSetMouseExitBehaviorFromMenu(_ sender: NSMenuItem) {
+        guard let ctx = sender.representedObject as? MouseExitBehaviorMenuContext,
+              let seg = zoomSegments.first(where: { $0.id == ctx.segmentID }) else { return }
+        seg.mouseExitBehavior = ctx.behavior
+        notifyMutation()
     }
 
     @objc private func handleAddZoomFromMenu(_ sender: NSMenuItem) {
@@ -1659,40 +1950,35 @@ final class EffectsBandView: NSView {
         guard let ctx = sender.representedObject as? TextSizeMenuContext,
               let seg = textSegments.first(where: { $0.id == ctx.segmentID }) else { return }
         seg.fontSize = ctx.fontSize
-        delegate?.effectsBandDidMutate(self)
-        needsDisplay = true
+        notifyMutation()
     }
 
     @objc private func handleToggleTextBoldFromMenu(_ sender: NSMenuItem) {
         guard let ctx = sender.representedObject as? TextSegmentRefContext,
               let seg = textSegments.first(where: { $0.id == ctx.segmentID }) else { return }
         seg.bold.toggle()
-        delegate?.effectsBandDidMutate(self)
-        needsDisplay = true
+        notifyMutation()
     }
 
     @objc private func handleToggleTextItalicFromMenu(_ sender: NSMenuItem) {
         guard let ctx = sender.representedObject as? TextSegmentRefContext,
               let seg = textSegments.first(where: { $0.id == ctx.segmentID }) else { return }
         seg.italic.toggle()
-        delegate?.effectsBandDidMutate(self)
-        needsDisplay = true
+        notifyMutation()
     }
 
     @objc private func handleSetTextAlignmentFromMenu(_ sender: NSMenuItem) {
         guard let ctx = sender.representedObject as? TextAlignmentMenuContext,
               let seg = textSegments.first(where: { $0.id == ctx.segmentID }) else { return }
         seg.alignment = ctx.alignment
-        delegate?.effectsBandDidMutate(self)
-        needsDisplay = true
+        notifyMutation()
     }
 
     @objc private func handleSetTextBgStyleFromMenu(_ sender: NSMenuItem) {
         guard let ctx = sender.representedObject as? TextBgStyleMenuContext,
               let seg = textSegments.first(where: { $0.id == ctx.segmentID }) else { return }
         seg.bgStyle = ctx.style
-        delegate?.effectsBandDidMutate(self)
-        needsDisplay = true
+        notifyMutation()
     }
 
     @objc private func handleSetTextColorFromMenu(_ sender: NSMenuItem) {
@@ -1703,8 +1989,7 @@ final class EffectsBandView: NSView {
         } else {
             seg.textColor = ctx.color
         }
-        delegate?.effectsBandDidMutate(self)
-        needsDisplay = true
+        notifyMutation()
     }
 
     @objc private func handlePickTextCustomColorFromMenu(_ sender: NSMenuItem) {
@@ -1719,8 +2004,7 @@ final class EffectsBandView: NSView {
         guard let ctx = sender.representedObject as? FreezeDurationMenuContext,
               let seg = freezeSegments.first(where: { $0.id == ctx.segmentID }) else { return }
         seg.holdDuration = VideoFreezeSegment.clampDuration(ctx.seconds)
-        delegate?.effectsBandDidMutate(self)
-        needsDisplay = true
+        notifyMutation()
     }
 
     @objc private func handleSetSpeedFactorFromMenu(_ sender: NSMenuItem) {
@@ -1735,8 +2019,7 @@ final class EffectsBandView: NSView {
             seg.endTime = min(duration, seg.startTime + minSrcDur)
         }
         seg.speedFactor = newFactor
-        delegate?.effectsBandDidMutate(self)
-        needsDisplay = true
+        notifyMutation()
     }
 
     private func addZoomSegment(clickTime: Double, gapStart: Double, gapEnd: Double) {
@@ -1826,6 +2109,9 @@ final class EffectsBandView: NSView {
     // MARK: - Keyboard
 
     override func keyDown(with event: NSEvent) {
+        if handleEffectCommand(keyCode: event.keyCode, modifiers: event.modifierFlags) {
+            return
+        }
         switch event.keyCode {
         case 51, 117: // Delete / Forward-Delete
             if let id = selectedSegmentID {
@@ -1851,6 +2137,16 @@ final class EffectsBandView: NSView {
         }
     }
 
+    private final class EffectCopyContext: NSObject {
+        let segmentID: UUID
+        init(segmentID: UUID) { self.segmentID = segmentID }
+    }
+
+    private final class EffectPasteContext: NSObject {
+        let clickTime: Double
+        init(clickTime: Double) { self.clickTime = clickTime }
+    }
+
     private final class CensorStyleMenuContext: NSObject {
         let segmentID: UUID
         let style: VideoCensorSegment.Style
@@ -1866,6 +2162,29 @@ final class EffectsBandView: NSView {
         init(segmentID: UUID, seconds: Double) {
             self.segmentID = segmentID
             self.seconds = seconds
+        }
+    }
+
+    private final class ZoomSegmentRefContext: NSObject {
+        let segmentID: UUID
+        init(segmentID: UUID) { self.segmentID = segmentID }
+    }
+
+    private final class ZoomLevelMenuContext: NSObject {
+        let segmentID: UUID
+        let level: CGFloat
+        init(segmentID: UUID, level: CGFloat) {
+            self.segmentID = segmentID
+            self.level = level
+        }
+    }
+
+    private final class MouseExitBehaviorMenuContext: NSObject {
+        let segmentID: UUID
+        let behavior: VideoZoomMouseExitBehavior
+        init(segmentID: UUID, behavior: VideoZoomMouseExitBehavior) {
+            self.segmentID = segmentID
+            self.behavior = behavior
         }
     }
 

@@ -1,6 +1,16 @@
 import Foundation
 import CoreGraphics
 
+enum VideoZoomMode: String, Codable, Sendable {
+    case fixed
+    case followMouse
+}
+
+enum VideoZoomMouseExitBehavior: String, Codable, Sendable {
+    case holdLastPosition
+    case restoreOriginal
+}
+
 /// A timeline region where the rendered video zooms into a chosen point.
 ///
 /// - `startTime` / `endTime` are in seconds, relative to the full (untrimmed)
@@ -16,7 +26,7 @@ final class VideoZoomSegment: Codable {
     static let minDuration: Double = 0.3
     /// Target fade duration for a generously long segment. For shorter
     /// segments we auto-scale down so the plateau always dominates.
-    static let defaultFade: Double = 0.35
+    static let defaultFade: Double = 0.75
     static let minZoom: CGFloat = 1.2
     static let maxZoom: CGFloat = 5.0
 
@@ -35,6 +45,8 @@ final class VideoZoomSegment: Codable {
     var center: CGPoint
     var fadeIn: Double
     var fadeOut: Double
+    var mode: VideoZoomMode
+    var mouseExitBehavior: VideoZoomMouseExitBehavior
 
     init(id: UUID = UUID(),
          startTime: Double,
@@ -42,7 +54,9 @@ final class VideoZoomSegment: Codable {
          zoomLevel: CGFloat = 2.0,
          center: CGPoint = CGPoint(x: 0.5, y: 0.5),
          fadeIn: Double = defaultFade,
-         fadeOut: Double = defaultFade) {
+         fadeOut: Double = defaultFade,
+         mode: VideoZoomMode = .fixed,
+         mouseExitBehavior: VideoZoomMouseExitBehavior = .restoreOriginal) {
         self.id = id
         self.startTime = startTime
         self.endTime = endTime
@@ -50,6 +64,40 @@ final class VideoZoomSegment: Codable {
         self.center = center
         self.fadeIn = fadeIn
         self.fadeOut = fadeOut
+        self.mode = mode
+        self.mouseExitBehavior = mouseExitBehavior
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case id, startTime, endTime, zoomLevel, center, fadeIn, fadeOut
+        case mode, mouseExitBehavior
+    }
+
+    required init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        id = try container.decode(UUID.self, forKey: .id)
+        startTime = try container.decode(Double.self, forKey: .startTime)
+        endTime = try container.decode(Double.self, forKey: .endTime)
+        zoomLevel = try container.decode(CGFloat.self, forKey: .zoomLevel)
+        center = try container.decode(CGPoint.self, forKey: .center)
+        fadeIn = try container.decode(Double.self, forKey: .fadeIn)
+        fadeOut = try container.decode(Double.self, forKey: .fadeOut)
+        mode = try container.decodeIfPresent(VideoZoomMode.self, forKey: .mode) ?? .fixed
+        mouseExitBehavior = try container.decodeIfPresent(
+            VideoZoomMouseExitBehavior.self, forKey: .mouseExitBehavior) ?? .restoreOriginal
+    }
+
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(id, forKey: .id)
+        try container.encode(startTime, forKey: .startTime)
+        try container.encode(endTime, forKey: .endTime)
+        try container.encode(zoomLevel, forKey: .zoomLevel)
+        try container.encode(center, forKey: .center)
+        try container.encode(fadeIn, forKey: .fadeIn)
+        try container.encode(fadeOut, forKey: .fadeOut)
+        try container.encode(mode, forKey: .mode)
+        try container.encode(mouseExitBehavior, forKey: .mouseExitBehavior)
     }
 
     var duration: Double { max(0, endTime - startTime) }
@@ -108,8 +156,8 @@ final class VideoZoomSegment: Codable {
         // the edge of the scaled content minus half the output.
         let maxTx = (zoom - 1) * videoSize.width / (2 * zoom)
         let maxTy = (zoom - 1) * videoSize.height / (2 * zoom)
-        let clampedTx = min(max(rawTx / zoom, -maxTx), maxTx)
-        let clampedTy = min(max(rawTy / zoom, -maxTy), maxTy)
+        let clampedTx = min(max(rawTx, -maxTx), maxTx)
+        let clampedTy = min(max(rawTy, -maxTy), maxTy)
         return CGPoint(x: clampedTx, y: clampedTy)
     }
 
@@ -117,5 +165,132 @@ final class VideoZoomSegment: Codable {
     /// do not count as overlap.
     func overlaps(_ other: VideoZoomSegment) -> Bool {
         return startTime < other.endTime && endTime > other.startTime
+    }
+}
+
+/// Value-only copy handed to background preview/export rendering.
+struct VideoZoomRenderSnapshot: Sendable {
+    let id: UUID
+    let startTime: Double
+    let endTime: Double
+    let zoomLevel: CGFloat
+    let center: CGPoint
+    let fadeIn: Double
+    let fadeOut: Double
+    let mode: VideoZoomMode
+    let mouseExitBehavior: VideoZoomMouseExitBehavior
+
+    init(segment: VideoZoomSegment) {
+        id = segment.id
+        startTime = segment.startTime
+        endTime = segment.endTime
+        zoomLevel = segment.zoomLevel
+        center = segment.center
+        fadeIn = segment.fadeIn
+        fadeOut = segment.fadeOut
+        mode = segment.mode
+        mouseExitBehavior = segment.mouseExitBehavior
+    }
+
+    var duration: Double { max(0, endTime - startTime) }
+
+    private var effectiveFadeIn: Double {
+        min(max(fadeIn, 0), max(0, duration / 2 - 0.001))
+    }
+
+    private var effectiveFadeOut: Double {
+        min(max(fadeOut, 0), max(0, duration / 2 - 0.001))
+    }
+
+    func level(at time: Double) -> CGFloat {
+        guard time >= startTime, time <= endTime, duration > 0 else { return 1 }
+        let elapsed = time - startTime
+        let remaining = endTime - time
+        if effectiveFadeIn > 0, elapsed < effectiveFadeIn {
+            return 1 + (zoomLevel - 1) * Self.ease(CGFloat(elapsed / effectiveFadeIn))
+        }
+        if effectiveFadeOut > 0, remaining < effectiveFadeOut {
+            return 1 + (zoomLevel - 1) * Self.ease(CGFloat(remaining / effectiveFadeOut))
+        }
+        return zoomLevel
+    }
+
+    func translation(zoom: CGFloat, center: CGPoint, videoSize: CGSize) -> CGPoint {
+        guard zoom > 1.0001 else { return .zero }
+        let rawTx = videoSize.width / 2 - center.x * videoSize.width
+        let rawTy = videoSize.height / 2 - center.y * videoSize.height
+        let maxTx = (zoom - 1) * videoSize.width / (2 * zoom)
+        let maxTy = (zoom - 1) * videoSize.height / (2 * zoom)
+        return CGPoint(x: min(max(rawTx, -maxTx), maxTx),
+                       y: min(max(rawTy, -maxTy), maxTy))
+    }
+
+    fileprivate static func ease(_ value: CGFloat) -> CGFloat {
+        let clamped = min(max(value, 0), 1)
+        return clamped * clamped * (3 - 2 * clamped)
+    }
+}
+
+struct VideoZoomResolvedState: Equatable, Sendable {
+    let zoomLevel: CGFloat
+    let center: CGPoint
+    let translation: CGPoint
+}
+
+enum VideoZoomResolver {
+    private static let mouseExitGraceDuration: Double = 0.3
+
+    static func resolve(at time: Double,
+                        segments: [VideoZoomRenderSnapshot],
+                        trajectory: VideoMouseTrajectory?,
+                        videoSize: CGSize) -> VideoZoomResolvedState? {
+        guard let segment = segments.first(where: {
+            time >= $0.startTime && time <= $0.endTime && $0.duration > 0
+        }) else { return nil }
+
+        var center = segment.center
+        var presence: CGFloat = 1
+        if segment.mode == .followMouse, let cursor = trajectory?.state(at: time) {
+            center = cursor.isInside ? cursor.point : (cursor.lastInsidePoint ?? segment.center)
+            if segment.mouseExitBehavior == .restoreOriginal {
+                if cursor.isInside {
+                    if cursor.stateBeganAt <= segment.startTime {
+                        presence = 1
+                    } else {
+                        let outsideDuration = cursor.precedingStateDuration ?? .infinity
+                        let fadedBeforeEntry = max(0, outsideDuration - mouseExitGraceDuration)
+                        let presenceAtEntry = 1 - transitionPresence(
+                            elapsed: fadedBeforeEntry,
+                            duration: segment.fadeOut)
+                        let reentryProgress = transitionPresence(
+                            elapsed: time - cursor.stateBeganAt,
+                            duration: segment.fadeIn)
+                        presence = presenceAtEntry + (1 - presenceAtEntry) * reentryProgress
+                    }
+                } else {
+                    if cursor.stateBeganAt <= segment.startTime {
+                        presence = 0
+                    } else {
+                        presence = 1 - transitionPresence(
+                            elapsed: time - cursor.stateBeganAt - mouseExitGraceDuration,
+                            duration: segment.fadeOut)
+                    }
+                }
+            }
+        }
+
+        let segmentLevel = segment.level(at: time)
+        let resolvedLevel = 1 + (segmentLevel - 1) * presence
+        return VideoZoomResolvedState(
+            zoomLevel: resolvedLevel,
+            center: center,
+            translation: segment.translation(zoom: resolvedLevel,
+                                             center: center,
+                                             videoSize: videoSize))
+    }
+
+    private static func transitionPresence(elapsed: Double, duration: Double) -> CGFloat {
+        guard duration > 0 else { return 1 }
+        return VideoZoomRenderSnapshot.ease(CGFloat(elapsed / duration))
     }
 }

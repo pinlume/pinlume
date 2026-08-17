@@ -657,6 +657,13 @@
 "Choose a video to open in Pinlume editor" = "选取要在 Pinlume 编辑器中打开的视频";
 "Click to add effects" = "点按以添加效果";
 "Add Zoom" = "添加缩放";
+"Follow Mouse" = "跟随鼠标";
+"Follow Mouse (No Mouse Data)" = "跟随鼠标（无鼠标数据）";
+"Follow %@" = "跟随 %@";
+"Zoom Level" = "缩放倍数";
+"When Mouse Leaves" = "鼠标移出时";
+"Hold Last Position" = "停在最后位置";
+"Restore Original" = "还原原始画面";
 "Add Censor" = "添加遮挡";
 "Add Cut" = "添加剪切";
 "Add Speed" = "添加速度";
@@ -872,3 +879,6 @@
 /* Added for v4.1.0-beta.3 — video editor, effects, open-video, shortcuts help */
 /* Appearance / Settings */
 /* Settings — shortcuts help text */
+"Copy Effect" = "复制效果";
+"Paste Effect" = "粘贴效果";
+"No continuous space is available for this effect. Shorten it or choose another time." = "没有足够的连续空间放置该效果，请缩短效果时长或选择其他时间位置。";

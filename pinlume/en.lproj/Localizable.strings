@@ -713,6 +713,13 @@
 "Choose a video to open in Pinlume editor" = "Choose a video to open in Pinlume editor";
 "Click to add effects" = "Click to add effects";
 "Add Zoom" = "Add Zoom";
+"Follow Mouse" = "Follow Mouse";
+"Follow Mouse (No Mouse Data)" = "Follow Mouse (No Mouse Data)";
+"Follow %@" = "Follow %@";
+"Zoom Level" = "Zoom Level";
+"When Mouse Leaves" = "When Mouse Leaves";
+"Hold Last Position" = "Hold Last Position";
+"Restore Original" = "Restore Original";
 "Add Censor" = "Add Censor";
 "Add Cut" = "Add Cut";
 "Add Speed" = "Add Speed";
@@ -868,3 +875,6 @@
 "Could not parse translation response" = "Could not parse translation response";
 "Translation returned empty result" = "Translation returned empty result";
 "Translation request was superseded" = "Translation request was superseded";
+"Copy Effect" = "Copy Effect";
+"Paste Effect" = "Paste Effect";
+"No continuous space is available for this effect. Shorten it or choose another time." = "No continuous space is available for this effect. Shorten it or choose another time.";

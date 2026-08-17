@@ -15,7 +15,7 @@ import CoreGraphics
 final class VideoCensorSegment: Codable {
 
     static let minDuration: Double = 0.3
-    static let defaultFade: Double = 0.25
+    static let defaultFade: Double = 0.15
 
     enum Style: String, Codable {
         case solid

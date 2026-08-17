@@ -18,16 +18,19 @@ final class VideoEditorWindowController: NSObject, NSWindowDelegate {
     ///     the window closes — appropriate for temporary recordings. Pass
     ///     `false` when opening a user-owned file so we don't delete their
     ///     source.
-    static func open(url: URL, deleteOnClose: Bool = true) {
+    static func open(url: URL, deleteOnClose: Bool = true,
+                     mouseTrajectory: VideoMouseTrajectory? = nil) {
         let controller = VideoEditorWindowController()
-        controller.show(url: url, deleteOnClose: deleteOnClose)
+        controller.show(url: url, deleteOnClose: deleteOnClose,
+                        mouseTrajectory: mouseTrajectory)
         activeControllers.append(controller)
         if activeControllers.count == 1 {
             NSApp.setActivationPolicy(.regular)
         }
     }
 
-    private func show(url: URL, deleteOnClose: Bool = true) {
+    private func show(url: URL, deleteOnClose: Bool = true,
+                      mouseTrajectory: VideoMouseTrajectory? = nil) {
         guard let screen = NSScreen.main else { return }
 
         // Size window to fit content, capped at 60% of screen
@@ -72,7 +75,8 @@ final class VideoEditorWindowController: NSObject, NSWindowDelegate {
 
         let view = VideoEditorView(frame: NSRect(x: 0, y: 0, width: winW, height: winH),
                                     videoURL: url,
-                                    deleteOnClose: deleteOnClose)
+                                    deleteOnClose: deleteOnClose,
+                                    mouseTrajectory: mouseTrajectory)
         win.contentView = view
 
         win.makeKeyAndOrderFront(nil)
@@ -103,6 +107,7 @@ private final class VideoEditorView: NSView {
     /// If true, the underlying file is deleted on close (recording tmp path).
     /// Set to false when opening a user-owned source file via "Open Video...".
     private let deleteOnClose: Bool
+    private let mouseTrajectory: VideoMouseTrajectory?
     private let isGIF: Bool
     private var player: AVPlayer?
     private var playerView: AVPlayerView?
@@ -260,9 +265,11 @@ private final class VideoEditorView: NSView {
     /// Live row count; the delegate callback updates it and triggers layout.
     private var currentEffectRowCount: Int = 1
 
-    init(frame: NSRect, videoURL: URL, deleteOnClose: Bool = true) {
+    init(frame: NSRect, videoURL: URL, deleteOnClose: Bool = true,
+         mouseTrajectory: VideoMouseTrajectory? = nil) {
         self.videoURL = videoURL
         self.deleteOnClose = deleteOnClose
+        self.mouseTrajectory = mouseTrajectory
         self.isGIF = videoURL.pathExtension.lowercased() == "gif"
         super.init(frame: frame)
 
@@ -455,6 +462,7 @@ private final class VideoEditorView: NSView {
         let band = EffectsBandView()
         band.translatesAutoresizingMaskIntoConstraints = false
         band.delegate = self
+        band.mouseTrajectoryAvailable = mouseTrajectory != nil
         scrollView.documentView = band
         addSubview(scrollView)
 
@@ -498,6 +506,7 @@ private final class VideoEditorView: NSView {
             // dirty-rect clipping skips their fills. This drops per-frame
             // draw cost from ~30ms (60 thumbnail redraws) to <1ms.
             self.invalidatePlayheadArea()
+            self.refreshSelectedFollowZoomOverlay()
         }
 
         generateThumbnails()
@@ -1280,7 +1289,11 @@ private final class VideoEditorView: NSView {
         guard let overlay = effectsOverlay else { return }
         if let id = selectedSegmentID {
             if let seg = zoomSegments.first(where: { $0.id == id }) {
-                overlay.selection = .init(kind: .zoom, rect: rectForZoom(seg))
+                overlay.selection = .init(
+                    kind: .zoom,
+                    rect: resolvedRectForZoom(seg, at: currentPlaybackTime),
+                    allowsMove: seg.mode == .fixed,
+                    resizesFromCenter: seg.mode == .followMouse)
                 return
             }
             if let seg = censorSegments.first(where: { $0.id == id }) {
@@ -1330,10 +1343,41 @@ private final class VideoEditorView: NSView {
         return CGRect(x: x, y: y, width: side, height: side)
     }
 
+    private func resolvedRectForZoom(_ seg: VideoZoomSegment, at time: Double) -> CGRect {
+        guard seg.mode == .followMouse else { return rectForZoom(seg) }
+        let resolvedTime = min(max(time, seg.startTime), seg.endTime)
+        let videoSize = CGSize(width: max(originalWidth, 1), height: max(originalHeight, 1))
+        let resolved = VideoZoomResolver.resolve(
+            at: resolvedTime,
+            segments: [VideoZoomRenderSnapshot(segment: seg)],
+            trajectory: mouseTrajectory,
+            videoSize: videoSize)
+        let side = 1 / max(seg.zoomLevel, 0.0001)
+        let half = side / 2
+        let sourceCenter = resolved?.center ?? seg.center
+        let center = CGPoint(x: min(max(sourceCenter.x, half), 1 - half),
+                             y: min(max(sourceCenter.y, half), 1 - half))
+        return CGRect(x: center.x - half, y: center.y - half,
+                      width: side, height: side)
+    }
+
+    private func refreshSelectedFollowZoomOverlay() {
+        guard let id = selectedSegmentID,
+              let seg = zoomSegments.first(where: { $0.id == id }),
+              seg.mode == .followMouse,
+              let overlay = effectsOverlay else { return }
+        overlay.selection = .init(
+            kind: .zoom,
+            rect: resolvedRectForZoom(seg, at: currentPlaybackTime),
+            allowsMove: false,
+            resizesFromCenter: true)
+    }
+
     /// Called when the overlay view reports a new normalized rect.
     /// Dispatches based on the currently-selected segment type.
     private func overlayRectChanged(_ rect: CGRect) {
         guard let id = selectedSegmentID else { return }
+        effectsBand?.invalidatePasteHistory()
         savedURL = nil
         invalidateGIFCache()
         if let seg = zoomSegments.first(where: { $0.id == id }) {
@@ -1343,8 +1387,12 @@ private final class VideoEditorView: NSView {
             let desiredZoom = 1.0 / side
             seg.zoomLevel = max(VideoZoomSegment.minZoom,
                                  min(VideoZoomSegment.maxZoom, desiredZoom))
-            // Center on the rect midpoint
-            seg.center = CGPoint(x: rect.midX, y: rect.midY)
+            // Fixed zooms are positioned manually. Follow zooms derive their
+            // center from the recorded cursor and only use this drag to set
+            // the viewport size / multiplier.
+            if seg.mode == .fixed {
+                seg.center = CGPoint(x: rect.midX, y: rect.midY)
+            }
         } else if let seg = censorSegments.first(where: { $0.id == id }) {
             seg.rect = VideoCensorSegment.clampedRect(rect)
         } else if let seg = textSegments.first(where: { $0.id == id }) {
@@ -2540,6 +2588,19 @@ private final class VideoEditorView: NSView {
 
     // MARK: - Keyboard
 
+    override func performKeyEquivalent(with event: NSEvent) -> Bool {
+        if window?.firstResponder is NSTextView || window?.firstResponder is NSTextField {
+            return super.performKeyEquivalent(with: event)
+        }
+        if effectsBand?.handleEffectCommand(
+            keyCode: event.keyCode,
+            modifiers: event.modifierFlags
+        ) == true {
+            return true
+        }
+        return super.performKeyEquivalent(with: event)
+    }
+
     override func keyDown(with event: NSEvent) {
         switch event.keyCode {
         case 49: // Space
@@ -2857,6 +2918,7 @@ private final class VideoEditorView: NSView {
         let zoomSnapshot = zoomSegments
             .filter { $0.endTime > $0.startTime }
             .sorted { $0.startTime < $1.startTime }
+            .map { VideoZoomRenderSnapshot(segment: $0) }
         let censorSnapshot = censorSegments
             .filter { $0.endTime > $0.startTime }
             .sorted { $0.startTime < $1.startTime }
@@ -2880,6 +2942,7 @@ private final class VideoEditorView: NSView {
             baseTransform: baseTransform,
             timeMap: timeMap,
             zoomSegments: zoomSnapshot,
+            mouseTrajectory: mouseTrajectory,
             censorSegments: censorSnapshot,
             textSnapshots: textSnapshots
         )
@@ -3262,6 +3325,7 @@ private final class VideoEditorView: NSView {
         let newText = tv.string
         let changed = newText != seg.text
         if changed {
+            effectsBand?.invalidatePasteHistory()
             seg.text = newText
             // Drop the cache for this segment so the next composition
             // rebuild re-rasterizes with the new text.
@@ -3366,6 +3430,7 @@ private final class VideoEditorView: NSView {
     @objc fileprivate func textColorPanelDidChange(_ sender: NSColorPanel) {
         guard let id = textColorPickerSegmentID,
               let seg = textSegments.first(where: { $0.id == id }) else { return }
+        effectsBand?.invalidatePasteHistory()
         let c = sender.color.usingColorSpace(.sRGB) ?? sender.color
         let rgba = VideoTextSegment.RGBA(
             r: Double(c.redComponent),
@@ -3386,10 +3451,15 @@ private final class VideoEditorView: NSView {
 }
 
 extension VideoEditorView: EffectsBandViewDelegate {
+    func effectsBandCurrentSourceTime(_ view: EffectsBandView) -> Double {
+        currentPlaybackTime
+    }
+
     func effectsBandDidMutate(_ view: EffectsBandView) {
         savedURL = nil
         invalidateGIFCache()
         applyZoomTransformForCurrentTime()
+        refreshOverlaySelection()
         needsDisplay = true
     }
 

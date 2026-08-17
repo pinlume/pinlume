@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.11
+
+- Add mouse-following video zoom, including edge clamping, smooth transitions, and a configurable behavior when the pointer briefly leaves the recorded area.
+- Add copy, paste, and paste-only undo/redo for video timeline effects, with consistent default fade durations.
+- Publish the Pinlume website and official macOS DMG download at [pinlume.cn](https://pinlume.cn).
+
 ## 1.0.10
 
 - Add Command-click selection-edge trimming and a matching cursor state for faster precise captures.

@@ -10,7 +10,7 @@ private let recordingResourceLog = OSLog(
 
 // Callback types
 typealias RecordingProgressCallback = (_ seconds: Int) -> Void
-typealias RecordingCompletionCallback = (_ url: URL?, _ error: Error?) -> Void
+typealias RecordingCompletionCallback = (_ artifact: RecordingArtifact?, _ error: Error?) -> Void
 
 @MainActor
 final class RecordingEngine: NSObject {
@@ -26,6 +26,7 @@ final class RecordingEngine: NSObject {
 
     private var fps: Int = 30
     private var cropRect: CGRect = .zero      // in screen coordinates (top-left origin)
+    private var recordingQuartzRect: CGRect = .zero
     private var screen: NSScreen = NSScreen.main ?? NSScreen.screens.first ?? NSScreen()
 
     // MARK: - SCStream
@@ -47,6 +48,8 @@ final class RecordingEngine: NSObject {
     private var writerSession: MP4WriterSession?
     private var outputURL: URL?
     private var writerOutputURL: URL?
+    private var mouseTrajectoryCollector: VideoMouseTrajectoryCollector?
+    private var completedMouseTrajectory: VideoMouseTrajectory?
 
     // MARK: - Mic capture
 
@@ -177,6 +180,12 @@ final class RecordingEngine: NSObject {
                 await fail(RecordingError.noDisplay, generation: generation)
                 return
             }
+            let quartzDisplayBounds = CGDisplayBounds(targetDisplayID)
+            recordingQuartzRect = CGRect(
+                x: quartzDisplayBounds.minX + cropRect.minX,
+                y: quartzDisplayBounds.minY + cropRect.minY,
+                width: cropRect.width,
+                height: cropRect.height)
 
             // Exclude specific Pinlume UI chrome windows (selection border, HUD)
             // but NOT recording overlays (webcam, mouse highlight, keystrokes)
@@ -246,12 +255,22 @@ final class RecordingEngine: NSObject {
                 quality: VideoQuality(rawValue: liveQuality.rawValue) ?? .medium,
                 recordSystemAudio: recordSystemAudio, recordMicAudio: recordMicAudio)
             self.writerSession = writer
+            let trajectoryCollector = VideoMouseTrajectoryCollector()
+            self.mouseTrajectoryCollector = trajectoryCollector
+            let sampledRecordingRect = recordingQuartzRect
 
             // Sample handlers run ON recordingQueue and call the queue-confined
             // writer session directly — no @MainActor hop, no race.
             let output = RecordingStreamOutput()
             output.onFrame = { pixelBuffer, presentationTime in
-                writer.handleFrame(pixelBuffer: pixelBuffer, presentationTime: presentationTime)
+                let acceptedAssetTime = writer.handleFrame(
+                    pixelBuffer: pixelBuffer, presentationTime: presentationTime)
+                guard let acceptedAssetTime else { return }
+                guard let cursorPoint = CGEvent(source: nil)?.location else { return }
+                trajectoryCollector.append(VideoMouseTrajectory.rawSample(
+                    quartzPoint: cursorPoint,
+                    recordingRect: sampledRecordingRect,
+                    time: acceptedAssetTime))
             }
             output.onAudioSample = { sampleBuffer in
                 writer.handleSystemAudioSample(sampleBuffer)
@@ -309,6 +328,10 @@ final class RecordingEngine: NSObject {
         }
         do {
             try await writer.finish()
+            completedMouseTrajectory = recordingQueue.sync {
+                mouseTrajectoryCollector?.trajectory()
+            }
+            mouseTrajectoryCollector = nil
             writerSession = nil
             guard let writerOutputURL, let outputURL else {
                 throw RecordingError.noOutput
@@ -391,7 +414,11 @@ final class RecordingEngine: NSObject {
     private func succeed(generation: UInt) {
         guard lifecycle.complete(generation: generation) else { return }
         startupTask = nil
-        onCompletion?(outputURL, nil)
+        let artifact = outputURL.map {
+            RecordingArtifact(url: $0, mouseTrajectory: completedMouseTrajectory)
+        }
+        completedMouseTrajectory = nil
+        onCompletion?(artifact, nil)
     }
 
     private func fail(_ error: Error, generation: UInt) async {
@@ -409,6 +436,8 @@ final class RecordingEngine: NSObject {
             try? await writer.finish()
         }
         writerSession = nil
+        mouseTrajectoryCollector = nil
+        completedMouseTrajectory = nil
         stopMicCapture()
         if let writerOutputURL { try? FileManager.default.removeItem(at: writerOutputURL) }
         writerOutputURL = nil
@@ -744,10 +773,10 @@ private final class MP4WriterSession: @unchecked Sendable {
 
     // MARK: Sample handling (called on the queue by SCStream / mic delegate)
 
-    func handleFrame(pixelBuffer: CVPixelBuffer, presentationTime: CMTime) {
+    func handleFrame(pixelBuffer: CVPixelBuffer, presentationTime: CMTime) -> Double? {
         dispatchPrecondition(condition: .onQueue(queue))
-        guard mode == .recording else { return }
-        writeFrame(buffer: pixelBuffer, presentationTime: adjustedTime(presentationTime))
+        guard mode == .recording else { return nil }
+        return writeFrame(buffer: pixelBuffer, presentationTime: adjustedTime(presentationTime))
     }
 
     func handleSystemAudioSample(_ sampleBuffer: CMSampleBuffer) {
@@ -766,12 +795,12 @@ private final class MP4WriterSession: @unchecked Sendable {
         if let adjusted = sampleBuffer.adjustingTime(by: pauseOffset) { input.append(adjusted) }
     }
 
-    private func writeFrame(buffer: CVPixelBuffer, presentationTime: CMTime) {
+    private func writeFrame(buffer: CVPixelBuffer, presentationTime: CMTime) -> Double? {
         guard mode == .recording,
               let writer = assetWriter, writer.status == .writing,
               let input = videoInput, let adaptor = adaptor,
               input.isReadyForMoreMediaData
-        else { return }
+        else { return nil }
 
         if !sessionStarted {
             startTime = presentationTime
@@ -811,7 +840,9 @@ private final class MP4WriterSession: @unchecked Sendable {
         // frameCount == 0 as a failed/empty recording.
         if adaptor.append(buffer, withPresentationTime: presentationTime) {
             frameCount += 1
+            return max(0, CMTimeGetSeconds(CMTimeSubtract(presentationTime, startTime)))
         }
+        return nil
     }
 
     private func adjustedTime(_ time: CMTime) -> CMTime {

@@ -13,7 +13,7 @@ import CoreGraphics
 final class VideoTextSegment: Codable {
 
     static let minDuration: Double = 0.3
-    static let defaultFade: Double = 0.25
+    static let defaultFade: Double = 0.15
 
     enum BackgroundStyle: String, Codable {
         case none      // text only (with optional shadow)

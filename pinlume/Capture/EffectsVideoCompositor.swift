@@ -52,7 +52,8 @@ final class EffectsCompositionInstruction: NSObject, AVVideoCompositionInstructi
     let renderSize: CGSize
     let baseTransform: CGAffineTransform
     let timeMap: [TimeMapEntry]
-    let zoomSegments: [VideoZoomSegment]
+    let zoomSegments: [VideoZoomRenderSnapshot]
+    let mouseTrajectory: VideoMouseTrajectory?
     let censorSegments: [VideoCensorSegment]
     /// Text segments paired with their pre-rasterized images. Keeping the
     /// CIImage inside the snapshot means per-frame rendering does no font
@@ -99,7 +100,8 @@ final class EffectsCompositionInstruction: NSObject, AVVideoCompositionInstructi
          renderSize: CGSize,
          baseTransform: CGAffineTransform,
          timeMap: [TimeMapEntry],
-         zoomSegments: [VideoZoomSegment],
+         zoomSegments: [VideoZoomRenderSnapshot],
+         mouseTrajectory: VideoMouseTrajectory?,
          censorSegments: [VideoCensorSegment],
          textSnapshots: [TextSnapshot] = []) {
         self.timeRange = timeRange
@@ -109,6 +111,7 @@ final class EffectsCompositionInstruction: NSObject, AVVideoCompositionInstructi
         self.baseTransform = baseTransform
         self.timeMap = timeMap
         self.zoomSegments = zoomSegments
+        self.mouseTrajectory = mouseTrajectory
         self.censorSegments = censorSegments
         self.textSnapshots = textSnapshots
         self.requiredSourceTrackIDs = [NSNumber(value: Int(videoTrackID))]
@@ -251,7 +254,11 @@ final class EffectsVideoCompositor: NSObject, AVVideoCompositing {
         //    negate the y component before feeding it into the concatenated
         //    transform. Without this, zooming into a point near the top of
         //    the video ends up showing content from the bottom.
-        let (zoomLevel, zoomTranslation) = activeZoom(at: assetTime, segments: instruction.zoomSegments, naturalSize: naturalSize)
+        let (zoomLevel, zoomTranslation) = activeZoom(
+            at: assetTime,
+            segments: instruction.zoomSegments,
+            trajectory: instruction.mouseTrajectory,
+            naturalSize: naturalSize)
         if zoomLevel > 1.0001 {
             let renderCx = renderSize.width / 2
             let renderCy = renderSize.height / 2
@@ -345,13 +352,17 @@ final class EffectsVideoCompositor: NSObject, AVVideoCompositing {
     /// Pick the single active zoom segment for `assetTime` (segments don't
     /// overlap, so at most one wins) and return the interpolated zoom level
     /// plus translation vector.
-    private func activeZoom(at t: Double, segments: [VideoZoomSegment], naturalSize: CGSize) -> (CGFloat, CGPoint) {
-        for seg in segments where t >= seg.startTime && t <= seg.endTime {
-            let z = seg.zoomLevel(at: t)
-            let tr = seg.translation(zoom: z, videoSize: naturalSize)
-            return (z, tr)
-        }
-        return (1.0, .zero)
+    private func activeZoom(at t: Double,
+                            segments: [VideoZoomRenderSnapshot],
+                            trajectory: VideoMouseTrajectory?,
+                            naturalSize: CGSize) -> (CGFloat, CGPoint) {
+        guard let resolved = VideoZoomResolver.resolve(
+            at: t,
+            segments: segments,
+            trajectory: trajectory,
+            videoSize: naturalSize)
+        else { return (1, .zero) }
+        return (resolved.zoomLevel, resolved.translation)
     }
 
     /// Map a normalized censor rect (natural-image, y-top) into render-space
